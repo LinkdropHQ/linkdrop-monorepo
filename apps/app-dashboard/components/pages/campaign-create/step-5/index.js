@@ -62,8 +62,19 @@ class Step5 extends React.Component {
 git clone https://github.com/spacehaz/linkdrop-monorepo.git
 
 # install
-cd linkdrop-monorepo
-CHAIN_ID=1 AMOUNT=100 SYMBOL=MANA DECENTRALAND_URL=https://decentraland.org CLAIM_HOST=<HEROKU_APP_HOST> DOMAIN=<AUTH0_DOMAIN> CLIENT_ID=<AUTH0_CLIENT_ID> CALLBACK_URL=<CLAIM_APP_HOST> PROXY_ADDRESS=${currentCampaign.id} CAPTCHA_KEY=<GOOGLE_SITE_KEY> SEGMENT_KEY=<SEGMENT_KEY> yarn && yarn compile-contracts && cd apps/linkdrop-ui-kit && yarn build && cd ../app-claim && yarn build
+cd linkdrop-monorepo && yarn && yarn compile-contracts && cd apps/linkdrop-ui-kit && yarn build && cd ../app-claim
+ 
+# Update the following command with correct env vars:
+# - GOOGLE_CAPTCHA_SITE_KEY: Google reCaptcha Site Key
+# - SEGMENT_KEY: Segment API key
+# - HEROKU_HOST: Heroku host that was deployed on the step 1, e.g. https://dc-linkdrop-rinkeby-01.herokuapp.com
+# - AUTH0_DOMAIN: Auth0 domain, e.g. https://dcl-test.auth0.com
+# - AUTH0_CLIENT_ID: Auth0 Client Id, e.g. iRGF5TR5DBngi8yifjDGuHzixa9Q9HA8
+# - AUTH0_CALLBACK_URL: Auth0 callback url, should the url where the front-end will be served, e.g. https://claim.decentraland.org
+# - SUCCESS_REDIRECT_URL: Redirect url after successful claim. (https://decentraland.org by default)
+GOOGLE_CAPTCHA_SITE_KEY=<GOOGLE_CAPTCHA_SITE_KEY> SEGMENT_KEY=<SEGMENT_KEY> HEROKU_HOST=<HEROKU_HOST> AUTH0_DOMAIN=<AUTH0_DOMAIN> AUTH0_CLIENT_ID=<AUTH0_CLIENT_ID> AUTH0_CALLBACK_URL=<CLAIM_APP_HOST> CHAIN_ID=${currentCampaign.chainId} AMOUNT=100 SYMBOL=MANA SUCCESS_REDIRECT_URL=https://decentraland.org PROXY_ADDRESS=${currentCampaign.id} yarn build
+
+# Front-end app assets will be compiled to linkdrop-monorepo/apps/app-claim                                                                
 `}
      </textarea>
           </div>}
