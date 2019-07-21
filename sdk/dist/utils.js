@@ -13,7 +13,10 @@ var _asyncToGenerator2 = _interopRequireDefault(require("@babel/runtime/helpers/
 
 var ethers = require('ethers');
 
-var Wallet = require('ethereumjs-wallet');
+var Wallet = require('ethereumjs-wallet'); // Turn off annoying warnings
+
+
+ethers.errors.setLogLevel('error');
 
 var buildCreate2Address = function buildCreate2Address(creatorAddress, saltHex, byteCode) {
   var byteCodeHash = ethers.utils.keccak256(byteCode);

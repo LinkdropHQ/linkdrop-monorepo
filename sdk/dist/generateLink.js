@@ -15,7 +15,10 @@ var _asyncToGenerator2 = _interopRequireDefault(require("@babel/runtime/helpers/
 
 var _utils = require("./utils");
 
-var ethers = require('ethers');
+var ethers = require('ethers'); // Turn off annoying warnings
+
+
+ethers.errors.setLogLevel('error');
 
 var generateLink =
 /*#__PURE__*/

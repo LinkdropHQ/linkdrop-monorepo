@@ -17,6 +17,7 @@ export const claim = async ({
   linkdropMasterAddress,
   linkdropSignerSignature,
   receiverAddress,
+  factoryAddress,
   campaignId
 }) => {
   if (jsonRpcUrl === null || jsonRpcUrl === '') {
@@ -71,6 +72,10 @@ export const claim = async ({
     throw new Error('Please provide campaign id')
   }
 
+  if (factoryAddress === null || factoryAddress === '') {
+    throw new Error('Please provide factory address')
+  }
+  
   // Get provider
   const provider = new ethers.providers.JsonRpcProvider(jsonRpcUrl)
 
@@ -92,6 +97,7 @@ export const claim = async ({
     linkdropSignerSignature,
     receiverAddress,
     receiverSignature,
+    factoryAddress,
     campaignId
   }
   try {
@@ -124,6 +130,7 @@ export const claimERC721 = async ({
   linkdropMasterAddress,
   linkdropSignerSignature,
   receiverAddress,
+  factoryAddress,
   campaignId
 }) => {
   if (jsonRpcUrl === null || jsonRpcUrl === '') {
@@ -181,7 +188,11 @@ export const claimERC721 = async ({
   if (campaignId === null || campaignId === '') {
     throw new Error('Please provide campaign id')
   }
-
+  
+  if (factoryAddress === null || factoryAddress === '') {
+    throw new Error('Please provide factory address')
+  }
+  
   // Get provider
   const provider = new ethers.providers.JsonRpcProvider(jsonRpcUrl)
 
@@ -203,6 +214,7 @@ export const claimERC721 = async ({
     linkdropSignerSignature,
     receiverAddress,
     receiverSignature,
+    factoryAddress,
     campaignId
   }
   try {

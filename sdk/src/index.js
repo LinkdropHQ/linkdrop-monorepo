@@ -125,6 +125,7 @@ const LinkdropSDK = ({
       linkdropMasterAddress,
       linkdropSignerSignature,
       receiverAddress,
+      factoryAddress,
       campaignId
     })
   }
@@ -152,6 +153,7 @@ const LinkdropSDK = ({
       linkdropMasterAddress,
       linkdropSignerSignature,
       receiverAddress,
+      factoryAddress,      
       campaignId
     })
   }

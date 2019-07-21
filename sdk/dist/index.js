@@ -23,6 +23,9 @@ var _LinkdropFactory = _interopRequireDefault(require("../../contracts/build/Lin
 
 var _ethers = require("ethers");
 
+// Turn off annoying warnings
+_ethers.ethers.errors.setLogLevel('error');
+
 var LinkdropSDK = function LinkdropSDK(_ref) {
   var linkdropMasterAddress = _ref.linkdropMasterAddress,
       factoryAddress = _ref.factoryAddress,
@@ -268,8 +271,9 @@ var LinkdropSDK = function LinkdropSDK(_ref) {
               _context4.t11 = linkdropMasterAddress;
               _context4.t12 = linkdropSignerSignature;
               _context4.t13 = receiverAddress;
-              _context4.t14 = campaignId;
-              _context4.t15 = {
+              _context4.t14 = factoryAddress;
+              _context4.t15 = campaignId;
+              _context4.t16 = {
                 jsonRpcUrl: _context4.t1,
                 apiHost: _context4.t2,
                 weiAmount: _context4.t3,
@@ -282,11 +286,12 @@ var LinkdropSDK = function LinkdropSDK(_ref) {
                 linkdropMasterAddress: _context4.t11,
                 linkdropSignerSignature: _context4.t12,
                 receiverAddress: _context4.t13,
-                campaignId: _context4.t14
+                factoryAddress: _context4.t14,
+                campaignId: _context4.t15
               };
-              return _context4.abrupt("return", _context4.t0.claim.call(_context4.t0, _context4.t15));
+              return _context4.abrupt("return", _context4.t0.claim.call(_context4.t0, _context4.t16));
 
-            case 22:
+            case 23:
             case "end":
               return _context4.stop();
           }
@@ -339,8 +344,9 @@ var LinkdropSDK = function LinkdropSDK(_ref) {
               _context5.t11 = linkdropMasterAddress;
               _context5.t12 = linkdropSignerSignature;
               _context5.t13 = receiverAddress;
-              _context5.t14 = campaignId;
-              _context5.t15 = {
+              _context5.t14 = factoryAddress;
+              _context5.t15 = campaignId;
+              _context5.t16 = {
                 jsonRpcUrl: _context5.t1,
                 apiHost: _context5.t2,
                 weiAmount: _context5.t3,
@@ -353,11 +359,12 @@ var LinkdropSDK = function LinkdropSDK(_ref) {
                 linkdropMasterAddress: _context5.t11,
                 linkdropSignerSignature: _context5.t12,
                 receiverAddress: _context5.t13,
-                campaignId: _context5.t14
+                factoryAddress: _context5.t14,
+                campaignId: _context5.t15
               };
-              return _context5.abrupt("return", _context5.t0.claimERC721.call(_context5.t0, _context5.t15));
+              return _context5.abrupt("return", _context5.t0.claimERC721.call(_context5.t0, _context5.t16));
 
-            case 22:
+            case 23:
             case "end":
               return _context5.stop();
           }
