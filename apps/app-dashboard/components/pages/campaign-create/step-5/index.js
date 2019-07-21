@@ -2,7 +2,7 @@ import React from 'react'
 import { actions, translate } from 'decorators'
 import styles from './styles.module'
 import classNames from 'classnames'
-import { Button, PageHeader } from 'components/common'
+// import { Button, PageHeader } from 'components/common'
 import { Loading } from 'linkdrop-ui-kit'
 import { ethers } from 'ethers'
 
@@ -12,9 +12,9 @@ class Step5 extends React.Component {
   render () {
     const { items, current, campaignToCheck, loading } = this.props
     const currentCampaign = items.find(item => item.id === (campaignToCheck || current))
-    const links = (currentCampaign || {}).links
+    // const links = (currentCampaign || {}).links
     if (!currentCampaign) { return null }
-
+    console.log({ currentCampaign })
     const herokuBaseUrl = 'https://heroku.com/deploy?template=https://github.com/dobrokhvalov/linkdrop-dc-server-v2'
     const signingKey = currentCampaign.privateKey
     const chain = currentCampaign.chainId === '4' ? 'rinkeby' : 'mainnet'
@@ -22,7 +22,8 @@ class Step5 extends React.Component {
     const campaignId = currentCampaign.campaignId
     const maxClaims = currentCampaign.linksAmount
     const weiAmount = ethers.utils.parseEther(currentCampaign.ethAmount || '0').toString()
-    const tokenAmount = currentCampaign.tokenAmount || '0'
+    const tokenAmount = ethers.utils.parseEther(currentCampaign.tokenAmount || '0').toString()
+    
     const tokenAddress = currentCampaign.tokenAddress || ''
         
     const herokuUrl = (`${herokuBaseUrl}` +
@@ -59,10 +60,10 @@ class Step5 extends React.Component {
      <p className={classNames(styles.text, styles.textMargin20)}>Use the following command to build front-end assets:</p>
      <textarea disabled className={styles.codeBlock}>
 {`# clone repo
-git clone https://github.com/spacehaz/linkdrop-monorepo.git
+git clone https://github.com/LinkdropProtocol/decentraland-claim-app
 
 # install
-cd linkdrop-monorepo && yarn && yarn compile-contracts && cd apps/linkdrop-ui-kit && yarn build && cd ../app-claim
+cd decentraland-claim-app && yarn && yarn compile-contracts && cd apps/linkdrop-ui-kit && yarn build && cd ../app-claim
  
 # Update the following command with correct env vars:
 # - GOOGLE_CAPTCHA_SITE_KEY: Google reCaptcha Site Key
