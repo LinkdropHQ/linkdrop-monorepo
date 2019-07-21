@@ -43,46 +43,34 @@ class Step5 extends React.Component {
         <div className={styles.automatic}>
           <p className={classNames(styles.text, styles.textMargin15)}>{this.t('titles.contractParams')}</p>
           <p className={classNames(styles.text, styles.textMargin10, styles.ellipsis)} dangerouslySetInnerHTML={{ __html: this.t('titles.masterAddress', { address: currentCampaign.currentAddress }) }} />
-          <p className={classNames(styles.text, styles.textMargin10, styles.ellipsis)} dangerouslySetInnerHTML={{ __html: this.t('titles.signingKey', { signingKey: currentCampaign.privateKey }) }} />
+      <p className={classNames(styles.text, styles.textMargin10, styles.ellipsis)} dangerouslySetInnerHTML={{ __html: this.t('titles.signingKey', { signingKey: currentCampaign.privateKey }) }} />
+      <p className={classNames(styles.text, styles.textMargin10, styles.ellipsis)}>Proxy Address: <span>{currentCampaign.id}</span></p>
       <p className={classNames(styles.text, styles.ellipsis)} dangerouslySetInnerHTML={{ __html: this.t('titles.campaignId', { campaignId: currentCampaign.campaignId }) }} />
+      <hr/>
+      <p className={classNames(styles.text, styles.textMargin20)}>Step 1. Deploy Claim Server</p> 
       <p className={classNames(styles.text, styles.textMargin20)}>
       <a href={herokuUrl} target="_blank">
       <img src="https://www.herokucdn.com/deploy/button.svg" alt="Deploy" />
       </a>
       </p>
+<hr/>
+    {<div>
+      <p className={classNames(styles.text, styles.textMargin20)}>Step 2. Deploy Front-End app</p> 
+     <p className={classNames(styles.text, styles.textMargin20)}>Use the following command to build front-end assets:</p>
+     <textarea disabled className={styles.codeBlock}>
+{`# clone repo
+git clone https://github.com/spacehaz/linkdrop-monorepo.git
 
-          {false && <div><PageHeader title={this.t('titles.getTheLinks')} />
-            <p className={styles.text}>{this.t('titles.linkdropSdk')}</p>
-            <p className={classNames(styles.text, styles.textGrey, styles.textMargin40)}>{this.t('titles.automaticDistribution')}</p>
-            <p className={styles.text}>{this.t('titles.nodeJsSupport')}</p>
-            <p className={styles.text}>{this.t('titles.otherPlatforms')}</p>
-            <p className={classNames(styles.text, styles.textMargin20)}>{this.t('titles.contactUs')}</p>
-            <Button className={classNames(styles.button, styles.buttonMargin60)}>{this.t('buttons.useLinkdropSdk')}</Button>
-           <p className={classNames(styles.text, styles.textMargin20)}>{this.t('titles.codeDetails')}</p>
-           <p className={classNames(styles.text, styles.textMargin20)}>{this.t('titles.codeDetails')}</p>
-            <textarea disabled className={styles.codeBlock}>
-              {this.t('texts.codeBlock')}
-            </textarea>
+# install
+cd linkdrop-monorepo
+CHAIN_ID=1 AMOUNT=100 SYMBOL=MANA DECENTRALAND_URL=https://decentraland.org CLAIM_HOST=<HEROKU_APP_HOST> DOMAIN=<AUTH0_DOMAIN> CLIENT_ID=<AUTH0_CLIENT_ID> CALLBACK_URL=<CLAIM_APP_HOST> PROXY_ADDRESS=${currentCampaign.id} CAPTCHA_KEY=<GOOGLE_SITE_KEY> SEGMENT_KEY=<SEGMENT_KEY> yarn && yarn compile-contracts && cd apps/linkdrop-ui-kit && yarn build && cd ../app-claim && yarn build
+`}
+     </textarea>
           </div>}
     </div>
 
     
-        <div className={styles.manual}>
-          <p className={styles.text}>{this.t('titles.downloadFile')}</p>
-          <p className={classNames(styles.text, styles.textGrey, styles.textMargin40)}>{this.t('titles.manual')}</p>
-          <div className={styles.buttonsContainer}>
-            <Button onClick={_ => links && this.actions().campaigns.getCSV({ links, id: campaignToCheck || current })} className={styles.button}>{this.t('buttons.downloadCsv')}</Button>
-            {false && <Button transparent className={styles.button}>{this.t('buttons.qr')}</Button>}
-          </div>
-          {false && <div>
-            <p className={classNames(styles.text, styles.textMargin60)} dangerouslySetInnerHTML={{ __html: this.t('titles.howToClaimPreview') }} />
-            <p className={classNames(styles.text, styles.textBold)}>{this.t('titles.faq')}</p>
-            <p className={classNames(styles.text, styles.textMargin20)}>{this.t('titles.visitHelpCenter')}</p>
-            <p className={classNames(styles.text, styles.textMargin20)}>{this.t('titles.customizations')}</p>
-            <p className={classNames(styles.text, styles.textMargin20)}>{this.t('titles.pauseOrStop')}</p>
-            <p className={classNames(styles.text, styles.textMargin20)}>{this.t('titles.analytics')}</p>
-          </div>}
-        </div>
+
       </div>
 
     </div>
