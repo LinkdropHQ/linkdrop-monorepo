@@ -72,12 +72,20 @@ class Step1 extends React.Component {
           <div className={styles.chooseTokens}>
             <h3 className={styles.subtitle}>{this.t('titles.chooseToken')}</h3>
             <Select options={options} value={tokenSymbol} onChange={({ value }) => {
-              const currentAddress = options.find(option => option.value === value).address
-              this.setState({
-                tokenAddress: currentAddress
-              }, _ => {
-                this.setField({ field: 'tokenSymbol', value })
-              })
+              if (value !== 'ETH' && value !== 'ERC20') {
+                const currentAddress = options.find(option => option.value === value).address
+                this.setState({
+                  tokenAddress: currentAddress
+                }, _ => {
+                  this.setField({ field: 'tokenSymbol', value })
+                })
+              } else {
+                this.setState({
+                  tokenAddress: null
+                }, _ => {
+                  this.setField({ field: 'tokenSymbol', value })
+                })
+              }
             }} />
           </div>
           {this.renderTokenInputs({ ethAmount, tokenType, tokenAddress, symbol, tokenSymbol, tokenAmount, addEth })}
