@@ -4,6 +4,7 @@ import styles from './styles.module'
 import classNames from 'classnames'
 import { Button, PageHeader } from 'components/common'
 import { Loading } from 'linkdrop-ui-kit'
+import { ethers } from 'ethers'
 
 @actions(({ user: { loading }, campaigns: { items, current } }) => ({ items, current, loading }))
 @translate('pages.campaignCreate')
@@ -13,6 +14,27 @@ class Step5 extends React.Component {
     const currentCampaign = items.find(item => item.id === (campaignToCheck || current))
     const links = (currentCampaign || {}).links
     if (!currentCampaign) { return null }
+
+    const herokuBaseUrl = 'https://heroku.com/deploy?template=https://github.com/dobrokhvalov/linkdrop-dc-server-v2'
+    const signingKey = currentCampaign.privateKey
+    const chain = currentCampaign.chainId === '4' ? 'rinkeby' : 'mainnet'
+    const masterAddress = currentCampaign.currentAddress
+    const campaignId = currentCampaign.campaignId
+    const maxClaims = currentCampaign.linksAmount
+    const weiAmount = ethers.utils.parseEther(currentCampaign.ethAmount).toString()
+
+    console.log({ currentCampaign, weiAmount })
+    
+    const herokuUrl = (`${herokuBaseUrl}` +
+                       `&env[LINKDROP_SIGNING_KEY]=${signingKey}` +
+                       `&env[CHAIN]=${chain}` +
+                       `&env[LINKDROP_MASTER_ADDRESS]=${masterAddress}` +
+                       `&env[CAMPAIGN_ID]=${campaignId}` +
+                       `&env[MAX_CLAIMS]=${maxClaims}` +
+                       `&env[WEI_AMOUNT]=${weiAmount}`
+                      )
+    
+    
     return <div className={styles.container}>
       {loading && <Loading withOverlay />}
       <div className={styles.content}>
@@ -20,7 +42,13 @@ class Step5 extends React.Component {
           <p className={classNames(styles.text, styles.textMargin15)}>{this.t('titles.contractParams')}</p>
           <p className={classNames(styles.text, styles.textMargin10, styles.ellipsis)} dangerouslySetInnerHTML={{ __html: this.t('titles.masterAddress', { address: currentCampaign.currentAddress }) }} />
           <p className={classNames(styles.text, styles.textMargin10, styles.ellipsis)} dangerouslySetInnerHTML={{ __html: this.t('titles.signingKey', { signingKey: currentCampaign.privateKey }) }} />
-          <p className={classNames(styles.text, styles.ellipsis)} dangerouslySetInnerHTML={{ __html: this.t('titles.campaignId', { campaignId: currentCampaign.campaignId }) }} />
+      <p className={classNames(styles.text, styles.ellipsis)} dangerouslySetInnerHTML={{ __html: this.t('titles.campaignId', { campaignId: currentCampaign.campaignId }) }} />
+      <p className={classNames(styles.text, styles.textMargin20)}>
+      <a href={herokuUrl} target="_blank">
+      <img src="https://www.herokucdn.com/deploy/button.svg" alt="Deploy" />
+      </a>
+      </p>
+
           {false && <div><PageHeader title={this.t('titles.getTheLinks')} />
             <p className={styles.text}>{this.t('titles.linkdropSdk')}</p>
             <p className={classNames(styles.text, styles.textGrey, styles.textMargin40)}>{this.t('titles.automaticDistribution')}</p>
@@ -28,12 +56,15 @@ class Step5 extends React.Component {
             <p className={styles.text}>{this.t('titles.otherPlatforms')}</p>
             <p className={classNames(styles.text, styles.textMargin20)}>{this.t('titles.contactUs')}</p>
             <Button className={classNames(styles.button, styles.buttonMargin60)}>{this.t('buttons.useLinkdropSdk')}</Button>
-            <p className={classNames(styles.text, styles.textMargin20)}>{this.t('titles.codeDetails')}</p>
+           <p className={classNames(styles.text, styles.textMargin20)}>{this.t('titles.codeDetails')}</p>
+           <p className={classNames(styles.text, styles.textMargin20)}>{this.t('titles.codeDetails')}</p>
             <textarea disabled className={styles.codeBlock}>
               {this.t('texts.codeBlock')}
             </textarea>
           </div>}
-        </div>
+    </div>
+
+    
         <div className={styles.manual}>
           <p className={styles.text}>{this.t('titles.downloadFile')}</p>
           <p className={classNames(styles.text, styles.textGrey, styles.textMargin40)}>{this.t('titles.manual')}</p>
