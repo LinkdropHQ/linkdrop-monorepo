@@ -47,7 +47,8 @@ class Step1 extends React.Component {
     if (assets != null && assets.length > 0 && !Immutable.fromJS(assets).equals(Immutable.fromJS(prevAssets))) {
       const assetsPrepared = assets.map(({ contract }) => ({
         label: `${contract.symbol} — ${(contract.address)}...`,
-        value: contract.symbol
+        value: contract.symbol,
+        address: contract.address
       }))
 
       const newOptions = [TOKENS[0]].concat(assetsPrepared).concat([TOKENS[1]])
@@ -62,6 +63,7 @@ class Step1 extends React.Component {
     const { tokenSymbol, ethAmount, linksAmount, tokenAmount, addEth, tokenAddress, addIconInfo, options } = this.state
     const { symbol, loading } = this.props
     const tokenType = this.defineTokenType({ tokenSymbol })
+
     return <div className={styles.container}>
       {loading && <Loading withOverlay />}
       <PageHeader title={this.t('titles.setupCampaign')} />
@@ -69,7 +71,14 @@ class Step1 extends React.Component {
         <div className={styles.form}>
           <div className={styles.chooseTokens}>
             <h3 className={styles.subtitle}>{this.t('titles.chooseToken')}</h3>
-            <Select options={options} value={tokenSymbol} onChange={({ value }) => this.setField({ field: 'tokenSymbol', value })} />
+            <Select options={options} value={tokenSymbol} onChange={({ value }) => {
+              const currentAddress = options.find(option => option.value === value).address
+              this.setState({
+                tokenAddress: currentAddress
+              }, _ => {
+                this.setField({ field: 'tokenSymbol', value })
+              })
+            }} />
           </div>
           {this.renderTokenInputs({ ethAmount, tokenType, tokenAddress, symbol, tokenSymbol, tokenAmount, addEth })}
           <div className={styles.linksAmount}>
