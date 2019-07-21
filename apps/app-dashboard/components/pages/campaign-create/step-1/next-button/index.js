@@ -7,12 +7,12 @@ import { Button } from 'components/common'
 @translate('pages.campaignCreate')
 class NextButton extends React.Component {
   render () {
-    const { ethAmount = 0, tokenSymbol, tokenAmount = 0, linksAmount = 0, tokenType } = this.props
+    const { ethAmount = 0, tokenSymbol, tokenAmount = 0, linksAmount = 0, tokenType, tokenAddress = null } = this.props
     let action
     if (tokenType === 'eth') {
       action = _ => this.actions().campaigns.prepareNewEthData({ ethAmount, linksAmount, tokenSymbol, tokenType })
     } else if (tokenType === 'erc20') {
-      action = _ => this.actions().campaigns.prepareNewERC20Data({ tokenAmount, ethAmount, linksAmount, tokenSymbol, tokenType })
+      action = _ => this.actions().campaigns.prepareNewERC20Data({ tokenAmount, ethAmount, linksAmount, tokenSymbol, tokenType, tokenAddress })
     }
     return <div className={styles.controls}>
       <Button disabled={this.defineIfButtonDisabled({ tokenType, ethAmount, tokenAmount, linksAmount })} onClick={action}>{this.t('buttons.next')}</Button>

@@ -8,6 +8,7 @@ const initialState = {
   ethAmount: null,
   linksAmount: null,
   tokenType: 'bloblo',
+  tokenAddress: null,
   date: null,
   links: [],
   items: campaignsDecoded,
@@ -26,6 +27,7 @@ export default (state = initialState, action = {}) => {
 
 const ACTIONS = {
   'CAMPAIGNS.SET_TOKEN_AMOUNT': reducers.setTokenAmount,
+  'CAMPAIGNS.SET_TOKEN_ADDRESS': reducers.setTokenAddress,
   'CAMPAIGNS.SET_TOKEN_SYMBOL': reducers.setTokenSymbol,
   'CAMPAIGNS.SET_ETH_AMOUNT': reducers.setEthAmount,
   'CAMPAIGNS.SET_LINKS_AMOUNT': reducers.setLinksAmount,

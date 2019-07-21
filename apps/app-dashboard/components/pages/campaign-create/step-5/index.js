@@ -21,17 +21,19 @@ class Step5 extends React.Component {
     const masterAddress = currentCampaign.currentAddress
     const campaignId = currentCampaign.campaignId
     const maxClaims = currentCampaign.linksAmount
-    const weiAmount = ethers.utils.parseEther(currentCampaign.ethAmount).toString()
-
-    console.log({ currentCampaign, weiAmount })
-    
+    const weiAmount = ethers.utils.parseEther(currentCampaign.ethAmount || '0').toString()
+    const tokenAmount = currentCampaign.tokenAmount || '0'
+    const tokenAddress = currentCampaign.tokenAddress || ''
+        
     const herokuUrl = (`${herokuBaseUrl}` +
                        `&env[LINKDROP_SIGNING_KEY]=${signingKey}` +
                        `&env[CHAIN]=${chain}` +
                        `&env[LINKDROP_MASTER_ADDRESS]=${masterAddress}` +
-                       `&env[CAMPAIGN_ID]=${campaignId}` +
+                       `&env[LINKDROP_CAMPAIGN_ID]=${campaignId}` +
                        `&env[MAX_CLAIMS]=${maxClaims}` +
-                       `&env[WEI_AMOUNT]=${weiAmount}`
+                       `&env[WEI_AMOUNT]=${weiAmount}` +
+                       `&env[TOKEN_AMOUNT]=${tokenAmount}` +
+                       `&env[TOKEN_ADDRESS]=${tokenAddress}`
                       )
     
     

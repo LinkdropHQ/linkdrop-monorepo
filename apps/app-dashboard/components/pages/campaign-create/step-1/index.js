@@ -99,6 +99,7 @@ class Step1 extends React.Component {
         ethAmount={ethAmount}
         linksAmount={linksAmount}
         tokenSymbol={symbol}
+        tokenAddress={tokenAddress}
         tokenType={tokenType}
       />
     </div>

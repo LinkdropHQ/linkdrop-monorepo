@@ -1,4 +1,5 @@
 import setTokenAmount from './set-token-amount'
+import setTokenAddress from './set-token-address'
 import setTokenSymbol from './set-token-symbol'
 import setEthAmount from './set-eth-amount'
 import setLinksAmount from './set-links-amount'
@@ -10,8 +11,10 @@ import setCurrent from './set-current'
 import setProxyAddress from './set-proxy-address'
 import setId from './set-id'
 
+
 export default {
   setTokenAmount,
+  setTokenAddress,
   setTokenSymbol,
   setEthAmount,
   setLinksAmount,

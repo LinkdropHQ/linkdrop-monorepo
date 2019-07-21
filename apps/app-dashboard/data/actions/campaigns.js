@@ -3,11 +3,12 @@ class Campaign {
     this.actions = actions
   }
 
-  prepareNewERC20Data ({ tokenAmount, ethAmount, linksAmount, tokenSymbol, tokenType }) {
+  prepareNewERC20Data ({ tokenAmount, ethAmount, linksAmount, tokenSymbol, tokenType, tokenAddress }) {
     this.actions.dispatch({
       type: '*CAMPAIGNS.PREPARE_NEW_ERC20_DATA',
       payload: {
         tokenAmount,
+        tokenAddress,
         tokenType,
         ethAmount,
         linksAmount,
