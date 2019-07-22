@@ -31,7 +31,7 @@ module.exports = shipit => {
       branch: 'master'
     },
     decentraland: {
-      deployTo: 'linkdrop/decentraland',
+      deployTo: 'linkdrop/custom-servers/decentraland-relayer',
       servers: 'root@rinkeby.linkdrop.io',
       branch: 'decentraland-server'
     }
