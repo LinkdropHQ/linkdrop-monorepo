@@ -4,20 +4,24 @@ import { Button } from 'components/common'
 import styles from './styles.module'
 import Web3Connect from 'web3connect'
 
-const web3Connect = new Web3Connect.Core({
-  providerOptions: {
-    disableWalletConnect: true
-  }
-})
-
-web3Connect.on('connect', provider => {
-  MetamaskInjector.applyProvider(provider)
-})
-
 @actions(_ => ({}))
 @translate('pages.main')
 class MetamaskInjector extends React.Component {
-  static applyProvider (provider) {
+  constructor (props) {
+    super(props)
+    this.web3Connect = new Web3Connect.Core({
+      providerOptions: {
+        disableWalletConnect: true
+      }
+    })
+
+    this.web3Connect.on('connect', provider => {
+      this.applyProvider(provider)
+    })
+  }
+
+  applyProvider (provider) {
+    console.log(this, this.actions)
     if (provider.selectedAddress) {
       this.actions().user.setCurrentAddress({ currentAddress: provider.selectedAddress })
       this.actions().user.setChainId({ chainId: provider.networkVersion })
@@ -33,8 +37,10 @@ class MetamaskInjector extends React.Component {
       />
       <div className={styles.button}>
         <Button
-          onClick={_ => web3Connect.toggleModal()}
-        />
+          onClick={_ => this.web3Connect.toggleModal()}
+        >
+          {this.t('buttons.signIn')}
+        </Button>
       </div>
     </div>
   }
