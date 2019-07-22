@@ -9,7 +9,8 @@
     "dev": "nodemon --exec npx babel-node server.js",
     "deploy-rinkeby": "cd deploy && npx shipit rinkeby deploy",
     "deploy-ropsten": "cd deploy && npx shipit ropsten deploy",
-    "deploy-mainnet": "cd deploy && npx shipit mainnet deploy"
+    "deploy-mainnet": "cd deploy && npx shipit mainnet deploy",
+    "deploy-decentraland": "cd deploy && npx shipit decentraland deploy"
   },
   "devDependencies": {
     "@babel/cli": "^7.4.3",
