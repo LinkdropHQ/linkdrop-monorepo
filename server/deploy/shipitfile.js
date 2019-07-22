@@ -8,6 +8,7 @@ module.exports = shipit => {
   if (network === 'mainnet') CUSTOM_PORT = 10001
   else if (network === 'rinkeby') CUSTOM_PORT = 10004
   else if (network === 'ropsten') CUSTOM_PORT = 10003
+  else if (network === 'decentraland') CUSTOM_PORT = 11001
 
   shipit.initConfig({
     default: {
