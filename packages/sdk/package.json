@@ -1,6 +1,6 @@
 {
   "name": "@linkdrop/sdk",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "main": "dist/index.js",
   "license": "MIT",
   "babel": {
@@ -10,5 +10,5 @@
     "axios": "^0.18.1",
     "ethers": "^4.0.27"
   },
-  "gitHead": "601af51a1631a3b37082548029b75f9b1a055d2d"
+  "gitHead": "de2cb9d69c3b0b8cdcebdea8ad2d568324b6c85d"
 }
