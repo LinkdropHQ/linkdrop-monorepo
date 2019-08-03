@@ -43,8 +43,21 @@ class App extends React.Component {
     // you must do in any case), a convenient idiom for replying to a
     // message is to call postMessage on event.source and provide
     // event.origin as the targetOrigin.
-    event.source.postMessage({ address: this.state.address },
-                             event.origin)
+    if (event.data.action === 'ASK_ADDRESS') {
+      event.source.postMessage({ action: 'PASS_ADDRESS', payload: { address: this.state.address } },
+                               event.origin)
+    } else if (event.data.action === 'SEND_TRANSACTION') {
+      console.log('sending transaction')
+      window.alert('sending transaction')
+
+      // notifying that transaction have been sent
+      event.source.postMessage({ action: 'PASS_TRANSACTION_RESULT', payload: { txHash: '0x000', success: true } },
+                               event.origin)
+
+      setTimeout(() => { // let post event before closing window
+        window.close()
+      }, 0)
+    }
   }
   
   render () {

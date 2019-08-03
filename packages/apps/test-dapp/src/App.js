@@ -9,26 +9,47 @@ class App extends React.Component {
     this.state = {
       address: null
     }
+    this.walletWindow = null
   }
   
   async componentDidMount () {
     console.log('component did mount')
     const walletWindow = window.opener
-    const walletOrigin = WALLET_URL
-    const message = 'Hello Wallet'
-    walletWindow.postMessage(message, walletOrigin)
+    const message = { action: 'ASK_ADDRESS' }
+    walletWindow.postMessage(message, WALLET_URL)
 
+    this.walletWindow = walletWindow
+    
     window.addEventListener('message', this.receiveMessage.bind(this), false)
   }
 
   receiveMessage (event) {
     // Do we trust the sender of this message?
     if (event.origin !== WALLET_URL) return
-    console.log('got event from wallet: ', { event })
-    const { address } = event.data
-    this.setState({ address })
-    // event.source is window.opener
-    // event.data is 'hello there!'
+
+    if (event.data.action === 'PASS_ADDRESS') {
+      const { address } = event.data.payload
+      this.setState({ address })
+      // event.source is window.opener
+      // event.data is 'hello there!'
+    } else if (event.data.action === 'PASS_TRANSACTION_RESULT') {
+      console.log('received tx result', event.data.payload)      
+      const { success, txHash } = event.data.payload
+      if (success) {
+        setTimeout(() => {
+          window.alert(`Got txHash: ${txHash}`)
+        }, 100)
+      }
+    }
+  }
+
+  _onSubmit () {
+    const newWindow = window.open(WALLET_URL, '_blank')
+    console.log('sending transaction')
+    setTimeout(() => {
+      const message = { action: 'SEND_TRANSACTION' }
+      newWindow.postMessage(message, WALLET_URL)
+    }, 500)
   }
   
   render () {
@@ -43,14 +64,12 @@ class App extends React.Component {
         Address: {this.state.address || 'Not connected' }
       </p>
       
-        <a
+        <button
       className='App-link'
-      href='https://reactjs.org'
-      target='_blank'
-      rel='noopener noreferrer'
+      onClick={this._onSubmit.bind(this)}
         >
         Submit Tx
-      </a>
+      </button>
         </header>
         </div>
     )
