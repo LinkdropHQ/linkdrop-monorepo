@@ -1,5 +1,5 @@
 import React from 'react'
-import { Wallet } from 'ethers'
+import { Wallet, ethers } from 'ethers'
 import './App.css'
 
 const DAPP_URL = 'http://localhost:3001'
@@ -8,12 +8,14 @@ class App extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      address: null
+      address: null,
+      balance: 0
     }
+
+    this.provider = ethers.getDefaultProvider('rinkeby')
   }
-  
-  async componentDidMount () {
-    console.log('component did mount')
+
+  async _getPrivateKey () {
     let pk = await window.localStorage.getItem('pkKey')
     console.log({ pk })
     if (!pk) {
@@ -24,10 +26,18 @@ class App extends React.Component {
     } else {
       console.log('found existing pk: ', pk)
     }
-
+    return pk
+  }
+  
+  async componentDidMount () {
+    const pk = await this._getPrivateKey()
+    
     // update ethereum wallet address
     const address = new Wallet(pk).address
-    this.setState({ address })
+
+    const balance = (await this.provider.getBalance(address)).toString()
+    console.log({ balance })
+    this.setState({ address, balance })
     
     window.addEventListener('message', this.receiveMessage.bind(this), false)
   }
@@ -52,10 +62,10 @@ class App extends React.Component {
         event.source.postMessage({ action: 'PASS_TRANSACTION_RESULT', payload: { txHash: '0x000', success: true } },
                                  event.origin)
       } else {
-        event.source.postMessage({ action: 'PASS_TRANSACTION_RESULT', payload: { txHash: '0x000', success: false } },
+        event.source.postMessage({ action: 'PASS_TRANSACTION_RESULT', payload: { success: false } },
                                  event.origin)
-        
       }
+      
       setTimeout(() => { // let post event before closing window
         window.close()
       }, 0)      
@@ -72,13 +82,16 @@ class App extends React.Component {
         <p>
         Address: { this.state.address }
       </p>
+        <p>
+        Wei: { this.state.balance }
+      </p>
       
         <a
       className='App-link'
       href={DAPP_URL}
       target='_blank'
         >
-        Connect With Dapp
+        Connect Dapp
       </a>
         </header>
         </div>
