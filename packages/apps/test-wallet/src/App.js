@@ -47,16 +47,18 @@ class App extends React.Component {
       event.source.postMessage({ action: 'PASS_ADDRESS', payload: { address: this.state.address } },
                                event.origin)
     } else if (event.data.action === 'SEND_TRANSACTION') {
-      console.log('sending transaction')
-      window.alert('sending transaction')
-
-      // notifying that transaction have been sent
-      event.source.postMessage({ action: 'PASS_TRANSACTION_RESULT', payload: { txHash: '0x000', success: true } },
-                               event.origin)
-
+      if (window.confirm('Do you want to submit transaction?')) { 
+        // notifying that transaction have been sent
+        event.source.postMessage({ action: 'PASS_TRANSACTION_RESULT', payload: { txHash: '0x000', success: true } },
+                                 event.origin)
+      } else {
+        event.source.postMessage({ action: 'PASS_TRANSACTION_RESULT', payload: { txHash: '0x000', success: false } },
+                                 event.origin)
+        
+      }
       setTimeout(() => { // let post event before closing window
         window.close()
-      }, 0)
+      }, 0)      
     }
   }
   

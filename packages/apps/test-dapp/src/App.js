@@ -33,13 +33,17 @@ class App extends React.Component {
       // event.source is window.opener
       // event.data is 'hello there!'
     } else if (event.data.action === 'PASS_TRANSACTION_RESULT') {
-      console.log('received tx result', event.data.payload)      
+      console.log('received tx result', event.data.payload)
       const { success, txHash } = event.data.payload
+      let message
       if (success) {
-        setTimeout(() => {
-          window.alert(`Got txHash: ${txHash}`)
-        }, 100)
+        message = `Got txHash: ${txHash}`
+      } else {
+        message = 'Transaction was rejected by user'
       }
+      setTimeout(() => {
+        window.alert(message)
+      }, 100)
     }
   }
 
