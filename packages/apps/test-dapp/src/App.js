@@ -53,7 +53,7 @@ class App extends React.Component {
     setTimeout(() => {
       const message = { action: 'SEND_TRANSACTION' }
       newWindow.postMessage(message, WALLET_URL)
-    }, 500)
+    }, 1000)
   }
   
   render () {

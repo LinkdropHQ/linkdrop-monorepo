@@ -13,6 +13,8 @@ class App extends React.Component {
     }
 
     this.provider = ethers.getDefaultProvider('rinkeby')
+    this.wallet = null
+    window.addEventListener('message', this.receiveMessage.bind(this), false)    
   }
 
   async _getPrivateKey () {
@@ -33,13 +35,12 @@ class App extends React.Component {
     const pk = await this._getPrivateKey()
     
     // update ethereum wallet address
-    const address = new Wallet(pk).address
+    this.wallet = new Wallet(pk, this.provider)
+    const address = this.wallet.address
 
     const balance = (await this.provider.getBalance(address)).toString()
     console.log({ balance })
     this.setState({ address, balance })
-    
-    window.addEventListener('message', this.receiveMessage.bind(this), false)
   }
 
   receiveMessage (event) {
@@ -57,18 +58,31 @@ class App extends React.Component {
       event.source.postMessage({ action: 'PASS_ADDRESS', payload: { address: this.state.address } },
                                event.origin)
     } else if (event.data.action === 'SEND_TRANSACTION') {
-      if (window.confirm('Do you want to submit transaction?')) { 
-        // notifying that transaction have been sent
-        event.source.postMessage({ action: 'PASS_TRANSACTION_RESULT', payload: { txHash: '0x000', success: true } },
-                                 event.origin)
-      } else {
-        event.source.postMessage({ action: 'PASS_TRANSACTION_RESULT', payload: { success: false } },
-                                 event.origin)
-      }
-      
-      setTimeout(() => { // let post event before closing window
-        window.close()
-      }, 0)      
+      setTimeout(async () => {
+        if (window.confirm('Do you want to submit transaction?')) {
+
+        
+          let txParams = {
+            to: this.wallet.address, // send to yourself
+            // ... or supports ENS names
+            value: 10 // 10 gwei
+          }
+          
+          let tx = await this.wallet.sendTransaction(txParams)
+          console.log('Tx sent: ', tx)
+          
+          // notifying that transaction have been sent
+          event.source.postMessage({ action: 'PASS_TRANSACTION_RESULT', payload: { txHash: tx.hash, success: true } },
+                                   event.origin)
+        } else {
+          event.source.postMessage({ action: 'PASS_TRANSACTION_RESULT', payload: { success: false } },
+                                   event.origin)
+        }
+        
+        setTimeout(() => { // let post event before closing window
+          window.close()
+        }, 0)
+      })
     }
   }
   
