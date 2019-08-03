@@ -1,10 +1,17 @@
 import React from 'react'
 import { Wallet } from 'ethers'
-import logo from './logo.svg'
 import './App.css'
 
+const DAPP_URL = 'http://localhost:3001'
 
 class App extends React.Component {
+  constructor (props) {
+    super(props)
+    this.state = {
+      address: null
+    }
+  }
+  
   async componentDidMount () {
     console.log('component did mount')
     let pk = await window.localStorage.getItem('pkKey')
@@ -17,23 +24,46 @@ class App extends React.Component {
     } else {
       console.log('found existing pk: ', pk)
     }
+
+    // update ethereum wallet address
+    const address = new Wallet(pk).address
+    this.setState({ address })
+    
+    window.addEventListener('message', this.receiveMessage.bind(this), false)
+  }
+
+  receiveMessage (event) {
+    // Do we trust the sender of this message?
+    if (event.origin !== DAPP_URL) return
+    console.log('got event from dapp: ', { event })
+    // event.source is window.opener
+    // event.data is 'hello there!'
+
+    // Assuming you've verified the origin of the received message (which
+    // you must do in any case), a convenient idiom for replying to a
+    // message is to call postMessage on event.source and provide
+    // event.origin as the targetOrigin.
+    event.source.postMessage({ address: this.state.address },
+                             event.origin)
   }
   
   render () {
     return (
         <div className='App'>
         <header className='App-header'>
-        <img src={logo} className='App-logo' alt='logo' />
         <p>
         Test Wallet
       </p>
+        <p>
+        Address: { this.state.address }
+      </p>
+      
         <a
       className='App-link'
-      href='https://reactjs.org'
+      href={DAPP_URL}
       target='_blank'
-      rel='noopener noreferrer'
         >
-        Learn React
+        Connect With Dapp
       </a>
         </header>
         </div>

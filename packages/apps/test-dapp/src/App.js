@@ -4,6 +4,13 @@ import './App.css'
 const WALLET_URL = 'http://localhost:3000'
 
 class App extends React.Component {
+  constructor (props) {
+    super(props)
+    this.state = {
+      address: null
+    }
+  }
+  
   async componentDidMount () {
     console.log('component did mount')
     const walletWindow = window.opener
@@ -18,6 +25,8 @@ class App extends React.Component {
     // Do we trust the sender of this message?
     if (event.origin !== WALLET_URL) return
     console.log('got event from wallet: ', { event })
+    const { address } = event.data
+    this.setState({ address })
     // event.source is window.opener
     // event.data is 'hello there!'
   }
@@ -28,6 +37,10 @@ class App extends React.Component {
         <header className='App-header'>
         <p>
         My Amazing Dapp
+      </p>
+
+        <p>
+        Address: {this.state.address || 'Not connected' }
       </p>
       
         <a
