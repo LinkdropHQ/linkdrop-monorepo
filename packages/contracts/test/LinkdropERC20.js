@@ -147,7 +147,7 @@ describe('ETH/ERC20 linkdrop tests', () => {
 
     await expect(
       proxyInstance.removeSigner(receiver.address, { gasLimit: 500000 })
-    ).to.be.revertedWith('Only linkdrop master')
+    ).to.be.revertedWith('ONLY_LINKDROP_MASTER')
     isSigner = await proxyInstance.isLinkdropSigner(receiver.address)
     expect(isSigner).to.eq(true)
   })
@@ -194,7 +194,7 @@ describe('ETH/ERC20 linkdrop tests', () => {
         receiverAddress,
         receiverSignature
       )
-    ).to.be.revertedWith('Insufficient allowance')
+    ).to.be.revertedWith('INSUFFICIENT_ALLOWANCE')
   })
 
   it('creates new link key and verifies its signature', async () => {
@@ -245,7 +245,7 @@ describe('ETH/ERC20 linkdrop tests', () => {
     )
     // Pausing
     await expect(proxyInstance.pause({ gasLimit: 500000 })).to.be.revertedWith(
-      'Only linkdrop master'
+      'ONLY_LINKDROP_MASTER'
     )
   })
 
@@ -313,7 +313,7 @@ describe('ETH/ERC20 linkdrop tests', () => {
         receiverAddress,
         receiverSignature
       )
-    ).to.be.revertedWith('Paused')
+    ).to.be.revertedWith('LINKDROP_PROXY_CONTRACT_PAUSED')
   })
 
   it('should fail to claim with insufficient allowance', async () => {
@@ -349,7 +349,7 @@ describe('ETH/ERC20 linkdrop tests', () => {
         receiverSignature,
         { gasLimit: 500000 }
       )
-    ).to.be.revertedWith('Insufficient allowance')
+    ).to.be.revertedWith('INSUFFICIENT_ALLOWANCE')
   })
 
   it('should fail to claim tokens by expired link', async () => {
@@ -383,7 +383,7 @@ describe('ETH/ERC20 linkdrop tests', () => {
         receiverSignature,
         { gasLimit: 500000 }
       )
-    ).to.be.revertedWith('Expired link')
+    ).to.be.revertedWith('LINK_EXPIRED')
   })
 
   it('should fail to claim with invalid contract version', async () => {
@@ -419,7 +419,7 @@ describe('ETH/ERC20 linkdrop tests', () => {
         receiverSignature,
         { gasLimit: 500000 }
       )
-    ).to.be.revertedWith('Invalid linkdrop signer signature')
+    ).to.be.revertedWith('INVALID_LINKDROP_SIGNER_SIGNATURE')
   })
 
   it('should fail to claim with invalid chain id', async () => {
@@ -454,7 +454,7 @@ describe('ETH/ERC20 linkdrop tests', () => {
         receiverSignature,
         { gasLimit: 500000 }
       )
-    ).to.be.revertedWith('Invalid linkdrop signer signature')
+    ).to.be.revertedWith('INVALID_LINKDROP_SIGNER_SIGNATURE')
   })
 
   it('should succesfully claim tokens with valid claim params and send fee to relayer', async () => {
@@ -526,7 +526,7 @@ describe('ETH/ERC20 linkdrop tests', () => {
         receiverSignature,
         { gasLimit: 500000 }
       )
-    ).to.be.revertedWith('Claimed link')
+    ).to.be.revertedWith('LINK_CLAIMED')
   })
 
   it('should fail to claim unavailable amount of tokens', async () => {
@@ -563,7 +563,7 @@ describe('ETH/ERC20 linkdrop tests', () => {
         receiverSignature,
         { gasLimit: 800000 }
       )
-    ).to.be.revertedWith('Insufficient tokens')
+    ).to.be.revertedWith('INSUFFICIENT_TOKENS')
   })
 
   it('should fail to claim tokens with fake linkdropMaster signature', async () => {
@@ -591,7 +591,7 @@ describe('ETH/ERC20 linkdrop tests', () => {
         receiverSignature,
         { gasLimit: 500000 }
       )
-    ).to.be.revertedWith('Invalid linkdrop signer signature')
+    ).to.be.revertedWith('INVALID_LINKDROP_SIGNER_SIGNATURE')
   })
 
   it('should fail to claim tokens with fake receiver signature', async () => {
@@ -635,7 +635,7 @@ describe('ETH/ERC20 linkdrop tests', () => {
         receiverSignature,
         { gasLimit: 500000 }
       )
-    ).to.be.revertedWith('Invalid receiver signature')
+    ).to.be.revertedWith('INVALID_RECEIVER_SIGNATURE')
   })
 
   it('should fail to claim tokens by canceled link', async () => {
@@ -668,7 +668,7 @@ describe('ETH/ERC20 linkdrop tests', () => {
         receiverSignature,
         { gasLimit: 500000 }
       )
-    ).to.be.revertedWith('Canceled link')
+    ).to.be.revertedWith('LINK_CANCELED')
   })
 
   it('should be able to get balance and send ethers to proxy', async () => {
@@ -849,6 +849,6 @@ describe('ETH/ERC20 linkdrop tests', () => {
         receiverAddress,
         receiverSignature
       )
-    ).to.be.revertedWith('Not deployed')
+    ).to.be.revertedWith('LINKDROP_PROXY_CONTRACT_NOT_DEPLOYED')
   })
 })

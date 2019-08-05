@@ -96,31 +96,29 @@ contract LinkdropERC721 is ILinkdropERC721, LinkdropCommon {
         uint _fee
     )
     public view
+    whenNotPaused
     returns (bool)
     {
-        // Make sure contract is not paused
-        require(!paused(), "Paused");
-
         // Make sure nft address is not equal to address(0)
-        require(_nftAddress != address(0), "Invalid nft address");
+        require(_nftAddress != address(0), "INVALID_NFT_ADDRESS");
 
         // Make sure link is not claimed
-        require(isClaimedLink(_linkId) == false, "Claimed link");
+        require(isClaimedLink(_linkId) == false, "LINK_CLAIMED");
 
         // Make sure link is not canceled
-        require(isCanceledLink(_linkId) == false, "Canceled link");
+        require(isCanceledLink(_linkId) == false, "LINK_CANCELED");
 
         // Make sure link is not expired
-        require(_expiration >= now, "Expired link");
+        require(_expiration >= now, "LINK_EXPIRED");
 
         // Make sure eth amount is available for this contract
-        require(address(this).balance >= _weiAmount.add(_fee), "Insufficient ethers");
+        require(address(this).balance >= _weiAmount.add(_fee), "INSUFFICIENT_ETHERS");
 
         // Make sure linkdrop master is owner of token
-        require(IERC721(_nftAddress).ownerOf(_tokenId) == linkdropMaster, "Unavailable token");
+        require(IERC721(_nftAddress).ownerOf(_tokenId) == linkdropMaster, "LINKDROP_MASTER_DOES_NOT_OWN_TOKEN_ID");
 
         // Make sure nft is available for this contract
-        require(IERC721(_nftAddress).isApprovedForAll(linkdropMaster, address(this)), "Insufficient allowance");
+        require(IERC721(_nftAddress).isApprovedForAll(linkdropMaster, address(this)), "INSUFFICIENT_ALLOWANCE");
 
         // Verify that link key is legit and signed by linkdrop signer's private key
         require
@@ -134,14 +132,14 @@ contract LinkdropERC721 is ILinkdropERC721, LinkdropCommon {
                 _linkId,
                 _linkdropSignerSignature
             ),
-            "Invalid linkdrop signer signature"
+            "INVALID_LINKDROP_SIGNER_SIGNATURE"
         );
 
         // Verify that receiver address is signed by ephemeral key assigned to claim link (link key)
         require
         (
             verifyReceiverSignatureERC721(_linkId, _receiver, _receiverSignature),
-            "Invalid receiver signature"
+            "INVALID_RECEIVER_SIGNATURE"
         );
 
         return true;
@@ -195,14 +193,14 @@ contract LinkdropERC721 is ILinkdropERC721, LinkdropCommon {
                 _receiverSignature,
                 _fee
             ),
-            "Invalid claim params"
+            "INVALID_CLAIM_PARAMS"
         );
 
         // Mark link as claimed
         claimedTo[_linkId] = _receiver;
 
         // Make sure transfer succeeds
-        require(_transferFundsERC721(_weiAmount, _nftAddress, _tokenId, _receiver, _feeReceiver, _fee), "Transfer failed");
+        require(_transferFundsERC721(_weiAmount, _nftAddress, _tokenId, _receiver, _feeReceiver, _fee), "TRANSFER_FAILED");
 
         // Log claim
         emit ClaimedERC721(_linkId, _weiAmount, _nftAddress, _tokenId, _receiver);

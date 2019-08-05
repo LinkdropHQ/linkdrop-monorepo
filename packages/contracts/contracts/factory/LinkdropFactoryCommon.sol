@@ -78,8 +78,8 @@ contract LinkdropFactoryCommon is LinkdropFactoryStorage, FeeManager, RelayerMan
     returns (address payable proxy)
     {
 
-        require(!isDeployed(_linkdropMaster, _campaignId), "Deployed");
-        require(_linkdropMaster != address(0), "Invalid linkdrop master address");
+        require(!isDeployed(_linkdropMaster, _campaignId), "LINKDROP_PROXY_CONTRACT_ALREADY_DEPLOYED");
+        require(_linkdropMaster != address(0), "INVALID_LINKDROP_MASTER_ADDRESS");
 
         bytes32 salt = salt(_linkdropMaster, _campaignId);
         bytes memory initcode = getInitcode();
@@ -101,7 +101,7 @@ contract LinkdropFactoryCommon is LinkdropFactoryStorage, FeeManager, RelayerMan
                 masterCopyVersion,
                 chainId
             ),
-            "Failed to initialize"
+            "INITIALIZATION_FAILED"
         );
 
         // Send funds attached to proxy contract
@@ -123,7 +123,7 @@ contract LinkdropFactoryCommon is LinkdropFactoryStorage, FeeManager, RelayerMan
     public
     returns (bool)
     {
-        require(isDeployed(msg.sender, _campaignId), "Not deployed");
+        require(isDeployed(msg.sender, _campaignId), "LINKDROP_PROXY_CONTRACT_NOT_DEPLOYED");
         address payable proxy = address(uint160(deployed[salt(msg.sender, _campaignId)]));
         ILinkdropCommon(proxy).destroy();
         delete deployed[salt(msg.sender, _campaignId)];
@@ -163,7 +163,7 @@ contract LinkdropFactoryCommon is LinkdropFactoryStorage, FeeManager, RelayerMan
     public onlyOwner
     returns (bool)
     {
-        require(_masterCopy != address(0), "Invalid master copy address");
+        require(_masterCopy != address(0), "INVALID_MASTER_COPY_ADDRESS");
         masterCopyVersion = masterCopyVersion.add(1);
 
         require
@@ -175,7 +175,7 @@ contract LinkdropFactoryCommon is LinkdropFactoryStorage, FeeManager, RelayerMan
                 masterCopyVersion,
                 chainId
             ),
-            "Failed to initialize"
+            "INITIALIZATION_FAILED"
         );
 
         bytes memory bytecode = abi.encodePacked

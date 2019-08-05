@@ -1,6 +1,6 @@
 {
   "name": "@linkdrop/app-claim",
-  "version": "1.0.8",
+  "version": "1.0.10",
   "description": "Front end part for linkdrop app to claim tokens",
   "main": "index.js",
   "author": "",
@@ -23,9 +23,9 @@
     "@babel/preset-env": "^7.4.5",
     "@babel/preset-react": "^7.0.0",
     "@babel/register": "^7.4.4",
-    "@linkdrop/commons": "^1.0.8",
-    "@linkdrop/sdk": "^1.0.8",
-    "@linkdrop/ui-kit": "^1.0.8",
+    "@linkdrop/commons": "^1.0.10",
+    "@linkdrop/sdk": "^1.0.10",
+    "@linkdrop/ui-kit": "^1.0.10",
     "babel-eslint": "^10.0.2",
     "babel-loader": "^8.0.5",
     "babel-plugin-react-css-modules": "^5.2.4",
@@ -67,6 +67,7 @@
     "web3-react": "^5.0.2",
     "webpack": "^4.10.2",
     "webpack-cli": "^3.1.1",
+    "webpack-dev-server": "^3.7.2",
     "webpack-livereload-plugin": "^0.10.0",
     "webpack-merge": "^4.2.1"
   },

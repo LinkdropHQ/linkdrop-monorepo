@@ -10,14 +10,14 @@ contract RelayerManager is Ownable {
     event RelayerRemoved(address indexed relayer);
 
     function addRelayer(address _relayer) external onlyOwner returns (bool) {
-        require(_relayer != address(0) && !isRelayer[_relayer], "Invalid address");
+        require(_relayer != address(0) && !isRelayer[_relayer], "INVALID_RELAYER_ADDRESS");
         isRelayer[_relayer] = true;
         emit RelayerAdded(_relayer);
         return true;
     }
 
     function removeRelayer(address _relayer) external onlyOwner returns (bool) {
-        require(isRelayer[_relayer], "Invalid address");
+        require(isRelayer[_relayer], "INVALID_RELAYER_ADDRESS");
         isRelayer[_relayer] = false;
         emit RelayerRemoved(_relayer);
         return true;

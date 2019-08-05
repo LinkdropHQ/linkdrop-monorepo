@@ -16,7 +16,7 @@ contract FeeManager is Ownable {
 
     function _setFee(address _proxy, uint _fee) internal {
         if (fees[_proxy] != 0) {
-            require(_fee < fees[_proxy], "Can't increase fee");
+            require(_fee < fees[_proxy], "CANNOT_INCREASE_FEE");
         }
         fees[_proxy] = _fee;
         emit FeeChanged(_proxy, _fee);

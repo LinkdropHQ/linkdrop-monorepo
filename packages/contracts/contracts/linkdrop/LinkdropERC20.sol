@@ -97,39 +97,37 @@ contract LinkdropERC20 is ILinkdropERC20, LinkdropCommon {
         uint _fee
     )
     public view
+    whenNotPaused
     returns (bool)
     {
-        // Make sure contract is not paused
-        require(!paused(), "Paused");
-
         // If tokens are being claimed
         if (_tokenAmount > 0) {
-            require(_tokenAddress != address(0), "Invalid token address");
+            require(_tokenAddress != address(0), "INVALID_TOKEN_ADDRESS");
         }
 
         // Make sure link is not claimed
-        require(isClaimedLink(_linkId) == false, "Claimed link");
+        require(isClaimedLink(_linkId) == false, "LINK_CLAIMED");
 
         // Make sure link is not canceled
-        require(isCanceledLink(_linkId) == false, "Canceled link");
+        require(isCanceledLink(_linkId) == false, "LINK_CANCELED");
 
         // Make sure link is not expired
-        require(_expiration >= now, "Expired link");
+        require(_expiration >= now, "LINK_EXPIRED");
 
         // Make sure eth amount is available for this contract
-        require(address(this).balance >= _weiAmount.add(_fee), "Insufficient ethers");
+        require(address(this).balance >= _weiAmount.add(_fee), "INSUFFICIENT_ETHERS");
 
         // Make sure tokens are available for this contract
         if (_tokenAddress != address(0)) {
             require
             (
                 IERC20(_tokenAddress).balanceOf(linkdropMaster) >= _tokenAmount,
-                "Insufficient tokens"
+                "INSUFFICIENT_TOKENS"
             );
 
             require
             (
-                IERC20(_tokenAddress).allowance(linkdropMaster, address(this)) >= _tokenAmount, "Insufficient allowance"
+                IERC20(_tokenAddress).allowance(linkdropMaster, address(this)) >= _tokenAmount, "INSUFFICIENT_ALLOWANCE"
             );
         }
 
@@ -145,14 +143,14 @@ contract LinkdropERC20 is ILinkdropERC20, LinkdropCommon {
                 _linkId,
                 _linkdropSignerSignature
             ),
-            "Invalid linkdrop signer signature"
+            "INVALID_LINKDROP_SIGNER_SIGNATURE"
         );
 
         // Verify that receiver address is signed by ephemeral key assigned to claim link (link key)
         require
         (
             verifyReceiverSignature(_linkId, _receiver, _receiverSignature),
-            "Invalid receiver signature"
+            "INVALID_RECEIVER_SIGNATURE"
         );
 
         return true;
@@ -206,14 +204,14 @@ contract LinkdropERC20 is ILinkdropERC20, LinkdropCommon {
                 _receiverSignature,
                 _fee
             ),
-            "Invalid claim params"
+            "INVALID_CLAIM_PARAMS"
         );
 
         // Mark link as claimed
         claimedTo[_linkId] = _receiver;
 
         // Make sure transfer succeeds
-        require(_transferFunds(_weiAmount, _tokenAddress, _tokenAmount, _receiver, _feeReceiver, _fee), "Transfer failed");
+        require(_transferFunds(_weiAmount, _tokenAddress, _tokenAmount, _receiver, _feeReceiver, _fee), "TRANSFER_FAILED");
 
         // Emit claim event
         emit Claimed(_linkId, _weiAmount, _tokenAddress, _tokenAmount, _receiver);
@@ -252,7 +250,7 @@ contract LinkdropERC20 is ILinkdropERC20, LinkdropCommon {
 
         // Transfer tokens
         if (_tokenAmount > 0) {
-            require(IERC20(_tokenAddress).transferFrom(linkdropMaster, _receiver, _tokenAmount), "");
+            IERC20(_tokenAddress).transferFrom(linkdropMaster, _receiver, _tokenAmount);
         }
 
         return true;
