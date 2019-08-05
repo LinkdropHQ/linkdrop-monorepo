@@ -48,7 +48,7 @@ const claim = async () => {
       factoryAddress: FACTORY_ADDRESS
     })
 
-    const { error, success, txHash } = await linkdropSDK.claim({
+    const { errors, success, txHash } = await linkdropSDK.claim({
       weiAmount,
       tokenAddress,
       tokenAmount,
@@ -65,8 +65,6 @@ const claim = async () => {
     if (success === true && txHash) {
       spinner.succeed(term.bold.str('Submitted claim transaction'))
       term.bold(`Tx hash: ^g${txHash}\n`)
-    } else {
-      throw newError(`${error.reason ? error.reason : error}`)
     }
   } catch (err) {
     spinner.fail(term.bold.red.str('Failed to claim'))

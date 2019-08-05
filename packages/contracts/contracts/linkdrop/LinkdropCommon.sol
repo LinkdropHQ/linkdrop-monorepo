@@ -24,7 +24,7 @@ contract LinkdropCommon is ILinkdropCommon, LinkdropStorage {
     public
     returns (bool)
     {
-        require(!initialized, "Already initialized");
+        require(!initialized, "LINKDROP_PROXY_CONTRACT_ALREADY_INITIALIZED");
         owner = _owner;
         linkdropMaster = _linkdropMaster;
         isLinkdropSigner[linkdropMaster] = true;
@@ -35,22 +35,22 @@ contract LinkdropCommon is ILinkdropCommon, LinkdropStorage {
     }
 
     modifier onlyLinkdropMaster() {
-        require(msg.sender == linkdropMaster, "Only linkdrop master");
+        require(msg.sender == linkdropMaster, "ONLY_LINKDROP_MASTER");
         _;
     }
 
     modifier onlyLinkdropMasterOrFactory() {
-        require (msg.sender == linkdropMaster || msg.sender == owner, "Only linkdrop master or factory");
+        require (msg.sender == linkdropMaster || msg.sender == owner, "ONLY_LINKDROP_MASTER_OR_FACTORY");
         _;
     }
 
     modifier onlyFactory() {
-        require(msg.sender == owner, "Only factory");
+        require(msg.sender == owner, "ONLY_FACTORY");
         _;
     }
 
     modifier whenNotPaused() {
-        require(!paused(), "Paused");
+        require(!paused(), "LINKDROP_PROXY_CONTRACT_PAUSED");
         _;
     }
 
@@ -86,7 +86,7 @@ contract LinkdropCommon is ILinkdropCommon, LinkdropStorage {
     * @return True if success
     */
     function cancel(address _linkId) external onlyLinkdropMaster returns (bool) {
-        require(!isClaimedLink(_linkId), "Claimed link");
+        require(!isClaimedLink(_linkId), "LINK_CLAIMED");
         _canceled[_linkId] = true;
         emit Canceled(_linkId);
         return true;
@@ -116,7 +116,7 @@ contract LinkdropCommon is ILinkdropCommon, LinkdropStorage {
     * @return True if success
     */
     function unpause() external onlyLinkdropMaster returns (bool) {
-        require(paused(), "Unpaused");
+        require(paused(), "LINKDROP_CONTRACT_ALREADY_UNPAUSED");
         _paused = false;
         emit Unpaused();
         return true;
@@ -128,7 +128,7 @@ contract LinkdropCommon is ILinkdropCommon, LinkdropStorage {
     * @return True if success
     */
     function addSigner(address _linkdropSigner) external payable onlyLinkdropMasterOrFactory returns (bool) {
-        require(_linkdropSigner != address(0), "Invalid address");
+        require(_linkdropSigner != address(0), "INVALID_LINKDROP_SIGNER_ADDRESS");
         isLinkdropSigner[_linkdropSigner] = true;
         return true;
     }
@@ -139,7 +139,7 @@ contract LinkdropCommon is ILinkdropCommon, LinkdropStorage {
     * @return True if success
     */
     function removeSigner(address _linkdropSigner) external onlyLinkdropMaster returns (bool) {
-        require(_linkdropSigner != address(0), "Invalid address");
+        require(_linkdropSigner != address(0), "INVALID_LINKDROP_SIGNER_ADDRESS");
         isLinkdropSigner[_linkdropSigner] = false;
         return true;
     }

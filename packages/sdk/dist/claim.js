@@ -26,7 +26,7 @@ function () {
   var _ref2 = (0, _asyncToGenerator2["default"])(
   /*#__PURE__*/
   _regenerator["default"].mark(function _callee(_ref) {
-    var jsonRpcUrl, apiHost, weiAmount, tokenAddress, tokenAmount, expirationTime, version, chainId, linkKey, linkdropMasterAddress, linkdropSignerSignature, receiverAddress, factoryAddress, campaignId, provider, receiverSignature, linkId, claimParams, response, _response$data, error, success, txHash;
+    var jsonRpcUrl, apiHost, weiAmount, tokenAddress, tokenAmount, expirationTime, version, chainId, linkKey, linkdropMasterAddress, linkdropSignerSignature, receiverAddress, factoryAddress, campaignId, provider, receiverSignature, linkId, claimParams, response, _response$data, error, errors, success, txHash;
 
     return _regenerator["default"].wrap(function _callee$(_context) {
       while (1) {
@@ -171,43 +171,25 @@ function () {
               factoryAddress: factoryAddress,
               campaignId: campaignId
             };
-            _context.prev = 35;
-            _context.next = 38;
+            _context.next = 37;
             return axios.post("".concat(apiHost, "/api/v1/linkdrops/claim"), claimParams);
 
-          case 38:
+          case 37:
             response = _context.sent;
-
-            if (!(response.status !== 200)) {
-              _context.next = 43;
-              break;
-            }
-
-            throw new Error("Invalid response status ".concat(response.status));
-
-          case 43:
-            _response$data = response.data, error = _response$data.error, success = _response$data.success, txHash = _response$data.txHash;
+            _response$data = response.data, error = _response$data.error, errors = _response$data.errors, success = _response$data.success, txHash = _response$data.txHash;
             return _context.abrupt("return", {
               error: error,
+              errors: errors,
               success: success,
               txHash: txHash
             });
 
-          case 45:
-            _context.next = 50;
-            break;
-
-          case 47:
-            _context.prev = 47;
-            _context.t0 = _context["catch"](35);
-            throw new Error(_context.t0);
-
-          case 50:
+          case 40:
           case "end":
             return _context.stop();
         }
       }
-    }, _callee, null, [[35, 47]]);
+    }, _callee);
   }));
 
   return function claim(_x) {
@@ -223,7 +205,7 @@ function () {
   var _ref4 = (0, _asyncToGenerator2["default"])(
   /*#__PURE__*/
   _regenerator["default"].mark(function _callee2(_ref3) {
-    var jsonRpcUrl, apiHost, weiAmount, nftAddress, tokenId, expirationTime, version, chainId, linkKey, linkdropMasterAddress, linkdropSignerSignature, receiverAddress, factoryAddress, campaignId, provider, receiverSignature, linkId, claimParams, response, _response$data2, error, success, txHash;
+    var jsonRpcUrl, apiHost, weiAmount, nftAddress, tokenId, expirationTime, version, chainId, linkKey, linkdropMasterAddress, linkdropSignerSignature, receiverAddress, factoryAddress, campaignId, provider, receiverSignature, linkId, claimParams, response, _response$data2, error, errors, success, txHash;
 
     return _regenerator["default"].wrap(function _callee2$(_context2) {
       while (1) {
@@ -368,43 +350,25 @@ function () {
               factoryAddress: factoryAddress,
               campaignId: campaignId
             };
-            _context2.prev = 35;
-            _context2.next = 38;
+            _context2.next = 37;
             return axios.post("".concat(apiHost, "/api/v1/linkdrops/claim-erc721"), claimParams);
 
-          case 38:
+          case 37:
             response = _context2.sent;
-
-            if (!(response.status !== 200)) {
-              _context2.next = 43;
-              break;
-            }
-
-            throw new Error("Invalid response status ".concat(response.status));
-
-          case 43:
-            _response$data2 = response.data, error = _response$data2.error, success = _response$data2.success, txHash = _response$data2.txHash;
+            _response$data2 = response.data, error = _response$data2.error, errors = _response$data2.errors, success = _response$data2.success, txHash = _response$data2.txHash;
             return _context2.abrupt("return", {
               error: error,
+              errors: errors,
               success: success,
               txHash: txHash
             });
 
-          case 45:
-            _context2.next = 50;
-            break;
-
-          case 47:
-            _context2.prev = 47;
-            _context2.t0 = _context2["catch"](35);
-            throw new Error(_context2.t0);
-
-          case 50:
+          case 40:
           case "end":
             return _context2.stop();
         }
       }
-    }, _callee2, null, [[35, 47]]);
+    }, _callee2);
   }));
 
   return function claimERC721(_x2) {

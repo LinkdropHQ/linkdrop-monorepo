@@ -45,7 +45,7 @@ const claimERC721 = async () => {
       apiHost: API_HOST
     })
 
-    const { error, success, txHash } = await linkdropSDK.claimERC721({
+    const { errors, success, txHash } = await linkdropSDK.claimERC721({
       jsonRpcUrl: JSON_RPC_URL,
       apiHost: API_HOST,
       weiAmount,
@@ -64,8 +64,6 @@ const claimERC721 = async () => {
     if (success === true && txHash) {
       spinner.succeed(term.bold.str('Submitted claim transaction'))
       term.bold(`Tx hash: ^g${txHash}\n`)
-    } else {
-      throw newError(`${error.reason ? error.reason : error}`)
     }
   } catch (err) {
     spinner.fail(term.bold.red.str('Failed to claim'))

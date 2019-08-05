@@ -38,7 +38,7 @@ contract LinkdropFactoryERC721 is ILinkdropFactoryERC721, LinkdropFactoryCommon 
     returns (bool)
     {
         // Make sure proxy contract is deployed
-        require(isDeployed(_linkdropMaster, _campaignId), "Not deployed");
+        require(isDeployed(_linkdropMaster, _campaignId), "LINKDROP_PROXY_CONTRACT_NOT_DEPLOYED");
 
         uint fee = fees[deployed[salt(_linkdropMaster, _campaignId)]];
 
@@ -87,10 +87,10 @@ contract LinkdropFactoryERC721 is ILinkdropFactoryERC721, LinkdropFactoryCommon 
     returns (bool)
     {
         // Make sure proxy contract is deployed
-        require(isDeployed(_linkdropMaster, _campaignId), "Not deployed");
+        require(isDeployed(_linkdropMaster, _campaignId), "LINKDROP_PROXY_CONTRACT_NOT_DEPLOYED");
 
         // Make sure only whitelisted relayer calls this function
-        require(isRelayer[msg.sender], "Only relayer");
+        require(isRelayer[msg.sender], "ONLY_RELAYER");
 
         uint fee = fees[deployed[salt(_linkdropMaster, _campaignId)]];
 

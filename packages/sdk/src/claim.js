@@ -100,21 +100,14 @@ export const claim = async ({
     factoryAddress,
     campaignId
   }
-  try {
-    const response = await axios.post(
-      `${apiHost}/api/v1/linkdrops/claim`,
-      claimParams
-    )
 
-    if (response.status !== 200) {
-      throw new Error(`Invalid response status ${response.status}`)
-    } else {
-      const { error, success, txHash } = response.data
-      return { error, success, txHash }
-    }
-  } catch (err) {
-    throw new Error(err)
-  }
+  const response = await axios.post(
+    `${apiHost}/api/v1/linkdrops/claim`,
+    claimParams
+  )
+
+  const { error, errors, success, txHash } = response.data
+  return { error, errors, success, txHash }
 }
 
 export const claimERC721 = async ({
@@ -217,18 +210,12 @@ export const claimERC721 = async ({
     factoryAddress,
     campaignId
   }
-  try {
-    const response = await axios.post(
-      `${apiHost}/api/v1/linkdrops/claim-erc721`,
-      claimParams
-    )
-    if (response.status !== 200) {
-      throw new Error(`Invalid response status ${response.status}`)
-    } else {
-      const { error, success, txHash } = response.data
-      return { error, success, txHash }
-    }
-  } catch (err) {
-    throw new Error(err)
-  }
+
+  const response = await axios.post(
+    `${apiHost}/api/v1/linkdrops/claim-erc721`,
+    claimParams
+  )
+
+  const { error, errors, success, txHash } = response.data
+  return { error, errors, success, txHash }
 }
