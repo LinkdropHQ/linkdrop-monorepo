@@ -2,6 +2,7 @@ import React from 'react'
 import { Loading } from '@linkdrop/ui-kit'
 import { actions, translate, platform } from 'decorators'
 import InitialPage from './initial-page'
+import { Page } from 'components/pages'
 import WalletChoosePage from './wallet-choose-page'
 import ClaimingProcessPage from './claiming-process-page'
 import ErrorPage from './error-page'
@@ -83,9 +84,12 @@ class Claim extends React.Component {
   }
 
   render () {
-    return <Web3Consumer>
-      {context => this.renderCurrentPage({ context })}
-    </Web3Consumer>
+    const { step } = this.props
+    return <Page dynamicHeader>
+      <Web3Consumer>
+        {context => this.renderCurrentPage({ context })}
+      </Web3Consumer>
+    </Page>
   }
 
   renderCurrentPage ({ context }) {

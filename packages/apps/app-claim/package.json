@@ -46,6 +46,7 @@
     "is-ios": "^1.0.0",
     "jest-css-modules": "^2.0.0",
     "node-sass": "^4.7.2",
+    "prop-types": "^15.7.2",
     "react": "^16.8.6",
     "react-addons-css-transition-group": "^15.5.2",
     "react-addons-transition-group": "^15.5.2",

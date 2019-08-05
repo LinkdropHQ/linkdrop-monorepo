@@ -19,6 +19,7 @@ import InformationIcon from './information-icon'
 import Cursor from './cursor'
 import Ethereum from './ethereum'
 import Done from './done'
+import About from './about'
 
 export default {
   LinkdropLogo,
@@ -41,5 +42,6 @@ export default {
   InformationIcon,
   Cursor,
   Ethereum,
-  Done
+  Done,
+  About
 }

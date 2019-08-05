@@ -1,10 +1,13 @@
 import React from 'react'
+import { Page } from 'components/pages'
 
 class NotFound extends React.Component {
   render () {
-    return <div>
-      Not found. Sorry
-    </div>
+    return <Page>
+      <div>
+        Not found. Sorry
+      </div>
+    </Page>
   }
 }
 

@@ -1,0 +1,27 @@
+.header {
+  display: flex;
+  align-items: center;
+  padding-top: 0px;
+  padding-bottom: 0px;
+  width: 100%;
+  justify-content: center;
+  text-align: center;
+  height: 60px;
+  font-size: 30px;
+  position: relative;
+  font-family: 'Inter-Bold';
+
+  .headerIcon {
+    position: absolute;
+    left: 30px;
+    top: 50%;
+    transform: translateY(-50%);
+    height: 40px; 
+  }
+}
+
+.body {
+  position: absolute;
+  width: 100%;
+  margin-top: -100%;
+}
