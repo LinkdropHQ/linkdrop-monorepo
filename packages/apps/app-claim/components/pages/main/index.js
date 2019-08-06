@@ -21,7 +21,7 @@ import { Web3Consumer } from 'web3-react'
 }))
 @platform()
 @translate('pages.claim')
-class Claim extends React.Component {
+class Main extends React.Component {
   componentDidMount () {
     const {
       linkKey,
@@ -72,13 +72,14 @@ class Claim extends React.Component {
       // show error page if link expired
       return this.actions().user.setErrors({ errors: ['LINK_EXPIRED'] })
     }
+    console.log(this.actions().contractsData, this.actions().tokens.checkIfClaimed)
 
     if (nftAddress && tokenId) {
-      this.actions().contract.getTokenERC721Data({ nftAddress, tokenId, chainId })
+      this.actions().contractsData.getTokenERC721Data({ nftAddress, tokenId, chainId })
     } else {
-      this.actions().contract.getTokenErc20Data({ tokenAddress, tokenAmount, chainId })
+      this.actions().contractsData.getTokenErc20Data({ tokenAddress, tokenAmount, chainId })
     }
-    this.actions().contract.getETHData({ weiAmount })
+    this.actions().contractsData.getETHData({ weiAmount })
   }
 
   render () {
@@ -162,4 +163,4 @@ class Claim extends React.Component {
   }
 }
 
-export default Claim
+export default Main
