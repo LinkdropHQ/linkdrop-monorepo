@@ -54,10 +54,7 @@ class App extends React.Component {
     // you must do in any case), a convenient idiom for replying to a
     // message is to call postMessage on event.source and provide
     // event.origin as the targetOrigin.
-    if (event.data.action === 'ASK_ADDRESS') {
-      event.source.postMessage({ action: 'PASS_ADDRESS', payload: { address: this.state.address } },
-                               event.origin)
-    } else if (event.data.action === 'SEND_TRANSACTION') {
+    if (event.data.action === 'SEND_TRANSACTION') {
       setTimeout(async () => {
         if (window.confirm('Do you want to submit transaction?')) {
 
@@ -87,6 +84,7 @@ class App extends React.Component {
   }
   
   render () {
+    const dappUrl = `${DAPP_URL}?address=${this.state.address}`
     return (
         <div className='App'>
         <header className='App-header'>
@@ -102,7 +100,7 @@ class App extends React.Component {
       
         <a
       className='App-link'
-      href={DAPP_URL}
+      href={dappUrl}
       target='_blank'
         >
         Connect Dapp

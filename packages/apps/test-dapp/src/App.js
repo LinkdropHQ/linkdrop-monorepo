@@ -1,4 +1,5 @@
 import React from 'react'
+import qs from 'querystring'
 import './App.css'
 
 const WALLET_URL = 'http://localhost:3000'
@@ -6,33 +7,40 @@ const WALLET_URL = 'http://localhost:3000'
 class App extends React.Component {
   constructor (props) {
     super(props)
+    const address = this._getAddressFromUrl()
     this.state = {
-      address: null
+      address
     }
     this.walletWindow = null
   }
+
+  _getAddressFromUrl () {
+    let address = null
+    const paramsFragment = document.location.search.substr(1)
+    if (paramsFragment) {
+      const query = qs.parse(paramsFragment)
+      console.log({ paramsFragment, query })
+      address = query.address
+    }
+    return address
+  }
   
   async componentDidMount () {
-    console.log('component did mount')
-    const walletWindow = window.opener
-    const message = { action: 'ASK_ADDRESS' }
-    walletWindow.postMessage(message, WALLET_URL)
-
-    this.walletWindow = walletWindow
+    // console.log('component did mount')
+    // const walletWindow = window.opener
+    // const message = { action: 'ASK_ADDRESS' }
+    // walletWindow.postMessage(message, WALLET_URL)
     
-    window.addEventListener('message', this.receiveMessage.bind(this), false)
+    // this.walletWindow = walletWindow
+    
+    // window.addEventListener('message', this.receiveMessage.bind(this), false)
   }
 
   receiveMessage (event) {
     // Do we trust the sender of this message?
     if (event.origin !== WALLET_URL) return
 
-    if (event.data.action === 'PASS_ADDRESS') {
-      const { address } = event.data.payload
-      this.setState({ address })
-      // event.source is window.opener
-      // event.data is 'hello there!'
-    } else if (event.data.action === 'PASS_TRANSACTION_RESULT') {
+    if (event.data.action === 'PASS_TRANSACTION_RESULT') {
       console.log('received tx result', event.data.payload)
       const { success, txHash } = event.data.payload
       let message
