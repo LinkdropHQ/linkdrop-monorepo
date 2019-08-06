@@ -14,7 +14,7 @@ class App extends React.Component {
 
     this.provider = ethers.getDefaultProvider('rinkeby')
     this.wallet = null
-    window.addEventListener('message', this.receiveMessage.bind(this), false)    
+    window.addEventListener('message', this.receiveMessage.bind(this), false)
   }
 
   async _getPrivateKey () {
@@ -101,7 +101,6 @@ class App extends React.Component {
         <a
       className='App-link'
       href={dappUrl}
-      target='_blank'
         >
         Connect Dapp
       </a>

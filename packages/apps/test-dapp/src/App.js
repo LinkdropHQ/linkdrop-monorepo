@@ -1,5 +1,6 @@
 import React from 'react'
 import qs from 'querystring'
+import { ethers } from 'ethers'
 import './App.css'
 
 const WALLET_URL = 'http://localhost:3000'
@@ -18,22 +19,28 @@ class App extends React.Component {
     let address = null
     const paramsFragment = document.location.search.substr(1)
     if (paramsFragment) {
-      const query = qs.parse(paramsFragment)
-      console.log({ paramsFragment, query })
-      address = query.address
+      try {
+        const query = qs.parse(paramsFragment)
+        console.log({ paramsFragment, query })
+        address = query.address        
+        address = ethers.utils.getAddress(address)
+      } catch (err) {
+        console.log('bad address')
+        address = null
+      }
     }
     return address
   }
   
   async componentDidMount () {
-    // console.log('component did mount')
-    // const walletWindow = window.opener
-    // const message = { action: 'ASK_ADDRESS' }
-    // walletWindow.postMessage(message, WALLET_URL)
-    
-    // this.walletWindow = walletWindow
-    
-    // window.addEventListener('message', this.receiveMessage.bind(this), false)
+    const persistedAddress = await window.localStorage.getItem('@connect/address')
+    if (this.state.address) {
+      if (this.state.address !== persistedAddress) {
+        window.localStorage.setItem('@connect/address', this.state.address)
+      } 
+    } else if (persistedAddress) {
+      this.setState({ address: persistedAddress })
+    }
   }
 
   receiveMessage (event) {
