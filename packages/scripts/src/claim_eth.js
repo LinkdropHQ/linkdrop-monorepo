@@ -72,4 +72,4 @@ export const claim = async (receiverAddress = RECEIVER_ADDRESS) => {
   }
 }
 
-claim()
+// claim()

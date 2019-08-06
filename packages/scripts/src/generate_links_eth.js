@@ -46,7 +46,7 @@ export const generate = async () => {
 
     const proxyAddress = linkdropSDK.getProxyAddress(CAMPAIGN_ID)
 
-    let cost = WEI_AMOUNT * LINKS_NUMBER
+    let cost = ethers.utils.bigNumberify(WEI_AMOUNT).mul(LINKS_NUMBER)
 
     let amountToSend
 
@@ -59,7 +59,7 @@ export const generate = async () => {
 
     if (proxyBalance < cost) {
       // Transfer ethers
-      amountToSend = cost - proxyBalance
+      amountToSend = cost.sub(proxyBalance)
 
       spinner.info(
         term.bold.str(

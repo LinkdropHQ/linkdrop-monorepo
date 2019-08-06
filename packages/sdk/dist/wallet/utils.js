@@ -15,6 +15,8 @@ var _axios = _interopRequireDefault(require("axios"));
 
 var _signTx = require("./signTx");
 
+var _bignumber = _interopRequireDefault(require("bignumber.js"));
+
 var triggerSafeDeployment =
 /*#__PURE__*/
 function () {
@@ -215,7 +217,7 @@ function () {
           case 7:
             _context4.next = 9;
             return (0, _axios["default"])({
-              url: "/v2/safes/".concat(safe, "/transactions/estimate"),
+              url: "/v2/safes/".concat(safe, "/transactions/estimate/"),
               method: 'post',
               data: {
                 safe: safe,
@@ -235,7 +237,7 @@ function () {
               safeTxGas: safeTxGas,
               baseGas: baseGas,
               gasPrice: gasPrice,
-              nonce: lastUsedNonce
+              nonce: lastUsedNonce || '0'
             });
 
           case 12:
@@ -349,8 +351,22 @@ function () {
 
           case 19:
             signature = _context5.sent;
+            console.log({
+              safe: safe,
+              to: to,
+              value: value,
+              data: data,
+              operation: operation,
+              gasToken: gasToken,
+              safeTxGas: safeTxGas,
+              dataGas: baseGas,
+              gasPrice: gasPrice,
+              refundReceiver: refundReceiver,
+              nonce: nonce,
+              signatures: [signature]
+            });
             return _context5.abrupt("return", (0, _axios["default"])({
-              url: "/v2/safes/".concat(safe, "/transactions/"),
+              url: "/v1/safes/".concat(safe, "/transactions/"),
               method: 'post',
               data: {
                 safe: safe,
@@ -359,17 +375,17 @@ function () {
                 data: data,
                 operation: operation,
                 gasToken: gasToken,
-                safeTxGas: safeTxGas,
-                baseGas: baseGas,
-                gasPrice: gasPrice,
+                safeTxGas: parseInt(safeTxGas),
+                dataGas: parseInt(baseGas),
+                gasPrice: parseInt(gasPrice),
                 refundReceiver: refundReceiver,
-                nonce: nonce,
-                signatures: signature
+                nonce: parseInt(nonce),
+                signatures: [signature]
               },
               baseURL: baseURL
             }));
 
-          case 21:
+          case 22:
           case "end":
             return _context5.stop();
         }

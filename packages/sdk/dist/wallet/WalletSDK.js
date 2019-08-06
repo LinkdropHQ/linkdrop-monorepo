@@ -22,9 +22,9 @@ var WalletSDK =
 function () {
   //
   function WalletSDK() {
-    var chain = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'rinkeby';
-    var safe = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
-    var privateKey = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
+    var safe = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
+    var privateKey = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+    var chain = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'rinkeby';
     (0, _classCallCheck2["default"])(this, WalletSDK);
 
     if (chain !== 'mainnet' && chain !== 'rinkeby') {
@@ -123,7 +123,8 @@ function () {
 
                 this._checkConnect();
 
-                _context2.next = 4;
+                _context2.prev = 2;
+                _context2.next = 5;
                 return (0, _utils.estimateTx)({
                   safe: this.safe,
                   to: to,
@@ -133,13 +134,19 @@ function () {
                   gasToken: gasToken
                 });
 
-              case 4:
+              case 5:
                 _ref4 = _context2.sent;
                 safeTxGas = _ref4.safeTxGas;
                 baseGas = _ref4.baseGas;
                 gasPrice = _ref4.gasPrice;
                 nonce = _ref4.nonce;
-                _context2.next = 11;
+                console.log({
+                  safeTxGas: safeTxGas,
+                  baseGas: baseGas,
+                  gasPrice: gasPrice,
+                  nonce: nonce
+                });
+                _context2.next = 13;
                 return (0, _utils.executeTx)({
                   to: to,
                   value: value,
@@ -154,19 +161,30 @@ function () {
                   privateKey: this.privateKey
                 });
 
-              case 11:
+              case 13:
                 response = _context2.sent;
                 console.log({
                   response: response
                 });
                 return _context2.abrupt("return", response);
 
-              case 14:
+              case 18:
+                _context2.prev = 18;
+                _context2.t0 = _context2["catch"](2);
+
+                if (_context2.t0.response) {
+                  console.log(_context2.t0.response.data);
+                  console.log(_context2.t0.response.status);
+                }
+
+                throw new Error('Error occured while executing safe tx');
+
+              case 22:
               case "end":
                 return _context2.stop();
             }
           }
-        }, _callee2, this);
+        }, _callee2, this, [[2, 18]]);
       }));
 
       function executeTransaction(_x2) {

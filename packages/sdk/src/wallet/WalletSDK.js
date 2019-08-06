@@ -2,7 +2,7 @@ import { triggerSafeDeployment, estimateTx, executeTx } from './utils'
 
 class WalletSDK {
   //
-  constructor (chain = 'rinkeby', safe = null, privateKey = null) {
+  constructor (safe = null, privateKey = null, chain = 'rinkeby') {
     if (chain !== 'mainnet' && chain !== 'rinkeby') {
       throw new Error('Chain not supported')
     }
@@ -57,31 +57,42 @@ class WalletSDK {
   }) {
     this._checkConnect()
 
-    const { safeTxGas, baseGas, gasPrice, nonce } = await estimateTx({
-      safe: this.safe,
-      to,
-      value,
-      data,
-      operation,
-      gasToken
-    })
+    try {
+      const { safeTxGas, baseGas, gasPrice, nonce } = await estimateTx({
+        safe: this.safe,
+        to,
+        value,
+        data,
+        operation,
+        gasToken
+      })
 
-    const response = await executeTx({
-      to,
-      value,
-      data,
-      operation,
-      gasToken,
-      safeTxGas,
-      baseGas,
-      gasPrice,
-      nonce,
-      safe: this.safe,
-      privateKey: this.privateKey
-    })
+      console.log({ safeTxGas, baseGas, gasPrice, nonce })
 
-    console.log({ response })
-    return response
+      const response = await executeTx({
+        to,
+        value,
+        data,
+        operation,
+        gasToken,
+        safeTxGas,
+        baseGas,
+        gasPrice,
+        nonce,
+        safe: this.safe,
+        privateKey: this.privateKey
+      })
+
+      console.log({ response })
+
+      return response
+    } catch (error) {
+      if (error.response) {
+        console.log(error.response.data)
+        console.log(error.response.status)
+      }
+      throw new Error('Error occured while executing safe tx')
+    }
   }
 }
 

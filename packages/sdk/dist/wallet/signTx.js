@@ -21,6 +21,8 @@ var ethUtil = _interopRequireWildcard(require("ethereumjs-util"));
 
 var _buffer = require("buffer");
 
+var _bignumber = _interopRequireDefault(require("bignumber.js"));
+
 var domain = new _ethTypedData["default"]({
   verifyingContract: '0x0000000000000000000000000000000000000000' // Address of smart contract associated with this domain
 
@@ -135,6 +137,10 @@ function () {
             throw new Error('Nonce is required');
 
           case 17:
+            if (privateKey.includes('0x')) {
+              privateKey = privateKey.replace('0x', '');
+            }
+
             privateKey = _buffer.Buffer.from(privateKey, 'hex');
             typedData = new SafeTx({
               to: to,
@@ -147,16 +153,19 @@ function () {
               gasToken: gasToken,
               refundReceiver: refundReceiver,
               nonce: nonce
-            }).toSignatureRequest();
-            signature = ethUtil.ecsign(_ethSigUtil["default"].TypedDataUtils.sign(typedData), privateKey); // const signature = sigUtil.signTypedData(
-            //   Buffer.from(signingKeyOrWallet, 'hex'),
-            //   {
-            //     data: typedData
-            //   }
+            }).toSignatureRequest(); // const signature = ethUtil.ecsign(
+            //   sigUtil.TypedDataUtils.sign(typedData),
+            //   privateKey
             // )
 
-            console.log(signature);
-            return _context.abrupt("return", signature);
+            signature = _ethSigUtil["default"].signTypedData(privateKey, {
+              data: typedData
+            });
+            return _context.abrupt("return", {
+              r: new _bignumber["default"](signature.slice(2, 66), 16).toString(10),
+              s: new _bignumber["default"](signature.slice(66, 130), 16).toString(10),
+              v: new _bignumber["default"](signature.slice(130, 132), 16).toString(10)
+            });
 
           case 22:
           case "end":

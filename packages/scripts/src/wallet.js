@@ -1,18 +1,25 @@
-import { WalletSDK } from '@linkdrop/sdk'
+import { LinkdropSDK, WalletSDK } from '@linkdrop/sdk'
+
+import ora from 'ora'
+
 import { ethers } from 'ethers'
-import { claim } from './claim_eth'
+import { terminal as term } from 'terminal-kit'
+import { newError, getString, getUrlParams, getLinkNumber } from './utils'
+//
+ethers.errors.setLogLevel('error')
+
+const JSON_RPC_URL = getString('jsonRpcUrl')
+const CHAIN = getString('CHAIN')
+const API_HOST = getString('API_HOST')
+const FACTORY_ADDRESS = getString('FACTORY_ADDRESS')
+const LINKS_NUMBER = getString('linksNumber')
 const walletSDK = new WalletSDK()
 
 async function main () {
   //
-  const provider = new ethers.providers.JsonRpcProvider(
-    'https://rinkeby.infura.io'
-  )
-  const privateKey =
-    '495AAFF3574670DA641373E119332DE00AE13E211F918CBD5D63D7C30F4F741A'
-  const funder = new ethers.Wallet(privateKey, provider)
 
   const mnemonic = ethers.Wallet.createRandom().mnemonic
+
   // const mnemonic = 'tired error before token warfare lens news fault visa trip chaos inform'
   console.log('mnemonic: ', mnemonic)
 
@@ -26,10 +33,12 @@ async function main () {
   const owners = []
 
   for (let i = 0; i < 3; i++) {
-    const addr = ethers.Wallet.fromMnemonic(mnemonic, `m/44'/60'/0'/0/${i}`)
-      .address
-    console.log('addr: ', addr)
-    owners.push(addr)
+    const wallet = ethers.Wallet.fromMnemonic(mnemonic, `m/44'/60'/0'/0/${i}`)
+    const address = wallet.address
+    const privateKey = wallet.privateKey
+    console.log('address: ', address)
+    console.log('privateKey: ', privateKey)
+    owners.push(address)
   }
   const threshold = 1
   const saltNonce = 1234
@@ -40,14 +49,62 @@ async function main () {
     saltNonce
   })
   console.log('Safe address: ', safeAddress)
+  /// //
+  let spinner
 
-  //   const rawTx = { to: safeAddress, value: ethers.utils.parseEther('0.01') }
-  //   const tx = await funder.sendTransaction(rawTx)
-  //   tx.wait(1)
+  try {
+    const linkNumber = getLinkNumber(LINKS_NUMBER - 1)
+    term.bold(`Claiming link #${linkNumber}:\n`)
+    spinner = ora({
+      text: term.bold.green.str('Claiming\n'),
+      color: 'green'
+    })
 
-  await claim(safeAddress)
+    spinner.start()
 
-  // await deploySafe(safeAddress)
+    const {
+      weiAmount,
+      tokenAddress,
+      tokenAmount,
+      expirationTime,
+      version,
+      chainId,
+      linkKey,
+      linkdropMasterAddress,
+      linkdropSignerSignature,
+      campaignId
+    } = await getUrlParams('eth', linkNumber)
+
+    const linkdropSDK = LinkdropSDK({
+      linkdropMasterAddress,
+      chain: CHAIN,
+      jsonRpcUrl: JSON_RPC_URL,
+      apiHost: API_HOST,
+      factoryAddress: FACTORY_ADDRESS
+    })
+
+    const { errors, success, txHash } = await linkdropSDK.claim({
+      weiAmount,
+      tokenAddress,
+      tokenAmount,
+      expirationTime,
+      version,
+      chainId,
+      linkKey,
+      linkdropMasterAddress,
+      linkdropSignerSignature,
+      receiverAddress: safeAddress,
+      campaignId
+    })
+
+    if (success === true && txHash) {
+      spinner.succeed(term.bold.str('Submitted claim transaction'))
+      term.bold(`Tx hash: ^g${txHash}\n`)
+    }
+  } catch (err) {
+    spinner.fail(term.bold.red.str('Failed to claim'))
+    throw newError(err)
+  }
 }
 
 main()

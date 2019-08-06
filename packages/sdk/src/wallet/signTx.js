@@ -2,6 +2,7 @@ import EIP712Domain from 'eth-typed-data'
 import sigUtil from 'eth-sig-util'
 import * as ethUtil from 'ethereumjs-util'
 import { Buffer } from 'buffer'
+import BigNumber from 'bignumber.js'
 
 const domain = new EIP712Domain({
   verifyingContract: '0x0000000000000000000000000000000000000000' // Address of smart contract associated with this domain
@@ -59,6 +60,10 @@ export const signTx = async ({
     throw new Error('Nonce is required')
   }
 
+  if (privateKey.includes('0x')) {
+    privateKey = privateKey.replace('0x', '')
+  }
+
   privateKey = Buffer.from(privateKey, 'hex')
 
   const typedData = new SafeTx({
@@ -74,20 +79,20 @@ export const signTx = async ({
     nonce
   }).toSignatureRequest()
 
-  const signature = ethUtil.ecsign(
-    sigUtil.TypedDataUtils.sign(typedData),
-    privateKey
-  )
-
-  // const signature = sigUtil.signTypedData(
-  //   Buffer.from(signingKeyOrWallet, 'hex'),
-  //   {
-  //     data: typedData
-  //   }
+  // const signature = ethUtil.ecsign(
+  //   sigUtil.TypedDataUtils.sign(typedData),
+  //   privateKey
   // )
 
-  console.log(signature)
-  return signature
+  const signature = sigUtil.signTypedData(privateKey, {
+    data: typedData
+  })
+
+  return {
+    r: new BigNumber(signature.slice(2, 66), 16).toString(10),
+    s: new BigNumber(signature.slice(66, 130), 16).toString(10),
+    v: new BigNumber(signature.slice(130, 132), 16).toString(10)
+  }
 }
 
 // signTx(

@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { signTx } from './signTx'
+import BigNumber from 'bignumber.js'
 
 export const triggerSafeDeployment = async (
   { owners, threshold, saltNonce },
@@ -75,7 +76,7 @@ export const estimateTx = async ({
   }
 
   const response = await axios({
-    url: `/v2/safes/${safe}/transactions/estimate`,
+    url: `/v2/safes/${safe}/transactions/estimate/`,
     method: 'post',
     data: {
       safe,
@@ -89,7 +90,13 @@ export const estimateTx = async ({
   })
 
   const { safeTxGas, baseGas, gasPrice, lastUsedNonce } = response.data
-  return { safeTxGas, baseGas, gasPrice, nonce: lastUsedNonce }
+
+  return {
+    safeTxGas,
+    baseGas,
+    gasPrice,
+    nonce: lastUsedNonce || '0'
+  }
 }
 
 export const executeTx = async ({
@@ -147,8 +154,23 @@ export const executeTx = async ({
     privateKey
   })
 
+  console.log({
+    safe,
+    to,
+    value,
+    data,
+    operation,
+    gasToken,
+    safeTxGas,
+    dataGas: baseGas,
+    gasPrice,
+    refundReceiver,
+    nonce: nonce,
+    signatures: [signature]
+  })
+
   return axios({
-    url: `/v2/safes/${safe}/transactions/`,
+    url: `/v1/safes/${safe}/transactions/`,
     method: 'post',
     data: {
       safe,
@@ -157,12 +179,12 @@ export const executeTx = async ({
       data,
       operation,
       gasToken,
-      safeTxGas,
-      baseGas,
-      gasPrice,
+      safeTxGas: parseInt(safeTxGas),
+      dataGas: parseInt(baseGas),
+      gasPrice: parseInt(gasPrice),
       refundReceiver,
-      nonce,
-      signatures: signature
+      nonce: parseInt(nonce),
+      signatures: [signature]
     },
     baseURL
   })
