@@ -1,4 +1,6 @@
-.header {
+@import "variables";
+
+.header, .bodyHeader {
   display: flex;
   align-items: center;
   padding-top: 0px;
@@ -6,7 +8,7 @@
   width: 100%;
   justify-content: center;
   text-align: center;
-  height: 60px;
+  height: 90px;
   font-size: 30px;
   position: relative;
   font-family: 'Inter-Bold';
@@ -15,13 +17,51 @@
     position: absolute;
     left: 30px;
     top: 50%;
+    cursor: pointer;
     transform: translateY(-50%);
-    height: 40px; 
+    height: 40px;
   }
+}
+
+
+.bodyMain {
+  height: calc(100vh - 90px);
 }
 
 .body {
   position: absolute;
   width: 100%;
-  margin-top: -100%;
+  background: $whiteColor;
+  top: -101%;
+  z-index: 2;
+  height: 100vh;
+  transition: top .3s;
+
+  .bodyContent {
+    padding: 55px 55px 50px;
+    text-align: center;
+
+    .title {
+      font-size: 24px;
+      margin-bottom: 30px;
+    }
+    .text {
+      font-size: 14px;
+    }
+  }
+
+  .bodyHeader {
+    .headerIcon {
+      height: 34px;
+    }
+  }
+}
+
+.container {
+  background: $whiteColor;
+  &.opened {
+    .body {
+      top: 0;
+    }
+  }
 }

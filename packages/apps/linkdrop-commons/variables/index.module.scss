@@ -19,8 +19,11 @@ $invertedActiveColor: rgba(248, 248, 248, 0.82);
 $bgColor: #F1F3F4;
 $dbGrey: #979797;
 $dbBlue: #0025FF;
+$dbBlueTransparent: rgba(0, 37, 255, .2);
 $greyStrokeColor: #E5E5E5;
 $darkOrangeColor: #F89D35;
+$greyStrokeMenuColor: #DADADA;
+$dbMenuFooter: #F3F3F3;
 
 :export {
   blackColor: $blackColor;
@@ -39,4 +42,7 @@ $darkOrangeColor: #F89D35;
   dbBlue: $dbBlue;
   greyStrokeColor: $greyStrokeColor;
   darkOrangeColor: $darkOrangeColor;
+  greyStrokeMenuColor: $greyStrokeMenuColor;
+  dbMenuFooter: $dbMenuFooter;
+  dbBlueTransparent: $dbBlueTransparent
 }

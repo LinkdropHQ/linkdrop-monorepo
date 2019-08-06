@@ -1,11 +1,9 @@
 import React from 'react'
-import { Loading } from '@linkdrop/ui-kit'
 import { translate, actions } from 'decorators'
-import styles from './styles.module'
 import commonStyles from '../styles.module'
 import { getHashVariables } from '@linkdrop/commons'
-import config from 'config-claim'
-import classNames from 'classnames'
+import { TokensAmount, AssetBalance } from 'components/common'
+import { getImages } from 'helpers'
 
 @actions(({ tokens: { transactionId, transactionStatus } }) => ({ transactionId, transactionStatus }))
 @translate('pages.main')
@@ -49,23 +47,13 @@ class ClaimingProcessPage extends React.Component {
   }
 
   render () {
-    const { chainId } = getHashVariables()
-    const { transactionId } = this.props
+    const { chainId, weiAmount } = getHashVariables()
+    const { transactionId, symbol, amount, decimals, icon } = this.props
+
     return <div className={commonStyles.container}>
-      <Loading container size='small' className={styles.loading} />
-      <div className={styles.title}>{this.t('titles.claiming')}</div>
-      <div className={styles.subtitle}>{this.t('titles.transactionInProcess')}</div>
-      <div className={styles.description}>{this.t('titles.instructions')}</div>
-      <div
-        className={classNames(styles.description, {
-          [styles.descriptionHidden]: !transactionId
-        })}
-        dangerouslySetInnerHTML={{
-          __html: this.t('titles.seeDetails', {
-            transactionLink: `${Number(chainId) === 4 ? config.etherscanRinkeby : config.etherscanMainnet}${transactionId}`
-          })
-        }}
-      />
+      <TokensAmount loading symbol={symbol} amount={amount} decimals={decimals} />
+      <AssetBalance loading symbol={symbol} amount={amount} decimals={decimals} icon={icon} />
+      {weiAmount && Number(weiAmount) > 0 && <AssetBalance loading symbol='ETH' amount={weiAmount} decimals={18} icon={getImages({ src: 'ether' }).imageRetina} />}
     </div>
   }
 }

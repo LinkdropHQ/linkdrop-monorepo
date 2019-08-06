@@ -1,0 +1,15 @@
+@import "variables";
+
+.container {
+
+}
+
+.menuItem {
+  height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: $dbBlue;
+  font-size: 18px;
+  border-top: 1px solid $greyStrokeMenuColor;
+}

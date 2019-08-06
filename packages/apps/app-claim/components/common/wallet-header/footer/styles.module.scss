@@ -1,0 +1,10 @@
+@import "variables";
+
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 120px;
+  text-align: center;
+  background: $dbMenuFooter;
+}

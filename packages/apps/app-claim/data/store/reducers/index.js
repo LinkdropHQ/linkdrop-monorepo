@@ -1,11 +1,11 @@
 import user from './user'
 import common from './common'
 import tokens from './tokens'
-import contract from './contract'
+import contractsData from './contracts-data'
 
 export {
   user,
   common,
   tokens,
-  contract
+  contractsData
 }

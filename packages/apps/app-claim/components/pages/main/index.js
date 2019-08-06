@@ -3,20 +3,16 @@ import { Loading } from '@linkdrop/ui-kit'
 import { actions, translate, platform } from 'decorators'
 import InitialPage from './initial-page'
 import { Page } from 'components/pages'
-import WalletChoosePage from './wallet-choose-page'
 import ClaimingProcessPage from './claiming-process-page'
 import ErrorPage from './error-page'
 import ClaimingFinishedPage from './claiming-finished-page'
 import { getHashVariables, defineNetworkName, capitalize } from '@linkdrop/commons'
 import { Web3Consumer } from 'web3-react'
 
-@actions(({ user: { errors, step, loading: userLoading, readyToClaim, alreadyClaimed }, tokens: { transactionId }, contract: { loading, decimals, amount, symbol, icon } }) => ({
+@actions(({ user: { errors, step, loading: userLoading, readyToClaim, alreadyClaimed }, tokens: { transactionId }, contractsData: { loading, itemsToClaim } }) => ({
   userLoading,
   loading,
-  decimals,
-  symbol,
-  amount,
-  icon,
+  itemsToClaim,
   step,
   transactionId,
   errors,
@@ -78,9 +74,11 @@ class Claim extends React.Component {
     }
 
     if (nftAddress && tokenId) {
-      return this.actions().contract.getTokenERC721Data({ nftAddress, tokenId, chainId })
+      this.actions().contract.getTokenERC721Data({ nftAddress, tokenId, chainId })
+    } else {
+      this.actions().contract.getTokenErc20Data({ tokenAddress, tokenAmount, chainId })
     }
-    this.actions().contract.getTokenERC20Data({ tokenAddress, weiAmount, tokenAmount, chainId })
+    this.actions().contract.getETHData({ weiAmount })
   }
 
   render () {
@@ -93,6 +91,7 @@ class Claim extends React.Component {
   }
 
   renderCurrentPage ({ context }) {
+    return console.log(this.props)
     const { decimals, amount, symbol, icon, step, userLoading, errors, alreadyClaimed } = this.props
     // in context we can find:
     // active,
@@ -141,32 +140,17 @@ class Claim extends React.Component {
           {...commonData}
           onClick={_ => {
             if (account) {
-              // if wallet account was found in web3 context, then go to step 4 and claim data
-              return this.actions().user.setStep({ step: 4 })
+              // if wallet account was found in web3 context, then go to step 2 and claim assets
+              return this.actions().user.setStep({ step: 2 })
             }
-            // if wallet was not found in web3 context, then go to step 2 with wallet select page and instructions
-            this.actions().user.setStep({ step: 2 })
           }}
         />
       case 2:
-        // page with wallet select component
-        return <WalletChoosePage onClick={_ => {
-          this.actions().user.setStep({ step: 3 })
-        }} />
-      case 3:
-        // page with info about current wallet and button to claim tokens
-        return <InitialPage
-          {...commonData}
-          onClick={_ => {
-            this.actions().user.setStep({ step: 4 })
-          }}
-        />
-      case 4:
         // claiming is in process
         return <ClaimingProcessPage
           {...commonData}
         />
-      case 5:
+      case 3:
         // claiming finished successfully
         return <ClaimingFinishedPage
           {...commonData}

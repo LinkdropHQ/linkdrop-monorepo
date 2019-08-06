@@ -1,10 +1,10 @@
 import tokens from './tokens'
-import contract from './contract'
+import contractsData from './contracts-data'
 import user from './user'
 
 function * saga () {
   yield * tokens()
-  yield * contract()
+  yield * contractsData()
   yield * user()
 }
 

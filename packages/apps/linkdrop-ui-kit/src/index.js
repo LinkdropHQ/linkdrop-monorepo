@@ -15,6 +15,7 @@ import TextCopyBlock from './text-copy-block'
 import Checkbox from './checkbox'
 import ModalWindow from './modal-window'
 import Select from './select'
+import ComponentInternalLoading from './component-internal-loading'
 
 export {
   Footer,
@@ -33,5 +34,6 @@ export {
   TextCopyBlock,
   Checkbox,
   ModalWindow,
-  Select
+  Select,
+  ComponentInternalLoading
 }

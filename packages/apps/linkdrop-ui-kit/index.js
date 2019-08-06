@@ -15,7 +15,8 @@ import {
   TextCopyBlock,
   Checkbox,
   ModalWindow,
-  Select
+  Select,
+  ComponentInternalLoading
 } from './dist/bundle.js'
 
 export {
@@ -35,5 +36,6 @@ export {
   TextControlBlock,
   TextCopyBlock,
   Checkbox,
-  Select
+  Select,
+  ComponentInternalLoading
 }
