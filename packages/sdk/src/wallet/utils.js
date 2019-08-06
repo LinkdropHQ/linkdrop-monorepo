@@ -73,9 +73,7 @@ export const estimateTx = async ({
   if (!value) {
     throw new Error('Value is required')
   }
-  if (!data) {
-    throw new Error('Data is required')
-  }
+
   const response = await axios({
     url: `/v2/safes/${safe}/transactions/estimate`,
     method: 'post',
@@ -95,6 +93,8 @@ export const estimateTx = async ({
 }
 
 export const executeTx = async ({
+  safe,
+  privateKey, // owner
   to,
   value,
   data = '0x',
@@ -105,10 +105,33 @@ export const executeTx = async ({
   gasPrice,
   refundReceiver = '0x0000000000000000000000000000000000000000',
   nonce,
-  safe,
-  privateKey, // owner
   baseURL = 'https://safe-relay.rinkeby.gnosis.pm/api'
 }) => {
+  if (!safe) {
+    throw new Error('Safe address is required')
+  }
+  if (!privateKey) {
+    throw new Error('Private key is required')
+  }
+  if (!to) {
+    throw new Error('To is required')
+  }
+  if (!value) {
+    throw new Error('Value is required')
+  }
+  if (!safeTxGas) {
+    throw new Error('Safe tx gas is required')
+  }
+  if (!baseGas) {
+    throw new Error('Base gas is required')
+  }
+  if (!gasPrice) {
+    throw new Error('Gas price is required')
+  }
+  if (!nonce) {
+    throw new Error('Nonce is required')
+  }
+
   const signature = await signTx({
     to,
     value,

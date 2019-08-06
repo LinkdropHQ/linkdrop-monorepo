@@ -1,4 +1,3 @@
-import * as ethers from 'ethers'
 import EIP712Domain from 'eth-typed-data'
 import sigUtil from 'eth-sig-util'
 import * as ethUtil from 'ethereumjs-util'
@@ -22,6 +21,8 @@ const SafeTx = domain.createType('SafeTx', [
 ])
 
 export const signTx = async ({
+  safe,
+  privateKey, // owner
   to,
   value,
   data = '0x',
@@ -31,10 +32,33 @@ export const signTx = async ({
   gasPrice,
   gasToken = '0x0000000000000000000000000000000000000000',
   refundReceiver = '0x0000000000000000000000000000000000000000',
-  nonce,
-  safe,
-  privateKey // owner
+  nonce
 }) => {
+  if (!safe) {
+    throw new Error('Safe address is required')
+  }
+  if (!privateKey) {
+    throw new Error('Private key is required')
+  }
+  if (!to) {
+    throw new Error('To is required')
+  }
+  if (!value) {
+    throw new Error('Value is required')
+  }
+  if (!safeTxGas) {
+    throw new Error('Safe tx gas is required')
+  }
+  if (!baseGas) {
+    throw new Error('Base gas is required')
+  }
+  if (!gasPrice) {
+    throw new Error('Gas price is required')
+  }
+  if (!nonce) {
+    throw new Error('Nonce is required')
+  }
+
   privateKey = Buffer.from(privateKey, 'hex')
 
   const typedData = new SafeTx({
