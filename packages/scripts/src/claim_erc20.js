@@ -1,4 +1,4 @@
-import LinkdropSDK from '@linkdrop/sdk'
+import { LinkdropSDK } from '@linkdrop/sdk'
 import ora from 'ora'
 import { ethers } from 'ethers'
 import { terminal as term } from 'terminal-kit'
@@ -13,7 +13,7 @@ const RECEIVER_ADDRESS = getString('receiverAddress')
 const FACTORY_ADDRESS = getString('FACTORY_ADDRESS')
 const LINKS_NUMBER = getString('linksNumber')
 
-const claim = async () => {
+const claim = async (receiverAddress = RECEIVER_ADDRESS) => {
   let spinner
 
   try {
@@ -60,7 +60,7 @@ const claim = async () => {
       linkKey,
       linkdropMasterAddress,
       linkdropSignerSignature,
-      receiverAddress: RECEIVER_ADDRESS,
+      receiverAddress,
       campaignId
     })
 

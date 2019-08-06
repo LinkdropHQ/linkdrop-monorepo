@@ -1,12 +1,4 @@
-import {
-  triggerSafeDeployment,
-  deploySafe,
-  getDeploymentTxHash,
-  estimateTx,
-  executeTx
-} from './utils'
-import LinkdropSDK from '../index'
-import { signTx } from './signTx'
+import { triggerSafeDeployment, estimateTx, executeTx } from './utils'
 
 class WalletSDK {
   //

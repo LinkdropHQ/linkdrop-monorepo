@@ -7,7 +7,7 @@ import {
   getInt
 } from './utils'
 
-import LinkdropSDK from '@linkdrop/sdk'
+import { LinkdropSDK } from '@linkdrop/sdk'
 import ora from 'ora'
 import { terminal as term } from 'terminal-kit'
 import { ethers } from 'ethers'

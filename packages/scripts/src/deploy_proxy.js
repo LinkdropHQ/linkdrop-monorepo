@@ -4,7 +4,7 @@ import {
   getString,
   getInt
 } from './utils'
-import LinkdropSDK from '@linkdrop/sdk'
+import { LinkdropSDK } from '@linkdrop/sdk'
 import LinkdropFactory from '../../contracts/build/LinkdropFactory'
 import { terminal as term } from 'terminal-kit'
 import { ethers } from 'ethers'

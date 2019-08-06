@@ -10,7 +10,6 @@
     "extends": "../babel.config.js"
   },
   "dependencies": {
-    "@aztec/typed-data": "^1.0.1",
     "axios": "^0.18.1",
     "buffer": "^5.2.1",
     "eth-sig-util": "^2.3.0",

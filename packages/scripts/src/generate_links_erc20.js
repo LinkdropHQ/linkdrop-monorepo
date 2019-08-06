@@ -1,5 +1,5 @@
 import TokenMock from '../../contracts/build/TokenMock'
-import LinkdropSDK from '@linkdrop/sdk'
+import { LinkdropSDK } from '@linkdrop/sdk'
 
 import ora from 'ora'
 import { terminal as term } from 'terminal-kit'
