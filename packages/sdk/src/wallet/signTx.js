@@ -21,25 +21,21 @@ const SafeTx = domain.createType('SafeTx', [
   { type: 'uint256', name: 'nonce' }
 ])
 
-export const signTx = async (
-  signingKeyOrWallet, // owner
+export const signTx = async ({
+  to,
+  value,
+  data = '0x',
+  operation = '0',
+  safeTxGas,
+  baseGas,
+  gasPrice,
+  gasToken = '0x0000000000000000000000000000000000000000',
+  refundReceiver = '0x0000000000000000000000000000000000000000',
+  nonce,
   safe,
-  {
-    to,
-    value,
-    data = '0x',
-    operation = '0',
-    safeTxGas,
-    baseGas,
-    gasPrice,
-    gasToken = '0x0000000000000000000000000000000000000000',
-    refundReceiver = '0x0000000000000000000000000000000000000000',
-    nonce
-  }
-) => {
-  if (typeof signingKeyOrWallet === 'object') {
-    signingKeyOrWallet = signingKeyOrWallet.privateKey
-  }
+  privateKey // owner
+}) => {
+  privateKey = Buffer.from(privateKey, 'hex')
 
   const typedData = new SafeTx({
     to,
@@ -56,7 +52,7 @@ export const signTx = async (
 
   const signature = ethUtil.ecsign(
     sigUtil.TypedDataUtils.sign(typedData),
-    Buffer.from(signingKeyOrWallet, 'hex')
+    privateKey
   )
 
   // const signature = sigUtil.signTypedData(

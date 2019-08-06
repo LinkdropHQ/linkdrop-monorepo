@@ -1,13 +1,21 @@
-import { triggerSafeDeployment, deploySafe, getDeploymentTxHash } from './utils'
+import {
+  triggerSafeDeployment,
+  deploySafe,
+  getDeploymentTxHash,
+  estimateTx,
+  executeTx
+} from './utils'
 import LinkdropSDK from '../index'
+import { signTx } from './signTx'
 
 class WalletSDK {
   //
-  constructor (chain = 'rinkeby') {
+  constructor (chain = 'rinkeby', safe = null, privateKey = null) {
     if (chain !== 'mainnet' && chain !== 'rinkeby') {
       throw new Error('Chain not supported')
     }
     this.chain = chain
+    this.connect({ safe, privateKey })
     this.baseURL =
       chain === 'mainnet'
         ? 'https://safe-relay.gnosis.pm/api'
@@ -34,27 +42,54 @@ class WalletSDK {
     }
   }
 
-  connect (safe) {
+  connect ({ privateKey, safe }) {
+    this.privateKey = privateKey
     this.safe = safe
   }
 
-  async executeTx ({
-    safe = this.safe,
+  _checkConnect () {
+    if (!this.privateKey) {
+      throw new Error('This action requires a connected private key')
+    }
+    if (!this.safe) {
+      throw new Error('This action requires a connected safe')
+    }
+  }
+
+  async executeTransaction ({
     to,
     value,
-    data,
-    operation = '0',
-    signature,
-    gasToken = '0x0000000000000000000000000000000000000000'
+    data, // optional
+    operation, // optional
+    gasToken // optional
   }) {
-    let { safeTxGas, baseGas, gasPrice, nonce } = await getEstimationParams({
-      safe,
+    this._checkConnect()
+
+    const { safeTxGas, baseGas, gasPrice, nonce } = await estimateTx({
+      safe: this.safe,
       to,
       value,
       data,
       operation,
       gasToken
     })
+
+    const response = await executeTx({
+      to,
+      value,
+      data,
+      operation,
+      gasToken,
+      safeTxGas,
+      baseGas,
+      gasPrice,
+      nonce,
+      safe: this.safe,
+      privateKey: this.privateKey
+    })
+
+    console.log({ response })
+    return response
   }
 }
 
