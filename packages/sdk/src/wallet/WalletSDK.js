@@ -34,7 +34,28 @@ class WalletSDK {
     }
   }
 
-  async executeTx () {}
+  connect (safe) {
+    this.safe = safe
+  }
+
+  async executeTx ({
+    safe = this.safe,
+    to,
+    value,
+    data,
+    operation = '0',
+    signature,
+    gasToken = '0x0000000000000000000000000000000000000000'
+  }) {
+    let { safeTxGas, baseGas, gasPrice, nonce } = await getEstimationParams({
+      safe,
+      to,
+      value,
+      data,
+      operation,
+      gasToken
+    })
+  }
 }
 
 export default WalletSDK
