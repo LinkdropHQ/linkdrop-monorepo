@@ -1,26 +1,6 @@
-import EIP712Domain from 'eth-typed-data'
 import sigUtil from 'eth-sig-util'
-import * as ethUtil from 'ethereumjs-util'
 import { Buffer } from 'buffer'
 import BigNumber from 'bignumber.js'
-import { ethers } from 'ethers'
-
-const domain = new EIP712Domain({
-  verifyingContract: '0x0000000000000000000000000000000000000000' // Address of smart contract associated with this domain
-})
-
-const SafeTx = domain.createType('SafeTx', [
-  { type: 'address', name: 'to' },
-  { type: 'uint256', name: 'value' },
-  { type: 'bytes', name: 'data' },
-  { type: 'uint8', name: 'operation' },
-  { type: 'uint256', name: 'safeTxGas' },
-  { type: 'uint256', name: 'baseGas' },
-  { type: 'uint256', name: 'gasPrice' },
-  { type: 'address', name: 'gasToken' },
-  { type: 'address', name: 'refundReceiver' },
-  { type: 'uint256', name: 'nonce' }
-])
 
 const getTypedData = ({
   safe,
@@ -35,7 +15,7 @@ const getTypedData = ({
   refundReceiver = '0x0000000000000000000000000000000000000000',
   nonce = '0'
 }) => {
-  const typedData = {
+  return {
     types: {
       EIP712Domain: [{ type: 'address', name: 'verifyingContract' }],
       SafeTx: [
@@ -68,9 +48,6 @@ const getTypedData = ({
       nonce
     }
   }
-
-  console.log({ typedData })
-  return typedData
 }
 
 export const signTx = async ({
@@ -132,44 +109,13 @@ export const signTx = async ({
     nonce
   })
 
-  // const signature = ethUtil.ecsign(
-  //   sigUtil.TypedDataUtils.sign(typedData),
-  //   privateKey
-  // )
-
   const signature = sigUtil.signTypedData(privateKey, {
     data: typedData
   })
-  console.log('signature: ', signature)
 
-  const owner = sigUtil.recoverTypedSignature({
-    data: typedData,
-    sig: signature
-  })
-  console.log('owner: ', owner)
-
-  const sig = {
+  return {
     r: new BigNumber(signature.slice(2, 66), 16).toString(10),
     s: new BigNumber(signature.slice(66, 130), 16).toString(10),
     v: new BigNumber(signature.slice(130, 132), 16).toString(10)
   }
-  console.log(sig)
-  return sig
 }
-
-// signTx(
-//   'EEDFA6C63D0B44CE6C511C7A9425A8668DFADFC8F47FF24647A92489D5A913CC',
-//   '0x0000000000000000000000000000000000000000',
-//   {
-//     to: '0x0000000000000000000000000000000000000000',
-//     value: '10000000000000000',
-//     data: '0x',
-//     operation: '0',
-//     safeTxGas: '42671',
-//     baseGas: '40660',
-//     gasPrice: '10000000000',
-//     gasToken: '0x0000000000000000000000000000000000000000',
-//     refundReceiver: '0x0000000000000000000000000000000000000000',
-//     nonce: 0
-//   }
-// )

@@ -95,7 +95,7 @@ export const estimateTx = async ({
     safeTxGas,
     baseGas,
     gasPrice,
-    nonce: lastUsedNonce || '0'
+    nonce: lastUsedNonce + 1 || '0'
   }
 }
 
@@ -152,21 +152,6 @@ export const executeTx = async ({
     nonce,
     safe,
     privateKey
-  })
-
-  console.log('Execute', {
-    safe,
-    to,
-    value,
-    data,
-    operation,
-    gasToken,
-    safeTxGas,
-    dataGas: baseGas,
-    gasPrice,
-    refundReceiver,
-    nonce: nonce,
-    signatures: [signature]
   })
 
   return axios({

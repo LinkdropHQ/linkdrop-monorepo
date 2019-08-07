@@ -67,9 +67,7 @@ class WalletSDK {
         gasToken
       })
 
-      console.log({ safeTxGas, baseGas, gasPrice, nonce })
-
-      const response = await executeTx({
+      return executeTx({
         to,
         value,
         data,
@@ -82,10 +80,6 @@ class WalletSDK {
         safe: this.safe,
         privateKey: this.privateKey
       })
-
-      console.log({ response })
-
-      return response
     } catch (error) {
       if (error.response) {
         console.log(error.response.data)

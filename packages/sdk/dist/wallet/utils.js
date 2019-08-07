@@ -237,7 +237,7 @@ function () {
               safeTxGas: safeTxGas,
               baseGas: baseGas,
               gasPrice: gasPrice,
-              nonce: lastUsedNonce || '0'
+              nonce: lastUsedNonce + 1 || '0'
             });
 
           case 12:
@@ -351,20 +351,6 @@ function () {
 
           case 19:
             signature = _context5.sent;
-            console.log('Execute', {
-              safe: safe,
-              to: to,
-              value: value,
-              data: data,
-              operation: operation,
-              gasToken: gasToken,
-              safeTxGas: safeTxGas,
-              dataGas: baseGas,
-              gasPrice: gasPrice,
-              refundReceiver: refundReceiver,
-              nonce: nonce,
-              signatures: [signature]
-            });
             return _context5.abrupt("return", (0, _axios["default"])({
               url: "/v1/safes/".concat(safe, "/transactions/"),
               method: 'post',
@@ -385,7 +371,7 @@ function () {
               baseURL: baseURL
             }));
 
-          case 22:
+          case 21:
           case "end":
             return _context5.stop();
         }

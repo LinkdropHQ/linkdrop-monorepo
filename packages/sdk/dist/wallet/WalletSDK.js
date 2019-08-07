@@ -113,7 +113,7 @@ function () {
       var _executeTransaction = (0, _asyncToGenerator2["default"])(
       /*#__PURE__*/
       _regenerator["default"].mark(function _callee2(_ref3) {
-        var to, value, data, operation, gasToken, _ref4, safeTxGas, baseGas, gasPrice, nonce, response;
+        var to, value, data, operation, gasToken, _ref4, safeTxGas, baseGas, gasPrice, nonce;
 
         return _regenerator["default"].wrap(function _callee2$(_context2) {
           while (1) {
@@ -140,14 +140,7 @@ function () {
                 baseGas = _ref4.baseGas;
                 gasPrice = _ref4.gasPrice;
                 nonce = _ref4.nonce;
-                console.log({
-                  safeTxGas: safeTxGas,
-                  baseGas: baseGas,
-                  gasPrice: gasPrice,
-                  nonce: nonce
-                });
-                _context2.next = 13;
-                return (0, _utils.executeTx)({
+                return _context2.abrupt("return", (0, _utils.executeTx)({
                   to: to,
                   value: value,
                   data: data,
@@ -159,17 +152,10 @@ function () {
                   nonce: nonce,
                   safe: this.safe,
                   privateKey: this.privateKey
-                });
+                }));
 
               case 13:
-                response = _context2.sent;
-                console.log({
-                  response: response
-                });
-                return _context2.abrupt("return", response);
-
-              case 18:
-                _context2.prev = 18;
+                _context2.prev = 13;
                 _context2.t0 = _context2["catch"](2);
 
                 if (_context2.t0.response) {
@@ -179,12 +165,12 @@ function () {
 
                 throw new Error('Error occured while executing safe tx');
 
-              case 22:
+              case 17:
               case "end":
                 return _context2.stop();
             }
           }
-        }, _callee2, this, [[2, 18]]);
+        }, _callee2, this, [[2, 13]]);
       }));
 
       function executeTransaction(_x2) {
