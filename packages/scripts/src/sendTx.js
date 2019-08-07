@@ -14,7 +14,8 @@ const walletSDK = new WalletSDK(
 async function main () {
   await walletSDK.executeTransaction({
     to: '0xdcF0E59De5518FAB06b8E398B02BC7240921cF48',
-    value: '10'
+    value: '10',
+    data: '0x'
   })
 }
 

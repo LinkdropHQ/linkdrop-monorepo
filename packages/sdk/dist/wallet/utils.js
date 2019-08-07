@@ -351,7 +351,7 @@ function () {
 
           case 19:
             signature = _context5.sent;
-            console.log({
+            console.log('Execute', {
               safe: safe,
               to: to,
               value: value,
@@ -375,11 +375,11 @@ function () {
                 data: data,
                 operation: operation,
                 gasToken: gasToken,
-                safeTxGas: parseInt(safeTxGas),
-                dataGas: parseInt(baseGas),
-                gasPrice: parseInt(gasPrice),
+                safeTxGas: safeTxGas,
+                dataGas: baseGas,
+                gasPrice: gasPrice,
                 refundReceiver: refundReceiver,
-                nonce: parseInt(nonce),
+                nonce: nonce,
                 signatures: [signature]
               },
               baseURL: baseURL

@@ -154,7 +154,7 @@ export const executeTx = async ({
     privateKey
   })
 
-  console.log({
+  console.log('Execute', {
     safe,
     to,
     value,
@@ -179,11 +179,11 @@ export const executeTx = async ({
       data,
       operation,
       gasToken,
-      safeTxGas: parseInt(safeTxGas),
-      dataGas: parseInt(baseGas),
-      gasPrice: parseInt(gasPrice),
+      safeTxGas,
+      dataGas: baseGas,
+      gasPrice,
       refundReceiver,
-      nonce: parseInt(nonce),
+      nonce,
       signatures: [signature]
     },
     baseURL
