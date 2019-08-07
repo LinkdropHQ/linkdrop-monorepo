@@ -11,7 +11,7 @@ class MetamaskInjector extends React.Component {
     super(props)
     this.web3Connect = new Web3Connect.Core({
       providerOptions: {
-        disableWalletConnect: true
+        disableWalletConnect: false
       }
     })
 

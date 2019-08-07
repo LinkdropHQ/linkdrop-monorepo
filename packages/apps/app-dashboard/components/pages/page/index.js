@@ -27,7 +27,7 @@ class Page extends React.Component {
   defineContent ({ currentAddress }) {
     const { chainId, loading } = this.props
     if (!web3Obj) {
-      return <MetamaskInjector disabled />
+      return <MetamaskInjector />
     }
     if (currentAddress === null && loading) {
       return <Loading />
