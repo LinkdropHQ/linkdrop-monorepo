@@ -1,5 +1,4 @@
 import React from 'react'
-import { ethers } from 'ethers'
 import Provider from './provider'
 import Web3 from 'web3'
 import './App.css'
@@ -14,6 +13,7 @@ class App extends React.Component {
     }
     this.walletWindow = null
     this._connect()
+    window.addEventListener('message', this.receiveMessage.bind(this), false)
   }
 
   _connect () {
@@ -31,17 +31,6 @@ class App extends React.Component {
       })
   }
   
-  async componentDidMount () {
-    // const persistedAddress = await window.localStorage.getItem('@connect/address')
-    // if (this.state.address) {
-    //   if (this.state.address !== persistedAddress) {
-    //     window.localStorage.setItem('@connect/address', this.state.address)
-    //   } 
-    // } else if (persistedAddress) {
-    //   this.setState({ address: persistedAddress })
-    // }
-  }
-
   receiveMessage (event) {
     // Do we trust the sender of this message?
     if (event.origin !== WALLET_URL) return
@@ -81,7 +70,7 @@ class App extends React.Component {
         <p>
         Address: {this.state.address || 'Not connected' }
       </p>
-      
+        
         <button
       className='App-link'
       onClick={this._onSubmit.bind(this)}
