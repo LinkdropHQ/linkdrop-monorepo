@@ -3,6 +3,7 @@ import { delay } from 'redux-saga'
 import { ethers, utils } from 'ethers'
 import configs from 'config-dashboard'
 import { convertFromExponents } from '@linkdrop/commons'
+import getCoinbaseWalletDeepLink from 'data/api/coinbase/get-deep-link'
 
 const generator = function * ({ payload }) {
   try {
@@ -22,6 +23,20 @@ const generator = function * ({ payload }) {
       campaignId
     })
 
+    // coinbase link logic
+    console.log('fetching coinbase link', { link })
+    try { 
+      const { success, link: coinbaseDeepLink } = yield getCoinbaseWalletDeepLink({ url: link.url })
+      console.log('got coinbase link', coinbaseDeepLink)
+      if (success) { 
+        link.url = coinbaseDeepLink
+      }
+    } catch (err) {
+      console.log('Error while converting url to coinbase deep link')
+      console.log(err)
+    }
+      
+    
     yield delay(10)
     const links = yield select(generator.selectors.links)
     const linksUpdated = links.concat(link.url)
