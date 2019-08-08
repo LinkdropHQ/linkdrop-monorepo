@@ -1,6 +1,7 @@
 import React from 'react'
-import qs from 'querystring'
 import { ethers } from 'ethers'
+import Provider from './provider'
+import Web3 from 'web3'
 import './App.css'
 
 const WALLET_URL = 'http://localhost:3000'
@@ -8,39 +9,37 @@ const WALLET_URL = 'http://localhost:3000'
 class App extends React.Component {
   constructor (props) {
     super(props)
-    const address = this._getAddressFromUrl()
     this.state = {
-      address
+      address: null
     }
     this.walletWindow = null
+    this._connect()
   }
 
-  _getAddressFromUrl () {
-    let address = null
-    const paramsFragment = document.location.search.substr(1)
-    if (paramsFragment) {
-      try {
-        const query = qs.parse(paramsFragment)
-        console.log({ paramsFragment, query })
-        address = query.address        
-        address = ethers.utils.getAddress(address)
-      } catch (err) {
-        console.log('bad address')
-        address = null
-      }
-    }
-    return address
+  _connect () {
+    console.log('getting provider...')
+    const card = new Provider()
+    console.log('got provider')
+    const web3 = new Web3(card.provider)
+    console.log('got web3 ', web3)
+
+    web3.eth.getAccounts()
+      .then((accs) => {
+        console.log({ accs })
+        const address = accs[0]
+        this.setState({ address })
+      })
   }
   
   async componentDidMount () {
-    const persistedAddress = await window.localStorage.getItem('@connect/address')
-    if (this.state.address) {
-      if (this.state.address !== persistedAddress) {
-        window.localStorage.setItem('@connect/address', this.state.address)
-      } 
-    } else if (persistedAddress) {
-      this.setState({ address: persistedAddress })
-    }
+    // const persistedAddress = await window.localStorage.getItem('@connect/address')
+    // if (this.state.address) {
+    //   if (this.state.address !== persistedAddress) {
+    //     window.localStorage.setItem('@connect/address', this.state.address)
+    //   } 
+    // } else if (persistedAddress) {
+    //   this.setState({ address: persistedAddress })
+    // }
   }
 
   receiveMessage (event) {
