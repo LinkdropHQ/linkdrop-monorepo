@@ -2,14 +2,20 @@ import React from 'react'
 import { translate, actions } from 'decorators'
 import commonStyles from '../styles.module'
 import { getHashVariables } from '@linkdrop/commons'
-import { TokensAmount, AssetBalance } from 'components/common'
-import { getImages } from 'helpers'
+import { TokensAmount, AssetBalance, AccountBalance } from 'components/common'
+import { getImages, getCurrentAsset } from 'helpers'
 
 @actions(({ tokens: { transactionId, transactionStatus } }) => ({ transactionId, transactionStatus }))
 @translate('pages.main')
 class ClaimingProcessPage extends React.Component {
+  constructor (props) {
+    super(props)
+    this.state = {
+      loading: true
+    }
+  }
+
   componentDidMount () {
-    return
     const { wallet } = this.props
     const {
       tokenAddress,
@@ -27,11 +33,13 @@ class ClaimingProcessPage extends React.Component {
     // token: ERC20 token address, 0x000...000 for ether - can be received from url params
     // tokenAmount: token amount in atomic values - can be received from url params
     // expirationTime: link expiration time - can be received from url params
-    if (nftAddress && tokenId) {
-      return this.actions().tokens.claimTokensERC721({ wallet, campaignId, nftAddress, tokenId, weiAmount, expirationTime, linkKey, linkdropSignerSignature })
-    }
 
-    this.actions().tokens.claimTokensERC20({ campaignId, wallet, tokenAddress, tokenAmount, weiAmount, expirationTime, linkKey, linkdropMasterAddress, linkdropSignerSignature })
+    return this.actions().tokens.claimTokensERC20({ campaignId, wallet, tokenAddress, tokenAmount, weiAmount, expirationTime, linkKey, linkdropMasterAddress, linkdropSignerSignature })
+    // if (nftAddress && tokenId) {
+    //   return this.actions().tokens.claimTokensERC721({ wallet, campaignId, nftAddress, tokenId, weiAmount, expirationTime, linkKey, linkdropSignerSignature })
+    // }
+
+    // this.actions().tokens.claimTokensERC20({ campaignId, wallet, tokenAddress, tokenAmount, weiAmount, expirationTime, linkKey, linkdropMasterAddress, linkdropSignerSignature })
   }
 
   componentWillReceiveProps ({ transactionId: id, transactionStatus: status }) {
@@ -42,18 +50,28 @@ class ClaimingProcessPage extends React.Component {
     }
     if (status != null && prevStatus === null) {
       this.statusCheck && window.clearInterval(this.statusCheck)
-      this.actions().user.setStep({ step: 5 })
+
+      window.setTimeout(_ => this.setState({
+        loading: false
+      }), 3000)
+      // this.actions().user.setStep({ step: 3 })
     }
   }
 
   render () {
-    const { chainId, weiAmount } = getHashVariables()
-    const { transactionId, symbol, amount, decimals, icon } = this.props
-
+    const { itemsToClaim } = this.props
+    const { loading } = this.state
+    const mainAsset = getCurrentAsset({ itemsToClaim })
+    if (!mainAsset) { return null }
+    const finalPrice = itemsToClaim.reduce((sum, item) => {
+      sum = sum + (Number(item.balanceFormatted) * Number(item.price))
+      return sum
+    }, 0)
+    const { balanceFormatted, symbol } = mainAsset
     return <div className={commonStyles.container}>
-      <TokensAmount loading symbol={symbol} amount={amount} decimals={decimals} />
-      <AssetBalance loading symbol={symbol} amount={amount} decimals={decimals} icon={icon} />
-      {weiAmount && Number(weiAmount) > 0 && <AssetBalance loading symbol='ETH' amount={weiAmount} decimals={18} icon={getImages({ src: 'ether' }).imageRetina} />}
+      <AccountBalance balance={finalPrice} loading={loading} />
+      <TokensAmount loading={loading} symbol={symbol} amount={balanceFormatted} />
+      {itemsToClaim.map(({ icon, symbol, balanceFormatted, tokenAddress, price }) => <AssetBalance key={tokenAddress} loading={loading} symbol={symbol} amount={balanceFormatted} price={price} icon={icon} />)}
     </div>
   }
 }

@@ -46,7 +46,7 @@ export const deploy = async () => {
       CHAIN_ID,
       {
         gasLimit: 4500000,
-        gasPrice: ethers.utils.parseUnits('5', 'gwei')
+        gasPrice: ethers.utils.parseUnits('4', 'gwei')
       }
     )
 

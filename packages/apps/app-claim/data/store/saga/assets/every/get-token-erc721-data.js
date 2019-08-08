@@ -7,7 +7,7 @@ import { defineNetworkName } from '@linkdrop/commons'
 const generator = function * ({ payload }) {
   let image = +(new Date())
   try {
-    yield put({ type: 'CONTRACT.SET_LOADING', payload: { loading: true } })
+    yield put({ type: 'ASSETS.SET_LOADING', payload: { loading: true } })
     const { nftAddress, chainId, tokenId } = payload
     const networkName = defineNetworkName({ chainId })
     const provider = yield ethers.getDefaultProvider(networkName)
@@ -20,12 +20,8 @@ const generator = function * ({ payload }) {
         image = data.image
       }
     }
-    yield put({ type: 'CONTRACT.SET_SYMBOL', payload: { symbol: name } })
 
-    yield put({ type: 'CONTRACT.SET_ICON', payload: { icon: image } })
-
-    yield put({ type: 'CONTRACT.SET_AMOUNT', payload: { amount: undefined } })
-    yield put({ type: 'CONTRACT.SET_LOADING', payload: { loading: false } })
+    yield put({ type: 'ASSETS.SET_LOADING', payload: { loading: false } })
     yield put({ type: 'USER.SET_STEP', payload: { step: 1 } })
   } catch (e) {
     console.error(e)
@@ -34,10 +30,8 @@ const generator = function * ({ payload }) {
     const provider = yield ethers.getDefaultProvider(networkName)
     const nftContract = yield new ethers.Contract(nftAddress, NFTMock.abi, provider)
     const name = yield nftContract.symbol()
-    yield put({ type: 'CONTRACT.SET_SYMBOL', payload: { symbol: name } })
-    yield put({ type: 'CONTRACT.SET_ICON', payload: { icon: image } })
-    yield put({ type: 'CONTRACT.SET_AMOUNT', payload: { amount: undefined } })
     yield put({ type: 'CONTRACT.SET_LOADING', payload: { loading: false } })
+    yield put({ type: 'USER.SET_ERRORS', payload: { errors: ['LINK_INVALID'] } })
     yield put({ type: 'USER.SET_STEP', payload: { step: 1 } })
   }
 }

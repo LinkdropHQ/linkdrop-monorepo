@@ -13,7 +13,7 @@
 .logo {
   cursor: pointer;
   display: block;
-  margin: 0 auto 60px;
+  margin: 0 auto 60px 50px;
   width: 118px;
 }
 
@@ -25,6 +25,15 @@
   &:hover {
     color: $dbBlue;
   }
+}
+
+.soon {
+  padding: 4px;
+  border-radius: 5px;
+  border: 1px solid $textGreyColor;
+  color: $textGreyColor;
+  line-height: normal;
+  font-size: 12px;
 }
 
 .menuItem {
@@ -44,9 +53,13 @@
   &.disabled {
     color: $textGreyColor;
     font-size: 20px;
+    display: flex;
+    align-items: center;
     a {
       cursor: not-allowed;
       color: $textGreyColor;
+      width: auto;
+      margin-right: 10px;
     }
   }
 

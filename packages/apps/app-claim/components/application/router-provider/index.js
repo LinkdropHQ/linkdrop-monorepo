@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { useWeb3Context } from 'web3-react'
-import { Router } from 'react-router'
+import { HashRouter } from 'react-router-dom'
 import { ConnectedRouter } from 'connected-react-router'
 import { history } from 'data/store'
 import { Loading } from '@linkdrop/ui-kit'
@@ -19,9 +19,9 @@ export default function RouterProvider () {
     return <div>error: {context.error.code} (line: {context.error.line}, col: {context.error.column})</div>
   } else {
     return <ConnectedRouter history={history}>
-      <Router history={history}>
+      <HashRouter history={history}>
         <AppRouter />
-      </Router>
+      </HashRouter>
     </ConnectedRouter>
   }
 }

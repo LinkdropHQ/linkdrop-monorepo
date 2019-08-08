@@ -23,10 +23,11 @@ const generator = function * ({ payload }) {
     const contractEthers = new ethers.Contract(address, LinkdropMastercopy.abi, provider)
     const initialBlock = Number(chainId) === 4 ? initialBlockRinkeby : initialBlockMainnet
 
-    yield put({ type: '*CONTRACT.GET_PAST_EVENTS', payload: { networkName, linkId, contract: contractWeb3, initialBlock } })
-    yield put({ type: '*CONTRACT.SUBSCRIBE_TO_CLAIM_EVENT', payload: { networkName, linkId, contract: contractEthers, initialBlock } })
+    yield put({ type: '*ASSETS.GET_PAST_EVENTS', payload: { networkName, linkId, contract: contractWeb3, initialBlock } })
+    yield put({ type: '*ASSETS.SUBSCRIBE_TO_CLAIM_EVENT', payload: { networkName, linkId, contract: contractEthers, initialBlock } })
   } catch (e) {
     console.error(e)
+    yield put({ type: 'USER.SET_ERRORS', payload: { errors: ['LINK_INVALID'] } })
   }
 }
 

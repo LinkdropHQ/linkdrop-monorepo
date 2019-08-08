@@ -1,0 +1,22 @@
+@import "variables";
+
+.container {
+  color: $dbBlue;
+  margin-bottom: 25px;
+  position: relative;
+
+  &.loading {
+    opacity: .3;
+  }
+}
+
+.currency {
+  font-size: 45px;
+  left: -30px;
+  position: absolute;
+}
+
+.balance {
+  font-size: 94px;
+  line-height: 1;
+}

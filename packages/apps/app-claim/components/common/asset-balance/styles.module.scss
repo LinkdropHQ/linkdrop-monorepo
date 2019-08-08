@@ -4,6 +4,7 @@
   display: flex;
   width: 100%;
   max-width: 100%;
+  min-width: 300px;
   align-items: center;
   text-align: left;
   margin-bottom: 15px;
@@ -32,4 +33,16 @@
 
 .symbol {
   flex: 1 0;
+}
+
+.amount {
+  font-family: 'Inter-Bold';
+}
+
+.price {
+  color: $textGreyColor;
+}
+
+.divider {
+  margin: 0px 4px;
 }

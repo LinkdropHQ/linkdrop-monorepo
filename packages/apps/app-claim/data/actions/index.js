@@ -1,7 +1,7 @@
 import User from './user'
 import Routing from './routing'
 import Tokens from './tokens'
-import ContractsData from './contracts-data'
+import Assets from './assets'
 
 class Actions {
   constructor (env) {
@@ -11,7 +11,7 @@ class Actions {
     this.routing = new Routing(this)
     this.user = new User(this)
     this.tokens = new Tokens(this)
-    this.contractsData = new ContractsData(this)
+    this.assets = new Assets(this)
   }
 }
 

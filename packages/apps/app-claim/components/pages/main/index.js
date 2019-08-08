@@ -9,7 +9,7 @@ import ClaimingFinishedPage from './claiming-finished-page'
 import { getHashVariables, defineNetworkName, capitalize } from '@linkdrop/commons'
 import { Web3Consumer } from 'web3-react'
 
-@actions(({ user: { errors, step, loading: userLoading, readyToClaim, alreadyClaimed }, tokens: { transactionId }, contractsData: { loading, itemsToClaim } }) => ({
+@actions(({ user: { errors, step, loading: userLoading, readyToClaim, alreadyClaimed }, tokens: { transactionId }, assets: { loading, itemsToClaim } }) => ({
   userLoading,
   loading,
   itemsToClaim,
@@ -72,14 +72,13 @@ class Main extends React.Component {
       // show error page if link expired
       return this.actions().user.setErrors({ errors: ['LINK_EXPIRED'] })
     }
-    console.log(this.actions().contractsData, this.actions().tokens.checkIfClaimed)
 
     if (nftAddress && tokenId) {
-      this.actions().contractsData.getTokenERC721Data({ nftAddress, tokenId, chainId })
+      this.actions().assets.getTokenERC721Data({ nftAddress, tokenId, chainId })
     } else {
-      this.actions().contractsData.getTokenErc20Data({ tokenAddress, tokenAmount, chainId })
+      this.actions().assets.getTokenERC20Data({ tokenAddress, tokenAmount, chainId })
     }
-    this.actions().contractsData.getETHData({ weiAmount })
+    this.actions().assets.getEthData({ weiAmount, chainId })
   }
 
   render () {
@@ -92,8 +91,7 @@ class Main extends React.Component {
   }
 
   renderCurrentPage ({ context }) {
-    return console.log(this.props)
-    const { decimals, amount, symbol, icon, step, userLoading, errors, alreadyClaimed } = this.props
+    const { itemsToClaim, step, userLoading, errors, alreadyClaimed } = this.props
     // in context we can find:
     // active,
     // connectorName,
@@ -110,7 +108,7 @@ class Main extends React.Component {
       chainId,
       linkdropMasterAddress
     } = getHashVariables()
-    const commonData = { linkdropMasterAddress, chainId, decimals, amount, symbol, icon, wallet: account, loading: userLoading }
+    const commonData = { linkdropMasterAddress, chainId, itemsToClaim, wallet: account, loading: userLoading }
     if (this.platform === 'desktop' && !account) {
       return <div>
         <ErrorPage
@@ -118,15 +116,15 @@ class Main extends React.Component {
         />
       </div>
     }
+    if (errors && errors.length > 0) {
+      // if some errors occured and can be found in redux store, then show error page
+      return <ErrorPage error={errors[0]} />
+    }
     if (
       (this.platform === 'desktop' && networkId && Number(chainId) !== Number(networkId)) ||
       (this.platform !== 'desktop' && account && networkId && Number(chainId) !== Number(networkId))) {
       // if network id in the link and in the web3 are different
       return <ErrorPage error='NETWORK_NOT_SUPPORTED' network={capitalize({ string: defineNetworkName({ chainId }) })} />
-    }
-    if (errors && errors.length > 0) {
-      // if some errors occured and can be found in redux store, then show error page
-      return <ErrorPage error={errors[0]} />
     }
 
     if (alreadyClaimed) {

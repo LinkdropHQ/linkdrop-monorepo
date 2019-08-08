@@ -20,6 +20,7 @@ $bgColor: #F1F3F4;
 $dbGrey: #979797;
 $dbBlue: #0025FF;
 $dbBlueTransparent: rgba(0, 37, 255, .2);
+$greenColorTransparent: rgba(43, 198, 79, .2);
 $greyStrokeColor: #E5E5E5;
 $darkOrangeColor: #F89D35;
 $greyStrokeMenuColor: #DADADA;
@@ -44,5 +45,6 @@ $dbMenuFooter: #F3F3F3;
   darkOrangeColor: $darkOrangeColor;
   greyStrokeMenuColor: $greyStrokeMenuColor;
   dbMenuFooter: $dbMenuFooter;
-  dbBlueTransparent: $dbBlueTransparent
+  dbBlueTransparent: $dbBlueTransparent;
+  greenColorTransparent: $greenColorTransparent
 }

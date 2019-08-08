@@ -1,11 +1,21 @@
 @import "variables";
 
+.wrapper {
+  min-height: 68px;
+  margin-bottom: 10px;
+}
+
+.message {
+  font-size: 14px;
+}
+
 .container {
   padding: 10px 12px;
   border-radius: 20px;
   display: flex;
+  margin-bottom: 6px;
   align-items: center;
-  margin-bottom: 25px;
+  background-color: $greenColorTransparent;
 
   &.loading {
     background-color: $dbBlueTransparent;

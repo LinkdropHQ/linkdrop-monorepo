@@ -2,6 +2,7 @@ import reducers from './reducers'
 
 const initialState = {
   itemsToClaim: [],
+  items: [],
   loading: false
 }
 
@@ -15,6 +16,7 @@ export default (state = initialState, action = {}) => {
 }
 
 const ACTIONS = {
-  'CONTRACTS_DATA.SET_LOADING': reducers.setLoading,
-  'CONTRACTS_DATA.SET_ITEMS_TO_CLAIM': reducers.setItemsToClaim
+  'ASSETS.SET_LOADING': reducers.setLoading,
+  'ASSETS.SET_ITEMS_TO_CLAIM': reducers.setItemsToClaim,
+  'ASSETS.SET_ITEMS': reducers.setItems
 }
