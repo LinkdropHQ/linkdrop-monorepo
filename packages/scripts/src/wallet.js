@@ -1,25 +1,60 @@
-import { LinkdropSDK } from '@linkdrop/sdk'
+import { LinkdropSDK, WalletSDK } from '@linkdrop/sdk'
+
 import ora from 'ora'
+
 import { ethers } from 'ethers'
 import { terminal as term } from 'terminal-kit'
 import { newError, getString, getUrlParams, getLinkNumber } from './utils'
-
+//
 ethers.errors.setLogLevel('error')
 
 const JSON_RPC_URL = getString('jsonRpcUrl')
 const CHAIN = getString('CHAIN')
 const API_HOST = getString('API_HOST')
-const RECEIVER_ADDRESS = getString('receiverAddress')
 const FACTORY_ADDRESS = getString('FACTORY_ADDRESS')
 const LINKS_NUMBER = getString('linksNumber')
+const walletSDK = new WalletSDK()
 
-const claim = async (receiverAddress = RECEIVER_ADDRESS) => {
+async function main () {
+  //
+
+  const mnemonic = ethers.Wallet.createRandom().mnemonic
+
+  // const mnemonic = 'tired error before token warfare lens news fault visa trip chaos inform'
+  console.log('mnemonic: ', mnemonic)
+
+  //   const first = ethers.Wallet.fromMnemonic(mnemonic)
+  //   console.log('first: ', first.address)
+  //   const second = ethers.Wallet.fromMnemonic(mnemonic, "m/44'/60'/0'/0/1")
+  //   console.log('second: ', second.address)
+  //   const third = ethers.Wallet.fromMnemonic(mnemonic, "m/44'/60'/0'/0/2")
+  //   console.log('third: ', third.address)
+
+  const owners = []
+
+  for (let i = 0; i < 3; i++) {
+    const wallet = ethers.Wallet.fromMnemonic(mnemonic, `m/44'/60'/0'/0/${i}`)
+    const address = wallet.address
+    const privateKey = wallet.privateKey
+    console.log('address: ', address)
+    console.log('privateKey: ', privateKey)
+    owners.push(address)
+  }
+  const threshold = 1
+  const saltNonce = 1234
+
+  const safeAddress = await walletSDK.getAddress({
+    owners,
+    threshold,
+    saltNonce
+  })
+  console.log('Safe address: ', safeAddress)
+  /// //
   let spinner
 
   try {
     const linkNumber = getLinkNumber(LINKS_NUMBER - 1)
     term.bold(`Claiming link #${linkNumber}:\n`)
-
     spinner = ora({
       text: term.bold.green.str('Claiming\n'),
       color: 'green'
@@ -38,7 +73,7 @@ const claim = async (receiverAddress = RECEIVER_ADDRESS) => {
       linkdropMasterAddress,
       linkdropSignerSignature,
       campaignId
-    } = await getUrlParams('erc20', linkNumber)
+    } = await getUrlParams('eth', linkNumber)
 
     const linkdropSDK = LinkdropSDK({
       linkdropMasterAddress,
@@ -49,8 +84,6 @@ const claim = async (receiverAddress = RECEIVER_ADDRESS) => {
     })
 
     const { errors, success, txHash } = await linkdropSDK.claim({
-      jsonRpcUrl: JSON_RPC_URL,
-      apiHost: API_HOST,
       weiAmount,
       tokenAddress,
       tokenAmount,
@@ -60,7 +93,7 @@ const claim = async (receiverAddress = RECEIVER_ADDRESS) => {
       linkKey,
       linkdropMasterAddress,
       linkdropSignerSignature,
-      receiverAddress,
+      receiverAddress: safeAddress,
       campaignId
     })
 
@@ -74,4 +107,4 @@ const claim = async (receiverAddress = RECEIVER_ADDRESS) => {
   }
 }
 
-claim()
+main()

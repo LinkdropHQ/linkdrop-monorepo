@@ -35,7 +35,7 @@ export const getInt = key => {
   if (config[key] == null || config[key] === '') {
     throw newError(`Please provide ${key}`)
   }
-  const intNumber = parseInt(config[key])
+  const intNumber = config[key]
   if (intNumber == null) throw newError(`Please provide valid ${key}`)
   return intNumber
 }

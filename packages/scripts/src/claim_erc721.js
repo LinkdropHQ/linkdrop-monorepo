@@ -1,4 +1,4 @@
-import LinkdropSDK from '@linkdrop/sdk'
+import { LinkdropSDK } from '@linkdrop/sdk'
 import ora from 'ora'
 import { ethers } from 'ethers'
 import { terminal as term } from 'terminal-kit'
@@ -13,7 +13,7 @@ const RECEIVER_ADDRESS = getString('receiverAddress')
 const FACTORY_ADDRESS = getString('FACTORY_ADDRESS')
 const NFT_IDS = getString('nftIds')
 
-const claimERC721 = async () => {
+const claimERC721 = async (receiverAddress = RECEIVER_ADDRESS) => {
   let spinner
   try {
     let LINKS_NUMBER = JSON.parse(NFT_IDS).length - 1
@@ -57,7 +57,7 @@ const claimERC721 = async () => {
       linkKey,
       linkdropMasterAddress,
       linkdropSignerSignature,
-      receiverAddress: RECEIVER_ADDRESS,
+      receiverAddress,
       campaignId
     })
 
