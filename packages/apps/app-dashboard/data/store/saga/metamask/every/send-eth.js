@@ -32,8 +32,13 @@ const generator = function * ({ payload }) {
       data = yield proxyContract.interface.functions.addSigner.encode([wallet])
       to = proxyAddress
     }
+    
+    // get nonce
+    // const nonce = yield window.web3.eth.getTransactionCountPromise(fromWallet)
+    // console.log({ nonce })
+    const nonce = 2
     const promise = new Promise((resolve, reject) => {
-      web3.eth.sendTransaction({ to, from: fromWallet, gasPrice: gasPrice.add(oneGwei), value: ethValueWei, data }, (err, txHash) => {
+      window.web3.eth.sendTransaction({ to, from: fromWallet, gasPrice: gasPrice.add(oneGwei), value: ethValueWei, data, gas: 5e5, nonce }, (err, txHash) => {
         if (err) { console.error(err); reject(err) }
         return resolve({ txHash })
       })

@@ -10,7 +10,7 @@ import NetworkNotSupported from './network-not-supported'
 let web3Obj
 const ls = window.localStorage
 try {
-  web3Obj = web3
+  web3Obj = web3 || window.web3
 } catch (e) {
   web3Obj = null
 }
@@ -20,15 +20,18 @@ try {
 class Page extends React.Component {
   componentDidMount () {
     if (web3Obj) {
-      this.actions().user.checkCurrentProvider()
+      this.actions().user.checkCurrentProvider({ currentProvider: web3.currentProvider })
     }
   }
 
   defineContent ({ currentAddress }) {
+    console.log('Define content')
+    console.log({ currentAddress })
+    
     const { chainId, loading } = this.props
-    if (!web3Obj) {
-      return <MetamaskInjector />
-    }
+    // if (!web3Obj) {
+    //   return <MetamaskInjector />
+    // }
     if (currentAddress === null && loading) {
       return <Loading />
     }

@@ -4,6 +4,7 @@ import { Button } from 'components/common'
 import styles from './styles.module'
 import Web3Connect from 'web3connect'
 
+
 @actions(({ campaigns: { items } }) => ({ items }))
 @translate('pages.main')
 class MetamaskInjector extends React.Component {
@@ -15,15 +16,14 @@ class MetamaskInjector extends React.Component {
       }
     })
 
-    this.web3Connect.on('connect', provider => {
+    this.web3Connect.on('connect', (provider) => {
+      console.log({ provider })
       this.applyProvider(provider)
     })
   }
 
-  applyProvider (provider) {
-    if (provider.selectedAddress) {
-      this.actions().user.checkCurrentProvider()
-    }
+  async applyProvider (currentProvider) {
+    this.actions().user.checkCurrentProvider({ currentProvider })
   }
 
   render () {

@@ -1,19 +1,30 @@
-/* global web3 */
 import { put } from 'redux-saga/effects'
 import { delay } from 'redux-saga'
 import initializeSdk from 'data/sdk'
 import { jsonRpcUrl, apiHost, factory, claimHost } from 'app.config.js'
 import { defineNetworkName } from '@linkdrop/commons'
+import Promise from 'bluebird'
+import Web3 from 'web3'
+
 
 const generator = function * ({ payload }) {
   try {
+    console.log(payload)
+    const { currentProvider } = payload
     yield put({ type: 'USER.SET_LOADING', payload: { loading: true } })
-    yield delay(3000)
-    const currentProvider = (web3 || {}).currentProvider
+    // yield delay(3000)
     if (!currentProvider) {
       return yield put({ type: 'USER.SET_LOADING', payload: { loading: false } })
     }
-    const { selectedAddress, networkVersion } = currentProvider
+
+    window.web3 = new Web3(currentProvider)
+    Promise.promisifyAll(window.web3.eth, { suffix: 'Promise' })
+    const accounts = yield window.web3.eth.getAccounts()
+    const selectedAddress = accounts[0]
+
+    console.log({ selectedAddress })
+    const networkVersion = yield window.web3.eth.net.getId()
+    
     if (!selectedAddress || !networkVersion) {
       return yield put({ type: 'USER.SET_LOADING', payload: { loading: false } })
     }
@@ -24,12 +35,12 @@ const generator = function * ({ payload }) {
     yield put({ type: 'USER.SET_CURRENT_ADDRESS', payload: { currentAddress: selectedAddress } })
     yield put({ type: 'USER.SET_CHAIN_ID', payload: { chainId: networkVersion } })
     yield put({ type: 'USER.SET_LOADING', payload: { loading: false } })
-    window.addressChangeInterval = window.setInterval(() => {
-      const currentMetamaskAddress = web3.eth.accounts[0]
-      if (selectedAddress !== currentMetamaskAddress) {
-        window.location.reload()
-      }
-    }, 2000)
+    // window.addressChangeInterval = window.setInterval(async () => {
+    //   const currentAddress = currentProvider.selectedAddress || (await window.web3.eth.getAccounts())[0]
+    //   if (selectedAddress !== currentAddress) {
+    //     window.location.reload()
+    //   }
+    // }, 2000)
   } catch (e) {
     console.error(e)
   }
