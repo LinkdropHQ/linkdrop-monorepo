@@ -3,7 +3,7 @@ import { translate, actions } from 'decorators'
 import commonStyles from '../styles.module'
 import { getHashVariables } from '@linkdrop/commons'
 import { TokensAmount, AssetBalance, AccountBalance } from 'components/common'
-import { getImages, getCurrentAsset } from 'helpers'
+import { getCurrentAsset } from 'helpers'
 
 @actions(({ tokens: { transactionId, transactionStatus } }) => ({ transactionId, transactionStatus }))
 @translate('pages.main')
@@ -51,10 +51,11 @@ class ClaimingProcessPage extends React.Component {
     if (status != null && prevStatus === null) {
       this.statusCheck && window.clearInterval(this.statusCheck)
 
-      window.setTimeout(_ => this.setState({
-        loading: false
-      }), 3000)
-      // this.actions().user.setStep({ step: 3 })
+      window.setTimeout(_ => {
+        this.setState({
+          loading: false
+        }, _ => this.actions().assets.saveClaimedAssets())
+      }, 3000)
     }
   }
 

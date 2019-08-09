@@ -1,0 +1,20 @@
+.container {
+  text-align: center;
+}
+
+.title {
+  font-size: 24px;
+  margin-bottom: 50px;
+}
+ 
+.button {
+  width: 140px;
+}
+
+.buttonsContainer {
+  display: flex;
+  margin: 0 auto 30px;
+  width: 300px;
+  align-items: center;
+  justify-content: space-between;
+}

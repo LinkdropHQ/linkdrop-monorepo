@@ -1,27 +1,30 @@
 @import "variables";
 
-.title {
-  font-size: 24px;
-  margin-bottom: 30px;
-  span {
-    font-family: 'Inter-Medium';
+.assets {
+  min-height: 68px;
+  .assetsContent {
+    display: none;
   }
 }
 
-.description {
-  font-size: 14px;
-  margin-bottom: 8px;
+.assetsHeader {
+  font-size: 18px;
+  user-select: none;
 
-  a {
-    color: $blackColor;
+  svg {
+    transition: transform .3s;
+    margin-left: 5px;
   }
 }
 
-.alert {
-  margin-bottom: 40px;
-}
+.assetsExpanded {
+  .assetsContent {
+    display: block;
+  }
 
-.descriptionHidden {
-  visibility: hidden;
-  opacity: 0;
+  .assetsHeader {
+    svg {
+      transform: rotate(180deg);
+    }
+  }
 }

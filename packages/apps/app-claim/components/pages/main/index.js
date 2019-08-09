@@ -91,7 +91,7 @@ class Main extends React.Component {
   }
 
   renderCurrentPage ({ context }) {
-    const { itemsToClaim, step, userLoading, errors, alreadyClaimed } = this.props
+    const { itemsToClaim, userLoading, errors, alreadyClaimed } = this.props
     // in context we can find:
     // active,
     // connectorName,
@@ -100,6 +100,7 @@ class Main extends React.Component {
     // networkId,
     // account,
     // error
+    const step = 3
     const {
       account,
       networkId

@@ -1,7 +1,7 @@
 import React from 'react'
 import i18next from 'i18next'
 import { Route, Switch } from 'react-router-dom'
-import { Main, NotFound, Wallet } from 'components/pages'
+import { Main, NotFound, Wallet, Confirm } from 'components/pages'
 import './styles'
 
 import { actions } from 'decorators'
@@ -20,6 +20,7 @@ class AppRouter extends React.Component {
   render () {
     return <Switch>
       <Route path='/receive' component={Main} />
+      <Route path='/confirm' component={Confirm} />
       <Route path='/' component={Wallet} />
       <Route path='*' component={NotFound} />
     </Switch>

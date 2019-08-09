@@ -40,7 +40,7 @@ class TokensAmount extends React.Component {
 
   defineIcon ({ loading }) {
     if (loading) return <ComponentInternalLoading className={styles.loadingComponent} color={variables.dbBlue} />
-    return <span className={styles.loadingComponent}><Icons.CheckSmall /></span>
+    return <span className={styles.loadingComponent}><Icons.CheckSmall stroke={variables.greenColor} /></span>
   }
 }
 

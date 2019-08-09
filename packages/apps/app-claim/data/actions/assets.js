@@ -18,6 +18,10 @@ class Assets {
   getPastEvents ({ linkKey, chainId, campaignId }) {
     this.actions.dispatch({ type: '*ASSETS.GET_PAST_EVENTS', payload: { linkKey, chainId, campaignId } })
   }
+
+  saveClaimedAssets () {
+    this.actions.dispatch({ type: '*ASSETS.SAVE_CLAIMED_ASSETS' })
+  }
 }
 
 export default Assets

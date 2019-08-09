@@ -1,7 +1,5 @@
 export default {
   titles: {
-    needWallet: 'You need a wallet to claim tokens',
-    haveAnother: 'Have another wallet?',
     claimTo: 'Claim to: <span>{{wallet}}</span>',
     transactionInProcess: 'Transaction is processing',
     claiming: 'Claiming...',
@@ -9,11 +7,13 @@ export default {
     seeDetails: 'See details on <a target="_blank" href={{transactionLink}}>Etherscan</a>',
     tokensClaimed: '<span>{{tokens}}</span> claimed',
     howToClaim: 'How to claim tokens to {{wallet}}',
-    agreeWithTerms: 'By claiming you agree to the <a href={{href}}>Terms & Privacy</a>'
+    agreeWithTerms: 'By claiming you agree to the <a href={{href}}>Terms & Privacy</a>',
+    digitalAssets: 'Digital Assets'
   },
   buttons: {
     useWallet: 'Use {{wallet}}',
-    copyLink: 'Copy link'
+    copyLink: 'Copy link',
+    goTo: 'Go to {{title}}'
   },
   errors: {
     LINKDROP_PROXY_CONTRACT_PAUSED: {
@@ -84,19 +84,6 @@ export default {
         _1: '1. Download <a href="https://metamask.io/" target="_blank">Metamask</a>',
         _2: '2. Then just reload the claim page'
       }
-    }
-  },
-  walletsInstructions: {
-    common: {
-      _1: {
-        withUrl: '1. Download <a href={{href}}>{{title}}</a>',
-        withNoUrl: '1. Download {{title}}'
-      },
-      _2: '2. Copy&Paste the claiming link in a wallet’s DApp browser'
-    },
-    deepLink: {
-      _1: '1. Download <a href={{href}}>{{title}}</a>.',
-      _2: '2. Return here and tap on the button below'
     }
   }
 }
