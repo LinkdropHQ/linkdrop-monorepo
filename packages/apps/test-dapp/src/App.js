@@ -16,9 +16,12 @@ class App extends React.Component {
     window.addEventListener('message', this.receiveMessage.bind(this), false)
   }
 
-  _connect () {
+  async _connect () {
     console.log('getting provider...')
     const card = new Provider()
+
+    await card.provider.enable()
+    
     console.log('got provider')
     const web3 = new Web3(card.provider)
     console.log('got web3 ', web3)

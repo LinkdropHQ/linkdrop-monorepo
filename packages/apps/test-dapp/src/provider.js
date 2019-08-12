@@ -10,18 +10,21 @@ const ethers = require('ethers')
 
 class Provider {
   constructor () {
-    const address = this._getAddressFromUrl()
-    this.provider = this._initProvider({ address })
+    this.provider = this._initProvider()
   }
-
-  _getAddressFromUrl () {
-    let address = null
+  
+  async _getAddressFromUrl () {
+    let ensName, address
     const paramsFragment = document.location.search.substr(1)
     if (paramsFragment) {
       try {
         const query = qs.parse(paramsFragment)
-        address = query.address
-        address = ethers.utils.getAddress(address)
+        const network = query.network || 'mainnet'
+        const provider = ethers.getDefaultProvider(network)
+        
+        ensName = query.user
+        console.log({ensName, network})
+        address = await provider.resolveName(ensName)
         console.log({ address })
       } catch (err) {
         console.log('bad address')
@@ -31,9 +34,14 @@ class Provider {
     return address
   }
   
-  _initProvider ({ address }) {
+  _initProvider () {
     const engine = new ProviderEngine()
+    let address
 
+    engine.enable = async () => {
+      address = await this._getAddressFromUrl()
+    }
+    
     engine.send = (payload, callback) => {
       // Web3 1.0 beta.38 (and above) calls `send` with method and parameters
       if (typeof payload === 'string') {
@@ -133,17 +141,17 @@ class Provider {
     //   /////// }
     // })
 
-    engine.enable = () =>
-      new Promise((resolve, reject) => {
-        engine.sendAsync({ method: 'eth_accounts' }, (error, response) => {
-          console.log('in send async get accounts')
-          if (error) {
-            reject(error)
-          } else {
-            resolve(response.result)
-          }
-        })
-      })
+    // engine.enable = () =>
+    //   new Promise((resolve, reject) => {
+    //     engine.sendAsync({ method: 'eth_accounts' }, (error, response) => {
+    //       console.log('in send async get accounts')
+    //       if (error) {
+    //         reject(error)
+    //       } else {
+    //         resolve(response.result)
+    //       }
+    //     })
+    //   })
 
     engine.isConnected = () => {
       return true
