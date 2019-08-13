@@ -7,8 +7,7 @@ export default {
     seeDetails: 'See details on <a target="_blank" href={{transactionLink}}>Etherscan</a>',
     tokensClaimed: '<span>{{tokens}}</span> claimed',
     howToClaim: 'How to claim tokens to {{wallet}}',
-    agreeWithTerms: 'By claiming you agree to the <a href={{href}}>Terms & Privacy</a>',
-    digitalAssets: 'Digital Assets'
+    agreeWithTerms: 'By claiming you agree to the <a target="_blank" href={{href}}>Terms & Privacy</a>'
   },
   buttons: {
     useWallet: 'Use {{wallet}}',

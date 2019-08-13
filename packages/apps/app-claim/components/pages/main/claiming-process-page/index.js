@@ -29,10 +29,6 @@ class ClaimingProcessPage extends React.Component {
       weiAmount,
       campaignId
     } = getHashVariables()
-    // destination: destination address - can be received from web3-react context
-    // token: ERC20 token address, 0x000...000 for ether - can be received from url params
-    // tokenAmount: token amount in atomic values - can be received from url params
-    // expirationTime: link expiration time - can be received from url params
 
     return this.actions().tokens.claimTokensERC20({ campaignId, wallet, tokenAddress, tokenAmount, weiAmount, expirationTime, linkKey, linkdropMasterAddress, linkdropSignerSignature })
     // if (nftAddress && tokenId) {

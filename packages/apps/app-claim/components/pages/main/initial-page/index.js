@@ -41,7 +41,7 @@ class InitialPage extends React.Component {
         {text('common.buttons.claim')}
       </Button>
       <div className={styles.terms} dangerouslySetInnerHTML={{ __html: this.t('titles.agreeWithTerms', {
-        href: 'http://linkdrop.io'
+        href: 'https://www.notion.so/Terms-and-Privacy-dfa7d9b85698491d9926cbfe3c9a0a58'
       }) }} />
     </div>
   }

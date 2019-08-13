@@ -6,8 +6,7 @@ import { Page } from 'components/pages'
 import ClaimingProcessPage from './claiming-process-page'
 import ErrorPage from './error-page'
 import ClaimingFinishedPage from './claiming-finished-page'
-import { getHashVariables, defineNetworkName, capitalize } from '@linkdrop/commons'
-import { Web3Consumer } from 'web3-react'
+import { getHashVariables } from '@linkdrop/commons'
 
 @actions(({ user: { errors, step, loading: userLoading, readyToClaim, alreadyClaimed }, tokens: { transactionId }, assets: { loading, itemsToClaim } }) => ({
   userLoading,
@@ -30,7 +29,6 @@ class Main extends React.Component {
       campaignId
     } = getHashVariables()
     this.actions().tokens.checkIfClaimed({ linkKey, chainId, linkdropMasterAddress, campaignId })
-    this.actions().user.createSdk({ linkdropMasterAddress, chainId, linkKey, campaignId })
   }
 
   componentWillReceiveProps ({ readyToClaim, alreadyClaimed }) {
@@ -84,47 +82,22 @@ class Main extends React.Component {
   render () {
     const { step } = this.props
     return <Page dynamicHeader>
-      <Web3Consumer>
-        {context => this.renderCurrentPage({ context })}
-      </Web3Consumer>
+      {this.renderCurrentPage()}
     </Page>
   }
 
-  renderCurrentPage ({ context }) {
+  renderCurrentPage () {
     const { itemsToClaim, userLoading, errors, alreadyClaimed, step } = this.props
-    // in context we can find:
-    // active,
-    // connectorName,
-    // connector,
-    // library,
-    // networkId,
-    // account,
-    // error
-    const {
-      account,
-      networkId
-    } = context
+
     const {
       chainId,
       linkdropMasterAddress
     } = getHashVariables()
-    const commonData = { linkdropMasterAddress, chainId, itemsToClaim, wallet: account, loading: userLoading }
-    if (this.platform === 'desktop' && !account) {
-      return <div>
-        <ErrorPage
-          error='NEED_METAMASK'
-        />
-      </div>
-    }
+    const commonData = { linkdropMasterAddress, chainId, itemsToClaim, loading: userLoading }
+
     if (errors && errors.length > 0) {
       // if some errors occured and can be found in redux store, then show error page
       return <ErrorPage error={errors[0]} />
-    }
-    if (
-      (this.platform === 'desktop' && networkId && Number(chainId) !== Number(networkId)) ||
-      (this.platform !== 'desktop' && account && networkId && Number(chainId) !== Number(networkId))) {
-      // if network id in the link and in the web3 are different
-      return <ErrorPage error='NETWORK_NOT_SUPPORTED' network={capitalize({ string: defineNetworkName({ chainId }) })} />
     }
 
     if (alreadyClaimed) {
@@ -138,8 +111,7 @@ class Main extends React.Component {
         return <InitialPage
           {...commonData}
           onClick={_ => {
-            if (account) {
-              // if wallet account was found in web3 context, then go to step 2 and claim assets
+            if (true) { // account check
               return this.actions().user.setStep({ step: 2 })
             }
           }}
