@@ -1,4 +1,5 @@
 import reducers from './reducers'
+const ls = (typeof window === 'undefined' ? {} : window).localStorage
 
 const initialState = {
   id: undefined,
@@ -6,10 +7,12 @@ const initialState = {
   step: 0,
   loading: false,
   errors: [],
-  walletType: null,
   readyToClaim: false,
   alreadyClaimed: false,
-  sdk: null
+  sdk: null,
+  privateKey: ls && ls.getItem && ls.getItem('privateKey'),
+  contractAddress: ls && ls.getItem && ls.getItem('contractAddress'),
+  ens: ls && ls.getItem && ls.getItem('ens')
 }
 
 export default (state = initialState, action = {}) => {
@@ -26,9 +29,11 @@ const ACTIONS = {
   'USER.SET_STEP': reducers.setStep,
   'USER.SET_LOADING': reducers.setLoading,
   'USER.SET_ERRORS': reducers.setErrors,
-  'USER.SET_WALLET_TYPE': reducers.setWalletType,
   'USER.SET_READY_TO_CLAIM': reducers.setReadyToClaim,
   'USER.SET_ALREADY_CLAIMED': reducers.setAlreadyClaimed,
-  'USER.SET_SDK': reducers.setSdk
-
+  'USER.SET_SDK': reducers.setSdk,
+  'USER.SET_PRIVATE_KEY': reducers.setPrivateKey,
+  'USER.SET_CONTRACT_ADDRESS': reducers.setContractAddress,
+  'USER.SET_ENS': reducers.setEns,
+  'USER.SET_USER_DATA': reducers.setUserData
 }

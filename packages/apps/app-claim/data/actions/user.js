@@ -19,12 +19,16 @@ class User {
     this.actions.dispatch({ type: 'USER.SET_ERRORS', payload: { errors } })
   }
 
-  setWalletType ({ walletType }) {
-    this.actions.dispatch({ type: 'USER.SET_WALLET_TYPE', payload: { walletType } })
-  }
-
   createSdk ({ chainId }) {
     this.actions.dispatch({ type: '*USER.CREATE_SDK', payload: { chainId } })
+  }
+
+  setUserData ({ privateKey, contractAddress, ens }) {
+    this.actions.dispatch({ type: '*USER.SET_USER_DATA', payload: { privateKey, contractAddress, ens } })
+  }
+
+  createWallet () {
+    this.actions.dispatch({ type: '*USER.CREATE_WALLET' })
   }
 }
 

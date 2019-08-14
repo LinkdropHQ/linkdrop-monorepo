@@ -1,8 +1,7 @@
-import LinkdropSDK from '@linkdrop/sdk/src/index'
-export default ({ linkdropMasterAddress, chain, jsonRpcUrl, apiHost, factoryAddress }) => LinkdropSDK({
-  linkdropMasterAddress,
-  chain,
-  jsonRpcUrl,
-  apiHost,
-  factoryAddress
-})
+import initializeSdk from './initialize-sdk'
+import initializeWalletSdk from './initialize-wallet-sdk'
+
+export {
+  initializeSdk,
+  initializeWalletSdk
+}

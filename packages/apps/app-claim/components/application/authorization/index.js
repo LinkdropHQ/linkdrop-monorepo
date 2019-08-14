@@ -4,8 +4,9 @@ import { Button } from '@linkdrop/ui-kit'
 import styles from './styles.module'
 import { Page } from 'components/pages'
 import { getEns } from 'helpers'
-import { ethers } from 'ethers'
+import { action } from 'decorators'
 
+@action(({ user: { sdk, privateKey, contractAddress, ens, loading } }) => ({ loading, sdk, contractAddress, privateKey, ens }))
 class Authorization extends React.Component {
   constructor (props) {
     super(props)
@@ -15,15 +16,21 @@ class Authorization extends React.Component {
   }
 
   componentDidMount () {
-    const script = document.createElement('script')
-    script.setAttribute('src', 'https://apis.google.com/js/api.js')
-    script.setAttribute('async', true)
-    script.onload = _ => this.handleClientLoad()
-    script.onreadystatechange = function () {
-      if (this.readyState === 'complete') this.onload()
+    this.actions().user.createWallet()
+  }
+
+  componentWllReceiveProps ({ privateKey, contractAddress }) {
+    const { contractAddress: prevContractAddress, privateKey: prevPrivateKey } = this.props
+    if (privateKey && contractAddress && !prevContractAddress && !prevPrivateKey) {
+      const script = document.createElement('script')
+      script.setAttribute('src', 'https://apis.google.com/js/api.js')
+      script.setAttribute('async', true)
+      script.onload = _ => this.handleClientLoad()
+      script.onreadystatechange = function () {
+        if (this.readyState === 'complete') this.onload()
+      }
+      document.body.appendChild(script)
     }
-    console.log(script)
-    document.body.appendChild(script)
   }
 
   handleClientLoad () {
@@ -57,7 +64,7 @@ class Authorization extends React.Component {
   }
 
   getFiles ({ email }) {
-    let ens
+    const ens = getEns({ email })
     gapi.client.drive.files.list({
       spaces: 'appDataFolder'
     }).then(function (response) {
@@ -71,24 +78,24 @@ class Authorization extends React.Component {
           })
           .execute(response => {
             console.log('Found existing linkdrop-data.json file with id:', id)
-            ens = response.ens
-            console.log('ens:', ens)
+            const { privateKey, contractAddress } = response
+            this.actions().user.setUserData({ privateKey, contractAddress, ens })
           })
       } else {
-        ens = getEns({ email })
+        const { contractAddress, privateKey } = this.props
         const boundary = '-------314159265358979323846'
         const delimiter = '\r\n--' + boundary + '\r\n'
         const closeDelim = '\r\n--' + boundary + '--'
 
         const contentType = 'application/json'
 
-        var metadata = {
+        const metadata = {
           name: 'linkdrop-data.json',
           mimeType: contentType,
           parents: ['appDataFolder']
         }
 
-        var multipartRequestBody =
+        const multipartRequestBody =
           delimiter +
           'Content-Type: application/json\r\n\r\n' +
           JSON.stringify(metadata) +
@@ -96,7 +103,7 @@ class Authorization extends React.Component {
           'Content-Type: ' +
           contentType +
           '\r\n\r\n' +
-          JSON.stringify({ ens }) +
+          JSON.stringify({ ens, contractAddress, privateKey }) +
           closeDelim
 
         gapi.client
@@ -112,7 +119,7 @@ class Authorization extends React.Component {
           })
           .execute(response => {
             console.log('Created new file with id:', response.id)
-            console.log('ens:', ens)
+            this.actions().user.setUserData({ privateKey, contractAddress, ens })
           })
       }
     })
@@ -123,10 +130,11 @@ class Authorization extends React.Component {
   }
 
   render () {
+    const { loading } = this.props
     const { enableAuthorize } = this.state
     return <Page>
       <div className={styles.container}>
-        <Button disabled={!enableAuthorize} onClick={e => this.handleAuthClick(e)}>Login</Button>
+        <Button disabled={!enableAuthorize || loading} onClick={e => this.handleAuthClick(e)}>Login</Button>
       </div>
     </Page>
   }
