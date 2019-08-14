@@ -76,9 +76,9 @@ class App extends React.Component {
                                    event.origin)
         }
         
-        setTimeout(() => { // let post event before closing window
-          window.close()
-        }, 0)
+        // setTimeout(() => { // let post event before closing window
+        //   window.close()
+        // }, 0)
       })
     }
   }

@@ -3,8 +3,6 @@ import Provider from './provider'
 import Web3 from 'web3'
 import './App.css'
 
-const WALLET_URL = 'http://localhost:3000'
-
 class App extends React.Component {
   constructor (props) {
     super(props)
@@ -13,7 +11,6 @@ class App extends React.Component {
     }
     this.walletWindow = null
     this._connect()
-    window.addEventListener('message', this.receiveMessage.bind(this), false)
   }
 
   async _connect () {
@@ -23,43 +20,27 @@ class App extends React.Component {
     await card.provider.enable()
     
     console.log('got provider')
-    const web3 = new Web3(card.provider)
-    console.log('got web3 ', web3)
+    this.web3 = new Web3(card.provider)
+    console.log('got web3 ', this.web3)
 
-    web3.eth.getAccounts()
-      .then((accs) => {
-        console.log({ accs })
-        const address = accs[0]
-        this.setState({ address })
-      })
+    const accs = await this.web3.eth.getAccounts()
+    console.log({ accs })
+    const address = accs[0]
+    this.setState({ address })
+
+    const balance = await this.web3.eth.getBalance(address)
+    console.log({ balance })
+    
   }
   
-  receiveMessage (event) {
-    // Do we trust the sender of this message?
-    if (event.origin !== WALLET_URL) return
-
-    if (event.data.action === 'PASS_TRANSACTION_RESULT') {
-      console.log('received tx result', event.data.payload)
-      const { success, txHash } = event.data.payload
-      let message
-      if (success) {
-        message = `Got txHash: ${txHash}`
-      } else {
-        message = 'Transaction was rejected by user'
-      }
-      setTimeout(() => {
-        window.alert(message)
-      }, 100)
-    }
-  }
-
   _onSubmit () {
-    const newWindow = window.open(WALLET_URL, '_blank')
-    console.log('sending transaction')
-    setTimeout(() => {
-      const message = { action: 'SEND_TRANSACTION' }
-      newWindow.postMessage(message, WALLET_URL)
-    }, 1000)
+    console.log("on submit clicked")
+    this.web3.eth.sendTransaction({ to: this.state.address, value: 0, from: this.state.address }, (err, result) => {
+      console.log({ err, result })
+      if (result) {
+        alert(result)
+      }
+    })
   }
   
   render () {
