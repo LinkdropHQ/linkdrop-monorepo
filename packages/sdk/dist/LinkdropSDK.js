@@ -62,7 +62,7 @@ function () {
     this.linkdropMasterAddress = linkdropMasterAddress;
     this.factoryAddress = factoryAddress;
     this.chain = chain;
-    this.chainId = this.getChainId(chain);
+    this.chainId = getChainId(chain);
     this.jsonRpcUrl = jsonRpcUrl;
     this.apiHost = apiHost;
     this.claimHost = claimHost;
@@ -398,33 +398,32 @@ function () {
 
       return claimERC721;
     }()
-  }, {
-    key: "getChainId",
-    value: function getChainId(chain) {
-      var chainId;
-
-      switch (chain) {
-        case 'mainnet':
-          chainId = 1;
-          break;
-
-        case 'ropsten':
-          chainId = 3;
-          break;
-
-        case 'rinkeby':
-          chainId = 4;
-          break;
-
-        default:
-          chainId = null;
-      }
-
-      return chainId;
-    }
   }]);
   return LinkdropSDK;
 }();
+
+function getChainId(chain) {
+  var chainId;
+
+  switch (chain) {
+    case 'mainnet':
+      chainId = 1;
+      break;
+
+    case 'ropsten':
+      chainId = 3;
+      break;
+
+    case 'rinkeby':
+      chainId = 4;
+      break;
+
+    default:
+      chainId = null;
+  }
+
+  return chainId;
+}
 
 var _default = LinkdropSDK;
 exports["default"] = _default;

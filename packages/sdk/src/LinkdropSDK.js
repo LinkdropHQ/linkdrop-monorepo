@@ -33,7 +33,7 @@ class LinkdropSDK {
     this.linkdropMasterAddress = linkdropMasterAddress
     this.factoryAddress = factoryAddress
     this.chain = chain
-    this.chainId = this.getChainId(chain)
+    this.chainId = getChainId(chain)
     this.jsonRpcUrl = jsonRpcUrl
     this.apiHost = apiHost
     this.claimHost = claimHost
@@ -167,24 +167,24 @@ class LinkdropSDK {
       campaignId
     })
   }
+}
 
-  getChainId (chain) {
-    let chainId
-    switch (chain) {
-      case 'mainnet':
-        chainId = 1
-        break
-      case 'ropsten':
-        chainId = 3
-        break
-      case 'rinkeby':
-        chainId = 4
-        break
-      default:
-        chainId = null
-    }
-    return chainId
+function getChainId (chain) {
+  let chainId
+  switch (chain) {
+    case 'mainnet':
+      chainId = 1
+      break
+    case 'ropsten':
+      chainId = 3
+      break
+    case 'rinkeby':
+      chainId = 4
+      break
+    default:
+      chainId = null
   }
+  return chainId
 }
 
 export default LinkdropSDK

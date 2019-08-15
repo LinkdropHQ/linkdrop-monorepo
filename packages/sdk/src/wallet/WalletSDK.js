@@ -12,9 +12,6 @@ import {
 import { ethers } from 'ethers'
 import { claimAndDeploy } from './claimAndDeploy'
 
-import { getString } from '../../../scripts/src/utils'
-const LINKDROP_FACTORY_ADDRESS = getString('FACTORY_ADDRESS')
-
 class WalletSDK {
   //
   constructor (chain = 'rinkeby') {
@@ -40,7 +37,8 @@ class WalletSDK {
     linkdropMasterAddress,
     linkdropSignerSignature,
     receiverAddress,
-    campaignId
+    campaignId,
+    factoryAddress
   }) {
     //
     const linkdropSDK = new LinkdropSDK({
@@ -48,7 +46,7 @@ class WalletSDK {
       chain: this.chain,
       jsonRpcUrl: this.jsonRpcUrl,
       apiHost: `https://${this.chain}.linkdrop.io`,
-      factoryAddress: LINKDROP_FACTORY_ADDRESS
+      factoryAddress
     })
 
     return linkdropSDK.claim({
@@ -188,7 +186,8 @@ class WalletSDK {
       linkKey,
       linkdropMasterAddress,
       linkdropSignerSignature,
-      campaignId
+      campaignId,
+      factoryAddress
     },
     { privateKey, ensName, gasPrice = 5e9 }
   ) {
@@ -197,7 +196,7 @@ class WalletSDK {
       chain: this.chain,
       jsonRpcUrl: this.jsonRpcUrl,
       apiHost: `https://${this.chain}.linkdrop.io`,
-      factoryAddress: LINKDROP_FACTORY_ADDRESS
+      factoryAddress
     })
 
     await this._fetchFutureWalletFactory()
@@ -228,7 +227,7 @@ class WalletSDK {
       linkdropSignerSignature,
       campaignId,
       receiverAddress: contractAddress,
-      factoryAddress: LINKDROP_FACTORY_ADDRESS,
+      factoryAddress,
       walletFactory: this.sdk.futureWalletFactory.config.factoryAddress,
       publicKey,
       initializeWithENS: initData,
