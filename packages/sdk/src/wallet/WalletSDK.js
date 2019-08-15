@@ -10,11 +10,13 @@ import {
 } from '@universal-login/commons'
 
 import { ethers } from 'ethers'
+import { claimAndDeploy } from './claimAndDeploy'
 
 import { getString } from '../../../scripts/src/utils'
 const LINKDROP_FACTORY_ADDRESS = getString('FACTORY_ADDRESS')
 
 class WalletSDK {
+  //
   constructor (chain = 'rinkeby') {
     if (chain !== 'mainnet' && chain !== 'rinkeby') {
       throw new Error('Chain not supported')
@@ -177,44 +179,6 @@ class WalletSDK {
     }
   }
 
-  async claimAndDeploy (claimParams, deployParams) {
-    const {
-      weiAmount,
-      tokenAddress,
-      tokenAmount,
-      expirationTime,
-      linkKey,
-      linkdropMasterAddress,
-      linkdropSignerSignature,
-      campaignId
-    } = claimParams
-
-    const {
-      privateKey,
-      contractAddress,
-      waitForBalance,
-      deploy
-    } = await this.createFutureWallet()
-
-    await waitForBalance()
-
-    await this.claim({
-      weiAmount,
-      tokenAddress,
-      tokenAmount,
-      expirationTime,
-      linkKey,
-      linkdropMasterAddress,
-      linkdropSignerSignature,
-      receiverAddress: contractAddress,
-      campaignId
-    })
-
-    const { txHash } = await deploy(deployParams)
-
-    return { privateKey, contractAddress, deployTxHash: txHash }
-  }
-
   async execute (message, privateKey) {
     try {
       const { messageStatus } = await this.sdk.execute(message, privateKey)
@@ -230,41 +194,3 @@ class WalletSDK {
 }
 
 export default WalletSDK
-
-const main = async () => {
-  const gasPrice = ethers.utils.parseUnits('5', 'gwei').toString()
-
-  const sdk = new WalletSDK()
-
-  const pub = new ethers.Wallet(
-    '0x0a24c99c3c585048032b67fea393e808db20137f7fc49d8301c849793ef75eb9'
-  ).address
-
-  const addr = await sdk.computeProxyAddress(pub)
-  console.log('addr: ', addr)
-
-  // const {
-  //   privateKey,
-  //   contractAddress,
-  //   waitForBalance,
-  //   deploy
-  // } = await sdk.createFutureWallet()
-
-  // console.log({ privateKey, contractAddress })
-
-  // await waitForBalance()
-
-  // const tx = await deploy('amir1.linkdrop.test', gasPrice)
-
-  // const tx = await sdk.deploy(
-  //   '0x0a24c99c3c585048032b67fea393e808db20137f7fc49d8301c849793ef75eb9',
-  //   'amir3.linkdrop.test',
-  //   gasPrice
-  // )
-
-  // console.log('tx: ', tx)
-
-  // const exists = await sdk.walletContractExist('amir3.linkdrop.test')
-  // console.log('exists: ', exists)
-}
-main()
