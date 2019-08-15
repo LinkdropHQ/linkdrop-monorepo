@@ -5,14 +5,19 @@ var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefau
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports["default"] = void 0;
+Object.defineProperty(exports, "LinkdropSDK", {
+  enumerable: true,
+  get: function get() {
+    return _LinkdropSDK["default"];
+  }
+});
+Object.defineProperty(exports, "WalletSDK", {
+  enumerable: true,
+  get: function get() {
+    return _WalletSDK["default"];
+  }
+});
 
-var _LinkdropSDK = require("./LinkdropSDK");
+var _LinkdropSDK = _interopRequireDefault(require("./LinkdropSDK"));
 
 var _WalletSDK = _interopRequireDefault(require("./wallet/WalletSDK"));
-
-var _default = {
-  LinkdropSDK: _LinkdropSDK.LinkdropSDK,
-  WalletSDK: _WalletSDK["default"]
-};
-exports["default"] = _default;
