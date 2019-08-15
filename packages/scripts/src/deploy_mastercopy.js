@@ -34,7 +34,7 @@ export const deploy = async () => {
 
     masterCopy = await factory.deploy({
       gasLimit: 4500000,
-      gasPrice: ethers.utils.parseUnits('7', 'gwei')
+      gasPrice: ethers.utils.parseUnits('4', 'gwei')
     })
 
     await masterCopy.deployed()

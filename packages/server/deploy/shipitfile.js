@@ -40,7 +40,7 @@ module.exports = shipit => {
 
   shipit.task('copyConfig', async () => {
     await shipit.copyToRemote(
-      '../../configs/server.config.json',
+      '../../../configs/server.config.json',
       `linkdrop/${network}/current/configs/server.config.json`
     )
   })

@@ -38,6 +38,7 @@ const generator = function * ({ payload }) {
     yield put({ type: 'CONTRACT.SET_ICON', payload: { icon: image } })
     yield put({ type: 'CONTRACT.SET_AMOUNT', payload: { amount: undefined } })
     yield put({ type: 'CONTRACT.SET_LOADING', payload: { loading: false } })
+    yield put({ type: 'USER.SET_ERRORS', payload: { errors: ['LINK_INVALID'] } })
     yield put({ type: 'USER.SET_STEP', payload: { step: 1 } })
   }
 }

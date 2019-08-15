@@ -42,6 +42,7 @@ const generator = function * ({ payload }) {
     yield put({ type: 'CONTRACT.SET_LOADING', payload: { loading: false } })
     yield put({ type: 'USER.SET_STEP', payload: { step: 1 } })
   } catch (e) {
+    yield put({ type: 'USER.SET_ERRORS', payload: { errors: ['LINK_INVALID'] } })
     console.error(e)
   }
 }

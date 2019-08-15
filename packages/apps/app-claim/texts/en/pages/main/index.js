@@ -9,7 +9,7 @@ export default {
     seeDetails: 'See details on <a target="_blank" href={{transactionLink}}>Etherscan</a>',
     tokensClaimed: '<span>{{tokens}}</span> claimed',
     howToClaim: 'How to claim tokens to {{wallet}}',
-    agreeWithTerms: 'By claiming this link you agree to the <a href={{termsHref}}>Terms</a> & <a href={{privacyHref}}>Privacy</a>'
+    agreeWithTerms: 'By claiming you agree to the <a target="_blank" href={{href}}>Terms & Privacy</a>'
   },
   buttons: {
     useWallet: 'Use {{wallet}}',
@@ -17,7 +17,7 @@ export default {
   },
   errors: {
     LINKDROP_PROXY_CONTRACT_PAUSED: {
-      title: 'Linkdrop proxy contract paused',
+      title: 'Campaign is paused',
       description: ''
     },
     INVALID_TOKEN_ADDRESS: {
@@ -26,10 +26,6 @@ export default {
     },
     LINK_CLAIMED: {
       title: 'Link claimed',
-      description: ''
-    },
-    LINK_CANCELED: {
-      title: 'Link canceled',
       description: ''
     },
     INSUFFICIENT_ETHERS: {
@@ -67,6 +63,10 @@ export default {
     LINK_FAILED: {
       title: 'Failed',
       description: 'Oops, something went wrong'
+    },
+    LINK_INVALID: {
+      title: 'Invalid Link',
+      description: 'Please check the format of claim link'
     },
     NETWORK_NOT_SUPPORTED: {
       title: 'Network is not supported',

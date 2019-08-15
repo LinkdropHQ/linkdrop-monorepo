@@ -1,0 +1,29 @@
+@import "variables";
+
+.container {
+  padding: 25px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100vw;
+  height: 100vh;
+  background: $bgColor;
+}
+
+.header {
+  font-size: 24px;
+  position: absolute;
+  top: 25px;
+  left: 0;
+  width: 100%;
+}
+
+.content {
+  font-size: 24px;
+
+  a {
+    color: $dbBlue;
+    text-decoration: none;
+  }
+}
