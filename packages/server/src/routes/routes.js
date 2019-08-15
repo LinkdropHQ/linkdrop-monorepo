@@ -1,4 +1,4 @@
-const routes = {
+export default {
   '/linkdrops/claim': {
     post: {
       controller: 'claimController',
@@ -22,7 +22,11 @@ const routes = {
       controller: 'lastTxHashController',
       method: 'getLastTxHashById'
     }
+  },
+  '/linkdrops/claimAndDeploy': {
+    post: {
+      controller: 'claimController',
+      method: 'claimAndDeploy'
+    }
   }
 }
-
-module.exports = routes
