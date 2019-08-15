@@ -1,7 +1,4 @@
-import {
-  claimServiceERC20,
-  claimServiceERC721
-} from '../services/claimServices'
+import { claimServiceERC20, claimServiceERC721 } from '../services/claimServices'
 
 export const claim = async (req, res) => {
   // claim transaction
@@ -23,9 +20,4 @@ export const claimERC721 = async (req, res) => {
     success: true,
     txHash: txHash
   })
-}
-
-export const claimAndDeploy = async (req, res) => {
-  const txHash = await claimServiceERC20.claimAndDeploy(req.body)
-  res.json({ success: true, txHash })
 }

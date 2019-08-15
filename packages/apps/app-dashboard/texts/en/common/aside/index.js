@@ -4,8 +4,5 @@ export default {
   contactUs: 'Contact us',
   copyright: '© Linkdrop Labs, Inc',
   dashboard: 'Dashboard',
-  create: 'Create',
-  analytics: 'Analytics',
-  settings: 'Settings',
-  soon: 'Soon'
+  create: 'Create'
 }

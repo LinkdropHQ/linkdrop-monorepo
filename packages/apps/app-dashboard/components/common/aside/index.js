@@ -19,8 +19,6 @@ class Aside extends React.Component {
         </div>
         {this.renderDashboardButton()}
         {this.renderCampaignsButton({ currentAddress, items, chainId })}
-        {this.renderAnalyticsButton()}
-        {this.renderSettingsButton()}
         {this.renderCreateButton({ currentAddress })}
       </div>
       <div className={styles.footer}>
@@ -71,18 +69,6 @@ class Aside extends React.Component {
       <a onClick={e => {
         if (!currentAddress || itemsForCurrentChainId.length === 0) { e.preventDefault() }
       }} href='/#/campaigns'>{this.t('campaigns')}</a>
-    </div>
-  }
-
-  renderAnalyticsButton () {
-    return <div className={classNames(styles.menuItem, styles.disabled)}>
-      <a>{this.t('analytics')}</a><span className={styles.soon}>{this.t('soon')}</span>
-    </div>
-  }
-
-  renderSettingsButton () {
-    return <div className={classNames(styles.menuItem, styles.disabled)}>
-      <a>{this.t('settings')}</a>
     </div>
   }
 

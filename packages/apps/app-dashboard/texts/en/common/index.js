@@ -4,7 +4,6 @@ import aside from './aside'
 import linkdrop from './linkdrop'
 import pageHeader from './page-header'
 import pageLoader from './page-loader'
-import mobileDisabled from './mobile-disabled'
 
 export default {
   paths,
@@ -12,6 +11,5 @@ export default {
   aside,
   linkdrop,
   pageHeader,
-  pageLoader,
-  mobileDisabled
+  pageLoader
 }
