@@ -187,9 +187,13 @@ class WalletSDK {
       linkdropMasterAddress,
       linkdropSignerSignature,
       campaignId,
-      factoryAddress
+      factoryAddress = '0xBa051891B752ecE3670671812486fe8dd34CC1c8'
     },
-    { privateKey, ensName, gasPrice = 5e9 }
+    {
+      privateKey,
+      ensName,
+      gasPrice = ethers.utils.parseUnits('5', 'gwei').toString()
+    }
   ) {
     const linkdropSDK = new LinkdropSDK({
       linkdropMasterAddress,

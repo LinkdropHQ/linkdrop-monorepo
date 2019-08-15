@@ -79,9 +79,9 @@ contract LinkdropFactoryERC20 is ILinkdropFactoryERC20, LinkdropFactoryCommon {
         address _linkId,
         address payable _linkdropMaster,
         uint _campaignId,
-        bytes calldata _linkdropSignerSignature,
+        bytes memory _linkdropSignerSignature,
         address payable _receiver,
-        bytes calldata _receiverSignature
+        bytes memory _receiverSignature
     )
     public
     returns (bool)
