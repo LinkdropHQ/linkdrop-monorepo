@@ -43,7 +43,7 @@ class WalletSDK {
     campaignId
   }) {
     //
-    const linkdropSDK = LinkdropSDK({
+    const linkdropSDK = new LinkdropSDK({
       linkdropMasterAddress,
       chain: this.chain,
       jsonRpcUrl: this.jsonRpcUrl,
@@ -177,6 +177,63 @@ class WalletSDK {
     } catch (err) {
       return { errors: err }
     }
+  }
+
+  async claimAndDeploy (
+    {
+      weiAmount,
+      tokenAddress,
+      tokenAmount,
+      expirationTime,
+      linkKey,
+      linkdropMasterAddress,
+      linkdropSignerSignature,
+      campaignId
+    },
+    { privateKey, ensName, gasPrice = 5e9 }
+  ) {
+    const linkdropSDK = new LinkdropSDK({
+      linkdropMasterAddress,
+      chain: this.chain,
+      jsonRpcUrl: this.jsonRpcUrl,
+      apiHost: `https://${this.chain}.linkdrop.io`,
+      factoryAddress: LINKDROP_FACTORY_ADDRESS
+    })
+
+    await this._fetchFutureWalletFactory()
+    const publicKey = new ethers.Wallet(privateKey).address
+
+    const contractAddress = await this.computeProxyAddress(publicKey)
+
+    const initData = await this.sdk.futureWalletFactory.setupInitData(
+      publicKey,
+      ensName,
+      gasPrice
+    )
+    const signature = await calculateInitializeSignature(initData, privateKey)
+
+    return claimAndDeploy({
+      jsonRpcUrl: linkdropSDK.jsonRpcUrl,
+      apiHost: linkdropSDK.apiHost,
+      weiAmount,
+      tokenAddress,
+      tokenAmount,
+      expirationTime,
+      version:
+        linkdropSDK.version[campaignId] ||
+        (await linkdropSDK.getVersion(campaignId)),
+      chainId: linkdropSDK.chainId,
+      linkKey,
+      linkdropMasterAddress,
+      linkdropSignerSignature,
+      campaignId,
+      receiverAddress: contractAddress,
+      factoryAddress: LINKDROP_FACTORY_ADDRESS,
+      walletFactory: this.sdk.futureWalletFactory.config.factoryAddress,
+      publicKey,
+      initializeWithENS: initData,
+      signature
+    })
   }
 
   async execute (message, privateKey) {

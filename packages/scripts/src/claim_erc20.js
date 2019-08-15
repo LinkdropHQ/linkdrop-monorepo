@@ -1,4 +1,4 @@
-import LinkdropSDK from '@linkdrop/sdk'
+import {LinkdropSDK} from '@linkdrop/sdk'
 import ora from 'ora'
 import { ethers } from 'ethers'
 import { terminal as term } from 'terminal-kit'
@@ -40,7 +40,7 @@ const claim = async () => {
       campaignId
     } = await getUrlParams('erc20', linkNumber)
 
-    const linkdropSDK = LinkdropSDK({
+    const linkdropSDK = new LinkdropSDK({
       linkdropMasterAddress,
       chain: CHAIN,
       jsonRpcUrl: JSON_RPC_URL,

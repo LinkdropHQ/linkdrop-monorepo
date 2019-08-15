@@ -591,7 +591,7 @@ function () {
               apiHost: "https://".concat(sdk.chain, ".linkdrop.io"),
               factoryAddress: LINKDROP_FACTORY_ADDRESS
             });
-            console.log('linkdropSDK: ', linkdropSDK); // const {
+            console.log('linkdropSDK: ', linkdropSDK.chainId); // const {
             //   privateKey,
             //   contractAddress,
             //   waitForBalance,
