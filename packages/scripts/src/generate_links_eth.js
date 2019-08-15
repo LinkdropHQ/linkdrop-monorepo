@@ -7,7 +7,7 @@ import {
   getInt
 } from './utils'
 
-import {LinkdropSDK} from '@linkdrop/sdk'
+import { LinkdropSDK } from '@linkdrop/sdk'
 import ora from 'ora'
 import { terminal as term } from 'terminal-kit'
 import { ethers } from 'ethers'
@@ -28,7 +28,7 @@ const CAMPAIGN_ID = getInt('CAMPAIGN_ID')
 const FACTORY_ADDRESS = getString('FACTORY_ADDRESS')
 const GAS_FEE = ethers.utils.parseUnits('0.002')
 
-const linkdropSDK = new LinkdropSDK({
+const linkdropSDK = LinkdropSDK({
   linkdropMasterAddress: new ethers.Wallet(LINKDROP_MASTER_PRIVATE_KEY).address,
   chain: CHAIN,
   jsonRpcUrl: JSON_RPC_URL,
