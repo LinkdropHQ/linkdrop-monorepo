@@ -12,7 +12,7 @@ class App extends React.Component {
       balance: 0
     }
 
-    this.provider = ethers.getDefaultProvider('rinkeby')
+    this.provider = ethers.getDefaultProvider('mainnet')
     this.wallet = null
     window.addEventListener('message', this.receiveMessage.bind(this), false)
   }
@@ -48,24 +48,33 @@ class App extends React.Component {
     if (event.origin !== DAPP_URL) return
     console.log('got event from dapp: ', { event })
     // event.source is window.opener
-    // event.data is 'hello there!'
+
 
     // Assuming you've verified the origin of the received message (which
     // you must do in any case), a convenient idiom for replying to a
     // message is to call postMessage on event.source and provide
     // event.origin as the targetOrigin.
     if (event.data.action === 'SEND_TRANSACTION') {
+      const txParams = event.data.payload.txParams
+      console.log({ txParams })
+      
       setTimeout(async () => {
-        if (window.confirm('Do you want to submit transaction?')) {
-
-        
-          let txParams = {
-            to: this.wallet.address, // send to yourself
-            // ... or supports ENS names
-            value: 10 // 10 gwei
-          }
+        if (window.confirm('Do you want to submit transaction?')) {       
+          const {
+            data,
+            to,
+            value,
+            gasPrice
+            // gas
+          } = txParams
           
-          let tx = await this.wallet.sendTransaction(txParams)
+          let tx = await this.wallet.sendTransaction({
+            data,
+            to,
+            value,
+            gasPrice
+            // gasLimit: gas
+          })
           console.log('Tx sent: ', tx)
           
           // notifying that transaction have been sent
@@ -76,15 +85,15 @@ class App extends React.Component {
                                    event.origin)
         }
         
-        // setTimeout(() => { // let post event before closing window
-        //   window.close()
-        // }, 0)
+        setTimeout(() => { // let post event before closing window
+          window.close()
+        }, 0)
       })
     }
   }
   
   render () {
-    const dappUrl = `${DAPP_URL}?address=${this.state.address}`
+    const dappUrl = `${DAPP_URL}?user=dobrokhvalov.gitcoin.eth&network=mainnet`
     return (
         <div className='App'>
         <header className='App-header'>
