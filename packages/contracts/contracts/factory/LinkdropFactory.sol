@@ -17,47 +17,28 @@ contract LinkdropFactory is LinkdropFactoryERC20, LinkdropFactoryERC721 {
         setMasterCopy(_masterCopy);
     }
 
-    //only Owner of wallet factory
-    //and only whitelisted linkdrop relayer
     function claimAndDeploy
     (
-        uint _weiAmount,
-        address _tokenAddress,
-        uint _tokenAmount,
-        uint _expiration,
-        address _linkId,
-        address payable _linkdropMaster,
-        uint _campaignId,
-        bytes calldata _linkdropSignerSignature,
-        address payable _receiver, // wallet contract address
-        bytes calldata _receiverSignature,
+        bytes calldata _claimData,
         address _walletFactory,
         address _publicKey,
-        bytes memory _initializeWithENS,
-        bytes memory _signature
+        bytes calldata _initializeWithENS,
+        bytes calldata _signature
     )
     external
-    returns (bool)
+    returns (bool success)
     {
-        require
-        (
-            claim
-            (
-                _weiAmount,
-                _tokenAddress,
-                _tokenAmount,
-                _expiration,
-                _linkId,
-                _linkdropSignerSignature,
-                _receiver,
-                _receiverSignature
-            ),
-            "CLAIM_FAILED"
-        );
+        // Make sure only whitelisted relayer calls this function
+        require(isRelayer[msg.sender], "ONLY_RELAYER");
 
-        IProxyCounterfactualFactory walletFactory = IProxyCounterfactualFactory(_proxyCounterfactualFactory);
+        // solium-disable-next-line security/no-low-level-calls
+        (success, ) = address(this).call(_claimData);
+        require(success, "CLAIM_FAILED");
+
+        IProxyCounterfactualFactory walletFactory = IProxyCounterfactualFactory(_walletFactory);
         require(walletFactory.createContract(_publicKey, _initializeWithENS, _signature), "WALLET_DEPLOY_FAILED");
 
+        return success;
     }
 
 }
