@@ -23,17 +23,12 @@ var _LinkdropFactory = _interopRequireDefault(require("../../contracts/build/Lin
 
 var _ethers = require("ethers");
 
-var _utils2 = require("../../scripts/src/utils");
-
 // Turn off annoying warnings
 _ethers.ethers.errors.setLogLevel('error');
 
-var FACTORY_ADDRESS = (0, _utils2.getString)('FACTORY_ADDRESS');
-
 var LinkdropSDK = function LinkdropSDK(_ref) {
   var linkdropMasterAddress = _ref.linkdropMasterAddress,
-      _ref$factoryAddress = _ref.factoryAddress,
-      factoryAddress = _ref$factoryAddress === void 0 ? FACTORY_ADDRESS : _ref$factoryAddress,
+      factoryAddress = _ref.factoryAddress,
       _ref$chain = _ref.chain,
       chain = _ref$chain === void 0 ? 'rinkeby' : _ref$chain,
       _ref$chainId = _ref.chainId,

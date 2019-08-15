@@ -3,22 +3,16 @@
         "browser": true,
         "es6": true
     },
-    "extends": ["eslint:recommended", "plugin:react/recommended"],
+    "extends": "eslint:recommended",
     "globals": {
         "Atomics": "readonly",
         "SharedArrayBuffer": "readonly"
     },
-    "parser": "babel-eslint",
     "parserOptions": {
         "ecmaFeatures": {
-            "jsx": true,
-            "experimentalObjectRestSpread": true,
-            "experimentalDecorators": true
+            "jsx": true
         },
-        "babelOptions": {
-          "configFile": "./babel.config.js"
-        },
-        "ecmaVersion": 7,
+        "ecmaVersion": 2018,
         "sourceType": "module"
     },
     "plugins": [
@@ -26,7 +20,6 @@
     ],
     "rules": {
         "accessor-pairs": "error",
-        "react/jsx-uses-vars": 2,
         "array-bracket-spacing": ["error", "never"],
         "arrow-spacing": ["error", { "before": true, "after": true }],
         "block-spacing": ["error", "always"],

@@ -114,15 +114,15 @@ class Claim extends React.Component {
         />
       </div>
     }
-    if (errors && errors.length > 0) {
-      // if some errors occured and can be found in redux store, then show error page
-      return <ErrorPage error={errors[0]} />
-    }
     if (
       (this.platform === 'desktop' && networkId && Number(chainId) !== Number(networkId)) ||
       (this.platform !== 'desktop' && account && networkId && Number(chainId) !== Number(networkId))) {
       // if network id in the link and in the web3 are different
       return <ErrorPage error='NETWORK_NOT_SUPPORTED' network={capitalize({ string: defineNetworkName({ chainId }) })} />
+    }
+    if (errors && errors.length > 0) {
+      // if some errors occured and can be found in redux store, then show error page
+      return <ErrorPage error={errors[0]} />
     }
 
     if (alreadyClaimed) {

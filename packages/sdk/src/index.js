@@ -4,16 +4,12 @@ import * as claimUtils from './claim'
 
 import LinkdropFactory from '../../contracts/build/LinkdropFactory'
 import { ethers } from 'ethers'
-
-import { getString } from '../../scripts/src/utils'
 // Turn off annoying warnings
 ethers.errors.setLogLevel('error')
 
-const FACTORY_ADDRESS = getString('FACTORY_ADDRESS')
-
 const LinkdropSDK = ({
   linkdropMasterAddress,
-  factoryAddress = FACTORY_ADDRESS,
+  factoryAddress,
   chain = 'rinkeby',
   chainId = getChainId(chain),
   jsonRpcUrl = `https://${chain}.infura.io`,
@@ -157,7 +153,7 @@ const LinkdropSDK = ({
       linkdropMasterAddress,
       linkdropSignerSignature,
       receiverAddress,
-      factoryAddress,
+      factoryAddress,      
       campaignId
     })
   }

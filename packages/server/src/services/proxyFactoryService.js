@@ -70,42 +70,6 @@ class ProxyFactoryService {
     )
   }
 
-  async claimAndDeploy (
-    {
-      weiAmount,
-      tokenAddress,
-      tokenAmount,
-      expirationTime,
-      linkId,
-      linkdropMasterAddress,
-      campaignId,
-      linkdropSignerSignature,
-      receiverAddress,
-      receiverSignature
-    },
-    { walletFactory, publicKey, initializeWithENS, signature }
-  ) {
-    const gasPrice = await relayerWalletService.getGasPrice()
-
-    return this.contract.claimAndDeploy(
-      weiAmount,
-      tokenAddress,
-      tokenAmount,
-      expirationTime,
-      linkId,
-      linkdropMasterAddress,
-      campaignId,
-      linkdropSignerSignature,
-      receiverAddress,
-      receiverSignature,
-      walletFactory,
-      publicKey,
-      initializeWithENS,
-      signature,
-      { gasPrice }
-    )
-  }
-
   checkClaimParamsERC721 ({
     weiAmount,
     nftAddress,

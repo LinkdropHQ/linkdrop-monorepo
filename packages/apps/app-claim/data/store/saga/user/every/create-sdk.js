@@ -27,7 +27,6 @@ const generator = function * ({ payload }) {
     yield put({ type: '*CONTRACT.SUBSCRIBE_TO_CLAIM_EVENT', payload: { networkName, linkId, contract: contractEthers, initialBlock } })
   } catch (e) {
     console.error(e)
-    yield put({ type: 'USER.SET_ERRORS', payload: { errors: ['LINK_INVALID'] } })
   }
 }
 
