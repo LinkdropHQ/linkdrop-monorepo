@@ -65,7 +65,7 @@ function () {
               case 0:
                 weiAmount = _ref.weiAmount, tokenAddress = _ref.tokenAddress, tokenAmount = _ref.tokenAmount, expirationTime = _ref.expirationTime, linkKey = _ref.linkKey, linkdropMasterAddress = _ref.linkdropMasterAddress, linkdropSignerSignature = _ref.linkdropSignerSignature, receiverAddress = _ref.receiverAddress, campaignId = _ref.campaignId;
                 //
-                linkdropSDK = (0, _sdk2.LinkdropSDK)({
+                linkdropSDK = new _sdk2.LinkdropSDK({
                   linkdropMasterAddress: linkdropMasterAddress,
                   chain: this.chain,
                   jsonRpcUrl: this.jsonRpcUrl,
@@ -392,7 +392,7 @@ function () {
               case 0:
                 weiAmount = _ref6.weiAmount, tokenAddress = _ref6.tokenAddress, tokenAmount = _ref6.tokenAmount, expirationTime = _ref6.expirationTime, linkKey = _ref6.linkKey, linkdropMasterAddress = _ref6.linkdropMasterAddress, linkdropSignerSignature = _ref6.linkdropSignerSignature, campaignId = _ref6.campaignId;
                 privateKey = _ref7.privateKey, ensName = _ref7.ensName, _ref7$gasPrice = _ref7.gasPrice, gasPrice = _ref7$gasPrice === void 0 ? 5e9 : _ref7$gasPrice;
-                linkdropSDK = (0, _sdk2.LinkdropSDK)({
+                linkdropSDK = new _sdk2.LinkdropSDK({
                   linkdropMasterAddress: linkdropMasterAddress,
                   chain: this.chain,
                   jsonRpcUrl: this.jsonRpcUrl,
@@ -565,61 +565,3 @@ function () {
 
 var _default = WalletSDK;
 exports["default"] = _default;
-
-var main =
-/*#__PURE__*/
-function () {
-  var _ref9 = (0, _asyncToGenerator2["default"])(
-  /*#__PURE__*/
-  _regenerator["default"].mark(function _callee11() {
-    var gasPrice, sdk, linkdropSDK;
-    return _regenerator["default"].wrap(function _callee11$(_context11) {
-      while (1) {
-        switch (_context11.prev = _context11.next) {
-          case 0:
-            gasPrice = _ethers.ethers.utils.parseUnits('5', 'gwei').toString();
-            sdk = new WalletSDK(); // const pub = new ethers.Wallet(
-            //   '0x0a24c99c3c585048032b67fea393e808db20137f7fc49d8301c849793ef75eb9'
-            // ).address
-            // const addr = await sdk.computeProxyAddress(pub)
-            // console.log('addr: ', addr)
-
-            linkdropSDK = (0, _sdk2.LinkdropSDK)({
-              linkdropMasterAddress: '0x49113d075c47ad98050a3aed0909b75db2610c72',
-              chain: sdk.chain,
-              jsonRpcUrl: sdk.jsonRpcUrl,
-              apiHost: "https://".concat(sdk.chain, ".linkdrop.io"),
-              factoryAddress: LINKDROP_FACTORY_ADDRESS
-            });
-            console.log('linkdropSDK: ', linkdropSDK.chainId); // const {
-            //   privateKey,
-            //   contractAddress,
-            //   waitForBalance,
-            //   deploy
-            // } = await sdk.createFutureWallet()
-            // console.log({ privateKey, contractAddress })
-            // await waitForBalance()
-            // const tx = await deploy('amir1.linkdrop.test', gasPrice)
-            // const tx = await sdk.deploy(
-            //   '0x0a24c99c3c585048032b67fea393e808db20137f7fc49d8301c849793ef75eb9',
-            //   'amir3.linkdrop.test',
-            //   gasPrice
-            // )
-            // console.log('tx: ', tx)
-            // const exists = await sdk.walletContractExist('amir3.linkdrop.test')
-            // console.log('exists: ', exists)
-
-          case 4:
-          case "end":
-            return _context11.stop();
-        }
-      }
-    }, _callee11);
-  }));
-
-  return function main() {
-    return _ref9.apply(this, arguments);
-  };
-}();
-
-main();
