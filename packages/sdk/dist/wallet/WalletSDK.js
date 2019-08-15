@@ -31,10 +31,6 @@ var _ethers = require("ethers");
 
 var _claimAndDeploy3 = require("./claimAndDeploy");
 
-var _utils = require("../../../scripts/src/utils");
-
-var LINKDROP_FACTORY_ADDRESS = (0, _utils.getString)('FACTORY_ADDRESS');
-
 var WalletSDK =
 /*#__PURE__*/
 function () {
@@ -58,19 +54,19 @@ function () {
       var _claim = (0, _asyncToGenerator2["default"])(
       /*#__PURE__*/
       _regenerator["default"].mark(function _callee(_ref) {
-        var weiAmount, tokenAddress, tokenAmount, expirationTime, linkKey, linkdropMasterAddress, linkdropSignerSignature, receiverAddress, campaignId, linkdropSDK;
+        var weiAmount, tokenAddress, tokenAmount, expirationTime, linkKey, linkdropMasterAddress, linkdropSignerSignature, receiverAddress, campaignId, factoryAddress, linkdropSDK;
         return _regenerator["default"].wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                weiAmount = _ref.weiAmount, tokenAddress = _ref.tokenAddress, tokenAmount = _ref.tokenAmount, expirationTime = _ref.expirationTime, linkKey = _ref.linkKey, linkdropMasterAddress = _ref.linkdropMasterAddress, linkdropSignerSignature = _ref.linkdropSignerSignature, receiverAddress = _ref.receiverAddress, campaignId = _ref.campaignId;
+                weiAmount = _ref.weiAmount, tokenAddress = _ref.tokenAddress, tokenAmount = _ref.tokenAmount, expirationTime = _ref.expirationTime, linkKey = _ref.linkKey, linkdropMasterAddress = _ref.linkdropMasterAddress, linkdropSignerSignature = _ref.linkdropSignerSignature, receiverAddress = _ref.receiverAddress, campaignId = _ref.campaignId, factoryAddress = _ref.factoryAddress;
                 //
                 linkdropSDK = new _sdk2.LinkdropSDK({
                   linkdropMasterAddress: linkdropMasterAddress,
                   chain: this.chain,
                   jsonRpcUrl: this.jsonRpcUrl,
                   apiHost: "https://".concat(this.chain, ".linkdrop.io"),
-                  factoryAddress: LINKDROP_FACTORY_ADDRESS
+                  factoryAddress: factoryAddress
                 });
                 return _context.abrupt("return", linkdropSDK.claim({
                   weiAmount: weiAmount,
@@ -384,20 +380,20 @@ function () {
       var _claimAndDeploy2 = (0, _asyncToGenerator2["default"])(
       /*#__PURE__*/
       _regenerator["default"].mark(function _callee8(_ref6, _ref7) {
-        var weiAmount, tokenAddress, tokenAmount, expirationTime, linkKey, linkdropMasterAddress, linkdropSignerSignature, campaignId, privateKey, ensName, _ref7$gasPrice, gasPrice, linkdropSDK, publicKey, contractAddress, initData, signature;
+        var weiAmount, tokenAddress, tokenAmount, expirationTime, linkKey, linkdropMasterAddress, linkdropSignerSignature, campaignId, factoryAddress, privateKey, ensName, _ref7$gasPrice, gasPrice, linkdropSDK, publicKey, contractAddress, initData, signature;
 
         return _regenerator["default"].wrap(function _callee8$(_context8) {
           while (1) {
             switch (_context8.prev = _context8.next) {
               case 0:
-                weiAmount = _ref6.weiAmount, tokenAddress = _ref6.tokenAddress, tokenAmount = _ref6.tokenAmount, expirationTime = _ref6.expirationTime, linkKey = _ref6.linkKey, linkdropMasterAddress = _ref6.linkdropMasterAddress, linkdropSignerSignature = _ref6.linkdropSignerSignature, campaignId = _ref6.campaignId;
+                weiAmount = _ref6.weiAmount, tokenAddress = _ref6.tokenAddress, tokenAmount = _ref6.tokenAmount, expirationTime = _ref6.expirationTime, linkKey = _ref6.linkKey, linkdropMasterAddress = _ref6.linkdropMasterAddress, linkdropSignerSignature = _ref6.linkdropSignerSignature, campaignId = _ref6.campaignId, factoryAddress = _ref6.factoryAddress;
                 privateKey = _ref7.privateKey, ensName = _ref7.ensName, _ref7$gasPrice = _ref7.gasPrice, gasPrice = _ref7$gasPrice === void 0 ? 5e9 : _ref7$gasPrice;
                 linkdropSDK = new _sdk2.LinkdropSDK({
                   linkdropMasterAddress: linkdropMasterAddress,
                   chain: this.chain,
                   jsonRpcUrl: this.jsonRpcUrl,
                   apiHost: "https://".concat(this.chain, ".linkdrop.io"),
-                  factoryAddress: LINKDROP_FACTORY_ADDRESS
+                  factoryAddress: factoryAddress
                 });
                 _context8.next = 5;
                 return this._fetchFutureWalletFactory();
@@ -447,7 +443,7 @@ function () {
                 _context8.t12 = linkdropSignerSignature;
                 _context8.t13 = campaignId;
                 _context8.t14 = contractAddress;
-                _context8.t15 = LINKDROP_FACTORY_ADDRESS;
+                _context8.t15 = factoryAddress;
                 _context8.t16 = this.sdk.futureWalletFactory.config.factoryAddress;
                 _context8.t17 = publicKey;
                 _context8.t18 = initData;
