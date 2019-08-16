@@ -469,7 +469,7 @@ function () {
           while (1) {
             switch (_context10.prev = _context10.next) {
               case 0:
-                weiAmount = _ref8.weiAmount, tokenAddress = _ref8.tokenAddress, tokenAmount = _ref8.tokenAmount, expirationTime = _ref8.expirationTime, linkKey = _ref8.linkKey, linkdropMasterAddress = _ref8.linkdropMasterAddress, linkdropSignerSignature = _ref8.linkdropSignerSignature, campaignId = _ref8.campaignId, _ref8$factoryAddress = _ref8.factoryAddress, factoryAddress = _ref8$factoryAddress === void 0 ? '0x6e89FB04c1F39E6bE0a08d47E0b96593EC192411' : _ref8$factoryAddress;
+                weiAmount = _ref8.weiAmount, tokenAddress = _ref8.tokenAddress, tokenAmount = _ref8.tokenAmount, expirationTime = _ref8.expirationTime, linkKey = _ref8.linkKey, linkdropMasterAddress = _ref8.linkdropMasterAddress, linkdropSignerSignature = _ref8.linkdropSignerSignature, campaignId = _ref8.campaignId, _ref8$factoryAddress = _ref8.factoryAddress, factoryAddress = _ref8$factoryAddress === void 0 ? '0xede635E4d35fb10793D6ff427147472f5B24db9f' : _ref8$factoryAddress;
                 privateKey = _ref9.privateKey, ensName = _ref9.ensName, _ref9$gasPrice = _ref9.gasPrice, gasPrice = _ref9$gasPrice === void 0 ? _ethers.ethers.utils.parseUnits('5', 'gwei').toString() : _ref9$gasPrice;
                 linkdropSDK = new _sdk2.LinkdropSDK({
                   linkdropMasterAddress: linkdropMasterAddress,

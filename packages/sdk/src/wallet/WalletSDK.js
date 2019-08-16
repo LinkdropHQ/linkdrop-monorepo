@@ -217,7 +217,7 @@ class WalletSDK {
       linkdropMasterAddress,
       linkdropSignerSignature,
       campaignId,
-      factoryAddress = '0x6e89FB04c1F39E6bE0a08d47E0b96593EC192411'
+      factoryAddress = '0xede635E4d35fb10793D6ff427147472f5B24db9f'
     },
     {
       privateKey,
