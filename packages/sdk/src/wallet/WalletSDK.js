@@ -173,7 +173,7 @@ class WalletSDK {
   }
 
   async getCreateWalletData ({ publicKey, initializeWithENSData, signature }) {
-    return new ethers.Interface(
+    return new ethers.utils.Interface(
       WalletMasterWithRefund.abi
     ).functions.createWallet.encode([
       publicKey,

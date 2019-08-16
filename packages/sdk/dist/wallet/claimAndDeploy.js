@@ -198,6 +198,8 @@ function () {
               linkId: linkId,
               linkdropMasterAddress: linkdropMasterAddress,
               campaignId: campaignId,
+              version: version,
+              chainId: chainId,
               linkdropSignerSignature: linkdropSignerSignature,
               receiverAddress: receiverAddress,
               // precomputed wallet address

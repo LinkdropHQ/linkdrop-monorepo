@@ -115,6 +115,8 @@ export const claimAndDeploy = async ({
     linkId,
     linkdropMasterAddress,
     campaignId,
+    version,
+    chainId,
     linkdropSignerSignature,
     receiverAddress, // precomputed wallet address
     receiverSignature,

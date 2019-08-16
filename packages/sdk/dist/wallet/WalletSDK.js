@@ -377,7 +377,7 @@ function () {
             switch (_context8.prev = _context8.next) {
               case 0:
                 publicKey = _ref7.publicKey, initializeWithENSData = _ref7.initializeWithENSData, signature = _ref7.signature;
-                return _context8.abrupt("return", new _ethers.ethers.Interface(_WalletMasterWithRefund["default"].abi).functions.createWallet.encode([publicKey, initializeWithENSData, signature]));
+                return _context8.abrupt("return", new _ethers.ethers.utils.Interface(_WalletMasterWithRefund["default"].abi).functions.createWallet.encode([publicKey, initializeWithENSData, signature]));
 
               case 2:
               case "end":
