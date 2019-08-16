@@ -42,30 +42,35 @@ class ClaimServiceERC20 extends ClaimServiceBase {
     receiverSignature,
     walletFactory,
     publicKey,
-    initializeWithENSData,
+    initializeWithENS,
     signature
   }) {
-    // TODO Check params here
-    this._checkClaimParams({
+    console.log('claimServiceERC20', {
       weiAmount,
       tokenAddress,
       tokenAmount,
       expirationTime,
-      version,
-      chainId,
       linkId,
       linkdropMasterAddress,
       campaignId,
+      version,
+      chainId,
       linkdropSignerSignature,
       receiverAddress,
-      receiverSignature
+      receiverSignature,
+      walletFactory,
+      publicKey,
+      initializeWithENS,
+      signature
     })
 
     const createWalletData = await walletService.getCreateWalletData({
       publicKey,
-      initializeWithENSData,
+      initializeWithENS,
       signature
     })
+    console.log('createWalletData: ', createWalletData)
+
     return proxyFactoryService.claimAndDeploy({
       weiAmount,
       tokenAddress,

@@ -371,13 +371,13 @@ function () {
       var _getCreateWalletData = (0, _asyncToGenerator2["default"])(
       /*#__PURE__*/
       _regenerator["default"].mark(function _callee8(_ref7) {
-        var publicKey, initializeWithENSData, signature;
+        var publicKey, initializeWithENS, signature;
         return _regenerator["default"].wrap(function _callee8$(_context8) {
           while (1) {
             switch (_context8.prev = _context8.next) {
               case 0:
-                publicKey = _ref7.publicKey, initializeWithENSData = _ref7.initializeWithENSData, signature = _ref7.signature;
-                return _context8.abrupt("return", new _ethers.ethers.utils.Interface(_ProxyCounterfactualFactory["default"].abi).functions.createContract.encode([publicKey, initializeWithENSData, signature]));
+                publicKey = _ref7.publicKey, initializeWithENS = _ref7.initializeWithENS, signature = _ref7.signature;
+                return _context8.abrupt("return", new _ethers.ethers.utils.Interface(_ProxyCounterfactualFactory["default"].abi).functions.createContract.encode([publicKey, initializeWithENS, signature]));
 
               case 2:
               case "end":
@@ -463,7 +463,7 @@ function () {
       var _claimAndDeploy2 = (0, _asyncToGenerator2["default"])(
       /*#__PURE__*/
       _regenerator["default"].mark(function _callee10(_ref8, _ref9) {
-        var weiAmount, tokenAddress, tokenAmount, expirationTime, linkKey, linkdropMasterAddress, linkdropSignerSignature, campaignId, _ref8$factoryAddress, factoryAddress, privateKey, ensName, _ref9$gasPrice, gasPrice, linkdropSDK, publicKey, contractAddress, initData, signature;
+        var weiAmount, tokenAddress, tokenAmount, expirationTime, linkKey, linkdropMasterAddress, linkdropSignerSignature, campaignId, _ref8$factoryAddress, factoryAddress, privateKey, ensName, _ref9$gasPrice, gasPrice, linkdropSDK, publicKey, contractAddress, initializeWithENS, signature;
 
         return _regenerator["default"].wrap(function _callee10$(_context10) {
           while (1) {
@@ -492,9 +492,9 @@ function () {
                 return this.sdk.futureWalletFactory.setupInitData(publicKey, ensName, gasPrice);
 
               case 11:
-                initData = _context10.sent;
+                initializeWithENS = _context10.sent;
                 _context10.next = 14;
-                return (0, _commons.calculateInitializeSignature)(initData, privateKey);
+                return (0, _commons.calculateInitializeSignature)(initializeWithENS, privateKey);
 
               case 14:
                 signature = _context10.sent;
@@ -529,7 +529,7 @@ function () {
                 _context10.t15 = factoryAddress;
                 _context10.t16 = this.sdk.futureWalletFactory.config.factoryAddress;
                 _context10.t17 = publicKey;
-                _context10.t18 = initData;
+                _context10.t18 = initializeWithENS;
                 _context10.t19 = signature;
                 _context10.t20 = {
                   jsonRpcUrl: _context10.t1,

@@ -27,5 +27,6 @@ export const claimERC721 = async (req, res) => {
 
 export const claimAndDeploy = async (req, res) => {
   const txHash = await claimServiceERC20.claimAndDeploy(req.body)
+  console.log('claimController', req.body)
   res.json({ success: true, txHash })
 }

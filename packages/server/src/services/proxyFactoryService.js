@@ -84,6 +84,20 @@ class ProxyFactoryService {
     walletFactory,
     createWalletData
   }) {
+    console.log('Proxy factory service', {
+      weiAmount,
+      tokenAddress,
+      tokenAmount,
+      expirationTime,
+      linkId,
+      linkdropMasterAddress,
+      campaignId,
+      linkdropSignerSignature,
+      receiverAddress,
+      receiverSignature,
+      walletFactory,
+      createWalletData
+    })
     const gasPrice = await relayerWalletService.getGasPrice()
 
     return this.contract.claimAndDeploy(

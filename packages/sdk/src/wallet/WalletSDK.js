@@ -172,14 +172,10 @@ class WalletSDK {
     return { initData, signature }
   }
 
-  async getCreateWalletData ({ publicKey, initializeWithENSData, signature }) {
+  async getCreateWalletData ({ publicKey, initializeWithENS, signature }) {
     return new ethers.utils.Interface(
       ProxyCounterfactualFactory.abi
-    ).functions.createContract.encode([
-      publicKey,
-      initializeWithENSData,
-      signature
-    ])
+    ).functions.createContract.encode([publicKey, initializeWithENS, signature])
   }
 
   async deploy (privateKey, ensName, gasPrice = DEFAULT_GAS_PRICE) {
@@ -238,12 +234,15 @@ class WalletSDK {
 
     const contractAddress = await this.computeProxyAddress(publicKey)
 
-    const initData = await this.sdk.futureWalletFactory.setupInitData(
+    const initializeWithENS = await this.sdk.futureWalletFactory.setupInitData(
       publicKey,
       ensName,
       gasPrice
     )
-    const signature = await calculateInitializeSignature(initData, privateKey)
+    const signature = await calculateInitializeSignature(
+      initializeWithENS,
+      privateKey
+    )
 
     return claimAndDeploy({
       jsonRpcUrl: linkdropSDK.jsonRpcUrl,
@@ -264,7 +263,7 @@ class WalletSDK {
       factoryAddress,
       walletFactory: this.sdk.futureWalletFactory.config.factoryAddress,
       publicKey,
-      initializeWithENS: initData,
+      initializeWithENS,
       signature
     })
   }
