@@ -1,6 +1,6 @@
 {
   "name": "@linkdrop/server",
-  "version": "1.0.23",
+  "version": "1.0.24",
   "main": "server.js",
   "author": "Linkdrop <linkdrop.org>",
   "private": true,
@@ -27,7 +27,7 @@
     "extends": "../babel.config.js"
   },
   "dependencies": {
-    "@linkdrop/sdk": "^1.0.23",
+    "@linkdrop/sdk": "^1.0.24",
     "cli-table": "^0.3.1",
     "cors": "^2.8.5",
     "express-async-handler": "^1.1.4",
