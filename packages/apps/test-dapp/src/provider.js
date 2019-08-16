@@ -53,7 +53,7 @@ class Provider {
     if (domain === 'argent.xyz') {
       return 'https://argent.xyz'
     } else {
-      return 'http://localhost:3000'
+      return 'http://localhost:9003/#/confirm'
     }
   }
   

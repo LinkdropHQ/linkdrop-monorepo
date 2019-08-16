@@ -21,7 +21,10 @@
 }
 
 .App-link {
-  color: #333;
+    background-color: blue;
+    color: white;
+    padding: 10px;
+    font-size: 20px;
 }
 
 @keyframes App-logo-spin {
@@ -31,4 +34,11 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+.ens-input {
+    width: 200px;
+    padding: 5px;
+    text-align: center;
+    margin-bottom: 10px;
 }
