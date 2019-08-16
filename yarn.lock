@@ -8535,7 +8535,7 @@ eth-json-rpc-middleware@^1.5.0:
     promise-to-callback "^1.0.0"
     tape "^4.6.3"
 
-eth-json-rpc-middleware@^4.0.0, "eth-json-rpc-middleware@github:walletconnect/eth-json-rpc-middleware":
+eth-json-rpc-middleware@^4.0.0, eth-json-rpc-middleware@^4.1.1:
   version "4.1.3"
   resolved "https://codeload.github.com/walletconnect/eth-json-rpc-middleware/tar.gz/dac43613b9f1bf9d45455dcb98cbb8f676f61a8a"
   dependencies:

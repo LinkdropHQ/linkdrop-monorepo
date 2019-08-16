@@ -152,6 +152,20 @@ class WalletSDK {
     }
   }
 
+  async getDeployData (privateKey, ensName, gasPrice = DEFAULT_GAS_PRICE) {
+    await this._fetchFutureWalletFactory()
+    const publicKey = new ethers.Wallet(privateKey).address
+
+    const initData = await this.sdk.futureWalletFactory.setupInitData(
+      publicKey,
+      ensName,
+      gasPrice
+    )
+    const signature = await calculateInitializeSignature(initData, privateKey)
+
+    return { initData, signature }
+  }
+
   async deploy (privateKey, ensName, gasPrice = DEFAULT_GAS_PRICE) {
     try {
       await this._fetchFutureWalletFactory()
