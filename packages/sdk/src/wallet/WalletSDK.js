@@ -2,7 +2,7 @@ import UniversalLoginSDK from '@universal-login/sdk'
 import { LinkdropSDK } from '@linkdrop/sdk'
 import { DeploymentReadyObserver } from '@universal-login/sdk/dist/lib/core/observers/DeploymentReadyObserver'
 import { FutureWalletFactory } from '@universal-login/sdk/dist/lib/api/FutureWalletFactory'
-import WalletMasterWithRefund from '@linkdrop/contracts/metadata/WalletMasterWithRefund'
+import ProxyCounterfactualFactory from '@linkdrop/contracts/metadata/ProxyCounterfactualFactory.json'
 import {
   calculateInitializeSignature,
   ensureNotNull,
@@ -174,8 +174,8 @@ class WalletSDK {
 
   async getCreateWalletData ({ publicKey, initializeWithENSData, signature }) {
     return new ethers.utils.Interface(
-      WalletMasterWithRefund.abi
-    ).functions.createWallet.encode([
+      ProxyCounterfactualFactory.abi
+    ).functions.createContract.encode([
       publicKey,
       initializeWithENSData,
       signature
