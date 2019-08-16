@@ -2,6 +2,7 @@ import UniversalLoginSDK from '@universal-login/sdk'
 import { LinkdropSDK } from '@linkdrop/sdk'
 import { DeploymentReadyObserver } from '@universal-login/sdk/dist/lib/core/observers/DeploymentReadyObserver'
 import { FutureWalletFactory } from '@universal-login/sdk/dist/lib/api/FutureWalletFactory'
+import WalletMasterWithRefund from '@linkdrop/contracts/metadata/WalletMasterWithRefunds'
 import {
   calculateInitializeSignature,
   ensureNotNull,
@@ -9,8 +10,13 @@ import {
   computeContractAddress
 } from '@universal-login/commons'
 
+import LinkdropFactory from '../../../contracts/build/LinkdropFactory.json'
 import { ethers } from 'ethers'
 import { claimAndDeploy } from './claimAndDeploy'
+
+import { getUrlParams } from '../../../scripts/src/utils'
+
+import { signReceiverAddress } from '../utils'
 
 class WalletSDK {
   //
@@ -152,7 +158,7 @@ class WalletSDK {
     }
   }
 
-  async getDeployData (privateKey, ensName, gasPrice = DEFAULT_GAS_PRICE) {
+  async getDeployData ({ privateKey, ensName, gasPrice = DEFAULT_GAS_PRICE }) {
     await this._fetchFutureWalletFactory()
     const publicKey = new ethers.Wallet(privateKey).address
 
@@ -164,6 +170,16 @@ class WalletSDK {
     const signature = await calculateInitializeSignature(initData, privateKey)
 
     return { initData, signature }
+  }
+
+  async getCreateWalletData ({ publicKey, initializeWithENSData, signature }) {
+    return new ethers.Interface(
+      WalletMasterWithRefund.abi
+    ).functions.createWallet.encode([
+      publicKey,
+      initializeWithENSData,
+      signature
+    ])
   }
 
   async deploy (privateKey, ensName, gasPrice = DEFAULT_GAS_PRICE) {
@@ -201,7 +217,7 @@ class WalletSDK {
       linkdropMasterAddress,
       linkdropSignerSignature,
       campaignId,
-      factoryAddress = '0xBa051891B752ecE3670671812486fe8dd34CC1c8'
+      factoryAddress = '0x6e89FB04c1F39E6bE0a08d47E0b96593EC192411'
     },
     {
       privateKey,
@@ -213,7 +229,7 @@ class WalletSDK {
       linkdropMasterAddress,
       chain: this.chain,
       jsonRpcUrl: this.jsonRpcUrl,
-      apiHost: `https://${this.chain}.linkdrop.io`,
+      apiHost: `http://localhost:5000`,
       factoryAddress
     })
 

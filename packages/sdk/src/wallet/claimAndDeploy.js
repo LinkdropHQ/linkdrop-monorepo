@@ -1,7 +1,7 @@
-import { signReceiverAddress } from './utils'
 import { ethers } from 'ethers'
 import axios from 'axios'
 import LinkdropFactory from '../../../contracts/build/LinkdropFactory.json'
+import { signReceiverAddress } from '../utils'
 
 // Turn off annoying warnings
 ethers.errors.setLogLevel('error')
@@ -107,9 +107,7 @@ export const claimAndDeploy = async ({
   // Get linkId from linkKey
   const linkId = new ethers.Wallet(linkKey, provider).address
 
-  const claimData = await new ethers.utils.Interface(
-    LinkdropFactory.abi
-  ).functions.claim.encode([
+  const claimAndDeployParams = {
     weiAmount,
     tokenAddress,
     tokenAmount,
@@ -118,22 +116,19 @@ export const claimAndDeploy = async ({
     linkdropMasterAddress,
     campaignId,
     linkdropSignerSignature,
-    receiverAddress,
-    receiverSignature
-  ])
-
-  console.log('claimData: ', claimData)
-
-  const claimAndDeployParams = {
-    claimData,
+    receiverAddress, // precomputed wallet address
+    receiverSignature,
+    factoryAddress,
     walletFactory,
     publicKey,
     initializeWithENS,
     signature
   }
 
+  console.log('claimAndDeployParams: ', claimAndDeployParams)
+
   const response = await axios.post(
-    `${apiHost}/api/v1/linkdrops/deployAndClaim`,
+    `${apiHost}/api/v1/linkdrops/claimAndDeploy`,
     claimAndDeployParams
   )
 

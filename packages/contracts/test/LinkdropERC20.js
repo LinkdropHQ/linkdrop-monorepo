@@ -26,6 +26,7 @@ import {
 } from '../scripts/utils'
 
 import { WalletSDK } from '@linkdrop/sdk'
+import { AddressZero } from 'ethers/constants'
 
 const ethers = require('ethers')
 
@@ -890,7 +891,9 @@ describe('ETH/ERC20 linkdrop tests', () => {
     expect(walletFactory.address).to.not.eq(ethers.constants.AddressZero)
   })
 
-  // it('should claim and deploy wallet', async () => {
+  // it('Should claim and deploy', async () => {
+  //   // Approving tokens from linkdropMaster to Linkdrop Contract
+  //   await tokenInstance.approve(proxyAddress, tokenAmount)
   //   link = await createLink(
   //     linkdropSigner,
   //     weiAmount,
@@ -902,23 +905,28 @@ describe('ETH/ERC20 linkdrop tests', () => {
   //     proxyAddress
   //   )
 
-  //   const wallet = ethers.Wallet.createRandom()
-  //   const privKey = wallet.privateKey
-  //   const pubKey = wallet.address
+  //   receiverAddress = ethers.Wallet.createRandom().address
 
-  //   const walletSDK = new WalletSDK()
+  //   let balance = await provider.getBalance(receiverAddress)
+  //   console.log('balance: ', +balance)
+  //   receiverSignature = await signReceiverAddress(link.linkKey, receiverAddress)
 
-  //   const walletAddress = await walletSDK.computeProxyAddress(pubKey)
-
-  //   receiverSignature = await signReceiverAddress(link.linkKey, walletAddress)
-
-  //   const gasPrice = ethers.utils.parseUnits('5', 'gwei').toString()
-
-  //   const { initData, signature } = await walletSDK.getDeployData(
-  //     privKey,
-  //     'ens.linkdrop.test',
-  //     gasPrice
+  //   const tx = await factory.claimAndDeploy(
+  //     weiAmount,
+  //     tokenAddress,
+  //     tokenAmount,
+  //     expirationTime,
+  //     link.linkId,
+  //     linkdropMaster.address, // New
+  //     campaignId,
+  //     link.linkdropSignerSignature,
+  //     receiverAddress,
+  //     receiverSignature,
+  //     AddressZero,
+  //     setStrData
   //   )
-  //   console.log('initData: ', initData)
+
+  //   balance = await provider.getBalance(receiverAddress)
+  //   console.log('balance: ', +balance)
   // })
 })
