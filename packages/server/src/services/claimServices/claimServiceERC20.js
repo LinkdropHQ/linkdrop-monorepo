@@ -64,14 +64,7 @@ class ClaimServiceERC20 extends ClaimServiceBase {
       signature
     })
 
-    const createWalletData = await walletService.getCreateWalletData({
-      publicKey,
-      initializeWithENS,
-      signature
-    })
-    console.log('createWalletData: ', createWalletData)
-
-    return proxyFactoryService.claimAndDeploy({
+    const claimData = await walletService.getClaimData({
       weiAmount,
       tokenAddress,
       tokenAmount,
@@ -81,9 +74,15 @@ class ClaimServiceERC20 extends ClaimServiceBase {
       campaignId,
       linkdropSignerSignature,
       receiverAddress,
-      receiverSignature,
-      walletFactory,
-      createWalletData
+      receiverSignature
+    })
+    console.log('claimData: ', claimData)
+
+    return proxyFactoryService.claimAndDeploy({
+      claimData,
+      publicKey,
+      initializeWithENS,
+      signature
     })
   }
 }

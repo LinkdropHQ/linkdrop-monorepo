@@ -4,17 +4,42 @@ const config = configs.get('server')
 const { CHAIN } = config
 
 class WalletService {
-  async getCreateWalletData ({ publicKey, initializeWithENS, signature }) {
+  async getClaimData ({
+    weiAmount,
+    tokenAddress,
+    tokenAmount,
+    expirationTime,
+    linkId,
+    linkdropMasterAddress,
+    campaignId,
+    linkdropSignerSignature,
+    receiverAddress,
+    receiverSignature
+  }) {
     console.log('WalletService', {
-      publicKey,
-      initializeWithENS,
-      signature
+      weiAmount,
+      tokenAddress,
+      tokenAmount,
+      expirationTime,
+      linkId,
+      linkdropMasterAddress,
+      campaignId,
+      linkdropSignerSignature,
+      receiverAddress,
+      receiverSignature
     })
     const walletSDK = new WalletSDK(CHAIN)
-    return walletSDK.getCreateWalletData({
-      publicKey,
-      initializeWithENS,
-      signature
+    return walletSDK.getClaimData({
+      weiAmount,
+      tokenAddress,
+      tokenAmount,
+      expirationTime,
+      linkId,
+      linkdropMasterAddress,
+      campaignId,
+      linkdropSignerSignature,
+      receiverAddress,
+      receiverSignature
     })
   }
 }

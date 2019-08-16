@@ -25,11 +25,11 @@ var _DeploymentReadyObserver = require("@universal-login/sdk/dist/lib/core/obser
 
 var _FutureWalletFactory = require("@universal-login/sdk/dist/lib/api/FutureWalletFactory");
 
-var _ProxyCounterfactualFactory = _interopRequireDefault(require("@linkdrop/contracts/metadata/ProxyCounterfactualFactory.json"));
-
 var _commons = require("@universal-login/commons");
 
-var _LinkdropFactory = _interopRequireDefault(require("../../../contracts/build/LinkdropFactory.json"));
+var _LinkdropFactory = _interopRequireDefault(require("@linkdrop/contracts/build/LinkdropFactory.json"));
+
+var _WalletFactory = _interopRequireDefault(require("@linkdrop/contracts/metadata/WalletFactory.json"));
 
 var _ethers = require("ethers");
 
@@ -366,18 +366,18 @@ function () {
       return getDeployData;
     }()
   }, {
-    key: "getCreateWalletData",
+    key: "getClaimData",
     value: function () {
-      var _getCreateWalletData = (0, _asyncToGenerator2["default"])(
+      var _getClaimData = (0, _asyncToGenerator2["default"])(
       /*#__PURE__*/
       _regenerator["default"].mark(function _callee8(_ref7) {
-        var publicKey, initializeWithENS, signature;
+        var weiAmount, tokenAddress, tokenAmount, expirationTime, linkId, linkdropMasterAddress, campaignId, linkdropSignerSignature, receiverAddress, receiverSignature;
         return _regenerator["default"].wrap(function _callee8$(_context8) {
           while (1) {
             switch (_context8.prev = _context8.next) {
               case 0:
-                publicKey = _ref7.publicKey, initializeWithENS = _ref7.initializeWithENS, signature = _ref7.signature;
-                return _context8.abrupt("return", new _ethers.ethers.utils.Interface(_ProxyCounterfactualFactory["default"].abi).functions.createContract.encode([publicKey, initializeWithENS, signature]));
+                weiAmount = _ref7.weiAmount, tokenAddress = _ref7.tokenAddress, tokenAmount = _ref7.tokenAmount, expirationTime = _ref7.expirationTime, linkId = _ref7.linkId, linkdropMasterAddress = _ref7.linkdropMasterAddress, campaignId = _ref7.campaignId, linkdropSignerSignature = _ref7.linkdropSignerSignature, receiverAddress = _ref7.receiverAddress, receiverSignature = _ref7.receiverSignature;
+                return _context8.abrupt("return", new _ethers.ethers.utils.Interface(_LinkdropFactory["default"].abi).functions.claim.encode([weiAmount, tokenAddress, tokenAmount, expirationTime, linkId, linkdropMasterAddress, campaignId, linkdropSignerSignature, receiverAddress, receiverSignature]));
 
               case 2:
               case "end":
@@ -387,11 +387,11 @@ function () {
         }, _callee8);
       }));
 
-      function getCreateWalletData(_x5) {
-        return _getCreateWalletData.apply(this, arguments);
+      function getClaimData(_x5) {
+        return _getClaimData.apply(this, arguments);
       }
 
-      return getCreateWalletData;
+      return getClaimData;
     }()
   }, {
     key: "deploy",
@@ -469,7 +469,7 @@ function () {
           while (1) {
             switch (_context10.prev = _context10.next) {
               case 0:
-                weiAmount = _ref8.weiAmount, tokenAddress = _ref8.tokenAddress, tokenAmount = _ref8.tokenAmount, expirationTime = _ref8.expirationTime, linkKey = _ref8.linkKey, linkdropMasterAddress = _ref8.linkdropMasterAddress, linkdropSignerSignature = _ref8.linkdropSignerSignature, campaignId = _ref8.campaignId, _ref8$factoryAddress = _ref8.factoryAddress, factoryAddress = _ref8$factoryAddress === void 0 ? '0xede635E4d35fb10793D6ff427147472f5B24db9f' : _ref8$factoryAddress;
+                weiAmount = _ref8.weiAmount, tokenAddress = _ref8.tokenAddress, tokenAmount = _ref8.tokenAmount, expirationTime = _ref8.expirationTime, linkKey = _ref8.linkKey, linkdropMasterAddress = _ref8.linkdropMasterAddress, linkdropSignerSignature = _ref8.linkdropSignerSignature, campaignId = _ref8.campaignId, _ref8$factoryAddress = _ref8.factoryAddress, factoryAddress = _ref8$factoryAddress === void 0 ? '0xBa051891B752ecE3670671812486fe8dd34CC1c8' : _ref8$factoryAddress;
                 privateKey = _ref9.privateKey, ensName = _ref9.ensName, _ref9$gasPrice = _ref9.gasPrice, gasPrice = _ref9$gasPrice === void 0 ? _ethers.ethers.utils.parseUnits('5', 'gwei').toString() : _ref9$gasPrice;
                 linkdropSDK = new _sdk2.LinkdropSDK({
                   linkdropMasterAddress: linkdropMasterAddress,

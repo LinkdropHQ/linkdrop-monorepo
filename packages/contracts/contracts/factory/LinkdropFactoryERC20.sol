@@ -79,11 +79,11 @@ contract LinkdropFactoryERC20 is ILinkdropFactoryERC20, LinkdropFactoryCommon {
         address _linkId,
         address payable _linkdropMaster,
         uint _campaignId,
-        bytes memory _linkdropSignerSignature,
+        bytes calldata _linkdropSignerSignature,
         address payable _receiver,
-        bytes memory _receiverSignature
+        bytes calldata _receiverSignature
     )
-    public
+    external
     returns (bool)
     {
         // Make sure proxy contract is deployed

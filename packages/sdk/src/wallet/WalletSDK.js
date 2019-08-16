@@ -2,7 +2,7 @@ import UniversalLoginSDK from '@universal-login/sdk'
 import { LinkdropSDK } from '@linkdrop/sdk'
 import { DeploymentReadyObserver } from '@universal-login/sdk/dist/lib/core/observers/DeploymentReadyObserver'
 import { FutureWalletFactory } from '@universal-login/sdk/dist/lib/api/FutureWalletFactory'
-import ProxyCounterfactualFactory from '@linkdrop/contracts/metadata/ProxyCounterfactualFactory.json'
+
 import {
   calculateInitializeSignature,
   ensureNotNull,
@@ -10,7 +10,9 @@ import {
   computeContractAddress
 } from '@universal-login/commons'
 
-import LinkdropFactory from '../../../contracts/build/LinkdropFactory.json'
+import LinkdropFactory from '@linkdrop/contracts/build/LinkdropFactory.json'
+import WalletFactory from '@linkdrop/contracts/metadata/WalletFactory.json'
+
 import { ethers } from 'ethers'
 import { claimAndDeploy } from './claimAndDeploy'
 
@@ -172,10 +174,32 @@ class WalletSDK {
     return { initData, signature }
   }
 
-  async getCreateWalletData ({ publicKey, initializeWithENS, signature }) {
+  async getClaimData ({
+    weiAmount,
+    tokenAddress,
+    tokenAmount,
+    expirationTime,
+    linkId,
+    linkdropMasterAddress,
+    campaignId,
+    linkdropSignerSignature,
+    receiverAddress,
+    receiverSignature
+  }) {
     return new ethers.utils.Interface(
-      ProxyCounterfactualFactory.abi
-    ).functions.createContract.encode([publicKey, initializeWithENS, signature])
+      LinkdropFactory.abi
+    ).functions.claim.encode([
+      weiAmount,
+      tokenAddress,
+      tokenAmount,
+      expirationTime,
+      linkId,
+      linkdropMasterAddress,
+      campaignId,
+      linkdropSignerSignature,
+      receiverAddress,
+      receiverSignature
+    ])
   }
 
   async deploy (privateKey, ensName, gasPrice = DEFAULT_GAS_PRICE) {
@@ -213,7 +237,7 @@ class WalletSDK {
       linkdropMasterAddress,
       linkdropSignerSignature,
       campaignId,
-      factoryAddress = '0xede635E4d35fb10793D6ff427147472f5B24db9f'
+      factoryAddress = '0xBa051891B752ecE3670671812486fe8dd34CC1c8'
     },
     {
       privateKey,

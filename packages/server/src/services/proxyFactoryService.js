@@ -70,49 +70,21 @@ class ProxyFactoryService {
     )
   }
 
-  async claimAndDeploy ({
-    weiAmount,
-    tokenAddress,
-    tokenAmount,
-    expirationTime,
-    linkId,
-    linkdropMasterAddress,
-    campaignId,
-    linkdropSignerSignature,
-    receiverAddress,
-    receiverSignature,
-    walletFactory,
-    createWalletData
-  }) {
-    console.log('Proxy factory service', {
-      weiAmount,
-      tokenAddress,
-      tokenAmount,
-      expirationTime,
-      linkId,
-      linkdropMasterAddress,
-      campaignId,
-      linkdropSignerSignature,
-      receiverAddress,
-      receiverSignature,
-      walletFactory,
-      createWalletData
-    })
+  async claimAndDeploy ({ claimData, publicKey, initializeWithENS, signature }) {
     const gasPrice = await relayerWalletService.getGasPrice()
 
+    console.log('proxyFactoryServise', {
+      claimData,
+      publicKey,
+      initializeWithENS,
+      signature
+    })
+
     return this.contract.claimAndDeploy(
-      weiAmount,
-      tokenAddress,
-      tokenAmount,
-      expirationTime,
-      linkId,
-      linkdropMasterAddress,
-      campaignId,
-      linkdropSignerSignature,
-      receiverAddress,
-      receiverSignature,
-      walletFactory,
-      createWalletData,
+      claimData,
+      publicKey,
+      initializeWithENS,
+      signature,
       { gasPrice }
     )
   }
