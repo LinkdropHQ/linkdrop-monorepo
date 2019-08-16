@@ -60,7 +60,6 @@ contract LinkdropFactory is LinkdropFactoryERC20, LinkdropFactoryERC721 {
 
         (success, ) = _walletFactory.call(_createWalletData);
         require(success, "DEPLOY_WALLET_FAILED");
-        
     }
 
 }
