@@ -25,7 +25,7 @@ class WalletSDK {
     this.jsonRpcUrl = `https://${chain}.infura.io`
 
     this.sdk = new UniversalLoginSDK(
-      'http://rinkeby.linkdrop.io:11004',
+      `https://${chain}-ul.linkdrop.io`,
       this.jsonRpcUrl
     )
   }
@@ -241,7 +241,7 @@ class WalletSDK {
     try {
       message = {
           ...message,
-        operationType: OPERATION_CALL,      
+        operationType: OPERATION_CALL,
         gasToken: ETHER_NATIVE_TOKEN.address,
         gasLimit: utils.bigNumberify('1000000'),
         gasPrice: utils.bigNumberify('8700000')
