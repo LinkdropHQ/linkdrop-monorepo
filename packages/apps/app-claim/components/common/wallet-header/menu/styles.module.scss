@@ -12,4 +12,10 @@
   color: $dbBlue;
   font-size: 18px;
   border-top: 1px solid $greyStrokeMenuColor;
+  cursor: pointer;
+  transition: background-color .3s;
+
+  &:hover {
+    background-color: $bgHoverGreyColor;
+  }
 }

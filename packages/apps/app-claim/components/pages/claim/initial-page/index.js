@@ -6,7 +6,7 @@ import text from 'texts'
 
 import styles from './styles.module'
 import commonStyles from '../styles.module'
-@translate('pages.main')
+@translate('pages.claim')
 class InitialPage extends React.Component {
   constructor (props) {
     super(props)

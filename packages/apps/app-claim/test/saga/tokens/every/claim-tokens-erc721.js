@@ -2,7 +2,7 @@
 import { expect } from 'chai'
 import generateLinkERC721Generator from 'data/store/saga/tokens/every/claim-tokens-erc721.js'
 import { put } from 'redux-saga/effects'
-import LinkdropSDK from '@linkdrop/sdk/src/index'
+import {LinkdropSDK} from '@linkdrop/sdk/src/index'
 import { jsonRpcUrl, apiHost, factory } from 'config'
 import { mocks, defineNetworkName } from '@linkdrop/commons'
 import { createMockProvider } from 'ethereum-waffle'

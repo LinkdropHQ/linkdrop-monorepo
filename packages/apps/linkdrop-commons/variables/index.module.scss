@@ -24,6 +24,7 @@ $greenColorTransparent: rgba(43, 198, 79, .2);
 $greyStrokeColor: #E5E5E5;
 $darkOrangeColor: #F89D35;
 $greyStrokeMenuColor: #DADADA;
+$avatarDisabled: #DADADA;
 $dbMenuFooter: #F3F3F3;
 
 :export {
@@ -46,5 +47,6 @@ $dbMenuFooter: #F3F3F3;
   greyStrokeMenuColor: $greyStrokeMenuColor;
   dbMenuFooter: $dbMenuFooter;
   dbBlueTransparent: $dbBlueTransparent;
-  greenColorTransparent: $greenColorTransparent
+  greenColorTransparent: $greenColorTransparent;
+  avatarDisabled: $avatarDisabled;
 }

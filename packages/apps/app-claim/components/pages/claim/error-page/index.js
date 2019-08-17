@@ -4,7 +4,7 @@ import { translate } from 'decorators'
 import styles from './styles.module'
 import commonStyles from '../styles.module'
 
-@translate('pages.main')
+@translate('pages.claim')
 class ErrorPage extends React.Component {
   render () {
     const { error, network } = this.props

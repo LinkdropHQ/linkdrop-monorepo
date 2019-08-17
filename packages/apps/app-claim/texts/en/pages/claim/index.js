@@ -6,6 +6,7 @@ export default {
     instructions: 'It may take a few minutes. You can come back later.',
     seeDetails: 'See details on <a target="_blank" href={{transactionLink}}>Etherscan</a>',
     tokensClaimed: '<span>{{tokens}}</span> claimed',
+    digitalAssets: 'Digital Assets',
     howToClaim: 'How to claim tokens to {{wallet}}',
     agreeWithTerms: 'By claiming you agree to the <a target="_blank" href={{href}}>Terms & Privacy</a>'
   },

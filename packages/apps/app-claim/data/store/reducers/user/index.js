@@ -12,7 +12,8 @@ const initialState = {
   sdk: null,
   privateKey: ls && ls.getItem && ls.getItem('privateKey'),
   contractAddress: ls && ls.getItem && ls.getItem('contractAddress'),
-  ens: ls && ls.getItem && ls.getItem('ens')
+  ens: ls && ls.getItem && ls.getItem('ens'),
+  avatar: ls && ls.getItem && ls.getItem('avatar')
 }
 
 export default (state = initialState, action = {}) => {

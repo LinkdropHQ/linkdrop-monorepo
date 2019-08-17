@@ -10,7 +10,7 @@ import { Button, Icons } from '@linkdrop/ui-kit'
 import { getCurrentAsset } from 'helpers'
 
 @actions(({ assets: { items, itemsToClaim } }) => ({ items }))
-@translate('pages.main')
+@translate('pages.claim')
 class ClaimingFinishedPage extends React.Component {
   constructor (props) {
     super(props)
@@ -27,10 +27,6 @@ class ClaimingFinishedPage extends React.Component {
   render () {
     const { items, itemsToClaim } = this.props
     const { showAssets, expandAssets } = this.state
-    const {
-      dappId
-    } = getHashVariables()
-    const { label, url } = dapps[dappId]
     const finalPrice = items.reduce((sum, item) => {
       sum = sum + (Number(item.balanceFormatted) * Number(item.price))
       return sum
@@ -42,18 +38,28 @@ class ClaimingFinishedPage extends React.Component {
       <AccountBalance balance={finalPrice} />
       {!showAssets && <TokensAmount symbol={symbol} amount={balanceFormatted} />}
       {showAssets && this.renderAllAssets({ items, expandAssets })}
-      <Button href={url} target='_blank'>{this.t('buttons.goTo', { title: label })}</Button>
+      {this.renderDappButton()}
     </div>
   }
 
+  renderDappButton () {
+    const {
+      dappId
+    } = getHashVariables()
+    if (!dappId) { return null }
+    const dapp = dapps[dappId]
+    if (!dapp) { return null }
+    const { label, url } = dapp
+    return <Button href={url} target='_blank'>{this.t('buttons.goTo', { title: label })}</Button>
+  }
+
   renderAllAssets ({ items, expandAssets }) {
-    console.log({ expandAssets })
     return <div className={classNames(styles.assets, { [styles.assetsExpanded]: expandAssets })}>
       <div className={styles.assetsHeader} onClick={_ => this.setState({ expandAssets: !expandAssets })}>
         {this.t('titles.digitalAssets')}
         <Icons.PolygonArrow fill='#000' />
       </div>
-      <div className={styles.content}>
+      <div className={styles.assetsContent}>
         {items.map(({
           icon,
           symbol,

@@ -6,7 +6,7 @@ import { TokensAmount, AssetBalance, AccountBalance } from 'components/common'
 import { getCurrentAsset } from 'helpers'
 
 @actions(({ tokens: { transactionId, transactionStatus } }) => ({ transactionId, transactionStatus }))
-@translate('pages.main')
+@translate('pages.claim')
 class ClaimingProcessPage extends React.Component {
   constructor (props) {
     super(props)
@@ -16,7 +16,6 @@ class ClaimingProcessPage extends React.Component {
   }
 
   componentDidMount () {
-    const { wallet } = this.props
     const {
       tokenAddress,
       tokenAmount,
@@ -29,6 +28,7 @@ class ClaimingProcessPage extends React.Component {
       weiAmount,
       campaignId
     } = getHashVariables()
+    const { wallet } = this.props
 
     return this.actions().tokens.claimTokensERC20({ campaignId, wallet, tokenAddress, tokenAmount, weiAmount, expirationTime, linkKey, linkdropMasterAddress, linkdropSignerSignature })
     // if (nftAddress && tokenId) {

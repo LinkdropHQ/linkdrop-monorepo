@@ -8,7 +8,7 @@ import ErrorPage from './error-page'
 import ClaimingFinishedPage from './claiming-finished-page'
 import { getHashVariables } from '@linkdrop/commons'
 
-@actions(({ user: { errors, step, loading: userLoading, readyToClaim, alreadyClaimed }, tokens: { transactionId }, assets: { loading, itemsToClaim } }) => ({
+@actions(({ user: { errors, step, loading: userLoading, readyToClaim, alreadyClaimed, contractAddress }, tokens: { transactionId }, assets: { loading, itemsToClaim } }) => ({
   userLoading,
   loading,
   itemsToClaim,
@@ -16,11 +16,12 @@ import { getHashVariables } from '@linkdrop/commons'
   transactionId,
   errors,
   alreadyClaimed,
-  readyToClaim
+  readyToClaim,
+  contractAddress
 }))
 @platform()
 @translate('pages.claim')
-class Main extends React.Component {
+class Claim extends React.Component {
   componentDidMount () {
     const {
       linkKey,
@@ -80,20 +81,18 @@ class Main extends React.Component {
   }
 
   render () {
-    const { step } = this.props
     return <Page dynamicHeader>
       {this.renderCurrentPage()}
     </Page>
   }
 
   renderCurrentPage () {
-    const { itemsToClaim, userLoading, errors, alreadyClaimed, step } = this.props
-
+    const { step, itemsToClaim, userLoading, errors, alreadyClaimed, contractAddress } = this.props
     const {
       chainId,
       linkdropMasterAddress
     } = getHashVariables()
-    const commonData = { linkdropMasterAddress, chainId, itemsToClaim, loading: userLoading }
+    const commonData = { linkdropMasterAddress, chainId, itemsToClaim, loading: userLoading, wallet: contractAddress }
 
     if (errors && errors.length > 0) {
       // if some errors occured and can be found in redux store, then show error page
@@ -133,4 +132,4 @@ class Main extends React.Component {
   }
 }
 
-export default Main
+export default Claim

@@ -1,5 +1,5 @@
 import TokenMock from '../../contracts/build/TokenMock'
-import LinkdropSDK from '@linkdrop/sdk'
+import {LinkdropSDK} from '@linkdrop/sdk'
 
 import ora from 'ora'
 import { terminal as term } from 'terminal-kit'
@@ -33,7 +33,7 @@ const FACTORY_ADDRESS = getString('FACTORY_ADDRESS')
 const GAS_FEE = ethers.utils.parseUnits('0.002')
 
 // Initialize linkdrop SDK
-const linkdropSDK = LinkdropSDK({
+const linkdropSDK = new LinkdropSDK({
   linkdropMasterAddress: new ethers.Wallet(LINKDROP_MASTER_PRIVATE_KEY).address,
   factoryAddress: FACTORY_ADDRESS,
   chain: CHAIN,

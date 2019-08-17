@@ -1,10 +1,10 @@
-import main from './main'
+import claim from './claim'
 import page from './page'
 import wallet from './wallet'
 import confirm from './confirm'
 
 export default {
-  main,
+  claim,
   page,
   wallet,
   confirm

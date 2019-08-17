@@ -11,7 +11,9 @@ import { defineNetworkName } from '@linkdrop/commons'
 const generator = function * ({ payload }) {
   try {
     const { chainId } = payload
+    console.log({ chainId })
     const networkName = defineNetworkName({ chainId })
+    console.log({ networkName })
     // const apiHost = Number(chainId) === 1 ? apiHostMainnet : apiHostRinkeby
     const sdk = initializeWalletSdk({ chain: networkName })
     yield put({ type: 'USER.SET_SDK', payload: { sdk } })

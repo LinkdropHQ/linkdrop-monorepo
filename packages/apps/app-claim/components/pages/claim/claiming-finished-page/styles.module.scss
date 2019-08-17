@@ -2,14 +2,19 @@
 
 .assets {
   min-height: 68px;
+  position: relative;
   .assetsContent {
+    position: absolute;
     display: none;
+    left: 50%;
+    transform: translate(-50%);
   }
 }
 
 .assetsHeader {
   font-size: 18px;
   user-select: none;
+  margin-bottom: 25px;
 
   svg {
     transition: transform .3s;
