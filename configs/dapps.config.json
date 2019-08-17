@@ -1,6 +1,6 @@
 {
-  "decentraland": {
-    "label": "Decentraland",
-    "url": "https://google.com"
+  "zrx-instant": {
+    "label": "0x Instant Demo",
+    "url": "http://localhost:3001"
   }
 }
