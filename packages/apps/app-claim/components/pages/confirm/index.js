@@ -8,7 +8,7 @@ import classNames from 'classnames'
 // import { getHashVariables } from '@linkdrop/commons'
 import { Button } from '@linkdrop/ui-kit'
 
-@actions(({ assets: { items, itemsToClaim } }) => ({ items }))
+@actions(({ assets: { items, itemsToClaim }, user: { sdk, privateKey, contractAddress } }) => ({ items, sdk, privateKey, contractAddress }))
 @translate('pages.confirm')
 class Confirm extends React.Component {
   constructor (props) {
@@ -35,16 +35,29 @@ class Confirm extends React.Component {
     this._closeWindow()
   }
 
-  _onConfirmClick () {
-    // let tx = await this.wallet.sendTransaction({
-    //   data,
-    //   to,
-    //   value,
-    //   gasPrice
-    //   // gasLimit: gas
-    // })
-    // this.postMessage({ action: 'PASS_TRANSACTION_RESULT', payload: { txHash: tx.hash, success: true } },
-    //                            event.origin)
+  async _onConfirmClick () {
+    const { sdk, privateKey, contractAddress } = this.props
+    
+    const {
+      data,
+      to,
+      value
+    } = this.state.txParams
+
+    const message = {
+      from: contractAddress,
+      data: data || '0x0',
+      to: to || '0x0',
+      value: value || '0x0'
+    }
+    const { txHash, success, errors } = await sdk.execute(message, privateKey)
+
+    console.log({ txHash, success, errors })
+    // pass result to dapp window
+    this.dappPage.postMessage({ action: 'PASS_TRANSACTION_RESULT', payload: { txHash, success } },
+                     this.state.dappUrl)
+
+    // close this window
     this._closeWindow()
   }
   
@@ -91,10 +104,9 @@ class Confirm extends React.Component {
       <div className={classNames(styles.container)}>
       <div className={styles.title} dangerouslySetInnerHTML={{ __html: this.t('titles.main', { dappUrl: this.state.dappUrl, dappName }) }} />
         <div className={styles.buttonsContainer}>
-        <Button inverted className={styles.button} onClick={() => this._onCancelClick()}>{this.t('buttons.cancel')}</Button>
-          <Button className={styles.button}>{this.t('buttons.confirm')}</Button>
+          <Button inverted className={styles.button} onClick={() => this._onCancelClick()}>{this.t('buttons.cancel')}</Button>
+          <Button className={styles.button} onClick={() => this._onConfirmClick()} >{this.t('buttons.confirm')}</Button>
         </div>
-
         <div className={styles.extraInfo} dangerouslySetInnerHTML={{ __html: this.t('descriptions.extraInfo') }} />
       </div>
     </Page>

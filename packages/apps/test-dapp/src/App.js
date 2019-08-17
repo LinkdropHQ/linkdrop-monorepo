@@ -76,7 +76,11 @@ class App extends React.Component {
   }
 
   _submitTestTx () {
-    this.web3.eth.sendTransaction({ to: this.state.address, value: 0, from: this.state.address }, (err, result) => {
+    this.web3.eth.sendTransaction({
+      to: '0xF695e673d7D159CBFc119b53D8928cEca4Efe99e',
+      value: 2019,
+      from: this.state.address
+    }, (err, result) => {
       console.log({ err, result })
       if (result) {
         window.alert(result)
