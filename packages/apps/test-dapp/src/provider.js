@@ -158,7 +158,8 @@ class Provider {
 
         const receiveMessage = (event) => {
           // Do we trust the sender of this message?
-          if (event.origin !== confirmationUrl) return
+          // if (event.origin !== confirmationUrl) return
+          if (event.origin !== confirmationUrl.substring(event.origin.length, -1)) return
 
           if (event.data.action === 'PASS_TRANSACTION_RESULT') {
             const { success, txHash } = event.data.payload
