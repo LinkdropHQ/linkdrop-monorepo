@@ -14,6 +14,7 @@ class Provider {
     this.ensName = opts.ensName
     this.rpcUrl = opts.rpcUrl
     this.network = opts.network || 'mainnet'
+    this.confirmUrl = opts.confirmUrl
     
     if (!opts.ensName) {
       throw new Error('ENS name should be provided')
@@ -50,10 +51,12 @@ class Provider {
   _getConfirmationUrlFromEns (ensName) {
     const [ label, domain ] = this._parseDomain(ensName)
     console.log({ label, domain })
+    if (this.confirmUrl) return this.confirmUrl
+    
     if (domain === 'argent.xyz') {
       return 'https://argent.xyz'
     } else {
-      return 'http://localhost:9002/#/confirm'
+      return 'https://wallet.linkdrop.io/#/confirm'
     }
   }
   

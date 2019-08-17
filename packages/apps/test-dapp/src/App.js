@@ -18,10 +18,10 @@ class App extends React.Component {
   }
 
   async componentDidMount () {
-    const { ensName, network } = this._getParamsFromUrl()
+    const { ensName, network, confirmUrl } = this._getParamsFromUrl()
     this.network = network
     if (ensName) {
-      await this._connect(ensName, network)
+      await this._connect(ensName, network, confirmUrl)
     }
     this.setState({
       loading: false
@@ -30,22 +30,31 @@ class App extends React.Component {
   
   _getParamsFromUrl () {
     let ensName
+    let confirmUrl
     let network = 'mainnet'
+
     const paramsFragment = document.location.search.substr(1)
     if (paramsFragment) {
       const query = qs.parse(paramsFragment)
       network = query.network || 'mainnet'
       ensName = query.user
+      confirmUrl = query.confirmUrl
     }
-    return { ensName, network }
+    return { ensName, network, confirmUrl }
   }
   
-  async _connect (ensName, network) {
-    try { 
+  async _connect (ensName, network, confirmUrl) {
+    try {
+      const urlParams = this._getParamsFromUrl()
+
+      ensName = ensName || urlParams.ensName
+      network = network || urlParams.network
+      confirmUrl = confirmUrl || (urlParams.confirmUrl ? decodeURIComponent(urlParams.confirmUrl) : null)
+      
       console.log('getting provider...')
       const rpcUrl = `https://${network}.infura.io/v3/d4d1a2b933e048e28fb6fe1abe3e813a`
       console.log({ rpcUrl })
-      const card = new Provider({ ensName, network, rpcUrl })
+      const card = new Provider({ ensName, network, rpcUrl, confirmUrl })
 
       await card.provider.enable()
       
@@ -106,7 +115,7 @@ class App extends React.Component {
         <input className='ens-input' placeholder='Your ENS, e.g. user.my-wallet.eth' type='text' name='ens' onChange={({ target }) => this.setState({ ensNameInput: target.value })} />
         <br/>
         <button className='App-link' onClick={() => {
-          this._connect(this.state.ensNameInput, this.network)
+          this._connect(this.state.ensNameInput)
         }}>Connect</button>
 
         <p style={{ fontSize: 10, textDecoration: 'none', marginTop: 30 }}>
