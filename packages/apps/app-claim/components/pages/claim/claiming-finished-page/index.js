@@ -53,8 +53,9 @@ class ClaimingFinishedPage extends React.Component {
     
     const { ens } = this.props
     const { chainId } = getHashVariables()
-    const network = chainId === '4' ? 'rinkeby' : ''
-    const dappUrl = `${url}?user=${ens}&network=${network}`
+    const network = chainId === '4' ? 'rinkeby' : 'mainnet'
+    const confirmUrl = encodeURIComponent(`${window.origin}/#/confirm`)
+    const dappUrl = `${url}?user=${ens}&network=${network}&confirmUrl=${confirmUrl}`
     
     return <Button href={dappUrl} target='_blank'>{this.t('buttons.goTo', { title: label })}</Button>
   }

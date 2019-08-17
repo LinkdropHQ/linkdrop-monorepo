@@ -38,7 +38,9 @@ class App extends React.Component {
       const query = qs.parse(paramsFragment)
       network = query.network || 'mainnet'
       ensName = query.user
-      confirmUrl = query.confirmUrl
+      if (query.confirmUrl) {
+        confirmUrl = decodeURIComponent(query.confirmUrl)
+      }      
     }
     return { ensName, network, confirmUrl }
   }
@@ -49,7 +51,7 @@ class App extends React.Component {
 
       ensName = ensName || urlParams.ensName
       network = network || urlParams.network
-      confirmUrl = confirmUrl || (urlParams.confirmUrl ? decodeURIComponent(urlParams.confirmUrl) : null)
+      confirmUrl = confirmUrl || urlParams.confirmUrl
       
       console.log('getting provider...')
       const rpcUrl = `https://${network}.infura.io/v3/d4d1a2b933e048e28fb6fe1abe3e813a`
