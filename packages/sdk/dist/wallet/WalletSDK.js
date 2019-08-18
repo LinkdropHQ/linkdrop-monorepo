@@ -29,15 +29,9 @@ var _commons = require("@universal-login/commons");
 
 var _LinkdropFactory = _interopRequireDefault(require("@linkdrop/contracts/build/LinkdropFactory.json"));
 
-var _WalletFactory = _interopRequireDefault(require("@linkdrop/contracts/metadata/WalletFactory.json"));
-
 var _ethers = require("ethers");
 
 var _claimAndDeploy3 = require("./claimAndDeploy");
-
-var _utils = require("../../../scripts/src/utils");
-
-var _utils2 = require("../utils");
 
 var WalletSDK =
 /*#__PURE__*/
