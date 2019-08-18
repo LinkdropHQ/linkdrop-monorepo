@@ -2,7 +2,7 @@ import { computeProxyAddress } from './utils'
 import * as generateLinkUtils from './generateLink'
 import * as claimUtils from './claim'
 
-import LinkdropFactory from '../../contracts/build/LinkdropFactory'
+import LinkdropFactory from '@linkdrop/contracts/build/LinkdropFactory'
 import { ethers } from 'ethers'
 
 // Turn off annoying warnings
