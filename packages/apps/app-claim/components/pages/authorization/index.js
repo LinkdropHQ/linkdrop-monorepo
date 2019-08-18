@@ -22,6 +22,7 @@ class Authorization extends React.Component {
   }
 
   componentWillReceiveProps ({ privateKey, contractAddress }) {
+    console.log({ privateKey, contractAddress })
     const { contractAddress: prevContractAddress, privateKey: prevPrivateKey } = this.props
     if (privateKey && contractAddress && !prevContractAddress && !prevPrivateKey) {
       const script = document.createElement('script')
@@ -90,9 +91,8 @@ class Authorization extends React.Component {
             alt: 'media'
           })
           .execute(response => {
-            console.log('Found existing linkdrop-data.json file with id:', id)
             const { privateKey, contractAddress, avatar } = response
-            console.log({ privateKey, contractAddress, ens, avatar })
+            console.log('from google drive:', { privateKey, contractAddress, avatar })
             this.actions().user.setUserData({ privateKey, contractAddress, ens, avatar })
           })
       } else {

@@ -32,11 +32,12 @@ const getTokenData = function * ({ address, symbol, decimals, chainId, provider,
 const generator = function * ({ payload }) {
   try {
     yield put({ type: 'USER.SET_LOADING', payload: { loading: true } })
-    const { chainId = '4' } = payload
+    const { wallet, chainId = '1' } = payload
     if (chainId === '4') {
-      return yield put({ type: 'ASSETS.SET_ITEMS', payload: { items: assetsMock } })
+      yield put({ type: 'ASSETS.SET_ITEMS', payload: { items: assetsMock } })
+      return yield put({ type: 'USER.SET_LOADING', payload: { loading: false } })
     }
-    const wallet = '0x1079d15c6ec352b193c13fba5047dbb9deeaefd8'
+
     const { total, docs } = yield call(getItems, { wallet })
     const networkName = defineNetworkName({ chainId })
     const contractAddress = yield select(generator.selectors.contractAddress)

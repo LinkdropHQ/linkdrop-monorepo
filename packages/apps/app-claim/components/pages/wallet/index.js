@@ -22,6 +22,7 @@ class Wallet extends React.Component {
     const {
       chainId
     } = getHashVariables()
+    console.log({ contractAddress, items })
     if (!items || items.length === 0) {
       this.actions().assets.getItems({ wallet: contractAddress, chainId })
     }
@@ -34,7 +35,7 @@ class Wallet extends React.Component {
       sum = sum + (Number(item.balanceFormatted) * Number(item.price))
       return sum
     }, 0)
-    return <Page >
+    return <Page dynamicHeader>
       <div className={styles.container}>
         {loading && <Loading withOverlay />}
         <AccountBalance balance={finalPrice} />

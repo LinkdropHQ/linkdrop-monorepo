@@ -73,13 +73,16 @@ class Claim extends React.Component {
       // show error page if link expired
       return this.actions().user.setErrors({ errors: ['LINK_EXPIRED'] })
     }
+    this.getAssetsData({ nftAddress, tokenId, weiAmount, chainId, tokenAddress, tokenAmount })
+  }
 
+  async getAssetsData ({ nftAddress, tokenId, weiAmount, chainId, tokenAddress, tokenAmount }) {
     if (nftAddress && tokenId) {
-      this.actions().assets.getTokenERC721Data({ nftAddress, tokenId, chainId })
+      // this.actions().assets.getTokenERC721Data({ nftAddress, tokenId, chainId })
     } else {
       this.actions().assets.getTokenERC20Data({ tokenAddress, tokenAmount, chainId })
     }
-    this.actions().assets.getEthData({ weiAmount, chainId })
+    setTimeout(_ => this.actions().assets.getEthData({ weiAmount, chainId }), 3000)
   }
 
   render () {
