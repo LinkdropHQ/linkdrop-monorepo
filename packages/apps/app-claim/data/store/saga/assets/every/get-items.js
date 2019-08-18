@@ -32,20 +32,39 @@ const getTokenData = function * ({ address, symbol, decimals, chainId, provider,
 const generator = function * ({ payload }) {
   try {
     yield put({ type: 'USER.SET_LOADING', payload: { loading: true } })
-    const { wallet, chainId = '4' } = payload
+    const { chainId = '4' } = payload
+    const contractAddress = yield select(generator.selectors.contractAddress)
     if (chainId === '4') {
       yield put({ type: 'ASSETS.SET_ITEMS', payload: { items: assetsMock } })
       return yield put({ type: 'USER.SET_LOADING', payload: { loading: false } })
     }
-
-    const { total, docs } = yield call(getItems, { wallet })
+    const { total = 0, docs = [] } = yield call(getItems, { wallet: contractAddress })
     const networkName = defineNetworkName({ chainId })
-    const contractAddress = yield select(generator.selectors.contractAddress)
     const provider = yield ethers.getDefaultProvider(networkName)
-    if (total && total > 0) {
+    const ethBalance = yield provider.getBalance(contractAddress)
+    let assetsStorage = []
+    if ((total && total > 0)) {
       const assets = yield all(docs.map(({ contract: { address, symbol, decimals } }) => getTokenData({ address, symbol, decimals, chainId, provider, contractAddress, wallet })))
-      yield put({ type: 'ASSETS.SET_ITEMS', payload: { items: assets } })
+      assetsStorage = assetsStorage.concat(assets)
     }
+
+    if (ethBalance && ethBalance > 0) {
+      let assetPrice = 0
+      if (Number(chainId) === 1) {
+        assetPrice = yield call(getAssetPrice, { symbol: 'ETH' })
+      }
+      const amountFormatted = utils.formatUnits(ethBalance, 18)
+      assetsStorage = assetsStorage.concat([{
+        balanceFormatted: Number(amountFormatted),
+        balance: ethBalance,
+        tokenAddress: ethers.constants.AddressZero,
+        symbol: 'ETH',
+        decimals: 18,
+        type: 'erc20',
+        price: assetPrice
+      }])
+    }
+    yield put({ type: 'ASSETS.SET_ITEMS', payload: { items: assetsStorage || [] } })
     yield put({ type: 'USER.SET_LOADING', payload: { loading: false } })
   } catch (e) {
     console.error(e)

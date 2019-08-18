@@ -7,9 +7,7 @@ const generator = function * ({ payload }) {
   try {
     const { campaignId, tokenAddress, tokenAmount, weiAmount, expirationTime, linkKey, linkdropMasterAddress, linkdropSignerSignature } = payload
     yield put({ type: 'USER.SET_LOADING', payload: { loading: true } })
-    // yield delay(3000)
-    // yield put({ type: 'TOKENS.SET_TRANSACTION_ID', payload: { transactionId: '0x14d92291f8edb49d08209d64d9410b381175c6113a1f7cd7bcbc0d1c2569e339' } })
-
+    console.log(ls.getItem('contractAddress'))
     const sdk = yield select(generator.selectors.sdk)
     const { success, errors, txHash } = yield sdk.claim({
       weiAmount: weiAmount || '0',

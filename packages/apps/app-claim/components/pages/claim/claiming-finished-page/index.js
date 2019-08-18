@@ -7,7 +7,7 @@ import dapps from 'dapps'
 import classNames from 'classnames'
 import { getHashVariables } from '@linkdrop/commons'
 import { Button, Icons, Loading } from '@linkdrop/ui-kit'
-import { getCurrentAsset } from 'helpers'
+import { getCurrentAsset, countFinalPrice } from 'helpers'
 
 @actions(({ assets: { items, itemsToClaim }, user: { ens } }) => ({ items, ens }))
 @translate('pages.claim')
@@ -27,10 +27,7 @@ class ClaimingFinishedPage extends React.Component {
   render () {
     const { items, itemsToClaim, alreadyClaimed, loading } = this.props
     const { showAssets, expandAssets } = this.state
-    const finalPrice = items.reduce((sum, item) => {
-      sum = sum + (Number(item.balanceFormatted) * Number(item.price))
-      return sum
-    }, 0)
+    const finalPrice = countFinalPrice({ items })
     const mainAsset = getCurrentAsset({ itemsToClaim })
     if (!mainAsset) { return null }
     const { balanceFormatted, symbol } = mainAsset

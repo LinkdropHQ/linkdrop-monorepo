@@ -5,6 +5,7 @@ import styles from './styles.module'
 import { Icons, Loading } from '@linkdrop/ui-kit'
 import { AssetBalance, AccountBalance } from 'components/common'
 import classNames from 'classnames'
+import { countFinalPrice } from 'helpers'
 import { getHashVariables } from '@linkdrop/commons'
 
 @actions(({ user: { loading, contractAddress }, assets: { items } }) => ({ items, loading, contractAddress }))
@@ -18,22 +19,19 @@ class Wallet extends React.Component {
   }
 
   componentDidMount () {
-    const { contractAddress, items } = this.props
+    const { items } = this.props
     const {
       chainId
     } = getHashVariables()
     if (!items || items.length === 0) {
-      this.actions().assets.getItems({ wallet: contractAddress, chainId })
+      this.actions().assets.getItems({ chainId })
     }
   }
 
   render () {
     const { expandAssets } = this.state
     const { items, loading } = this.props
-    const finalPrice = items.reduce((sum, item) => {
-      sum = sum + (Number(item.balanceFormatted) * Number(item.price))
-      return sum
-    }, 0)
+    const finalPrice = countFinalPrice({ items })
     return <Page dynamicHeader>
       <div className={styles.container}>
         {loading && <Loading withOverlay />}

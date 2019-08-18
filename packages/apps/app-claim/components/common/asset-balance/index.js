@@ -2,7 +2,7 @@ import React from 'react'
 import styles from './styles.module'
 import { translate } from 'decorators'
 import classNames from 'classnames'
-import { utils } from 'ethers'
+import { multiply, bignumber } from 'mathjs'
 
 @translate('common.assetBalance')
 class AssetBalance extends React.Component {
@@ -17,6 +17,7 @@ class AssetBalance extends React.Component {
     const { iconType } = this.state
     const { loading, symbol, amount, icon, tokenAddress, price } = this.props
     const finalIcon = iconType === 'default' ? <img onError={_ => this.setState({ iconType: 'blank' })} className={styles.iconImg} src={icon} /> : <span />
+    const finalPrice = String(multiply(bignumber(price), bignumber(amount)))
     return <div className={classNames(styles.container, { [styles.loading]: loading })}>
       <div className={styles.icon}>
         {finalIcon}
@@ -24,7 +25,7 @@ class AssetBalance extends React.Component {
       <div className={styles.symbol}>{symbol}</div>
       <div className={styles.amount}>{amount}</div>
       <span className={styles.divider}>/</span>
-      <div className={styles.price}>${price}</div>
+      <div className={styles.price}>${finalPrice}</div>
     </div>
   }
 }
