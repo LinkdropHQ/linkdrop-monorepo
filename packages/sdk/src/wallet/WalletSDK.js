@@ -11,14 +11,9 @@ import {
 } from '@universal-login/commons'
 
 import LinkdropFactory from '@linkdrop/contracts/build/LinkdropFactory.json'
-import WalletFactory from '@linkdrop/contracts/metadata/WalletFactory.json'
 
 import { ethers } from 'ethers'
 import { claimAndDeploy } from './claimAndDeploy'
-
-import { getUrlParams } from '../../../scripts/src/utils'
-
-import { signReceiverAddress } from '../utils'
 
 class WalletSDK {
   //
