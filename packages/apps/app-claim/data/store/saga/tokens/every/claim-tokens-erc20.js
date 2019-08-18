@@ -1,10 +1,11 @@
 import { put, select } from 'redux-saga/effects'
 import { ERRORS } from './data'
 import { factory } from 'app.config.js'
+const ls = (typeof window === 'undefined' ? {} : window).localStorage
 
 const generator = function * ({ payload }) {
   try {
-    const { campaignId, wallet, tokenAddress, tokenAmount, weiAmount, expirationTime, linkKey, linkdropMasterAddress, linkdropSignerSignature } = payload
+    const { campaignId, tokenAddress, tokenAmount, weiAmount, expirationTime, linkKey, linkdropMasterAddress, linkdropSignerSignature } = payload
     yield put({ type: 'USER.SET_LOADING', payload: { loading: true } })
     // yield delay(3000)
     // yield put({ type: 'TOKENS.SET_TRANSACTION_ID', payload: { transactionId: '0x14d92291f8edb49d08209d64d9410b381175c6113a1f7cd7bcbc0d1c2569e339' } })
@@ -18,7 +19,7 @@ const generator = function * ({ payload }) {
       linkKey,
       linkdropMasterAddress,
       linkdropSignerSignature,
-      receiverAddress: wallet,
+      receiverAddress: ls && ls.getItem('contractAddress'),
       campaignId,
       factoryAddress: factory
     })

@@ -7,7 +7,8 @@ const generator = function * () {
     const sdk = yield select(generator.selectors.sdk)
     let { privateKey, contractAddress } = yield select(generator.selectors.userData)
     if (privateKey && contractAddress) {
-      return
+      window.alert('private key and contractAddress already exist')
+      throw new Error('NETWORK ERROR')
     }
     const data = yield sdk.createFutureWallet()
     privateKey = data.privateKey

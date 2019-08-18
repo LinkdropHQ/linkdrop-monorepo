@@ -39,7 +39,7 @@ class ClaimingFinishedPage extends React.Component {
       <AccountBalance balance={finalPrice} />
       {!showAssets && <TokensAmount alreadyClaimed={alreadyClaimed} symbol={symbol} amount={balanceFormatted} />}
       {showAssets && this.renderAllAssets({ items, expandAssets })}
-      {this.renderDappButton()}
+
     </div>
   }
 
@@ -51,13 +51,12 @@ class ClaimingFinishedPage extends React.Component {
     const dapp = dapps[dappId]
     if (!dapp) { return null }
     const { label, url } = dapp
-    
+
     const { ens } = this.props
     const { chainId } = getHashVariables()
     const network = chainId === '4' ? 'rinkeby' : 'mainnet'
     const confirmUrl = encodeURIComponent(`${window.origin}/#/confirm`)
     const dappUrl = `${url}?user=${ens}&network=${network}&confirmUrl=${confirmUrl}`
-    
     return <Button href={dappUrl} target='_blank'>{this.t('buttons.goTo', { title: label })}</Button>
   }
 
@@ -68,19 +67,22 @@ class ClaimingFinishedPage extends React.Component {
         <Icons.PolygonArrow fill='#000' />
       </div>
       <div className={styles.assetsContent}>
-        {items.map(({
-          icon,
-          symbol,
-          balanceFormatted,
-          tokenAddress,
-          price
-        }) => <AssetBalance
-          key={tokenAddress}
-          symbol={symbol}
-          amount={balanceFormatted}
-          price={price}
-          icon={icon}
-        />)}
+        <div className={styles.assetsContentItems}>
+          {items.map(({
+            icon,
+            symbol,
+            balanceFormatted,
+            tokenAddress,
+            price
+          }) => <AssetBalance
+            key={tokenAddress}
+            symbol={symbol}
+            amount={balanceFormatted}
+            price={price}
+            icon={icon}
+          />)}
+        </div>
+        {this.renderDappButton()}
       </div>
     </div>
   }

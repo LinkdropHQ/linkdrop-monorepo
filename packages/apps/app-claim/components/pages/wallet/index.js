@@ -22,7 +22,6 @@ class Wallet extends React.Component {
     const {
       chainId
     } = getHashVariables()
-    console.log({ contractAddress, items })
     if (!items || items.length === 0) {
       this.actions().assets.getItems({ wallet: contractAddress, chainId })
     }
@@ -45,19 +44,21 @@ class Wallet extends React.Component {
             <Icons.PolygonArrow fill='#000' />
           </div>
           <div className={styles.assetsContent}>
-            {items.map(({
-              icon,
-              symbol,
-              balanceFormatted,
-              tokenAddress,
-              price
-            }) => <AssetBalance
-              key={tokenAddress}
-              symbol={symbol}
-              amount={balanceFormatted}
-              price={price}
-              icon={icon}
-            />)}
+            <div className={styles.assetsContentItems}>
+              {items.map(({
+                icon,
+                symbol,
+                balanceFormatted,
+                tokenAddress,
+                price
+              }) => <AssetBalance
+                key={tokenAddress}
+                symbol={symbol}
+                amount={balanceFormatted}
+                price={price}
+                icon={icon}
+              />)}
+            </div>
           </div>
         </div>
       </div>

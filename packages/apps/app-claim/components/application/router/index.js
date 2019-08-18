@@ -27,7 +27,6 @@ class AppRouter extends React.Component {
       chainId
     } = getHashVariables()
     chainId = chainId || '1'
-    
     this.actions().user.createSdk({ chainId })
   }
 

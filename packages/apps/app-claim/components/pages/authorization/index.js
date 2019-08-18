@@ -13,7 +13,7 @@ class Authorization extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      enableAuthorize: true
+      enableAuthorize: false
     }
   }
 
@@ -22,7 +22,6 @@ class Authorization extends React.Component {
   }
 
   componentWillReceiveProps ({ privateKey, contractAddress }) {
-    console.log({ privateKey, contractAddress })
     const { contractAddress: prevContractAddress, privateKey: prevPrivateKey } = this.props
     if (privateKey && contractAddress && !prevContractAddress && !prevPrivateKey) {
       const script = document.createElement('script')
@@ -61,15 +60,18 @@ class Authorization extends React.Component {
   updateSigninStatus ({ authInstance }) {
     if (!authInstance) { return }
     const isSignedIn = authInstance.isSignedIn.get()
-    if (!isSignedIn) { return }
-    const email = authInstance.currentUser.get().getBasicProfile().getEmail()
-    const avatar = authInstance.currentUser.get().getBasicProfile().getImageUrl()
+
     this.setState({
-      enableAuthorize: !isSignedIn,
-      email
+      enableAuthorize: !isSignedIn
     }, _ => {
       if (isSignedIn) {
-        this.getFiles({ email, avatar })
+        const email = authInstance.currentUser.get().getBasicProfile().getEmail()
+        const avatar = authInstance.currentUser.get().getBasicProfile().getImageUrl()
+        this.setState({
+          email
+        }, _ => {
+          this.getFiles({ email, avatar })
+        })
       }
     })
   }
@@ -92,7 +94,7 @@ class Authorization extends React.Component {
           })
           .execute(response => {
             const { privateKey, contractAddress, avatar } = response
-            console.log('from google drive:', { privateKey, contractAddress, avatar })
+            console.log('from google drive: ', { privateKey, contractAddress, avatar, ens })
             this.actions().user.setUserData({ privateKey, contractAddress, ens, avatar })
           })
       } else {
@@ -127,12 +129,11 @@ class Authorization extends React.Component {
             params: { uploadType: 'multipart' },
             headers: {
               'Content-Type':
-                'multipart/related; boundary="' + boundary + '"'
+              'multipart/related; boundary="' + boundary + '"'
             },
             body: multipartRequestBody
           })
           .execute(response => {
-            console.log('Created new file with id:', response.id)
             this.actions().user.setUserData({ privateKey, contractAddress, ens, avatar })
           })
       }

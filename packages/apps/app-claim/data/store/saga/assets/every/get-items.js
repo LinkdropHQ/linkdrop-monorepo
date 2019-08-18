@@ -32,7 +32,7 @@ const getTokenData = function * ({ address, symbol, decimals, chainId, provider,
 const generator = function * ({ payload }) {
   try {
     yield put({ type: 'USER.SET_LOADING', payload: { loading: true } })
-    const { wallet, chainId = '1' } = payload
+    const { wallet, chainId = '4' } = payload
     if (chainId === '4') {
       yield put({ type: 'ASSETS.SET_ITEMS', payload: { items: assetsMock } })
       return yield put({ type: 'USER.SET_LOADING', payload: { loading: false } })
@@ -44,7 +44,6 @@ const generator = function * ({ payload }) {
     const provider = yield ethers.getDefaultProvider(networkName)
     if (total && total > 0) {
       const assets = yield all(docs.map(({ contract: { address, symbol, decimals } }) => getTokenData({ address, symbol, decimals, chainId, provider, contractAddress, wallet })))
-      console.log({ assets })
       yield put({ type: 'ASSETS.SET_ITEMS', payload: { items: assets } })
     }
     yield put({ type: 'USER.SET_LOADING', payload: { loading: false } })

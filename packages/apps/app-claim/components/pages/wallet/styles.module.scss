@@ -9,9 +9,13 @@
   position: relative;
   .assetsContent {
     position: absolute;
-    display: none;
     left: 50%;
     transform: translate(-50%);
+    margin-bottom: 20px;
+  }
+
+  .assetsContentItems {
+    display: none;
   }
 }
 
@@ -27,7 +31,7 @@
 }
 
 .assetsExpanded {
-  .assetsContent {
+  .assetsContentItems {
     display: block;
   }
 
