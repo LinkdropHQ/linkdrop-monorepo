@@ -15,8 +15,6 @@ var _ethers = require("ethers");
 
 var _axios = _interopRequireDefault(require("axios"));
 
-var _LinkdropFactory = _interopRequireDefault(require("../../../contracts/build/LinkdropFactory.json"));
-
 var _utils = require("../utils");
 
 // Turn off annoying warnings
@@ -210,11 +208,10 @@ function () {
               initializeWithENS: initializeWithENS,
               signature: signature
             };
-            console.log('claimAndDeployParams: ', claimAndDeployParams);
-            _context.next = 46;
+            _context.next = 45;
             return _axios["default"].post("".concat(apiHost, "/api/v1/linkdrops/claimAndDeploy"), claimAndDeployParams);
 
-          case 46:
+          case 45:
             response = _context.sent;
             _response$data = response.data, error = _response$data.error, errors = _response$data.errors, success = _response$data.success, txHash = _response$data.txHash;
             return _context.abrupt("return", {
@@ -224,7 +221,7 @@ function () {
               txHash: txHash
             });
 
-          case 49:
+          case 48:
           case "end":
             return _context.stop();
         }

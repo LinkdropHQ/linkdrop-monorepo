@@ -16,18 +16,6 @@ class WalletService {
     receiverAddress,
     receiverSignature
   }) {
-    console.log('WalletService', {
-      weiAmount,
-      tokenAddress,
-      tokenAmount,
-      expirationTime,
-      linkId,
-      linkdropMasterAddress,
-      campaignId,
-      linkdropSignerSignature,
-      receiverAddress,
-      receiverSignature
-    })
     const walletSDK = new WalletSDK(CHAIN)
     return walletSDK.getClaimData({
       weiAmount,

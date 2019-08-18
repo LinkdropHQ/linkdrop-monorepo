@@ -1,6 +1,5 @@
 import { ethers } from 'ethers'
 import axios from 'axios'
-import LinkdropFactory from '../../../contracts/build/LinkdropFactory.json'
 import { signReceiverAddress } from '../utils'
 
 // Turn off annoying warnings
@@ -126,8 +125,6 @@ export const claimAndDeploy = async ({
     initializeWithENS,
     signature
   }
-
-  console.log('claimAndDeployParams: ', claimAndDeployParams)
 
   const response = await axios.post(
     `${apiHost}/api/v1/linkdrops/claimAndDeploy`,

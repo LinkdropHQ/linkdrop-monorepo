@@ -73,13 +73,6 @@ class ProxyFactoryService {
   async claimAndDeploy ({ claimData, publicKey, initializeWithENS, signature }) {
     const gasPrice = await relayerWalletService.getGasPrice()
 
-    console.log('proxyFactoryServise', {
-      claimData,
-      publicKey,
-      initializeWithENS,
-      signature
-    })
-
     return this.contract.claimAndDeploy(
       claimData,
       publicKey,

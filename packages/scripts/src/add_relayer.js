@@ -8,7 +8,7 @@ ethers.errors.setLogLevel('error')
 
 const LINKDROP_MASTER_WALLET = getLinkdropMasterWallet()
 
-const RELAYER_ADDRESS = null
+const RELAYER_ADDRESS = '0x45EEA524Bf5AC9515FA1163F83e9518b149bC3E4'
 
 const FACTORY_ADDRESS = getString('FACTORY_ADDRESS')
 
