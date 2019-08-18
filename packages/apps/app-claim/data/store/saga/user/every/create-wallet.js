@@ -5,9 +5,7 @@ import { put, select } from 'redux-saga/effects'
 const generator = function * () {
   try {
     const sdk = yield select(generator.selectors.sdk)
-    const { privateKey, contractAddress, publicKey } = yield sdk.createFutureWallet()
-    const proxyAddress = yield sdk.computeProxyAddress(publicKey)
-    console.log({ privateKey, contractAddress, publicKey, proxyAddress })
+    const { privateKey, contractAddress } = yield sdk.createFutureWallet()
     yield put({ type: 'USER.SET_USER_DATA', payload: { privateKey, contractAddress } })
   } catch (e) {
     console.error(e)

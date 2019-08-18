@@ -23,6 +23,7 @@ import { getHashVariables } from '@linkdrop/commons'
 @translate('pages.claim')
 class Claim extends React.Component {
   componentDidMount () {
+    const { contractAddress } = this.props
     const {
       linkKey,
       chainId,
@@ -30,6 +31,7 @@ class Claim extends React.Component {
       campaignId
     } = getHashVariables()
     this.actions().tokens.checkIfClaimed({ linkKey, chainId, linkdropMasterAddress, campaignId })
+    this.actions().assets.getItems({ wallet: contractAddress, chainId })
   }
 
   componentWillReceiveProps ({ readyToClaim, alreadyClaimed }) {
@@ -87,12 +89,12 @@ class Claim extends React.Component {
   }
 
   renderCurrentPage () {
-    const { step, itemsToClaim, userLoading, errors, alreadyClaimed, contractAddress } = this.props
+    const { step, itemsToClaim, userLoading, errors, alreadyClaimed, contractAddress, loading } = this.props
     const {
       chainId,
       linkdropMasterAddress
     } = getHashVariables()
-    const commonData = { linkdropMasterAddress, chainId, itemsToClaim, loading: userLoading, wallet: contractAddress }
+    const commonData = { linkdropMasterAddress, chainId, itemsToClaim, loading: userLoading || loading, wallet: contractAddress }
 
     if (errors && errors.length > 0) {
       // if some errors occured and can be found in redux store, then show error page
@@ -103,17 +105,14 @@ class Claim extends React.Component {
       // if tokens we already claimed (if wallet is totally empty).
       return <ClaimingFinishedPage
         {...commonData}
+        alreadyClaimed
       />
     }
     switch (step) {
       case 1:
         return <InitialPage
           {...commonData}
-          onClick={_ => {
-            if (true) { // account check
-              return this.actions().user.setStep({ step: 2 })
-            }
-          }}
+          onClick={_ => this.actions().user.setStep({ step: 2 })}
         />
       case 2:
         // claiming is in process

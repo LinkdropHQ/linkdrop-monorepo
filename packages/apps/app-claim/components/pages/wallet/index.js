@@ -2,11 +2,12 @@ import React from 'react'
 import { translate, actions } from 'decorators'
 import { Page } from 'components/pages'
 import styles from './styles.module'
-import { Icons } from '@linkdrop/ui-kit'
+import { Icons, Loading } from '@linkdrop/ui-kit'
 import { AssetBalance, AccountBalance } from 'components/common'
 import classNames from 'classnames'
+import { getHashVariables } from '@linkdrop/commons'
 
-@actions(({ assets: { items } }) => ({ items }))
+@actions(({ user: { loading, contractAddress }, assets: { items } }) => ({ items, loading, contractAddress }))
 @translate('pages.wallet')
 class Wallet extends React.Component {
   constructor (props) {
@@ -16,15 +17,26 @@ class Wallet extends React.Component {
     }
   }
 
+  componentDidMount () {
+    const { contractAddress, items } = this.props
+    const {
+      chainId
+    } = getHashVariables()
+    if (!items || items.length === 0) {
+      this.actions().assets.getItems({ wallet: contractAddress, chainId })
+    }
+  }
+
   render () {
     const { expandAssets } = this.state
-    const { items } = this.props
+    const { items, loading } = this.props
     const finalPrice = items.reduce((sum, item) => {
       sum = sum + (Number(item.balanceFormatted) * Number(item.price))
       return sum
     }, 0)
-    return <Page dynamicHeader>
+    return <Page >
       <div className={styles.container}>
+        {loading && <Loading withOverlay />}
         <AccountBalance balance={finalPrice} />
         <div className={classNames(styles.assets, { [styles.assetsExpanded]: expandAssets })}>
           <div className={styles.assetsHeader} onClick={_ => this.setState({ expandAssets: !expandAssets })}>

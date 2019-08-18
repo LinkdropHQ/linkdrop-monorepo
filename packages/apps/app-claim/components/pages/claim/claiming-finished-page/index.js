@@ -6,7 +6,7 @@ import { TokensAmount, AssetBalance, AccountBalance } from 'components/common'
 import dapps from 'dapps'
 import classNames from 'classnames'
 import { getHashVariables } from '@linkdrop/commons'
-import { Button, Icons } from '@linkdrop/ui-kit'
+import { Button, Icons, Loading } from '@linkdrop/ui-kit'
 import { getCurrentAsset } from 'helpers'
 
 @actions(({ assets: { items, itemsToClaim } }) => ({ items }))
@@ -25,7 +25,7 @@ class ClaimingFinishedPage extends React.Component {
   }
 
   render () {
-    const { items, itemsToClaim } = this.props
+    const { items, itemsToClaim, alreadyClaimed, loading } = this.props
     const { showAssets, expandAssets } = this.state
     const finalPrice = items.reduce((sum, item) => {
       sum = sum + (Number(item.balanceFormatted) * Number(item.price))
@@ -35,8 +35,9 @@ class ClaimingFinishedPage extends React.Component {
     if (!mainAsset) { return null }
     const { balanceFormatted, symbol } = mainAsset
     return <div className={commonStyles.container}>
+      {loading && <Loading withOverlay />}
       <AccountBalance balance={finalPrice} />
-      {!showAssets && <TokensAmount symbol={symbol} amount={balanceFormatted} />}
+      {!showAssets && <TokensAmount alreadyClaimed={alreadyClaimed} symbol={symbol} amount={balanceFormatted} />}
       {showAssets && this.renderAllAssets({ items, expandAssets })}
       {this.renderDappButton()}
     </div>

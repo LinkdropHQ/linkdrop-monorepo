@@ -20,12 +20,13 @@ class TokensAmount extends React.Component {
 
   render () {
     const { showMessage } = this.state
-    const { loading, symbol, amount, decimals } = this.props
+    const { loading, symbol, amount, decimals, alreadyClaimed } = this.props
     const text = this.defineText({ loading, symbol, amount })
     const icon = this.defineIcon({ loading })
     return <div className={styles.wrapper}>
       <div className={classNames(styles.container, {
-        [styles.loading]: loading
+        [styles.loading]: loading,
+        [styles.alreadyClaimed]: alreadyClaimed
       })}>
         {icon} {text}
       </div>

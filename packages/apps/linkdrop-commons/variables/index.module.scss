@@ -25,6 +25,7 @@ $greyStrokeColor: #E5E5E5;
 $darkOrangeColor: #F89D35;
 $greyStrokeMenuColor: #DADADA;
 $avatarDisabled: #DADADA;
+$alreadyClaimedColor: #DADADA;
 $dbMenuFooter: #F3F3F3;
 
 :export {
@@ -49,4 +50,5 @@ $dbMenuFooter: #F3F3F3;
   dbBlueTransparent: $dbBlueTransparent;
   greenColorTransparent: $greenColorTransparent;
   avatarDisabled: $avatarDisabled;
+  alreadyClaimedColor: $alreadyClaimedColor;
 }

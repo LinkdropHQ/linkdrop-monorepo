@@ -6,6 +6,7 @@ import text from 'texts'
 
 import styles from './styles.module'
 import commonStyles from '../styles.module'
+
 @translate('pages.claim')
 class InitialPage extends React.Component {
   constructor (props) {
@@ -37,7 +38,7 @@ class InitialPage extends React.Component {
       <div className={styles.title}>
         <span>{balanceFormatted}</span> {symbol}
       </div>
-      <Button loading={loading} className={styles.button} onClick={_ => onClick && onClick()}>
+      <Button disabled={loading} className={styles.button} onClick={_ => onClick && onClick()}>
         {text('common.buttons.claim')}
       </Button>
       <div className={styles.terms} dangerouslySetInnerHTML={{ __html: this.t('titles.agreeWithTerms', {
