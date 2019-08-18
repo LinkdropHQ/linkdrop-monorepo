@@ -405,44 +405,52 @@ function () {
               case 0:
                 gasPrice = _args9.length > 2 && _args9[2] !== undefined ? _args9[2] : _commons.DEFAULT_GAS_PRICE;
                 _context9.prev = 1;
-                _context9.next = 4;
+                console.log('privateKey', privateKey);
+                console.log('ensName', ensName);
+                _context9.next = 6;
                 return this._fetchFutureWalletFactory();
 
-              case 4:
+              case 6:
                 publicKey = new _ethers.ethers.Wallet(privateKey).address;
-                _context9.next = 7;
+                console.log('publicKey: ', publicKey);
+                console.log('gasPrice: ', gasPrice);
+                _context9.next = 11;
                 return this.sdk.futureWalletFactory.setupInitData(publicKey, ensName, gasPrice);
 
-              case 7:
+              case 11:
                 initData = _context9.sent;
-                _context9.next = 10;
+                console.log('initData: ', initData);
+                _context9.next = 15;
                 return (0, _commons.calculateInitializeSignature)(initData, privateKey);
 
-              case 10:
+              case 15:
                 signature = _context9.sent;
-                _context9.next = 13;
+                console.log('signature: ', signature);
+                _context9.next = 19;
                 return this.sdk.futureWalletFactory.relayerApi.deploy(publicKey, ensName, gasPrice, signature);
 
-              case 13:
+              case 19:
                 tx = _context9.sent;
+                console.log('tx: ', tx);
                 return _context9.abrupt("return", {
                   success: true,
                   txHash: tx.hash
                 });
 
-              case 17:
-                _context9.prev = 17;
+              case 24:
+                _context9.prev = 24;
                 _context9.t0 = _context9["catch"](1);
+                console.log('ERR420', _context9.t0);
                 return _context9.abrupt("return", {
                   errors: _context9.t0
                 });
 
-              case 20:
+              case 28:
               case "end":
                 return _context9.stop();
             }
           }
-        }, _callee9, this, [[1, 17]]);
+        }, _callee9, this, [[1, 24]]);
       }));
 
       function deploy(_x6, _x7) {

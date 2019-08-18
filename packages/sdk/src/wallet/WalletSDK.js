@@ -203,13 +203,16 @@ class WalletSDK {
       console.log('ensName', ensName)
       await this._fetchFutureWalletFactory()
       const publicKey = new ethers.Wallet(privateKey).address
-
+      console.log('publicKey: ', publicKey)
+      console.log('gasPrice: ', gasPrice)
       const initData = await this.sdk.futureWalletFactory.setupInitData(
         publicKey,
         ensName,
         gasPrice
       )
+      console.log('initData: ', initData)
       const signature = await calculateInitializeSignature(initData, privateKey)
+      console.log('signature: ', signature)
 
       const tx = await this.sdk.futureWalletFactory.relayerApi.deploy(
         publicKey,
@@ -218,8 +221,10 @@ class WalletSDK {
         signature
       )
 
+      console.log('tx: ', tx)
       return { success: true, txHash: tx.hash }
     } catch (err) {
+      console.log('ERR420', err)
       return { errors: err }
     }
   }
