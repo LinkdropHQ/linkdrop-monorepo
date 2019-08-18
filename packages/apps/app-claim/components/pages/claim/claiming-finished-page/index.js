@@ -9,7 +9,7 @@ import { getHashVariables } from '@linkdrop/commons'
 import { Button, Icons, Loading } from '@linkdrop/ui-kit'
 import { getCurrentAsset } from 'helpers'
 
-@actions(({ assets: { items, itemsToClaim } }) => ({ items }))
+@actions(({ assets: { items, itemsToClaim }, user: { ens } }) => ({ items, ens }))
 @translate('pages.claim')
 class ClaimingFinishedPage extends React.Component {
   constructor (props) {
@@ -51,7 +51,14 @@ class ClaimingFinishedPage extends React.Component {
     const dapp = dapps[dappId]
     if (!dapp) { return null }
     const { label, url } = dapp
-    return <Button href={url} target='_blank'>{this.t('buttons.goTo', { title: label })}</Button>
+    
+    const { ens } = this.props
+    const { chainId } = getHashVariables()
+    const network = chainId === '4' ? 'rinkeby' : 'mainnet'
+    const confirmUrl = encodeURIComponent(`${window.origin}/#/confirm`)
+    const dappUrl = `${url}?user=${ens}&network=${network}&confirmUrl=${confirmUrl}`
+    
+    return <Button href={dappUrl} target='_blank'>{this.t('buttons.goTo', { title: label })}</Button>
   }
 
   renderAllAssets ({ items, expandAssets }) {
