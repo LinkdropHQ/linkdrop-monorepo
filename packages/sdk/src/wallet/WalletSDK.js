@@ -268,7 +268,7 @@ class WalletSDK {
       privateKey
     )
 
-    return claimAndDeploy({
+    const claimAndDeployParams = {
       jsonRpcUrl: linkdropSDK.jsonRpcUrl,
       apiHost: linkdropSDK.apiHost,
       weiAmount,
@@ -289,7 +289,10 @@ class WalletSDK {
       publicKey,
       initializeWithENS,
       signature
-    })
+    }
+
+    console.log({ claimAndDeployParams })
+    return claimAndDeploy(claimAndDeployParams)
   }
 
   async execute (message, privateKey) {

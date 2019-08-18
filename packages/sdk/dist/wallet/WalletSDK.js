@@ -463,7 +463,7 @@ function () {
       var _claimAndDeploy2 = (0, _asyncToGenerator2["default"])(
       /*#__PURE__*/
       _regenerator["default"].mark(function _callee10(_ref8, _ref9) {
-        var weiAmount, tokenAddress, tokenAmount, expirationTime, linkKey, linkdropMasterAddress, linkdropSignerSignature, campaignId, _ref8$factoryAddress, factoryAddress, privateKey, ensName, _ref9$gasPrice, gasPrice, linkdropSDK, publicKey, contractAddress, initializeWithENS, signature;
+        var weiAmount, tokenAddress, tokenAmount, expirationTime, linkKey, linkdropMasterAddress, linkdropSignerSignature, campaignId, _ref8$factoryAddress, factoryAddress, privateKey, ensName, _ref9$gasPrice, gasPrice, linkdropSDK, publicKey, contractAddress, initializeWithENS, signature, claimAndDeployParams;
 
         return _regenerator["default"].wrap(function _callee10$(_context10) {
           while (1) {
@@ -498,60 +498,62 @@ function () {
 
               case 14:
                 signature = _context10.sent;
-                _context10.t0 = _claimAndDeploy3.claimAndDeploy;
-                _context10.t1 = linkdropSDK.jsonRpcUrl;
-                _context10.t2 = linkdropSDK.apiHost;
-                _context10.t3 = weiAmount;
-                _context10.t4 = tokenAddress;
-                _context10.t5 = tokenAmount;
-                _context10.t6 = expirationTime;
-                _context10.t7 = linkdropSDK.version[campaignId];
+                _context10.t0 = linkdropSDK.jsonRpcUrl;
+                _context10.t1 = linkdropSDK.apiHost;
+                _context10.t2 = weiAmount;
+                _context10.t3 = tokenAddress;
+                _context10.t4 = tokenAmount;
+                _context10.t5 = expirationTime;
+                _context10.t6 = linkdropSDK.version[campaignId];
 
-                if (_context10.t7) {
-                  _context10.next = 27;
+                if (_context10.t6) {
+                  _context10.next = 26;
                   break;
                 }
 
-                _context10.next = 26;
+                _context10.next = 25;
                 return linkdropSDK.getVersion(campaignId);
 
-              case 26:
-                _context10.t7 = _context10.sent;
+              case 25:
+                _context10.t6 = _context10.sent;
 
-              case 27:
-                _context10.t8 = _context10.t7;
-                _context10.t9 = linkdropSDK.chainId;
-                _context10.t10 = linkKey;
-                _context10.t11 = linkdropMasterAddress;
-                _context10.t12 = linkdropSignerSignature;
-                _context10.t13 = campaignId;
-                _context10.t14 = contractAddress;
-                _context10.t15 = factoryAddress;
-                _context10.t16 = this.sdk.futureWalletFactory.config.factoryAddress;
-                _context10.t17 = publicKey;
-                _context10.t18 = initializeWithENS;
-                _context10.t19 = signature;
-                _context10.t20 = {
-                  jsonRpcUrl: _context10.t1,
-                  apiHost: _context10.t2,
-                  weiAmount: _context10.t3,
-                  tokenAddress: _context10.t4,
-                  tokenAmount: _context10.t5,
-                  expirationTime: _context10.t6,
-                  version: _context10.t8,
-                  chainId: _context10.t9,
-                  linkKey: _context10.t10,
-                  linkdropMasterAddress: _context10.t11,
-                  linkdropSignerSignature: _context10.t12,
-                  campaignId: _context10.t13,
-                  receiverAddress: _context10.t14,
-                  factoryAddress: _context10.t15,
-                  walletFactory: _context10.t16,
-                  publicKey: _context10.t17,
-                  initializeWithENS: _context10.t18,
-                  signature: _context10.t19
+              case 26:
+                _context10.t7 = _context10.t6;
+                _context10.t8 = linkdropSDK.chainId;
+                _context10.t9 = linkKey;
+                _context10.t10 = linkdropMasterAddress;
+                _context10.t11 = linkdropSignerSignature;
+                _context10.t12 = campaignId;
+                _context10.t13 = contractAddress;
+                _context10.t14 = factoryAddress;
+                _context10.t15 = this.sdk.futureWalletFactory.config.factoryAddress;
+                _context10.t16 = publicKey;
+                _context10.t17 = initializeWithENS;
+                _context10.t18 = signature;
+                claimAndDeployParams = {
+                  jsonRpcUrl: _context10.t0,
+                  apiHost: _context10.t1,
+                  weiAmount: _context10.t2,
+                  tokenAddress: _context10.t3,
+                  tokenAmount: _context10.t4,
+                  expirationTime: _context10.t5,
+                  version: _context10.t7,
+                  chainId: _context10.t8,
+                  linkKey: _context10.t9,
+                  linkdropMasterAddress: _context10.t10,
+                  linkdropSignerSignature: _context10.t11,
+                  campaignId: _context10.t12,
+                  receiverAddress: _context10.t13,
+                  factoryAddress: _context10.t14,
+                  walletFactory: _context10.t15,
+                  publicKey: _context10.t16,
+                  initializeWithENS: _context10.t17,
+                  signature: _context10.t18
                 };
-                return _context10.abrupt("return", (0, _context10.t0)(_context10.t20));
+                console.log({
+                  claimAndDeployParams: claimAndDeployParams
+                });
+                return _context10.abrupt("return", (0, _claimAndDeploy3.claimAndDeploy)(claimAndDeployParams));
 
               case 41:
               case "end":
