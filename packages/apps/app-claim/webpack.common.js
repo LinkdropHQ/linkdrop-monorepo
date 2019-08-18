@@ -62,41 +62,43 @@ module.exports = {
     }
   },
   module: {
-    rules: [{
-      enforce: 'pre',
-      test: /\.(js|jsx)$/,
-      loader: 'standard-loader',
-      exclude: /(node_modules|bower_components|linkdrop-ui-kit)/,
-      options: {
-        parser: 'babel-eslint'
-      }
-    }, {
-      test: /\.(js|jsx)$/,
-      exclude: /node_modules/,
-      use: {
-        loader: 'babel-loader'
-      }
-    }, {
-      test: /\.(scss|css)$/,
-      exclude: /\.module\.scss$/,
-      use: [
-        'style-loader',
-        CSSLoader,
-        'sass-loader',
-        postCSSLoader
-      ]
-    }, {
-      test: /\.module\.scss$/,
-      use: [
-        'style-loader',
-        CSSModuleLoader,
-        'sass-loader',
-        postCSSLoader
-      ]
-    }, {
-      test: /\.(png|woff|woff2|eot|ttf|svg|otf|gif)$/,
-      loader: 'url-loader?limit=100000'
-    }]
+    rules: [
+      {
+        enforce: 'pre',
+        test: /\.(js|jsx)$/,
+        loader: 'standard-loader',
+        exclude: /(node_modules|bower_components|linkdrop-ui-kit)/,
+        options: {
+          parser: 'babel-eslint'
+        }
+      },
+      {
+        test: /\.(js|jsx)$/,
+        exclude: /node_modules/,
+        use: {
+          loader: 'babel-loader'
+        }
+      }, {
+        test: /\.(scss|css)$/,
+        exclude: /\.module\.scss$/,
+        use: [
+          'style-loader',
+          CSSLoader,
+          'sass-loader',
+          postCSSLoader
+        ]
+      }, {
+        test: /\.module\.scss$/,
+        use: [
+          'style-loader',
+          CSSModuleLoader,
+          'sass-loader',
+          postCSSLoader
+        ]
+      }, {
+        test: /\.(png|woff|woff2|eot|ttf|svg|otf|gif)$/,
+        loader: 'url-loader?limit=100000'
+      }]
   },
   plugins: [
     new webpack.HotModuleReplacementPlugin(),

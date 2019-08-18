@@ -2,6 +2,7 @@ import UniversalLoginSDK from '@universal-login/sdk'
 import { LinkdropSDK } from '@linkdrop/sdk'
 import { DeploymentReadyObserver } from '@universal-login/sdk/dist/lib/core/observers/DeploymentReadyObserver'
 import { FutureWalletFactory } from '@universal-login/sdk/dist/lib/api/FutureWalletFactory'
+
 import {
   calculateInitializeSignature,
   ensureNotNull,
@@ -10,6 +11,8 @@ import {
   ETHER_NATIVE_TOKEN,
   OPERATION_CALL
 } from '@universal-login/commons'
+
+import LinkdropFactory from '@linkdrop/contracts/build/LinkdropFactory.json'
 
 import { ethers, utils } from 'ethers'
 import { claimAndDeploy } from './claimAndDeploy'
@@ -20,7 +23,7 @@ class WalletSDK {
     if (chain !== 'mainnet' && chain !== 'rinkeby') {
       throw new Error('Chain not supported')
     }
-    
+
     this.chain = chain
     this.jsonRpcUrl = `https://${chain}.infura.io`
 
@@ -154,17 +157,64 @@ class WalletSDK {
     }
   }
 
+  async getDeployData ({ privateKey, ensName, gasPrice = DEFAULT_GAS_PRICE }) {
+    await this._fetchFutureWalletFactory()
+    const publicKey = new ethers.Wallet(privateKey).address
+
+    const initData = await this.sdk.futureWalletFactory.setupInitData(
+      publicKey,
+      ensName,
+      gasPrice
+    )
+    const signature = await calculateInitializeSignature(initData, privateKey)
+
+    return { initData, signature }
+  }
+
+  async getClaimData ({
+    weiAmount,
+    tokenAddress,
+    tokenAmount,
+    expirationTime,
+    linkId,
+    linkdropMasterAddress,
+    campaignId,
+    linkdropSignerSignature,
+    receiverAddress,
+    receiverSignature
+  }) {
+    return new ethers.utils.Interface(
+      LinkdropFactory.abi
+    ).functions.claim.encode([
+      weiAmount,
+      tokenAddress,
+      tokenAmount,
+      expirationTime,
+      linkId,
+      linkdropMasterAddress,
+      campaignId,
+      linkdropSignerSignature,
+      receiverAddress,
+      receiverSignature
+    ])
+  }
+
   async deploy (privateKey, ensName, gasPrice = DEFAULT_GAS_PRICE) {
     try {
+      console.log('privateKey', privateKey)
+      console.log('ensName', ensName)
       await this._fetchFutureWalletFactory()
       const publicKey = new ethers.Wallet(privateKey).address
-
+      console.log('publicKey: ', publicKey)
+      console.log('gasPrice: ', gasPrice)
       const initData = await this.sdk.futureWalletFactory.setupInitData(
         publicKey,
         ensName,
         gasPrice
       )
+      console.log('initData: ', initData)
       const signature = await calculateInitializeSignature(initData, privateKey)
+      console.log('signature: ', signature)
 
       const tx = await this.sdk.futureWalletFactory.relayerApi.deploy(
         publicKey,
@@ -173,8 +223,10 @@ class WalletSDK {
         signature
       )
 
+      console.log('tx: ', tx)
       return { success: true, txHash: tx.hash }
     } catch (err) {
+      console.log('ERR420', err)
       return { errors: err }
     }
   }
@@ -189,9 +241,13 @@ class WalletSDK {
       linkdropMasterAddress,
       linkdropSignerSignature,
       campaignId,
-      factoryAddress
+      factoryAddress = '0xBa051891B752ecE3670671812486fe8dd34CC1c8'
     },
-    { privateKey, ensName, gasPrice = 5e9 }
+    {
+      privateKey,
+      ensName,
+      gasPrice = ethers.utils.parseUnits('5', 'gwei').toString()
+    }
   ) {
     const linkdropSDK = new LinkdropSDK({
       linkdropMasterAddress,
@@ -206,14 +262,17 @@ class WalletSDK {
 
     const contractAddress = await this.computeProxyAddress(publicKey)
 
-    const initData = await this.sdk.futureWalletFactory.setupInitData(
+    const initializeWithENS = await this.sdk.futureWalletFactory.setupInitData(
       publicKey,
       ensName,
       gasPrice
     )
-    const signature = await calculateInitializeSignature(initData, privateKey)
+    const signature = await calculateInitializeSignature(
+      initializeWithENS,
+      privateKey
+    )
 
-    return claimAndDeploy({
+    const claimAndDeployParams = {
       jsonRpcUrl: linkdropSDK.jsonRpcUrl,
       apiHost: linkdropSDK.apiHost,
       weiAmount,
@@ -232,15 +291,18 @@ class WalletSDK {
       factoryAddress,
       walletFactory: this.sdk.futureWalletFactory.config.factoryAddress,
       publicKey,
-      initializeWithENS: initData,
+      initializeWithENS,
       signature
-    })
+    }
+
+    console.log({ claimAndDeployParams })
+    return claimAndDeploy(claimAndDeployParams)
   }
 
   async execute (message, privateKey) {
     try {
       message = {
-          ...message,
+        ...message,
         operationType: OPERATION_CALL,
         gasToken: ETHER_NATIVE_TOKEN.address,
         gasLimit: utils.bigNumberify('1000000'),
@@ -252,7 +314,7 @@ class WalletSDK {
       const { messageStatus } = result
       return { success: true, txHash: messageStatus.messageHash }
     } catch (err) {
-      return { errors: err, susccess: false }
+      return { errors: err, success: false }
     }
   }
 

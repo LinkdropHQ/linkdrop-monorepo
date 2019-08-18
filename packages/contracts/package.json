@@ -1,6 +1,6 @@
 {
   "name": "@linkdrop/contracts",
-  "version": "1.0.16",
+  "version": "1.0.31",
   "main": "index.js",
   "license": "MIT",
   "scripts": {
@@ -11,7 +11,7 @@
     "access": "public"
   },
   "dependencies": {
-    "@linkdrop/sdk": "^1.0.16",
+    "@linkdrop/sdk": "^1.0.31",
     "ethereum-waffle": "^2.0.14",
     "ethers": "^4.0.27",
     "openzeppelin-solidity": "^2.2.0",
@@ -23,7 +23,8 @@
     "@babel/node": "^7.2.2",
     "@babel/polyfill": "^7.4.3",
     "@babel/preset-env": "^7.4.0",
-    "@babel/register": "^7.4.0"
+    "@babel/register": "^7.4.0",
+    "@universal-login/contracts": "^0.3.18"
   },
   "standard": {
     "parser": "babel-eslint"

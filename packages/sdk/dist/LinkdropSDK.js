@@ -23,7 +23,7 @@ var generateLinkUtils = _interopRequireWildcard(require("./generateLink"));
 
 var claimUtils = _interopRequireWildcard(require("./claim"));
 
-var _LinkdropFactory = _interopRequireDefault(require("../../contracts/build/LinkdropFactory"));
+var _LinkdropFactory = _interopRequireDefault(require("@linkdrop/contracts/build/LinkdropFactory"));
 
 var _ethers = require("ethers");
 

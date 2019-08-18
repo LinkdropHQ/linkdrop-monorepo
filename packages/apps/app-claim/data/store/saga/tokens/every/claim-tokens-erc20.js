@@ -7,9 +7,12 @@ const generator = function * ({ payload }) {
   try {
     const { campaignId, tokenAddress, tokenAmount, weiAmount, expirationTime, linkKey, linkdropMasterAddress, linkdropSignerSignature } = payload
     yield put({ type: 'USER.SET_LOADING', payload: { loading: true } })
-    console.log(ls.getItem('contractAddress'))
     const sdk = yield select(generator.selectors.sdk)
-    const { success, errors, txHash } = yield sdk.claim({
+    const ens = yield select(generator.selectors.ens)
+    const privateKey = yield select(generator.selectors.privateKey)
+    const walletContractExist = yield sdk.walletContractExist(ens)
+    let result = {}
+    const claimParams = {
       weiAmount: weiAmount || '0',
       tokenAddress,
       tokenAmount: tokenAmount || '0',
@@ -20,8 +23,20 @@ const generator = function * ({ payload }) {
       receiverAddress: ls && ls.getItem('contractAddress'),
       campaignId,
       factoryAddress: factory
-    })
+    }
 
+    if (walletContractExist) {
+      console.log('...claiming')
+      result = yield sdk.claim(claimParams)
+    } else {
+      const deployParams = {
+        privateKey,
+        ensName: ens
+      }
+      console.log('...claiming and deploy')
+      result = yield sdk.claimAndDeploy(claimParams, deployParams)
+    }
+    const { success, errors, txHash } = result
     if (success) {
       yield put({ type: 'TOKENS.SET_TRANSACTION_ID', payload: { transactionId: txHash } })
     } else {
@@ -42,5 +57,7 @@ const generator = function * ({ payload }) {
 
 export default generator
 generator.selectors = {
-  sdk: ({ user: { sdk } }) => sdk
+  sdk: ({ user: { sdk } }) => sdk,
+  ens: ({ user: { ens } }) => ens,
+  privateKey: ({ user: { privateKey } }) => privateKey
 }

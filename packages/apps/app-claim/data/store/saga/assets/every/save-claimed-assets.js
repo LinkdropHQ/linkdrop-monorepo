@@ -7,7 +7,6 @@ const generator = function * ({ payload }) {
     const itemsToClaim = yield select(generator.selectors.itemsToClaim)
     const itemsUpdated = items.concat(itemsToClaim)
     yield put({ type: 'ASSETS.SET_ITEMS', payload: { items: itemsUpdated } })
-    yield put({ type: '*CONTRACTS.DEPLOY' })
     yield put({ type: 'USER.SET_STEP', payload: { step: 3 } })
     yield put({ type: 'USER.SET_LOADING', payload: { loading: false } })
   } catch (e) {

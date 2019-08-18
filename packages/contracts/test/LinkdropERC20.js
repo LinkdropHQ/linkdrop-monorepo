@@ -9,9 +9,14 @@ import {
   solidity
 } from 'ethereum-waffle'
 
+import { getDeployData } from '@universal-login/contracts'
+import ProxyContract from '@universal-login/contracts/build/Proxy.json'
+
 import LinkdropFactory from '../build/LinkdropFactory'
 import LinkdropMastercopy from '../build/LinkdropMastercopy'
 import TokenMock from '../build/TokenMock'
+import ProxyCounterfactualFactory from '../metadata/ProxyCounterfactualFactory'
+import WalletMasterWithRefund from '../metadata/WalletMasterWithRefund'
 
 import {
   computeProxyAddress,
@@ -19,6 +24,9 @@ import {
   signReceiverAddress,
   computeBytecode
 } from '../scripts/utils'
+
+import { WalletSDK } from '@linkdrop/sdk'
+import { AddressZero } from 'ethers/constants'
 
 const ethers = require('ethers')
 
@@ -55,6 +63,8 @@ let standardFee
 
 const initcode = '0x6352c7420d6000526103ff60206004601c335afa6040516060f3'
 const chainId = 4 // Rinkeby
+
+let walletMasterCopy, walletFactory
 
 describe('ETH/ERC20 linkdrop tests', () => {
   before(async () => {
@@ -851,4 +861,72 @@ describe('ETH/ERC20 linkdrop tests', () => {
       )
     ).to.be.revertedWith('LINKDROP_PROXY_CONTRACT_NOT_DEPLOYED')
   })
+
+  it('should deploy wallet master', async () => {
+    walletMasterCopy = await deployContract(
+      linkdropMaster,
+      WalletMasterWithRefund,
+      [],
+      {
+        gasLimit: 6000000
+      }
+    )
+    expect(walletMasterCopy.address).to.not.eq(ethers.constants.AddressZero)
+  })
+
+  it('should deploy wallet factory', async () => {
+    const initData = getDeployData(ProxyContract, [
+      walletMasterCopy.address,
+      '0x0'
+    ])
+
+    walletFactory = await deployContract(
+      linkdropMaster,
+      ProxyCounterfactualFactory,
+      [initData, factory.address],
+      {
+        gasLimit: 6000000
+      }
+    )
+    expect(walletFactory.address).to.not.eq(ethers.constants.AddressZero)
+  })
+
+  // it('Should claim and deploy', async () => {
+  //   // Approving tokens from linkdropMaster to Linkdrop Contract
+  //   await tokenInstance.approve(proxyAddress, tokenAmount)
+  //   link = await createLink(
+  //     linkdropSigner,
+  //     weiAmount,
+  //     tokenAddress,
+  //     tokenAmount,
+  //     expirationTime,
+  //     version,
+  //     chainId,
+  //     proxyAddress
+  //   )
+
+  //   receiverAddress = ethers.Wallet.createRandom().address
+
+  //   let balance = await provider.getBalance(receiverAddress)
+  //   console.log('balance: ', +balance)
+  //   receiverSignature = await signReceiverAddress(link.linkKey, receiverAddress)
+
+  //   const tx = await factory.claimAndDeploy(
+  //     weiAmount,
+  //     tokenAddress,
+  //     tokenAmount,
+  //     expirationTime,
+  //     link.linkId,
+  //     linkdropMaster.address, // New
+  //     campaignId,
+  //     link.linkdropSignerSignature,
+  //     receiverAddress,
+  //     receiverSignature,
+  //     AddressZero,
+  //     setStrData
+  //   )
+
+  //   balance = await provider.getBalance(receiverAddress)
+  //   console.log('balance: ', +balance)
+  // })
 })

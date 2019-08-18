@@ -75,17 +75,18 @@ class ClaimService {
     // Check whether a claim tx exists in database
     const claim = await this.findClaimInDB(params)
     if (claim) {
-	logger.info(`Existing claim transaction found: ${claim.id}`)
-	
-	if (!claim.transactions) {
-	    logger.warn(`Existing claim transaction found: ${claim.id} without transactions`)
-	    throw new Error('Claim link was already submitted')
-	}
+      logger.info(`Existing claim transaction found: ${claim.id}`)
 
-	// retrieving the latest transactoin and returning it's tx hash
-	const tx = claim.transactions[claim.transactions.length - 1]
-	return tx.hash
+      if (!claim.transactions) {
+        logger.warn(
+          `Existing claim transaction found: ${claim.id} without transactions`
+        )
+        throw new Error('Claim link was already submitted')
+      }
 
+      // retrieving the latest transactoin and returning it's tx hash
+      const tx = claim.transactions[claim.transactions.length - 1]
+      return tx.hash
     }
     logger.debug("Claim doesn't exist in database yet. Creating new claim...")
 

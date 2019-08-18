@@ -18,26 +18,26 @@ class Confirm extends React.Component {
       txParams: null,
       btnDisabled: false
     }
-    
+
     window.addEventListener('message', this._receiveMessage.bind(this), false)
   }
 
   _closeWindow () {
-     setTimeout(() => { // let post event before closing window
-          window.close()
-     }, 300)
+    setTimeout(() => { // let post event before closing window
+      window.close()
+    }, 300)
   }
 
   _onCancelClick () {
     this.setState({ btnDisabled: true })
     this.dappPage.postMessage({ action: 'PASS_TRANSACTION_RESULT', payload: { success: false } },
-                               this.state.dappUrl)
+      this.state.dappUrl)
     this._closeWindow()
   }
 
   async _onConfirmClick () {
     this.setState({ btnDisabled: true })
-    
+
     const { sdk, privateKey, contractAddress } = this.props
     const {
       data,
@@ -56,12 +56,12 @@ class Confirm extends React.Component {
     console.log({ txHash, success, errors })
     // pass result to dapp window
     this.dappPage.postMessage({ action: 'PASS_TRANSACTION_RESULT', payload: { txHash, success } },
-                     this.state.dappUrl)
+      this.state.dappUrl)
 
     // close this window
     this._closeWindow()
   }
-  
+
   _receiveMessage (event) {
     // Do we trust the sender of this message?
     // if (event.origin !== DAPP_URL) return
@@ -75,7 +75,7 @@ class Confirm extends React.Component {
       const txParams = event.data.payload.txParams
 
       this.dappPage = event.source
-      
+
       this.setState({
         txParams,
         dappUrl: event.origin,
@@ -83,7 +83,7 @@ class Confirm extends React.Component {
       })
     }
   }
-  
+
   render () {
     // waiting for SEND_TRANSACTION event with tx params data
     if (this.state.loading) {
@@ -98,14 +98,14 @@ class Confirm extends React.Component {
       reducerDct[url] = label
       return reducerDct
     }, {})
-          
+
     const dappName = dct[this.state.dappUrl] || this.state.dappUrl
-    
+
     return <Page dynamicHeader>
       <div className={classNames(styles.container)}>
-      <div className={styles.title} dangerouslySetInnerHTML={{ __html: this.t('titles.main', { dappUrl: this.state.dappUrl, dappName }) }} />
+        <div className={styles.title} dangerouslySetInnerHTML={{ __html: this.t('titles.main', { dappUrl: this.state.dappUrl, dappName }) }} />
         <div className={styles.buttonsContainer}>
-      <Button disabled={this.state.btnDisabled} inverted className={styles.button} onClick={() => this._onCancelClick()}>{this.t('buttons.cancel')}</Button>
+          <Button disabled={this.state.btnDisabled} inverted className={styles.button} onClick={() => this._onCancelClick()}>{this.t('buttons.cancel')}</Button>
           <Button disabled={this.state.btnDisabled} className={styles.button} onClick={() => this._onConfirmClick()} >{this.t('buttons.confirm')}</Button>
         </div>
         <div className={styles.extraInfo} dangerouslySetInnerHTML={{ __html: this.t('descriptions.extraInfo') }} />
