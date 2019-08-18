@@ -6,6 +6,7 @@ import { Page } from 'components/pages'
 import { getEns } from 'helpers'
 import { actions } from 'decorators'
 import config from 'app.config.js'
+import { getHashVariables } from '@linkdrop/commons'
 
 @actions(({ user: { sdk, privateKey, contractAddress, ens, loading } }) => ({ loading, sdk, contractAddress, privateKey, ens }))
 class Authorization extends React.Component {
@@ -73,7 +74,10 @@ class Authorization extends React.Component {
   }
 
   getFiles ({ email, avatar }) {
-    const ens = getEns({ email })
+    const {
+      chainId
+    } = getHashVariables()
+    const ens = getEns({ email, chainId })
     gapi.client.drive.files.list({
       spaces: 'appDataFolder'
     }).then(response => {

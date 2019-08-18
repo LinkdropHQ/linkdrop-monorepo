@@ -7,6 +7,8 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports["default"] = void 0;
 
+var _defineProperty2 = _interopRequireDefault(require("@babel/runtime/helpers/defineProperty"));
+
 var _slicedToArray2 = _interopRequireDefault(require("@babel/runtime/helpers/slicedToArray"));
 
 var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"));
@@ -31,6 +33,10 @@ var _ethers = require("ethers");
 
 var _claimAndDeploy3 = require("./claimAndDeploy");
 
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(source, true).forEach(function (key) { (0, _defineProperty2["default"])(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(source).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
 var WalletSDK =
 /*#__PURE__*/
 function () {
@@ -45,7 +51,7 @@ function () {
 
     this.chain = chain;
     this.jsonRpcUrl = "https://".concat(chain, ".infura.io");
-    this.sdk = new _sdk["default"]('http://rinkeby.linkdrop.io:11004', this.jsonRpcUrl);
+    this.sdk = new _sdk["default"]("https://".concat(chain, "-ul.linkdrop.io"), this.jsonRpcUrl);
   }
 
   (0, _createClass2["default"])(WalletSDK, [{
@@ -490,37 +496,49 @@ function () {
       var _execute = (0, _asyncToGenerator2["default"])(
       /*#__PURE__*/
       _regenerator["default"].mark(function _callee9(message, privateKey) {
-        var _ref8, messageStatus;
-
+        var result, messageStatus;
         return _regenerator["default"].wrap(function _callee9$(_context9) {
           while (1) {
             switch (_context9.prev = _context9.next) {
               case 0:
                 _context9.prev = 0;
-                _context9.next = 3;
+                message = _objectSpread({}, message, {
+                  operationType: _commons.OPERATION_CALL,
+                  gasToken: _commons.ETHER_NATIVE_TOKEN.address,
+                  gasLimit: _ethers.utils.bigNumberify('500000'),
+                  gasPrice: _ethers.utils.bigNumberify(String(20e9))
+                });
+                console.log({
+                  message: message
+                });
+                _context9.next = 5;
                 return this.sdk.execute(message, privateKey);
 
-              case 3:
-                _ref8 = _context9.sent;
-                messageStatus = _ref8.messageStatus;
+              case 5:
+                result = _context9.sent;
+                console.log({
+                  result: result
+                });
+                messageStatus = result.messageStatus;
                 return _context9.abrupt("return", {
                   success: true,
-                  txHash: messageStatus.transactionHash
-                });
-
-              case 8:
-                _context9.prev = 8;
-                _context9.t0 = _context9["catch"](0);
-                return _context9.abrupt("return", {
-                  errors: _context9.t0
+                  txHash: messageStatus.messageHash
                 });
 
               case 11:
+                _context9.prev = 11;
+                _context9.t0 = _context9["catch"](0);
+                return _context9.abrupt("return", {
+                  errors: _context9.t0,
+                  susccess: false
+                });
+
+              case 14:
               case "end":
                 return _context9.stop();
             }
           }
-        }, _callee9, this, [[0, 8]]);
+        }, _callee9, this, [[0, 11]]);
       }));
 
       function execute(_x8, _x9) {

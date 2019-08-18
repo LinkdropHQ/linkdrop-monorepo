@@ -26,7 +26,7 @@ class Confirm extends React.Component {
   _closeWindow () {
      setTimeout(() => { // let post event before closing window
           window.close()
-     }, 0)
+     }, 300)
   }
 
   _onCancelClick () {

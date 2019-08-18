@@ -20,7 +20,7 @@ class WalletSDK {
     if (chain !== 'mainnet' && chain !== 'rinkeby') {
       throw new Error('Chain not supported')
     }
-
+    
     this.chain = chain
     this.jsonRpcUrl = `https://${chain}.infura.io`
 
@@ -244,7 +244,7 @@ class WalletSDK {
         operationType: OPERATION_CALL,
         gasToken: ETHER_NATIVE_TOKEN.address,
         gasLimit: utils.bigNumberify('1000000'),
-        gasPrice: utils.bigNumberify('8700000')
+        gasPrice: utils.bigNumberify(String(20e9))
       }
       console.log({ message })
       const result = await this.sdk.execute(message, privateKey)

@@ -134,10 +134,10 @@ class App extends React.Component {
       className='App-link'
       onClick={this._submitTestTx.bind(this)}
         >
-          Continue
+          Submit Test Tx
         </button>
       )
-    }
+     }
 
     return (
      <button

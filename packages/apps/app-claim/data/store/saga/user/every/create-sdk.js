@@ -10,6 +10,7 @@ import { defineNetworkName } from '@linkdrop/commons'
 
 const generator = function * ({ payload }) {
   try {
+    console.log({ payload })
     const { chainId } = payload
     console.log({ chainId })
     const networkName = defineNetworkName({ chainId })
