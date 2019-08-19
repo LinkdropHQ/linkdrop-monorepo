@@ -10,7 +10,7 @@ import { defineNetworkName } from '@linkdrop/commons'
 
 const generator = function * ({ payload }) {
   try {
-    const { chainId } = payload
+    const { chainId = '4' } = payload
     const networkName = defineNetworkName({ chainId })
     // const apiHost = Number(chainId) === 1 ? apiHostMainnet : apiHostRinkeby
     const sdk = initializeWalletSdk({ chain: 'rinkeby' })
