@@ -7,6 +7,8 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports["default"] = void 0;
 
+var _defineProperty2 = _interopRequireDefault(require("@babel/runtime/helpers/defineProperty"));
+
 var _slicedToArray2 = _interopRequireDefault(require("@babel/runtime/helpers/slicedToArray"));
 
 var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"));
@@ -33,6 +35,10 @@ var _ethers = require("ethers");
 
 var _claimAndDeploy3 = require("./claimAndDeploy");
 
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(source, true).forEach(function (key) { (0, _defineProperty2["default"])(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(source).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
 var WalletSDK =
 /*#__PURE__*/
 function () {
@@ -47,7 +53,7 @@ function () {
 
     this.chain = chain;
     this.jsonRpcUrl = "https://".concat(chain, ".infura.io");
-    this.sdk = new _sdk["default"]('http://rinkeby.linkdrop.io:11004', this.jsonRpcUrl);
+    this.sdk = new _sdk["default"]("https://".concat(chain, "-ul.linkdrop.io"), this.jsonRpcUrl);
   }
 
   (0, _createClass2["default"])(WalletSDK, [{
@@ -574,37 +580,49 @@ function () {
       var _execute = (0, _asyncToGenerator2["default"])(
       /*#__PURE__*/
       _regenerator["default"].mark(function _callee11(message, privateKey) {
-        var _ref10, messageStatus;
-
+        var result, messageStatus;
         return _regenerator["default"].wrap(function _callee11$(_context11) {
           while (1) {
             switch (_context11.prev = _context11.next) {
               case 0:
                 _context11.prev = 0;
-                _context11.next = 3;
+                message = _objectSpread({}, message, {
+                  operationType: _commons.OPERATION_CALL,
+                  gasToken: _commons.ETHER_NATIVE_TOKEN.address,
+                  gasLimit: _ethers.utils.bigNumberify('1000000'),
+                  gasPrice: _ethers.utils.bigNumberify(String(20e9))
+                });
+                console.log({
+                  message: message
+                });
+                _context11.next = 5;
                 return this.sdk.execute(message, privateKey);
 
-              case 3:
-                _ref10 = _context11.sent;
-                messageStatus = _ref10.messageStatus;
+              case 5:
+                result = _context11.sent;
+                console.log({
+                  result: result
+                });
+                messageStatus = result.messageStatus;
                 return _context11.abrupt("return", {
                   success: true,
-                  txHash: messageStatus.transactionHash
-                });
-
-              case 8:
-                _context11.prev = 8;
-                _context11.t0 = _context11["catch"](0);
-                return _context11.abrupt("return", {
-                  errors: _context11.t0
+                  txHash: messageStatus.messageHash
                 });
 
               case 11:
+                _context11.prev = 11;
+                _context11.t0 = _context11["catch"](0);
+                return _context11.abrupt("return", {
+                  errors: _context11.t0,
+                  success: false
+                });
+
+              case 14:
               case "end":
                 return _context11.stop();
             }
           }
-        }, _callee11, this, [[0, 8]]);
+        }, _callee11, this, [[0, 11]]);
       }));
 
       function execute(_x10, _x11) {
