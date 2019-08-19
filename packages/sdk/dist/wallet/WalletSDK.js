@@ -477,7 +477,7 @@ function () {
                   linkdropMasterAddress: linkdropMasterAddress,
                   chain: this.chain,
                   jsonRpcUrl: this.jsonRpcUrl,
-                  apiHost: "http://localhost:5000",
+                  apiHost: "https://".concat(this.chain, ".linkdrop.io"),
                   factoryAddress: factoryAddress
                 });
                 _context10.next = 5;
@@ -552,12 +552,9 @@ function () {
                   initializeWithENS: _context10.t17,
                   signature: _context10.t18
                 };
-                console.log({
-                  claimAndDeployParams: claimAndDeployParams
-                });
                 return _context10.abrupt("return", (0, _claimAndDeploy3.claimAndDeploy)(claimAndDeployParams));
 
-              case 41:
+              case 40:
               case "end":
                 return _context10.stop();
             }

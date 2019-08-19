@@ -46,37 +46,37 @@ class ClaimServiceERC20 extends ClaimServiceBase {
     initializeWithENS,
     signature
   }) {
-    // this._checkClaimParams({
-    //   weiAmount,
-    //   tokenAddress,
-    //   tokenAmount,
-    //   expirationTime,
-    //   linkId,
-    //   linkdropMasterAddress,
-    //   campaignId,
-    //   version,
-    //   chainId,
-    //   linkdropSignerSignature,
-    //   receiverAddress,
-    //   receiverSignature,
-    //   walletFactory,
-    //   publicKey,
-    //   initializeWithENS,
-    //   signature
-    // })
+    super._checkClaimParamsBase({
+      weiAmount,
+      tokenAddress,
+      tokenAmount,
+      expirationTime,
+      linkId,
+      linkdropMasterAddress,
+      campaignId,
+      version,
+      chainId,
+      linkdropSignerSignature,
+      receiverAddress,
+      receiverSignature,
+      walletFactory,
+      publicKey,
+      initializeWithENS,
+      signature
+    })
 
-    // if (!walletFactory) {
-    //   throw new BadRequestError('Please provide walletFactory argument')
-    // }
-    // if (!publicKey) {
-    //   throw new BadRequestError('Please provide publicKey argument')
-    // }
-    // if (!initializeWithENS) {
-    //   throw new BadRequestError('Please provide initializeWithENS argument')
-    // }
-    // if (!signature) {
-    //   throw new BadRequestError('Please provide signature argument')
-    // }
+    if (!walletFactory) {
+      throw new BadRequestError('Please provide walletFactory argument')
+    }
+    if (!publicKey) {
+      throw new BadRequestError('Please provide publicKey argument')
+    }
+    if (!initializeWithENS) {
+      throw new BadRequestError('Please provide initializeWithENS argument')
+    }
+    if (!signature) {
+      throw new BadRequestError('Please provide signature argument')
+    }
 
     const claimData = await walletService.getClaimData({
       weiAmount,
@@ -89,6 +89,26 @@ class ClaimServiceERC20 extends ClaimServiceBase {
       linkdropSignerSignature,
       receiverAddress,
       receiverSignature
+    })
+
+    logger.json({
+      weiAmount,
+      tokenAddress,
+      tokenAmount,
+      expirationTime,
+      linkId,
+      linkdropMasterAddress,
+      campaignId,
+      version,
+      chainId,
+      linkdropSignerSignature,
+      receiverAddress,
+      receiverSignature,
+      claimData,
+      walletFactory,
+      publicKey,
+      initializeWithENS,
+      signature
     })
 
     return walletFactoryService.claimAndDeploy({

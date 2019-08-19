@@ -251,7 +251,7 @@ class WalletSDK {
       linkdropMasterAddress,
       chain: this.chain,
       jsonRpcUrl: this.jsonRpcUrl,
-      apiHost: `http://localhost:5000`,
+      apiHost: `https://${this.chain}.linkdrop.io`,
       factoryAddress
     })
 
@@ -293,7 +293,6 @@ class WalletSDK {
       signature
     }
 
-    console.log({ claimAndDeployParams })
     return claimAndDeploy(claimAndDeployParams)
   }
 
