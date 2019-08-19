@@ -295,7 +295,6 @@ class WalletSDK {
       signature
     }
 
-    console.log({ claimAndDeployParams })
     return claimAndDeploy(claimAndDeployParams)
   }
 
