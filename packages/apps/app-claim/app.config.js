@@ -12,6 +12,7 @@
   AUTH_DISCOVERY_DOCS,
   AUTH_SCOPE
 */
+
 let config
 let authConfig
 try {
@@ -37,7 +38,7 @@ const initialBlockRinkeby = INITIAL_BLOCK_RINKEBY || config.initialBlockRinkeby
 
 const authClientId = AUTH_CLIENT_ID || authConfig.clientId
 const authApiKey = AUTH_API_KEY || authConfig.apiKey
-const authDiscoveryDocs = JSON.parse(AUTH_DISCOVERY_DOCS) || authConfig.discoveryDocs
+const authDiscoveryDocs = (AUTH_DISCOVERY_DOCS !== undefined && JSON.parse(AUTH_DISCOVERY_DOCS)) || authConfig.discoveryDocs
 const authScope = AUTH_SCOPE || authConfig.scope
 
 module.exports = {
