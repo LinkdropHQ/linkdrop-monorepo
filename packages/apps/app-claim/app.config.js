@@ -37,7 +37,7 @@ const initialBlockRinkeby = INITIAL_BLOCK_RINKEBY || config.initialBlockRinkeby
 
 const authClientId = AUTH_CLIENT_ID || authConfig.clientId
 const authApiKey = AUTH_API_KEY || authConfig.apiKey
-const authDiscoveryDocs = AUTH_DISCOVERY_DOCS || authConfig.discoveryDocs
+const authDiscoveryDocs = JSON.parse(AUTH_DISCOVERY_DOCS) || authConfig.discoveryDocs
 const authScope = AUTH_SCOPE || authConfig.scope
 
 module.exports = {
