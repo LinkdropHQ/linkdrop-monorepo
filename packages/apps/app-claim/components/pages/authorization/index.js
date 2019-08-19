@@ -40,7 +40,6 @@ class Authorization extends React.Component {
   }
 
   initClient () {
-    console.log({ config })
     gapi.client.init({
       clientId: config.authClientId,
       apiKey: config.authApiKey,
@@ -80,7 +79,7 @@ class Authorization extends React.Component {
     const {
       chainId
     } = getHashVariables()
-    const ens = getEns({ email, chainId })
+
     gapi.client.drive.files.list({
       spaces: 'appDataFolder'
     }).then(response => {
@@ -93,11 +92,12 @@ class Authorization extends React.Component {
             alt: 'media'
           })
           .execute(response => {
-            const { privateKey, contractAddress, avatar } = response
+            const { privateKey, contractAddress, avatar, ens } = response
             console.log('from google drive: ', { privateKey, contractAddress, avatar, ens })
             this.actions().user.setUserData({ privateKey, contractAddress, ens, avatar })
           })
       } else {
+        const ens = getEns({ email, chainId })
         const { contractAddress, privateKey } = this.props
         const boundary = '-------314159265358979323846'
         const delimiter = '\r\n--' + boundary + '\r\n'
