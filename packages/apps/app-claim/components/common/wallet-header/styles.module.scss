@@ -21,6 +21,11 @@
     transform: translateY(-50%);
     height: 40px;
   }
+
+  a {
+    text-decoration: none!important;
+    color: $blackColor!important;
+  }
 }
 
 

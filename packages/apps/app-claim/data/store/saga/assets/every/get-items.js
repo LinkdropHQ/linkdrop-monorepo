@@ -77,41 +77,4 @@ generator.selectors = {
   sdk: ({ user: { sdk } }) => sdk
 }
 
-const assetsMock = [
-  {
-    balanceFormatted: 0,
-    balance: {
-      _hex: '0x00'
-    },
-    tokenAddress: '0xade1b7955252c379dc4399d5cd609a9cac1686e5',
-    icon: 'https://trustwalletapp.com/images/tokens/0xade1b7955252c379dc4399d5cd609a9cac1686e5.png',
-    symbol: 'TGN',
-    decimals: 8,
-    type: 'erc20',
-    price: 0
-  },
-  {
-    balanceFormatted: 0,
-    balance: {
-      _hex: '0x00'
-    },
-    tokenAddress: '0x2c33f5fde437ad4c1de85d5d5cb864921ab583af',
-    icon: 'https://trustwalletapp.com/images/tokens/0x2c33f5fde437ad4c1de85d5d5cb864921ab583af.png',
-    symbol: 'Shell',
-    decimals: 18,
-    type: 'erc20',
-    price: 0
-  },
-  {
-    balanceFormatted: 0,
-    balance: {
-      _hex: '0x00'
-    },
-    tokenAddress: '0xb8c77482e45f1f44de1745f52c74426c631bdd52',
-    icon: 'https://trustwalletapp.com/images/tokens/0xb8c77482e45f1f44de1745f52c74426c631bdd52.png',
-    symbol: 'BNB',
-    decimals: 18,
-    type: 'erc20',
-    price: 0
-  }
-]
+const assetsMock = []

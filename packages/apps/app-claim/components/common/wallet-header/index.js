@@ -31,7 +31,7 @@ class WalletHeader extends React.Component {
         })}>
           <Icons.Profile />
         </div>
-        {this.t('titles.wallet')}
+        <a href='/'>{this.t('titles.wallet')}></a>
       </div>
       <div className={styles.body}>
         <div className={styles.bodyHeader}>
