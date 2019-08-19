@@ -7,12 +7,14 @@ import {
   calculateInitializeSignature,
   ensureNotNull,
   DEFAULT_GAS_PRICE,
-  computeContractAddress
+  computeContractAddress,
+  ETHER_NATIVE_TOKEN,
+  OPERATION_CALL
 } from '@universal-login/commons'
 
 import LinkdropFactory from '@linkdrop/contracts/build/LinkdropFactory.json'
 
-import { ethers } from 'ethers'
+import { ethers, utils } from 'ethers'
 import { claimAndDeploy } from './claimAndDeploy'
 
 class WalletSDK {
@@ -26,7 +28,7 @@ class WalletSDK {
     this.jsonRpcUrl = `https://${chain}.infura.io`
 
     this.sdk = new UniversalLoginSDK(
-      'http://rinkeby.linkdrop.io:11004',
+      `https://${chain}-ul.linkdrop.io`,
       this.jsonRpcUrl
     )
   }
@@ -298,10 +300,20 @@ class WalletSDK {
 
   async execute (message, privateKey) {
     try {
-      const { messageStatus } = await this.sdk.execute(message, privateKey)
-      return { success: true, txHash: messageStatus.transactionHash }
+      message = {
+        ...message,
+        operationType: OPERATION_CALL,
+        gasToken: ETHER_NATIVE_TOKEN.address,
+        gasLimit: utils.bigNumberify('1000000'),
+        gasPrice: utils.bigNumberify(String(20e9))
+      }
+      console.log({ message })
+      const result = await this.sdk.execute(message, privateKey)
+      console.log({ result })
+      const { messageStatus } = result
+      return { success: true, txHash: messageStatus.messageHash }
     } catch (err) {
-      return { errors: err }
+      return { errors: err, success: false }
     }
   }
 
