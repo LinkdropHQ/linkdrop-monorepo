@@ -11,11 +11,11 @@ var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"))
 
 var _asyncToGenerator2 = _interopRequireDefault(require("@babel/runtime/helpers/asyncToGenerator"));
 
-var _utils = require("./utils");
-
 var _ethers = require("ethers");
 
 var _axios = _interopRequireDefault(require("axios"));
+
+var _utils = require("../utils");
 
 // Turn off annoying warnings
 _ethers.ethers.errors.setLogLevel('error');
@@ -146,13 +146,45 @@ function () {
             throw new Error('Please provide factory address');
 
           case 29:
+            if (!(walletFactory === null || walletFactory === '')) {
+              _context.next = 31;
+              break;
+            }
+
+            throw new Error('Please provide wallet factory address');
+
+          case 31:
+            if (!(publicKey === null || publicKey === '')) {
+              _context.next = 33;
+              break;
+            }
+
+            throw new Error('Please provide public key');
+
+          case 33:
+            if (!(initializeWithENS === null || initializeWithENS === '')) {
+              _context.next = 35;
+              break;
+            }
+
+            throw new Error('Please provide initialize with ens data');
+
+          case 35:
+            if (!(signature === null || signature === '')) {
+              _context.next = 37;
+              break;
+            }
+
+            throw new Error('Please provide signature ');
+
+          case 37:
             // Get provider
             provider = new _ethers.ethers.providers.JsonRpcProvider(jsonRpcUrl); // Get receiver signature
 
-            _context.next = 32;
+            _context.next = 40;
             return (0, _utils.signReceiverAddress)(linkKey, receiverAddress);
 
-          case 32:
+          case 40:
             receiverSignature = _context.sent;
             // Get linkId from linkKey
             linkId = new _ethers.ethers.Wallet(linkKey, provider).address;
@@ -161,24 +193,25 @@ function () {
               tokenAddress: tokenAddress,
               tokenAmount: tokenAmount,
               expirationTime: expirationTime,
-              version: version,
-              chainId: chainId,
               linkId: linkId,
               linkdropMasterAddress: linkdropMasterAddress,
+              campaignId: campaignId,
+              version: version,
+              chainId: chainId,
               linkdropSignerSignature: linkdropSignerSignature,
               receiverAddress: receiverAddress,
+              // precomputed wallet address
               receiverSignature: receiverSignature,
               factoryAddress: factoryAddress,
-              campaignId: campaignId,
               walletFactory: walletFactory,
               publicKey: publicKey,
               initializeWithENS: initializeWithENS,
               signature: signature
             };
-            _context.next = 37;
-            return _axios["default"].post("".concat(apiHost, "/api/v1/linkdrops/deployAndClaim"), claimAndDeployParams);
+            _context.next = 45;
+            return _axios["default"].post("".concat(apiHost, "/api/v1/linkdrops/claimAndDeploy"), claimAndDeployParams);
 
-          case 37:
+          case 45:
             response = _context.sent;
             _response$data = response.data, error = _response$data.error, errors = _response$data.errors, success = _response$data.success, txHash = _response$data.txHash;
             return _context.abrupt("return", {
@@ -188,7 +221,7 @@ function () {
               txHash: txHash
             });
 
-          case 40:
+          case 48:
           case "end":
             return _context.stop();
         }

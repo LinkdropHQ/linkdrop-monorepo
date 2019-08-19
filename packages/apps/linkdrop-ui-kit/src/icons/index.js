@@ -20,6 +20,7 @@ import Cursor from './cursor'
 import Ethereum from './ethereum'
 import Done from './done'
 import About from './about'
+import Profile from './profile'
 
 export default {
   LinkdropLogo,
@@ -43,5 +44,6 @@ export default {
   Cursor,
   Ethereum,
   Done,
-  About
+  About,
+  Profile
 }

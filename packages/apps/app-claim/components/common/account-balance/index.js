@@ -12,8 +12,7 @@ class AccountBalance extends React.Component {
       [styles.loading]: loading
     })}>
       <span className={styles.currency}>$</span>
-      <span className={styles.balance}>{balance}</span>
-
+      <span className={styles.balance}>{(balance || 0).toFixed(2)}</span>
     </div>
   }
 }

@@ -17,9 +17,15 @@
   align-items: center;
   background-color: $greenColorTransparent;
   color: $greenColor;
+
   &.loading {
     background-color: $dbBlueTransparent;
     color: $dbBlue;
+  }
+
+  &.alreadyClaimed {
+    background-color: $alreadyClaimedColor;
+    color: $blackColor;
   }
 }
 

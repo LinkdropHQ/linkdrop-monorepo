@@ -40,13 +40,17 @@
   .bodyContent {
     padding: 55px 55px 50px;
     text-align: center;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
 
-    .title {
-      font-size: 24px;
-      margin-bottom: 30px;
-    }
-    .text {
-      font-size: 14px;
+    .avatar {
+      margin-bottom: 15px;
+      height: 80px;
+      width: 80px;
+      border-radius: 80px;
+      background-repeat: no-repeat;
+      background-size: contain;
     }
   }
 

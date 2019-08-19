@@ -13,6 +13,7 @@ const generator = function * ({ payload }) {
     let decimals
     let symbol
     let icon
+    console.log({ tokenAmount, tokenAddress, chainId })
     if (tokenAddress.toLowerCase() === '0x89d24a6b4ccb1b6faa2625fe562bdd9a23260359') {
       // DAI token has problem with fetching decimals
       decimals = 18

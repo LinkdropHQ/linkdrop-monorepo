@@ -7,6 +7,8 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports["default"] = void 0;
 
+var _defineProperty2 = _interopRequireDefault(require("@babel/runtime/helpers/defineProperty"));
+
 var _slicedToArray2 = _interopRequireDefault(require("@babel/runtime/helpers/slicedToArray"));
 
 var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"));
@@ -27,13 +29,15 @@ var _FutureWalletFactory = require("@universal-login/sdk/dist/lib/api/FutureWall
 
 var _commons = require("@universal-login/commons");
 
+var _LinkdropFactory = _interopRequireDefault(require("@linkdrop/contracts/build/LinkdropFactory.json"));
+
 var _ethers = require("ethers");
 
 var _claimAndDeploy3 = require("./claimAndDeploy");
 
-var _utils = require("../../../scripts/src/utils");
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
-var LINKDROP_FACTORY_ADDRESS = (0, _utils.getString)('FACTORY_ADDRESS');
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(source, true).forEach(function (key) { (0, _defineProperty2["default"])(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(source).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 
 var WalletSDK =
 /*#__PURE__*/
@@ -49,7 +53,7 @@ function () {
 
     this.chain = chain;
     this.jsonRpcUrl = "https://".concat(chain, ".infura.io");
-    this.sdk = new _sdk["default"]('http://rinkeby.linkdrop.io:11004', this.jsonRpcUrl);
+    this.sdk = new _sdk["default"]("https://".concat(chain, "-ul.linkdrop.io"), this.jsonRpcUrl);
   }
 
   (0, _createClass2["default"])(WalletSDK, [{
@@ -58,19 +62,19 @@ function () {
       var _claim = (0, _asyncToGenerator2["default"])(
       /*#__PURE__*/
       _regenerator["default"].mark(function _callee(_ref) {
-        var weiAmount, tokenAddress, tokenAmount, expirationTime, linkKey, linkdropMasterAddress, linkdropSignerSignature, receiverAddress, campaignId, linkdropSDK;
+        var weiAmount, tokenAddress, tokenAmount, expirationTime, linkKey, linkdropMasterAddress, linkdropSignerSignature, receiverAddress, campaignId, factoryAddress, linkdropSDK;
         return _regenerator["default"].wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                weiAmount = _ref.weiAmount, tokenAddress = _ref.tokenAddress, tokenAmount = _ref.tokenAmount, expirationTime = _ref.expirationTime, linkKey = _ref.linkKey, linkdropMasterAddress = _ref.linkdropMasterAddress, linkdropSignerSignature = _ref.linkdropSignerSignature, receiverAddress = _ref.receiverAddress, campaignId = _ref.campaignId;
+                weiAmount = _ref.weiAmount, tokenAddress = _ref.tokenAddress, tokenAmount = _ref.tokenAmount, expirationTime = _ref.expirationTime, linkKey = _ref.linkKey, linkdropMasterAddress = _ref.linkdropMasterAddress, linkdropSignerSignature = _ref.linkdropSignerSignature, receiverAddress = _ref.receiverAddress, campaignId = _ref.campaignId, factoryAddress = _ref.factoryAddress;
                 //
-                linkdropSDK = (0, _sdk2.LinkdropSDK)({
+                linkdropSDK = new _sdk2.LinkdropSDK({
                   linkdropMasterAddress: linkdropMasterAddress,
                   chain: this.chain,
                   jsonRpcUrl: this.jsonRpcUrl,
                   apiHost: "https://".concat(this.chain, ".linkdrop.io"),
-                  factoryAddress: LINKDROP_FACTORY_ADDRESS
+                  factoryAddress: factoryAddress
                 });
                 return _context.abrupt("return", linkdropSDK.claim({
                   weiAmount: weiAmount,
@@ -315,64 +319,147 @@ function () {
       return createFutureWallet;
     }()
   }, {
+    key: "getDeployData",
+    value: function () {
+      var _getDeployData = (0, _asyncToGenerator2["default"])(
+      /*#__PURE__*/
+      _regenerator["default"].mark(function _callee7(_ref6) {
+        var privateKey, ensName, _ref6$gasPrice, gasPrice, publicKey, initData, signature;
+
+        return _regenerator["default"].wrap(function _callee7$(_context7) {
+          while (1) {
+            switch (_context7.prev = _context7.next) {
+              case 0:
+                privateKey = _ref6.privateKey, ensName = _ref6.ensName, _ref6$gasPrice = _ref6.gasPrice, gasPrice = _ref6$gasPrice === void 0 ? _commons.DEFAULT_GAS_PRICE : _ref6$gasPrice;
+                _context7.next = 3;
+                return this._fetchFutureWalletFactory();
+
+              case 3:
+                publicKey = new _ethers.ethers.Wallet(privateKey).address;
+                _context7.next = 6;
+                return this.sdk.futureWalletFactory.setupInitData(publicKey, ensName, gasPrice);
+
+              case 6:
+                initData = _context7.sent;
+                _context7.next = 9;
+                return (0, _commons.calculateInitializeSignature)(initData, privateKey);
+
+              case 9:
+                signature = _context7.sent;
+                return _context7.abrupt("return", {
+                  initData: initData,
+                  signature: signature
+                });
+
+              case 11:
+              case "end":
+                return _context7.stop();
+            }
+          }
+        }, _callee7, this);
+      }));
+
+      function getDeployData(_x4) {
+        return _getDeployData.apply(this, arguments);
+      }
+
+      return getDeployData;
+    }()
+  }, {
+    key: "getClaimData",
+    value: function () {
+      var _getClaimData = (0, _asyncToGenerator2["default"])(
+      /*#__PURE__*/
+      _regenerator["default"].mark(function _callee8(_ref7) {
+        var weiAmount, tokenAddress, tokenAmount, expirationTime, linkId, linkdropMasterAddress, campaignId, linkdropSignerSignature, receiverAddress, receiverSignature;
+        return _regenerator["default"].wrap(function _callee8$(_context8) {
+          while (1) {
+            switch (_context8.prev = _context8.next) {
+              case 0:
+                weiAmount = _ref7.weiAmount, tokenAddress = _ref7.tokenAddress, tokenAmount = _ref7.tokenAmount, expirationTime = _ref7.expirationTime, linkId = _ref7.linkId, linkdropMasterAddress = _ref7.linkdropMasterAddress, campaignId = _ref7.campaignId, linkdropSignerSignature = _ref7.linkdropSignerSignature, receiverAddress = _ref7.receiverAddress, receiverSignature = _ref7.receiverSignature;
+                return _context8.abrupt("return", new _ethers.ethers.utils.Interface(_LinkdropFactory["default"].abi).functions.claim.encode([weiAmount, tokenAddress, tokenAmount, expirationTime, linkId, linkdropMasterAddress, campaignId, linkdropSignerSignature, receiverAddress, receiverSignature]));
+
+              case 2:
+              case "end":
+                return _context8.stop();
+            }
+          }
+        }, _callee8);
+      }));
+
+      function getClaimData(_x5) {
+        return _getClaimData.apply(this, arguments);
+      }
+
+      return getClaimData;
+    }()
+  }, {
     key: "deploy",
     value: function () {
       var _deploy = (0, _asyncToGenerator2["default"])(
       /*#__PURE__*/
-      _regenerator["default"].mark(function _callee7(privateKey, ensName) {
+      _regenerator["default"].mark(function _callee9(privateKey, ensName) {
         var gasPrice,
             publicKey,
             initData,
             signature,
             tx,
-            _args7 = arguments;
-        return _regenerator["default"].wrap(function _callee7$(_context7) {
+            _args9 = arguments;
+        return _regenerator["default"].wrap(function _callee9$(_context9) {
           while (1) {
-            switch (_context7.prev = _context7.next) {
+            switch (_context9.prev = _context9.next) {
               case 0:
-                gasPrice = _args7.length > 2 && _args7[2] !== undefined ? _args7[2] : _commons.DEFAULT_GAS_PRICE;
-                _context7.prev = 1;
-                _context7.next = 4;
+                gasPrice = _args9.length > 2 && _args9[2] !== undefined ? _args9[2] : _commons.DEFAULT_GAS_PRICE;
+                _context9.prev = 1;
+                console.log('privateKey', privateKey);
+                console.log('ensName', ensName);
+                _context9.next = 6;
                 return this._fetchFutureWalletFactory();
 
-              case 4:
+              case 6:
                 publicKey = new _ethers.ethers.Wallet(privateKey).address;
-                _context7.next = 7;
+                console.log('publicKey: ', publicKey);
+                console.log('gasPrice: ', gasPrice);
+                _context9.next = 11;
                 return this.sdk.futureWalletFactory.setupInitData(publicKey, ensName, gasPrice);
 
-              case 7:
-                initData = _context7.sent;
-                _context7.next = 10;
+              case 11:
+                initData = _context9.sent;
+                console.log('initData: ', initData);
+                _context9.next = 15;
                 return (0, _commons.calculateInitializeSignature)(initData, privateKey);
 
-              case 10:
-                signature = _context7.sent;
-                _context7.next = 13;
+              case 15:
+                signature = _context9.sent;
+                console.log('signature: ', signature);
+                _context9.next = 19;
                 return this.sdk.futureWalletFactory.relayerApi.deploy(publicKey, ensName, gasPrice, signature);
 
-              case 13:
-                tx = _context7.sent;
-                return _context7.abrupt("return", {
+              case 19:
+                tx = _context9.sent;
+                console.log('tx: ', tx);
+                return _context9.abrupt("return", {
                   success: true,
                   txHash: tx.hash
                 });
 
-              case 17:
-                _context7.prev = 17;
-                _context7.t0 = _context7["catch"](1);
-                return _context7.abrupt("return", {
-                  errors: _context7.t0
+              case 24:
+                _context9.prev = 24;
+                _context9.t0 = _context9["catch"](1);
+                console.log('ERR420', _context9.t0);
+                return _context9.abrupt("return", {
+                  errors: _context9.t0
                 });
 
-              case 20:
+              case 28:
               case "end":
-                return _context7.stop();
+                return _context9.stop();
             }
           }
-        }, _callee7, this, [[1, 17]]);
+        }, _callee9, this, [[1, 24]]);
       }));
 
-      function deploy(_x4, _x5) {
+      function deploy(_x6, _x7) {
         return _deploy.apply(this, arguments);
       }
 
@@ -383,106 +470,108 @@ function () {
     value: function () {
       var _claimAndDeploy2 = (0, _asyncToGenerator2["default"])(
       /*#__PURE__*/
-      _regenerator["default"].mark(function _callee8(_ref6, _ref7) {
-        var weiAmount, tokenAddress, tokenAmount, expirationTime, linkKey, linkdropMasterAddress, linkdropSignerSignature, campaignId, privateKey, ensName, _ref7$gasPrice, gasPrice, linkdropSDK, publicKey, contractAddress, initData, signature;
+      _regenerator["default"].mark(function _callee10(_ref8, _ref9) {
+        var weiAmount, tokenAddress, tokenAmount, expirationTime, linkKey, linkdropMasterAddress, linkdropSignerSignature, campaignId, _ref8$factoryAddress, factoryAddress, privateKey, ensName, _ref9$gasPrice, gasPrice, linkdropSDK, publicKey, contractAddress, initializeWithENS, signature, claimAndDeployParams;
 
-        return _regenerator["default"].wrap(function _callee8$(_context8) {
+        return _regenerator["default"].wrap(function _callee10$(_context10) {
           while (1) {
-            switch (_context8.prev = _context8.next) {
+            switch (_context10.prev = _context10.next) {
               case 0:
-                weiAmount = _ref6.weiAmount, tokenAddress = _ref6.tokenAddress, tokenAmount = _ref6.tokenAmount, expirationTime = _ref6.expirationTime, linkKey = _ref6.linkKey, linkdropMasterAddress = _ref6.linkdropMasterAddress, linkdropSignerSignature = _ref6.linkdropSignerSignature, campaignId = _ref6.campaignId;
-                privateKey = _ref7.privateKey, ensName = _ref7.ensName, _ref7$gasPrice = _ref7.gasPrice, gasPrice = _ref7$gasPrice === void 0 ? 5e9 : _ref7$gasPrice;
-                linkdropSDK = (0, _sdk2.LinkdropSDK)({
+                weiAmount = _ref8.weiAmount, tokenAddress = _ref8.tokenAddress, tokenAmount = _ref8.tokenAmount, expirationTime = _ref8.expirationTime, linkKey = _ref8.linkKey, linkdropMasterAddress = _ref8.linkdropMasterAddress, linkdropSignerSignature = _ref8.linkdropSignerSignature, campaignId = _ref8.campaignId, _ref8$factoryAddress = _ref8.factoryAddress, factoryAddress = _ref8$factoryAddress === void 0 ? '0xBa051891B752ecE3670671812486fe8dd34CC1c8' : _ref8$factoryAddress;
+                privateKey = _ref9.privateKey, ensName = _ref9.ensName, _ref9$gasPrice = _ref9.gasPrice, gasPrice = _ref9$gasPrice === void 0 ? _ethers.ethers.utils.parseUnits('5', 'gwei').toString() : _ref9$gasPrice;
+                linkdropSDK = new _sdk2.LinkdropSDK({
                   linkdropMasterAddress: linkdropMasterAddress,
                   chain: this.chain,
                   jsonRpcUrl: this.jsonRpcUrl,
                   apiHost: "https://".concat(this.chain, ".linkdrop.io"),
-                  factoryAddress: LINKDROP_FACTORY_ADDRESS
+                  factoryAddress: factoryAddress
                 });
-                _context8.next = 5;
+                _context10.next = 5;
                 return this._fetchFutureWalletFactory();
 
               case 5:
                 publicKey = new _ethers.ethers.Wallet(privateKey).address;
-                _context8.next = 8;
+                _context10.next = 8;
                 return this.computeProxyAddress(publicKey);
 
               case 8:
-                contractAddress = _context8.sent;
-                _context8.next = 11;
+                contractAddress = _context10.sent;
+                _context10.next = 11;
                 return this.sdk.futureWalletFactory.setupInitData(publicKey, ensName, gasPrice);
 
               case 11:
-                initData = _context8.sent;
-                _context8.next = 14;
-                return (0, _commons.calculateInitializeSignature)(initData, privateKey);
+                initializeWithENS = _context10.sent;
+                _context10.next = 14;
+                return (0, _commons.calculateInitializeSignature)(initializeWithENS, privateKey);
 
               case 14:
-                signature = _context8.sent;
-                _context8.t0 = _claimAndDeploy3.claimAndDeploy;
-                _context8.t1 = linkdropSDK.jsonRpcUrl;
-                _context8.t2 = linkdropSDK.apiHost;
-                _context8.t3 = weiAmount;
-                _context8.t4 = tokenAddress;
-                _context8.t5 = tokenAmount;
-                _context8.t6 = expirationTime;
-                _context8.t7 = linkdropSDK.version[campaignId];
+                signature = _context10.sent;
+                _context10.t0 = linkdropSDK.jsonRpcUrl;
+                _context10.t1 = linkdropSDK.apiHost;
+                _context10.t2 = weiAmount;
+                _context10.t3 = tokenAddress;
+                _context10.t4 = tokenAmount;
+                _context10.t5 = expirationTime;
+                _context10.t6 = linkdropSDK.version[campaignId];
 
-                if (_context8.t7) {
-                  _context8.next = 27;
+                if (_context10.t6) {
+                  _context10.next = 26;
                   break;
                 }
 
-                _context8.next = 26;
+                _context10.next = 25;
                 return linkdropSDK.getVersion(campaignId);
 
-              case 26:
-                _context8.t7 = _context8.sent;
+              case 25:
+                _context10.t6 = _context10.sent;
 
-              case 27:
-                _context8.t8 = _context8.t7;
-                _context8.t9 = linkdropSDK.chainId;
-                _context8.t10 = linkKey;
-                _context8.t11 = linkdropMasterAddress;
-                _context8.t12 = linkdropSignerSignature;
-                _context8.t13 = campaignId;
-                _context8.t14 = contractAddress;
-                _context8.t15 = LINKDROP_FACTORY_ADDRESS;
-                _context8.t16 = this.sdk.futureWalletFactory.config.factoryAddress;
-                _context8.t17 = publicKey;
-                _context8.t18 = initData;
-                _context8.t19 = signature;
-                _context8.t20 = {
-                  jsonRpcUrl: _context8.t1,
-                  apiHost: _context8.t2,
-                  weiAmount: _context8.t3,
-                  tokenAddress: _context8.t4,
-                  tokenAmount: _context8.t5,
-                  expirationTime: _context8.t6,
-                  version: _context8.t8,
-                  chainId: _context8.t9,
-                  linkKey: _context8.t10,
-                  linkdropMasterAddress: _context8.t11,
-                  linkdropSignerSignature: _context8.t12,
-                  campaignId: _context8.t13,
-                  receiverAddress: _context8.t14,
-                  factoryAddress: _context8.t15,
-                  walletFactory: _context8.t16,
-                  publicKey: _context8.t17,
-                  initializeWithENS: _context8.t18,
-                  signature: _context8.t19
+              case 26:
+                _context10.t7 = _context10.t6;
+                _context10.t8 = linkdropSDK.chainId;
+                _context10.t9 = linkKey;
+                _context10.t10 = linkdropMasterAddress;
+                _context10.t11 = linkdropSignerSignature;
+                _context10.t12 = campaignId;
+                _context10.t13 = contractAddress;
+                _context10.t14 = factoryAddress;
+                _context10.t15 = this.sdk.futureWalletFactory.config.factoryAddress;
+                _context10.t16 = publicKey;
+                _context10.t17 = initializeWithENS;
+                _context10.t18 = signature;
+                claimAndDeployParams = {
+                  jsonRpcUrl: _context10.t0,
+                  apiHost: _context10.t1,
+                  weiAmount: _context10.t2,
+                  tokenAddress: _context10.t3,
+                  tokenAmount: _context10.t4,
+                  expirationTime: _context10.t5,
+                  version: _context10.t7,
+                  chainId: _context10.t8,
+                  linkKey: _context10.t9,
+                  linkdropMasterAddress: _context10.t10,
+                  linkdropSignerSignature: _context10.t11,
+                  campaignId: _context10.t12,
+                  receiverAddress: _context10.t13,
+                  factoryAddress: _context10.t14,
+                  walletFactory: _context10.t15,
+                  publicKey: _context10.t16,
+                  initializeWithENS: _context10.t17,
+                  signature: _context10.t18
                 };
-                return _context8.abrupt("return", (0, _context8.t0)(_context8.t20));
+                console.log({
+                  claimAndDeployParams: claimAndDeployParams
+                });
+                return _context10.abrupt("return", (0, _claimAndDeploy3.claimAndDeploy)(claimAndDeployParams));
 
               case 41:
               case "end":
-                return _context8.stop();
+                return _context10.stop();
             }
           }
-        }, _callee8, this);
+        }, _callee10, this);
       }));
 
-      function claimAndDeploy(_x6, _x7) {
+      function claimAndDeploy(_x8, _x9) {
         return _claimAndDeploy2.apply(this, arguments);
       }
 
@@ -493,41 +582,53 @@ function () {
     value: function () {
       var _execute = (0, _asyncToGenerator2["default"])(
       /*#__PURE__*/
-      _regenerator["default"].mark(function _callee9(message, privateKey) {
-        var _ref8, messageStatus;
-
-        return _regenerator["default"].wrap(function _callee9$(_context9) {
+      _regenerator["default"].mark(function _callee11(message, privateKey) {
+        var result, messageStatus;
+        return _regenerator["default"].wrap(function _callee11$(_context11) {
           while (1) {
-            switch (_context9.prev = _context9.next) {
+            switch (_context11.prev = _context11.next) {
               case 0:
-                _context9.prev = 0;
-                _context9.next = 3;
+                _context11.prev = 0;
+                message = _objectSpread({}, message, {
+                  operationType: _commons.OPERATION_CALL,
+                  gasToken: _commons.ETHER_NATIVE_TOKEN.address,
+                  gasLimit: utils.bigNumberify('1000000'),
+                  gasPrice: utils.bigNumberify(String(20e9))
+                });
+                console.log({
+                  message: message
+                });
+                _context11.next = 5;
                 return this.sdk.execute(message, privateKey);
 
-              case 3:
-                _ref8 = _context9.sent;
-                messageStatus = _ref8.messageStatus;
-                return _context9.abrupt("return", {
-                  success: true,
-                  txHash: messageStatus.transactionHash
+              case 5:
+                result = _context11.sent;
+                console.log({
+                  result: result
                 });
-
-              case 8:
-                _context9.prev = 8;
-                _context9.t0 = _context9["catch"](0);
-                return _context9.abrupt("return", {
-                  errors: _context9.t0
+                messageStatus = result.messageStatus;
+                return _context11.abrupt("return", {
+                  success: true,
+                  txHash: messageStatus.messageHash
                 });
 
               case 11:
+                _context11.prev = 11;
+                _context11.t0 = _context11["catch"](0);
+                return _context11.abrupt("return", {
+                  errors: _context11.t0,
+                  susccess: false
+                });
+
+              case 14:
               case "end":
-                return _context9.stop();
+                return _context11.stop();
             }
           }
-        }, _callee9, this, [[0, 8]]);
+        }, _callee11, this, [[0, 11]]);
       }));
 
-      function execute(_x8, _x9) {
+      function execute(_x10, _x11) {
         return _execute.apply(this, arguments);
       }
 
@@ -538,22 +639,22 @@ function () {
     value: function () {
       var _walletContractExist = (0, _asyncToGenerator2["default"])(
       /*#__PURE__*/
-      _regenerator["default"].mark(function _callee10(ensName) {
-        return _regenerator["default"].wrap(function _callee10$(_context10) {
+      _regenerator["default"].mark(function _callee12(ensName) {
+        return _regenerator["default"].wrap(function _callee12$(_context12) {
           while (1) {
-            switch (_context10.prev = _context10.next) {
+            switch (_context12.prev = _context12.next) {
               case 0:
-                return _context10.abrupt("return", this.sdk.walletContractExist(ensName));
+                return _context12.abrupt("return", this.sdk.walletContractExist(ensName));
 
               case 1:
               case "end":
-                return _context10.stop();
+                return _context12.stop();
             }
           }
-        }, _callee10, this);
+        }, _callee12, this);
       }));
 
-      function walletContractExist(_x10) {
+      function walletContractExist(_x12) {
         return _walletContractExist.apply(this, arguments);
       }
 
@@ -565,61 +666,3 @@ function () {
 
 var _default = WalletSDK;
 exports["default"] = _default;
-
-var main =
-/*#__PURE__*/
-function () {
-  var _ref9 = (0, _asyncToGenerator2["default"])(
-  /*#__PURE__*/
-  _regenerator["default"].mark(function _callee11() {
-    var gasPrice, sdk, linkdropSDK;
-    return _regenerator["default"].wrap(function _callee11$(_context11) {
-      while (1) {
-        switch (_context11.prev = _context11.next) {
-          case 0:
-            gasPrice = _ethers.ethers.utils.parseUnits('5', 'gwei').toString();
-            sdk = new WalletSDK(); // const pub = new ethers.Wallet(
-            //   '0x0a24c99c3c585048032b67fea393e808db20137f7fc49d8301c849793ef75eb9'
-            // ).address
-            // const addr = await sdk.computeProxyAddress(pub)
-            // console.log('addr: ', addr)
-
-            linkdropSDK = (0, _sdk2.LinkdropSDK)({
-              linkdropMasterAddress: '0x49113d075c47ad98050a3aed0909b75db2610c72',
-              chain: sdk.chain,
-              jsonRpcUrl: sdk.jsonRpcUrl,
-              apiHost: "https://".concat(sdk.chain, ".linkdrop.io"),
-              factoryAddress: LINKDROP_FACTORY_ADDRESS
-            });
-            console.log('linkdropSDK: ', linkdropSDK); // const {
-            //   privateKey,
-            //   contractAddress,
-            //   waitForBalance,
-            //   deploy
-            // } = await sdk.createFutureWallet()
-            // console.log({ privateKey, contractAddress })
-            // await waitForBalance()
-            // const tx = await deploy('amir1.linkdrop.test', gasPrice)
-            // const tx = await sdk.deploy(
-            //   '0x0a24c99c3c585048032b67fea393e808db20137f7fc49d8301c849793ef75eb9',
-            //   'amir3.linkdrop.test',
-            //   gasPrice
-            // )
-            // console.log('tx: ', tx)
-            // const exists = await sdk.walletContractExist('amir3.linkdrop.test')
-            // console.log('exists: ', exists)
-
-          case 4:
-          case "end":
-            return _context11.stop();
-        }
-      }
-    }, _callee11);
-  }));
-
-  return function main() {
-    return _ref9.apply(this, arguments);
-  };
-}();
-
-main();

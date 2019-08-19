@@ -22,6 +22,10 @@ class Assets {
   saveClaimedAssets () {
     this.actions.dispatch({ type: '*ASSETS.SAVE_CLAIMED_ASSETS' })
   }
+
+  getItems ({ wallet, chainId }) {
+    this.actions.dispatch({ type: '*ASSETS.GET_ITEMS', payload: { wallet, chainId } })
+  }
 }
 
 export default Assets

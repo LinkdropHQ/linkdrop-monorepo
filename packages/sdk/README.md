@@ -17,13 +17,13 @@ const LinkdropSDK = require('@linkdrop/sdk')
 
 // OR
 
-import LinkdropSDK from '@linkdrop/sdk'
+import {LinkdropSDK} from '@linkdrop/sdk'
 ```
 
 ### Initialization
 
 ```js
-const linkdropSDK = LinkdropSDK({
+const linkdropSDK = new LinkdropSDK({
   linkdropMasterAddress: <LINKDROP_MASTER_ADDRESS>,
   // optional params:
   // chain = <CHAIN>, // 'mainnet' by default

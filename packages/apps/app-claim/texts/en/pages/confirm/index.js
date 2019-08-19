@@ -1,6 +1,6 @@
 export default {
   titles: {
-    main: '<a href={href}>Decentraland</a> requesting<br/>access to spend assets'
+    main: 'Confirm action on<br/><a href={{dappUrl}}>{{dappName}}</a>'
   },
   buttons: {
     cancel: 'Cancel',

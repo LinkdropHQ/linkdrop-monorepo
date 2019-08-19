@@ -1,6 +1,6 @@
-import { signReceiverAddress } from './utils'
 import { ethers } from 'ethers'
 import axios from 'axios'
+import { signReceiverAddress } from '../utils'
 
 // Turn off annoying warnings
 ethers.errors.setLogLevel('error')
@@ -81,6 +81,22 @@ export const claimAndDeploy = async ({
     throw new Error('Please provide factory address')
   }
 
+  if (walletFactory === null || walletFactory === '') {
+    throw new Error('Please provide wallet factory address')
+  }
+
+  if (publicKey === null || publicKey === '') {
+    throw new Error('Please provide public key')
+  }
+
+  if (initializeWithENS === null || initializeWithENS === '') {
+    throw new Error('Please provide initialize with ens data')
+  }
+
+  if (signature === null || signature === '') {
+    throw new Error('Please provide signature ')
+  }
+
   // Get provider
   const provider = new ethers.providers.JsonRpcProvider(jsonRpcUrl)
 
@@ -95,15 +111,15 @@ export const claimAndDeploy = async ({
     tokenAddress,
     tokenAmount,
     expirationTime,
-    version,
-    chainId,
     linkId,
     linkdropMasterAddress,
+    campaignId,
+    version,
+    chainId,
     linkdropSignerSignature,
-    receiverAddress,
+    receiverAddress, // precomputed wallet address
     receiverSignature,
     factoryAddress,
-    campaignId,
     walletFactory,
     publicKey,
     initializeWithENS,
@@ -111,7 +127,7 @@ export const claimAndDeploy = async ({
   }
 
   const response = await axios.post(
-    `${apiHost}/api/v1/linkdrops/deployAndClaim`,
+    `${apiHost}/api/v1/linkdrops/claimAndDeploy`,
     claimAndDeployParams
   )
 

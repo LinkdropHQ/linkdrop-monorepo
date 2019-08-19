@@ -1,4 +1,4 @@
-export default {
+const routes = {
   '/linkdrops/claim': {
     post: {
       controller: 'claimController',
@@ -30,3 +30,5 @@ export default {
     }
   }
 }
+
+module.exports = routes

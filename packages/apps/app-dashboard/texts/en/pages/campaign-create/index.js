@@ -85,10 +85,10 @@ export default {
 const LinkdropSDK = require('@linkdrop/sdk')
 
 // OR
-import LinkdropSDK from '@linkdrop/sdk'
+import {LinkdropSDK} from '@linkdrop/sdk'
 
 // initialization
-const linkdropSDK = LinkdropSDK({
+const linkdropSDK = new LinkdropSDK({
   linkdropMasterAddress: '{{masterAddress}}',
   chain = '{{chain}}'
 })

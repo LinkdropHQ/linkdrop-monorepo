@@ -4,6 +4,7 @@
   "jsonRpcUrl":"https://rinkeby.infura.io",
   "INFURA_PROJECT_ID":"",
   "FACTORY_ADDRESS":"0x79b26a14d99DB8511a650af4ada03a1C7578FC13",
+  "WALLET_FACTORY_ADDRESS": "0x645E6a5D506322f02e7Ae493bB82e06A40B373ba",
   "relayerPrivateKey":"",
   "DEFAULT_GAS_PRICE": "auto",
   "TRANSACTION_LOOP_TIME": 10000,

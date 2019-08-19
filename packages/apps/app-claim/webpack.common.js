@@ -62,41 +62,43 @@ module.exports = {
     }
   },
   module: {
-    rules: [{
-      enforce: 'pre',
-      test: /\.(js|jsx)$/,
-      loader: 'standard-loader',
-      exclude: /(node_modules|bower_components|linkdrop-ui-kit)/,
-      options: {
-        parser: 'babel-eslint'
-      }
-    }, {
-      test: /\.(js|jsx)$/,
-      exclude: /node_modules/,
-      use: {
-        loader: 'babel-loader'
-      }
-    }, {
-      test: /\.(scss|css)$/,
-      exclude: /\.module\.scss$/,
-      use: [
-        'style-loader',
-        CSSLoader,
-        'sass-loader',
-        postCSSLoader
-      ]
-    }, {
-      test: /\.module\.scss$/,
-      use: [
-        'style-loader',
-        CSSModuleLoader,
-        'sass-loader',
-        postCSSLoader
-      ]
-    }, {
-      test: /\.(png|woff|woff2|eot|ttf|svg|otf|gif)$/,
-      loader: 'url-loader?limit=100000'
-    }]
+    rules: [
+      {
+        enforce: 'pre',
+        test: /\.(js|jsx)$/,
+        loader: 'standard-loader',
+        exclude: /(node_modules|bower_components|linkdrop-ui-kit)/,
+        options: {
+          parser: 'babel-eslint'
+        }
+      },
+      {
+        test: /\.(js|jsx)$/,
+        exclude: /node_modules/,
+        use: {
+          loader: 'babel-loader'
+        }
+      }, {
+        test: /\.(scss|css)$/,
+        exclude: /\.module\.scss$/,
+        use: [
+          'style-loader',
+          CSSLoader,
+          'sass-loader',
+          postCSSLoader
+        ]
+      }, {
+        test: /\.module\.scss$/,
+        use: [
+          'style-loader',
+          CSSModuleLoader,
+          'sass-loader',
+          postCSSLoader
+        ]
+      }, {
+        test: /\.(png|woff|woff2|eot|ttf|svg|otf|gif)$/,
+        loader: 'url-loader?limit=100000'
+      }]
   },
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
@@ -109,6 +111,10 @@ module.exports = {
       CLAIM_HOST: JSON.stringify(process.env.CLAIM_HOST),
       INITIAL_BLOCK_RINKEBY: JSON.stringify(process.env.INITIAL_BLOCK_RINKEBY),
       INITIAL_BLOCK_MAINNET: JSON.stringify(process.env.INITIAL_BLOCK_MAINNET),
+      AUTH_CLIENT_ID: JSON.stringify(process.env.AUTH_CLIENT_ID),
+      AUTH_API_KEY: JSON.stringify(process.env.AUTH_API_KEY),
+      AUTH_DISCOVERY_DOCS: JSON.stringify(process.env.AUTH_DISCOVERY_DOCS),
+      AUTH_SCOPE: JSON.stringify(process.env.AUTH_SCOPE),
       'process.env': {
         NODE_ENV: JSON.stringify(process.env.NODE_ENV || 'development')
       }

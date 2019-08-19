@@ -6,6 +6,7 @@ import getPastEvents from './every/get-past-events'
 import getEthData from './every/get-eth-data'
 import subscribeToClaimEvent from './every/subscribe-to-claim-event'
 import saveClaimedAssets from './every/save-claimed-assets'
+import getItems from './every/get-items'
 
 export default function * () {
   yield takeEvery('*ASSETS.GET_TOKEN_ERC20_DATA', getTokenERC20Data)
@@ -14,4 +15,5 @@ export default function * () {
   yield takeEvery('*ASSETS.GET_PAST_EVENTS', getPastEvents)
   yield takeEvery('*ASSETS.SUBSCRIBE_TO_CLAIM_EVENT', subscribeToClaimEvent)
   yield takeEvery('*ASSETS.SAVE_CLAIMED_ASSETS', saveClaimedAssets)
+  yield takeEvery('*ASSETS.GET_ITEMS', getItems)
 }

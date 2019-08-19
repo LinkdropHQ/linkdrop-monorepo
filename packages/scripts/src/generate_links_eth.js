@@ -7,7 +7,7 @@ import {
   getInt
 } from './utils'
 
-import LinkdropSDK from '@linkdrop/sdk'
+import { LinkdropSDK } from '@linkdrop/sdk'
 import ora from 'ora'
 import { terminal as term } from 'terminal-kit'
 import { ethers } from 'ethers'
@@ -28,7 +28,7 @@ const CAMPAIGN_ID = getInt('CAMPAIGN_ID')
 const FACTORY_ADDRESS = getString('FACTORY_ADDRESS')
 const GAS_FEE = ethers.utils.parseUnits('0.002')
 
-const linkdropSDK = LinkdropSDK({
+const linkdropSDK = new LinkdropSDK({
   linkdropMasterAddress: new ethers.Wallet(LINKDROP_MASTER_PRIVATE_KEY).address,
   chain: CHAIN,
   jsonRpcUrl: JSON_RPC_URL,
@@ -46,7 +46,7 @@ export const generate = async () => {
 
     const proxyAddress = linkdropSDK.getProxyAddress(CAMPAIGN_ID)
 
-    let cost = WEI_AMOUNT * LINKS_NUMBER
+    let cost = ethers.utils.bigNumberify(WEI_AMOUNT).mul(LINKS_NUMBER)
 
     let amountToSend
 
@@ -59,7 +59,7 @@ export const generate = async () => {
 
     if (proxyBalance < cost) {
       // Transfer ethers
-      amountToSend = cost - proxyBalance
+      amountToSend = cost.sub(proxyBalance)
 
       spinner.info(
         term.bold.str(

@@ -1,0 +1,13 @@
+@import "variables";
+
+.container {
+  max-width: 230px;
+  width: 100%;
+  border-radius: 20px;
+  border: 1px solid $greyStrokeMenuColor;
+  padding: 10px 15px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
