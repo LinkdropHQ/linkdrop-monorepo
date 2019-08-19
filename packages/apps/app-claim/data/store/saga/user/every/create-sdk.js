@@ -13,7 +13,7 @@ const generator = function * ({ payload }) {
     const { chainId = '4' } = payload
     const networkName = defineNetworkName({ chainId })
     // const apiHost = Number(chainId) === 1 ? apiHostMainnet : apiHostRinkeby
-    const sdk = initializeWalletSdk({ chain: 'rinkeby' })
+    const sdk = initializeWalletSdk({ chain: 'mainnet' })
     yield put({ type: 'USER.SET_SDK', payload: { sdk } })
 
     // const address = sdk.computeProxyAddress(factory, linkdropMasterAddress, campaignId)
