@@ -1,7 +1,7 @@
 {
   "name": "@linkdrop/commons",
   "version": "1.0.32",
-  "private": true,
+  "private": false,
   "description": "Linkdrop common helpers",
   "main": "index.js",
   "license": "MIT",

@@ -1,6 +1,10 @@
 const webpack = require('webpack')
 const path = require('path')
 const autoprefixer = require('autoprefixer')
+const SWPrecacheWebpackPlugin = require('sw-precache-webpack-plugin')
+const WebpackPwaManifest = require('webpack-pwa-manifest')
+
+const PUBLIC_PATH = 'http://localhost:9002/'
 
 const CSSModuleLoader = {
   loader: 'css-loader',
@@ -28,21 +32,16 @@ const postCSSLoader = {
   options: {
     ident: 'postcss',
     sourceMap: true,
-    plugins: () => [
-      autoprefixer()
-    ]
+    plugins: () => [autoprefixer()]
   }
 }
 
 module.exports = {
-  entry: [
-    'webpack/hot/dev-server',
-    '@babel/polyfill',
-    './index.js'
-  ],
+  entry: ['webpack/hot/dev-server', '@babel/polyfill', './index.js'],
   output: {
     filename: 'bundle.js',
-    path: path.resolve(__dirname, 'assets/scripts')
+    path: path.resolve(__dirname, 'assets/scripts'),
+    publicPath: PUBLIC_PATH
   },
   context: __dirname,
   resolve: {
@@ -58,7 +57,10 @@ module.exports = {
       config: path.resolve(__dirname, '../../../configs/app.config'),
       'config-claim': path.resolve(__dirname, '../../../configs/claim.config'),
       contracts: path.resolve(__dirname, '../../contracts/build'),
-      variables: path.resolve(__dirname, '../linkdrop-commons/variables/index.module.scss')
+      variables: path.resolve(
+        __dirname,
+        '../linkdrop-commons/variables/index.module.scss'
+      )
     }
   },
   module: {
@@ -78,27 +80,21 @@ module.exports = {
         use: {
           loader: 'babel-loader'
         }
-      }, {
+      },
+      {
         test: /\.(scss|css)$/,
         exclude: /\.module\.scss$/,
-        use: [
-          'style-loader',
-          CSSLoader,
-          'sass-loader',
-          postCSSLoader
-        ]
-      }, {
+        use: ['style-loader', CSSLoader, 'sass-loader', postCSSLoader]
+      },
+      {
         test: /\.module\.scss$/,
-        use: [
-          'style-loader',
-          CSSModuleLoader,
-          'sass-loader',
-          postCSSLoader
-        ]
-      }, {
+        use: ['style-loader', CSSModuleLoader, 'sass-loader', postCSSLoader]
+      },
+      {
         test: /\.(png|woff|woff2|eot|ttf|svg|otf|gif)$/,
         loader: 'url-loader?limit=100000'
-      }]
+      }
+    ]
   },
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
@@ -118,6 +114,30 @@ module.exports = {
       'process.env': {
         NODE_ENV: JSON.stringify(process.env.NODE_ENV || 'development')
       }
+    }),
+    new SWPrecacheWebpackPlugin({
+      cacheId: 'my-domain-cache-id',
+      dontCacheBustUrlsMatching: /\.\w{8}\./,
+      filename: 'service-worker.js',
+      minify: true,
+      navigateFallback: PUBLIC_PATH + 'index.html',
+      staticFileGlobsIgnorePatterns: [/\.map$/, /manifest\.json$/]
+    }),
+    new WebpackPwaManifest({
+      name: 'Linkdrop Wallet',
+      short_name: 'Wallet',
+      description: 'Description',
+      background_color: '#01579b',
+      theme_color: '#01579b',
+      'theme-color': '#01579b',
+      start_url: '/',
+      icons: [
+        {
+          src: path.resolve('assets/images/favicon.png'),
+          sizes: [96, 128, 192, 256, 384, 512],
+          destination: path.join('assets', 'icons')
+        }
+      ]
     })
   ]
 }
