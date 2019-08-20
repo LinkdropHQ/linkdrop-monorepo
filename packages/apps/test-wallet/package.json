@@ -1,6 +1,6 @@
 {
   "name": "test-wallet",
-  "version": "1.0.34",
+  "version": "1.0.35",
   "private": true,
   "dependencies": {
     "ethers": "^4.0.33",
