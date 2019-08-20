@@ -1,6 +1,6 @@
 {
   "name": "@linkdrop/sdk",
-  "version": "1.0.35",
+  "version": "1.0.42",
   "main": "dist/index.js",
   "license": "MIT",
   "publishConfig": {
@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "@ensdomains/ens": "^0.3.11",
-    "@linkdrop/contracts": "^1.0.35",
+    "@linkdrop/contracts": "^1.0.42",
     "@universal-login/commons": "^0.3.18",
     "@universal-login/sdk": "^0.3.18",
     "axios": "^0.18.1",
@@ -21,5 +21,5 @@
     "ethereumjs-util": "^6.1.0",
     "ethers": "^4.0.27"
   },
-  "gitHead": "414d0e9ecca3fab72be5820c3046207b0b5415b2"
+  "gitHead": "12d5d60123478ccbb8a3fb40e6f88cb8de203232"
 }
