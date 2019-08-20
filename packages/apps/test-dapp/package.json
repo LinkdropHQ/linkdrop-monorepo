@@ -1,14 +1,14 @@
 {
   "name": "test-dapp",
-  "version": "0.1.0",
+  "version": "1.0.34",
   "private": true,
   "dependencies": {
     "qs": "^6.7.0",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-scripts": "3.0.1",
-    "web3-provider-engine": "^15.0.0",    
-    "web3": "^1.2.1"
+    "web3": "^1.2.1",
+    "web3-provider-engine": "^15.0.0"
   },
   "scripts": {
     "start": "react-scripts start",
