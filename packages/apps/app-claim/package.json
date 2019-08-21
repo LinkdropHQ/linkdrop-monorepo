@@ -4,7 +4,9 @@
   "description": "Front end part for linkdrop app to claim tokens",
   "main": "index.js",
   "author": "",
-  "private": false,
+  "publishConfig": {
+    "access": "public"
+  },
   "license": "ISC",
   "scripts": {
     "dev": "webpack --watch --config webpack.dev.js",
@@ -110,5 +112,6 @@
   ],
   "babel": {
     "extends": "../../../babel.config.js"
-  }
+  },
+  "gitHead": "705908130b126ec3b5bcfbda2e272d753e33c3de"
 }
