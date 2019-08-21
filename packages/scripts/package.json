@@ -1,11 +1,11 @@
 {
   "name": "@linkdrop/scripts",
-  "version": "1.0.43",
+  "version": "1.0.44",
   "main": "index.js",
   "license": "MIT",
   "private": true,
   "dependencies": {
-    "@linkdrop/sdk": "^1.0.43",
+    "@linkdrop/sdk": "^1.0.44",
     "axios": "^0.18.0",
     "bignumber.js": "^9.0.0",
     "csvtojson": "^2.0.8",
