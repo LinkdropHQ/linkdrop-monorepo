@@ -9,6 +9,7 @@
   "scripts": {
     "dev": "webpack --watch --config webpack.dev.js",
     "build": "webpack --config webpack.prod.js",
+    "start": "npx serve assets/scripts -l 9002",
     "test": "NODE_PATH=. mocha test/saga/**/*.js --require @babel/register --require ignore-styles --recursive",
     "dev:server": "webpack-dev-server --hot --inline --config webpack.dev.js"
   },
@@ -82,8 +83,10 @@
     "babel-jest": "^24.7.1",
     "babel-plugin-webpack-alias": "^2.1.2",
     "chai": "^3.5.0",
+    "clean-webpack-plugin": "^3.0.0",
     "enzyme": "^3.9.0",
     "enzyme-adapter-react-16": "^1.12.1",
+    "html-webpack-plugin": "^3.2.0",
     "identity-obj-proxy": "^3.0.0",
     "ignore-styles": "^5.0.1",
     "jest": "^24.7.1",
@@ -91,13 +94,15 @@
     "nodemon": "^1.11.0",
     "postcss-loader": "^3.0.0",
     "react-test-renderer": "^16.8.6",
+    "script-ext-html-webpack-plugin": "^2.1.4",
     "sinon": "^7.3.1",
     "standard-loader": "^6.0.1",
     "supertest": "^2.0.1",
     "supertest-as-promised": "^4.0.1",
     "sw-precache-webpack-plugin": "^0.11.5",
     "webpack-dev-server": "^3.3.1",
-    "webpack-pwa-manifest": "^4.0.0"
+    "webpack-pwa-manifest": "^4.0.0",
+    "workbox-webpack-plugin": "^4.3.1"
   },
   "standard": {
     "parser": "babel-eslint"

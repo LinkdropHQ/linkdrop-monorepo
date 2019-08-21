@@ -5,14 +5,29 @@
 	<title>Get Tokens | Powered by Linkdrop.io</title>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link rel="icon" href="./assets/images/favicon.png">
-	<meta property="og:image" content="./assets/images/preview.png" />
-	<link rel="manifest" href="./assets/scripts/manifest.81d40306d602f78261c211bde172cb0c.json">
+	<link rel="icon" href="images/favicon.png">
+	<meta property="og:image" content="images/preview.png" />
+
 </head>
 
 <body>
 	<div class='application' id='application'></div>
+	<script>
+		if ('serviceWorker' in navigator) {
+			window.addEventListener('load', function () {
+				navigator.serviceWorker.register('service-worker.js').then(function (registration) {
+					console.log('Worker registration successful', registration.scope);
+				}, function (err) {
+					console.log('Worker registration failed', err);
+				}).catch(function (err) {
+					console.log(err);
+				});
+			});
+		} else {
+			console.log('Service Worker is not supported by browser.');
+		}
+	</script>
 </body>
-<script src='./assets/scripts/bundle.js'></script>
+<script src='bundle.js'></script>
 
 </html>
