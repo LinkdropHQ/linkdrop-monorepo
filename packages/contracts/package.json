@@ -1,6 +1,6 @@
 {
   "name": "@linkdrop/contracts",
-  "version": "1.0.44",
+  "version": "1.0.45",
   "main": "index.js",
   "license": "MIT",
   "scripts": {
@@ -11,7 +11,7 @@
     "access": "public"
   },
   "dependencies": {
-    "@linkdrop/sdk": "^1.0.44",
+    "@linkdrop/sdk": "^1.0.45",
     "ethereum-waffle": "^2.0.14",
     "ethers": "^4.0.27",
     "openzeppelin-solidity": "^2.2.0",
