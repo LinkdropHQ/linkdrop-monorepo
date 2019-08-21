@@ -1,7 +1,9 @@
 {
   "name": "@linkdrop/commons",
-  "version": "1.0.44",
-  "private": false,
+  "version": "1.0.45",
+  "publishConfig": {
+    "access": "public"
+  },
   "description": "Linkdrop common helpers",
   "main": "index.js",
   "license": "MIT",
@@ -9,7 +11,7 @@
     "extends": "../../../babel.config.js"
   },
   "dependencies": {
-    "@linkdrop/sdk": "^1.0.44"
+    "@linkdrop/sdk": "^1.0.45"
   },
-  "gitHead": "f557d94bd16a7cd070c6ada9dd350d521e474bd9"
+  "gitHead": "7f2b8d66bb661b80e72dac1405b5836c3be53b60"
 }
