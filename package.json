@@ -10,6 +10,8 @@
     "packages/apps/*"
   ],
   "scripts": {
+    "build": "yarn compile contracts && cd packages/apps/app-claim && yarn build",
+    "start": "cd packages/apps/app-claim && npx serve assets/scripts -l 9002",
     "test": "cd packages/contracts/ && mocha --require @babel/polyfill --require @babel/register",
     "compile-contracts": "cd packages/contracts && npx waffle .waffle",
     "deploy-registry": "npx babel-node packages/scripts/src/deploy_registry.js",
