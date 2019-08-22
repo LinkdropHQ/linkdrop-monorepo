@@ -6,6 +6,7 @@ const webpack = require('webpack')
 const path = require('path')
 const autoprefixer = require('autoprefixer')
 const WorkboxPlugin = require('workbox-webpack-plugin')
+var CopyWebpackPlugin = require('copy-webpack-plugin')
 
 const CSSModuleLoader = {
   loader: 'css-loader',
@@ -122,20 +123,31 @@ module.exports = {
     new ScriptExtHtmlWebpackPlugin({
       defaultAttribute: 'defer'
     }),
+    new CopyWebpackPlugin([{ from: 'assets/images', to: 'images' }]),
     new WebpackPwaManifest({
       name: 'Linkdrop Wallet',
+      short_name: 'Wallet',
+      start_url: '/',
       orientation: 'portrait',
       display: 'standalone',
-      start_url: '.',
-      short_name: 'Wallet',
-      description: 'Linkdrop gasless web3 wallet',
-      background_color: '#2c2c2c',
-      theme_color: '#2c2c2c',
+      theme_color: '#ffffff',
+      background_color: '#ffffff',
+      fingerprints: false,
+      ios: {
+        'apple-mobile-web-app-title': 'Wallet',
+        'apple-mobile-web-app-status-bar-style': 'transparent'
+      },
       icons: [
         {
-          src: './assets/images/favicon.png',
-          sizes: '144x144',
-          type: 'image/png'
+          src: path.resolve('assets/icons/linkdrop.png'),
+          sizes: [120, 152, 167, 180, 1024],
+          destination: path.join('icons', 'ios'),
+          ios: true
+        },
+        {
+          src: path.resolve('assets/icons/linkdrop.png'),
+          sizes: [36, 48, 72, 96, 144, 192, 512],
+          destination: path.join('icons', 'android')
         }
       ]
     }),
