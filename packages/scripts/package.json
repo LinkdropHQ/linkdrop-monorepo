@@ -1,6 +1,7 @@
 {
   "name": "@linkdrop/scripts",
   "version": "1.0.47",
+  "version": "1.0.42",
   "main": "index.js",
   "license": "MIT",
   "private": true,
