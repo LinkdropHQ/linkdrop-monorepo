@@ -1,10 +1,12 @@
+const HtmlWebpackPlugin = require('html-webpack-plugin')
+const ScriptExtHtmlWebpackPlugin = require('script-ext-html-webpack-plugin')
+const WebpackPwaManifest = require('webpack-pwa-manifest')
+
 const webpack = require('webpack')
 const path = require('path')
 const autoprefixer = require('autoprefixer')
-const SWPrecacheWebpackPlugin = require('sw-precache-webpack-plugin')
-const WebpackPwaManifest = require('webpack-pwa-manifest')
-
-const PUBLIC_PATH = 'http://localhost:9002/'
+const WorkboxPlugin = require('workbox-webpack-plugin')
+var CopyWebpackPlugin = require('copy-webpack-plugin')
 
 const CSSModuleLoader = {
   loader: 'css-loader',
@@ -40,8 +42,7 @@ module.exports = {
   entry: ['webpack/hot/dev-server', '@babel/polyfill', './index.js'],
   output: {
     filename: 'bundle.js',
-    path: path.resolve(__dirname, 'assets/scripts'),
-    publicPath: PUBLIC_PATH
+    path: path.resolve(__dirname, './assets/scripts')
   },
   context: __dirname,
   resolve: {
@@ -115,29 +116,47 @@ module.exports = {
         NODE_ENV: JSON.stringify(process.env.NODE_ENV || 'development')
       }
     }),
-    new SWPrecacheWebpackPlugin({
-      cacheId: 'my-domain-cache-id',
-      dontCacheBustUrlsMatching: /\.\w{8}\./,
-      filename: 'service-worker.js',
-      minify: true,
-      navigateFallback: PUBLIC_PATH + 'index.html',
-      staticFileGlobsIgnorePatterns: [/\.map$/, /manifest\.json$/]
+    new HtmlWebpackPlugin({
+      favicon: 'assets/images/favicon.png',
+      template: path.join(__dirname, 'index.html')
     }),
+    new ScriptExtHtmlWebpackPlugin({
+      defaultAttribute: 'defer'
+    }),
+    new CopyWebpackPlugin([{ from: 'assets/images', to: 'images' }]),
     new WebpackPwaManifest({
       name: 'Linkdrop Wallet',
       short_name: 'Wallet',
-      description: 'Description',
-      background_color: '#01579b',
-      theme_color: '#01579b',
-      'theme-color': '#01579b',
       start_url: '/',
+      orientation: 'portrait',
+      display: 'standalone',
+      theme_color: '#ffffff',
+      background_color: '#ffffff',
+      fingerprints: false,
+      ios: {
+        'apple-mobile-web-app-title': 'Wallet',
+        'apple-mobile-web-app-status-bar-style': 'transparent'
+      },
       icons: [
         {
-          src: path.resolve('assets/images/favicon.png'),
-          sizes: [96, 128, 192, 256, 384, 512],
-          destination: path.join('assets', 'icons')
+          src: path.resolve('assets/icons/linkdrop.png'),
+          sizes: [120, 152, 167, 180, 1024],
+          destination: path.join('icons', 'ios'),
+          ios: true
+        },
+        {
+          src: path.resolve('assets/icons/linkdrop.png'),
+          sizes: [36, 48, 72, 96, 144, 192, 512],
+          destination: path.join('icons', 'android')
         }
       ]
+    }),
+    new WorkboxPlugin.GenerateSW({
+      // these options encourage the ServiceWorkers to get in there fast
+      // and not allow any straggling "old" SWs to hang around
+      include: [/\.html$/, /\.js$/, /\.css$/, /\.jpg$/, /\.png$/, /\.ico$/],
+      clientsClaim: true,
+      skipWaiting: true
     })
   ]
 }
