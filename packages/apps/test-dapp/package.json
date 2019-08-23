@@ -1,6 +1,6 @@
 {
   "name": "test-dapp",
-  "version": "1.0.43",
+  "version": "1.0.48",
   "private": true,
   "dependencies": {
     "qs": "^6.7.0",
