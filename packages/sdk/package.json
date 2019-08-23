@@ -10,6 +10,7 @@
     "extends": "../babel.config.js"
   },
   "dependencies": {
+    "3box": "^1.10.7",
     "@ensdomains/ens": "^0.3.11",
     "@linkdrop/contracts": "^1.0.47",
     "@universal-login/commons": "^0.3.18",
@@ -19,7 +20,8 @@
     "eth-sig-util": "^2.3.0",
     "eth-typed-data": "^0.1.0-beta.0",
     "ethereumjs-util": "^6.1.0",
-    "ethers": "^4.0.27"
+    "ethers": "^4.0.27",
+    "truffle-privatekey-provider": "^1.3.0"
   },
   "gitHead": "7f2b8d66bb661b80e72dac1405b5836c3be53b60"
 }

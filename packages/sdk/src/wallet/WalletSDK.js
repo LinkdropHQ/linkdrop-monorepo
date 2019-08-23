@@ -2,6 +2,9 @@ import UniversalLoginSDK from '@universal-login/sdk'
 import { LinkdropSDK } from '@linkdrop/sdk'
 import { DeploymentReadyObserver } from '@universal-login/sdk/dist/lib/core/observers/DeploymentReadyObserver'
 import { FutureWalletFactory } from '@universal-login/sdk/dist/lib/api/FutureWalletFactory'
+import Box from '3box'
+
+import PrivateKeyProvider from 'truffle-privatekey-provider'
 
 import {
   calculateInitializeSignature,
@@ -17,6 +20,8 @@ import LinkdropFactory from '@linkdrop/contracts/build/LinkdropFactory.json'
 import { ethers, utils } from 'ethers'
 import { claimAndDeploy } from './claimAndDeploy'
 
+const SPACE_NAME = 'LINKDROP_WALLET'
+
 class WalletSDK {
   //
   constructor (chain = 'rinkeby') {
@@ -31,6 +36,18 @@ class WalletSDK {
       `https://${chain}-ul.linkdrop.io`,
       this.jsonRpcUrl
     )
+  }
+
+  async get3BoxSpace (privateKey) {
+    const address = new ethers.Wallet(privateKey).address
+    const provider = new PrivateKeyProvider(privateKey, this.jsonRpcUrl)
+    const box = await Box.openBox(address, provider)
+    return box.openSpace(SPACE_NAME)
+  }
+
+  async get3BoxProfile (privateKey) {
+    const space = await this.get3BoxSpace(privateKey)
+    return space.public.get('walletProfile')
   }
 
   async claim ({
