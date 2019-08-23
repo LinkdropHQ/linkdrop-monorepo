@@ -4,7 +4,7 @@ import { ethers, utils } from 'ethers'
 import TokenMock from 'contracts/TokenMock.json'
 import { defineNetworkName } from '@linkdrop/commons'
 
-const getTokenData = function * ({ address, symbol, decimals, chainId, provider, contractAddress, wallet }) {
+const getTokenData = function * ({ address, symbol, decimals, chainId, provider, contractAddress }) {
   let assetPrice = 0
   if (Number(chainId) === 1) {
     assetPrice = yield call(getAssetPrice, { symbol })
@@ -44,7 +44,7 @@ const generator = function * ({ payload }) {
     const ethBalance = yield provider.getBalance(contractAddress)
     let assetsStorage = []
     if ((total && total > 0)) {
-      const assets = yield all(docs.map(({ contract: { address, symbol, decimals } }) => getTokenData({ address, symbol, decimals, chainId, provider, contractAddress, wallet })))
+      const assets = yield all(docs.map(({ contract: { address, symbol, decimals } }) => getTokenData({ address, symbol, decimals, chainId, provider, contractAddress })))
       assetsStorage = assetsStorage.concat(assets)
     }
 
