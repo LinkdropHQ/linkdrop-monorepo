@@ -4,11 +4,12 @@ import { Button } from '@linkdrop/ui-kit'
 import styles from './styles.module'
 import { Page } from 'components/pages'
 import { getEns } from 'helpers'
-import { actions } from 'decorators'
+import { actions, translate } from 'decorators'
 import config from 'app.config.js'
 import { getHashVariables } from '@linkdrop/commons'
 
 @actions(({ user: { sdk, privateKey, contractAddress, ens, loading } }) => ({ loading, sdk, contractAddress, privateKey, ens }))
+@translate('pages.authorization')
 class Authorization extends React.Component {
   constructor (props) {
     super(props)
@@ -93,7 +94,6 @@ class Authorization extends React.Component {
           })
           .execute(response => {
             const { privateKey, contractAddress, avatar, ens } = response
-            console.log('from google drive: ', { privateKey, contractAddress, avatar, ens })
             this.actions().user.setUserData({ privateKey, contractAddress, ens, avatar })
           })
       } else {
@@ -149,7 +149,8 @@ class Authorization extends React.Component {
     const { enableAuthorize } = this.state
     return <Page>
       <div className={styles.container}>
-        <Button disabled={!enableAuthorize || loading} onClick={e => this.handleAuthClick(e)}>Login</Button>
+        <h2 className={styles.title} dangerouslySetInnerHTML={{ __html: this.t('titles.signIn') }} />
+        <Button inverted disabled={!enableAuthorize || loading} onClick={e => this.handleAuthClick(e)}>{this.t('titles.googleSignIn')}</Button>
       </div>
     </Page>
   }
