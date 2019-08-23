@@ -14,7 +14,6 @@ const generator = function * ({ payload }) {
     const linkId = yield linkWallet.address
     const factoryContract = yield new ethers.Contract(factory, LinkdropFactory.abi, provider)
     const claimed = yield factoryContract.isClaimedLink(linkdropMasterAddress, campaignId, linkId)
-    console.log({ claimed })
     yield put({ type: 'USER.SET_ALREADY_CLAIMED', payload: { alreadyClaimed: claimed } })
     yield put({ type: 'USER.SET_READY_TO_CLAIM', payload: { readyToClaim: true } })
     yield put({ type: 'USER.SET_LOADING', payload: { loading: false } })
