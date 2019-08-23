@@ -50,6 +50,28 @@ class WalletSDK {
     return space.public.get('walletProfile')
   }
 
+  async set3BoxProfile ({
+    privateKey,
+    contractAddress,
+    ensName,
+    firstName,
+    lastName,
+    avatarUrl
+  }) {
+    const space = await this.get3BoxSpace(privateKey)
+    const address = new ethers.Wallet(privateKey).address
+
+    const walletProfile = {
+      address,
+      contractAddress,
+      ensName,
+      firstName,
+      lastName,
+      avatarUrl
+    }
+    return space.public.set('walletProfile', JSON.stringify(walletProfile))
+  }
+
   async claim ({
     weiAmount,
     tokenAddress,
