@@ -49,7 +49,6 @@ class Menu extends React.Component {
       scope: config.authScope
     }).then(_ => {
       // Listen for sign-in state changes.
-      console.log(gapi.auth2.getAuthInstance())
       this.setState({
         gapiObj: gapi
       })

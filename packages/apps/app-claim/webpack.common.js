@@ -114,30 +114,31 @@ module.exports = {
       'process.env': {
         NODE_ENV: JSON.stringify(process.env.NODE_ENV || 'development')
       }
-    }),
-    new SWPrecacheWebpackPlugin({
-      cacheId: 'my-domain-cache-id',
-      dontCacheBustUrlsMatching: /\.\w{8}\./,
-      filename: 'service-worker.js',
-      minify: true,
-      navigateFallback: PUBLIC_PATH + 'index.html',
-      staticFileGlobsIgnorePatterns: [/\.map$/, /manifest\.json$/]
-    }),
-    new WebpackPwaManifest({
-      name: 'Linkdrop Wallet',
-      short_name: 'Wallet',
-      description: 'Description',
-      background_color: '#01579b',
-      theme_color: '#01579b',
-      'theme-color': '#01579b',
-      start_url: '/',
-      icons: [
-        {
-          src: path.resolve('assets/images/favicon.png'),
-          sizes: [96, 128, 192, 256, 384, 512],
-          destination: path.join('assets', 'icons')
-        }
-      ]
     })
+    // ,
+    // new SWPrecacheWebpackPlugin({
+    //   cacheId: 'my-domain-cache-id',
+    //   dontCacheBustUrlsMatching: /\.\w{8}\./,
+    //   filename: 'service-worker.js',
+    //   minify: true,
+    //   navigateFallback: PUBLIC_PATH + 'index.html',
+    //   staticFileGlobsIgnorePatterns: [/\.map$/, /manifest\.json$/]
+    // }),
+    // new WebpackPwaManifest({
+    //   name: 'Linkdrop Wallet',
+    //   short_name: 'Wallet',
+    //   description: 'Description',
+    //   background_color: '#01579b',
+    //   theme_color: '#01579b',
+    //   'theme-color': '#01579b',
+    //   start_url: '/',
+    //   icons: [
+    //     {
+    //       src: path.resolve('assets/images/favicon.png'),
+    //       sizes: [96, 128, 192, 256, 384, 512],
+    //       destination: path.join('assets', 'icons')
+    //     }
+    //   ]
+    // })
   ]
 }

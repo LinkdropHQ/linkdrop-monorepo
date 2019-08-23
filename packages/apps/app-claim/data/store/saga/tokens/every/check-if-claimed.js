@@ -9,6 +9,7 @@ const generator = function * ({ payload }) {
     yield put({ type: 'USER.SET_LOADING', payload: { loading: true } })
     const { linkdropMasterAddress, linkKey, chainId, campaignId } = payload
     const networkName = defineNetworkName({ chainId })
+    console.log('starting')
     const provider = yield ethers.getDefaultProvider(networkName)
     const linkWallet = yield new ethers.Wallet(linkKey, provider)
     const linkId = yield linkWallet.address
