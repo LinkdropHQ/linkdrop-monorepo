@@ -108,10 +108,12 @@ module.exports = {
       CLAIM_HOST: JSON.stringify(process.env.CLAIM_HOST),
       INITIAL_BLOCK_RINKEBY: JSON.stringify(process.env.INITIAL_BLOCK_RINKEBY),
       INITIAL_BLOCK_MAINNET: JSON.stringify(process.env.INITIAL_BLOCK_MAINNET),
+      INITIAL_BLOCK_GOERLI: JSON.stringify(process.env.INITIAL_BLOCK_GOERLI),
       AUTH_CLIENT_ID: JSON.stringify(process.env.AUTH_CLIENT_ID),
       AUTH_API_KEY: JSON.stringify(process.env.AUTH_API_KEY),
       AUTH_DISCOVERY_DOCS: JSON.stringify(process.env.AUTH_DISCOVERY_DOCS),
       AUTH_SCOPE: JSON.stringify(process.env.AUTH_SCOPE),
+      API_HOST_GOERLI: JSON.stringify(process.env.API_HOST_GOERLI),
       'process.env': {
         NODE_ENV: JSON.stringify(process.env.NODE_ENV || 'development')
       }

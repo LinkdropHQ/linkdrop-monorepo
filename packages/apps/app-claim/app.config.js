@@ -3,10 +3,12 @@
   MASTER_COPY,
   FACTORY,
   CLAIM_HOST,
-  API_HOST_RINKEBY,
   API_HOST_MAINNET,
+  API_HOST_RINKEBY,
+  API_HOST_GOERLI,
   INITIAL_BLOCK_MAINNET,
   INITIAL_BLOCK_RINKEBY,
+  INITIAL_BLOCK_GOERLI,
   AUTH_CLIENT_ID,
   AUTH_API_KEY,
   AUTH_DISCOVERY_DOCS,
@@ -33,8 +35,10 @@ const factory = FACTORY || String(config.factory)
 const claimHost = CLAIM_HOST || String(config.claimHost)
 const apiHostRinkeby = API_HOST_RINKEBY || String(config.apiHostRinkeby)
 const apiHostMainnet = API_HOST_MAINNET || String(config.apiHostMainnet)
+const apiHostGoerli = API_HOST_GOERLI || String(config.apiHostGoerli)
 const initialBlockMainnet = INITIAL_BLOCK_MAINNET || config.initialBlockMainnet
 const initialBlockRinkeby = INITIAL_BLOCK_RINKEBY || config.initialBlockRinkeby
+const initialBlockGoerli = INITIAL_BLOCK_GOERLI || config.initialBlockGoerli
 
 const authClientId = AUTH_CLIENT_ID || authConfig.clientId
 const authApiKey = AUTH_API_KEY || authConfig.apiKey
@@ -46,9 +50,11 @@ module.exports = {
   claimHost,
   apiHostMainnet,
   apiHostRinkeby,
+  apiHostGoerli,
   masterCopy,
   factory,
   initialBlockMainnet,
+  initialBlockGoerli,
   initialBlockRinkeby,
   authClientId,
   authApiKey,

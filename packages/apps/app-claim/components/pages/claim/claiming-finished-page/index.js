@@ -5,7 +5,7 @@ import commonStyles from '../styles.module'
 import { TokensAmount, AssetBalance, AccountBalance } from 'components/common'
 import dapps from 'dapps'
 import classNames from 'classnames'
-import { getHashVariables } from '@linkdrop/commons'
+import { getHashVariables, defineNetworkName } from '@linkdrop/commons'
 import { Button, Icons, Loading } from '@linkdrop/ui-kit'
 import { getCurrentAsset, countFinalPrice } from 'helpers'
 
@@ -51,7 +51,7 @@ class ClaimingFinishedPage extends React.Component {
 
     const { ens } = this.props
     const { chainId } = getHashVariables()
-    const network = chainId === '4' ? 'rinkeby' : 'mainnet'
+    const network = defineNetworkName({ chainId })
     const confirmUrl = encodeURIComponent(`${window.origin}/#/confirm`)
     const dappUrl = `${url}?user=${ens}&network=${network}&confirmUrl=${confirmUrl}`
     return <Button href={dappUrl} target='_blank'>{this.t('buttons.goTo', { title: label })}</Button>
