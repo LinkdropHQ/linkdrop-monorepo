@@ -2,8 +2,7 @@
   "clientId": "301042882031-4libn9sh8jjlf03ihsmff54155fddoko.apps.googleusercontent.com",
   "apiKey": "AIzaSyCZtnMEHag9i00sxAqFW9yPRfnSqkgcpb4",
   "discoveryDocs": [
-    "https://www.googleapis.com/discovery/v1/apis/drive/v3/rest",
-    "https://www.googleapis.com/auth/contacts.readonly"
+    "https://www.googleapis.com/discovery/v1/apis/drive/v3/rest"
   ],
   "scope": "https://www.googleapis.com/auth/drive.appdata"
 }

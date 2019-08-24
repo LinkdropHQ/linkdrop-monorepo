@@ -30,6 +30,10 @@ class User {
   createWallet () {
     this.actions.dispatch({ type: '*USER.CREATE_WALLET' })
   }
+
+  setMoonpayShow ({ moonpayShow }) {
+    this.actions.dispatch({ type: 'USER.SET_MOONPAY_SHOW', payload: { moonpayShow } })
+  }
 }
 
 export default User

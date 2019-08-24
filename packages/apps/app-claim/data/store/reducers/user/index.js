@@ -13,7 +13,8 @@ const initialState = {
   privateKey: ls && ls.getItem && ls.getItem('privateKey'),
   contractAddress: ls && ls.getItem && ls.getItem('contractAddress'),
   ens: ls && ls.getItem && ls.getItem('ens'),
-  avatar: ls && ls.getItem && ls.getItem('avatar')
+  avatar: ls && ls.getItem && ls.getItem('avatar'),
+  moonpayShow: false
 }
 
 export default (state = initialState, action = {}) => {
@@ -36,5 +37,6 @@ const ACTIONS = {
   'USER.SET_PRIVATE_KEY': reducers.setPrivateKey,
   'USER.SET_CONTRACT_ADDRESS': reducers.setContractAddress,
   'USER.SET_ENS': reducers.setEns,
-  'USER.SET_USER_DATA': reducers.setUserData
+  'USER.SET_USER_DATA': reducers.setUserData,
+  'USER.SET_MOONPAY_SHOW': reducers.setMoonpayShow
 }

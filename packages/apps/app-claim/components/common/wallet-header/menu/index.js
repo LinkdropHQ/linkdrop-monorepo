@@ -10,7 +10,6 @@ let gapiObj
 try {
   gapiObj = gapi
 } catch (e) {
-  console.error('error: ', e)
   gapiObj = false
 }
 
@@ -61,6 +60,15 @@ class Menu extends React.Component {
     const { gapiObj } = this.state
     const MENU = [
       {
+        title: text('common.walletHeader.menu.buyTokens'),
+        onClick: _ => this.actions().user.setMoonpayShow({ moonpayShow: true })
+      }, {
+        title: text('common.walletHeader.menu.chat'),
+        href: 'https://t.me/LinkdropHQ'
+      }, {
+        title: text('common.walletHeader.menu.legal'),
+        href: 'https://www.notion.so/Terms-and-Privacy-dfa7d9b85698491d9926cbfe3c9a0a58'
+      }, {
         title: text('common.walletHeader.menu.logOut'),
         onClick: _ => {
           if (gapiObj) {
@@ -72,16 +80,13 @@ class Menu extends React.Component {
             })
           }
         }
-      }, {
-        title: text('common.walletHeader.menu.followUs')
-      }, {
-        title: text('common.walletHeader.menu.support')
-      }, {
-        title: text('common.walletHeader.menu.legal')
       }
     ]
     return <div className={styles.container}>
-      {MENU.map(({ title, href, onClick }) => <div onClick={_ => onClick && onClick()} key={href} className={styles.menuItem}>{title}</div>)}
+      {MENU.map(({ title, href, onClick }) => {
+        if (href) { return <a traget='_blank' key={title} href={href} className={styles.menuItem}>{title}</a> }
+        return <div onClick={_ => onClick && onClick()} key={title} className={styles.menuItem}>{title}</div>
+      })}
     </div>
   }
 }

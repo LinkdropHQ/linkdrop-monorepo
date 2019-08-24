@@ -1,0 +1,19 @@
+.container {
+  position: fixed;
+  width: calc(100vw - 60px);
+  margin: 30px;
+  z-index: 10;
+  height: calc(100vh - 60px);
+  top: 0;
+  left: 0;
+}
+
+
+.close {
+  position: absolute;
+  z-index: 1;
+  top: 0px;
+  left: 0px;
+  transform: translate(-20px, -20px);
+}
+

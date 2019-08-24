@@ -5,10 +5,10 @@ export default {
     wallet: 'Wallet'
   },
   menu: {
-    followUs: 'Follow Us',
-    support: 'Support',
+    chat: 'Chat',
     legal: 'Legal',
-    logOut: 'Log Out'
+    logOut: 'Log Out',
+    buyTokens: 'Buy Tokens'
   },
   texts: {
     intro: 'Congrats, most likely this is your first crypto wallet. It will be an honor to guide you in this magical world.',

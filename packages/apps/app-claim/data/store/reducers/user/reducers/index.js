@@ -9,6 +9,7 @@ import setContractsAddress from './set-contract-address'
 import setPrivateKey from './set-private-key'
 import setEns from './set-ens'
 import setUserData from './set-user-data'
+import setMoonpayShow from './set-moonpay-show'
 
 export default {
   changeLocale,
@@ -21,5 +22,6 @@ export default {
   setContractsAddress,
   setPrivateKey,
   setEns,
-  setUserData
+  setUserData,
+  setMoonpayShow
 }

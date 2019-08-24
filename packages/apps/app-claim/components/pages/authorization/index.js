@@ -146,7 +146,7 @@ class Authorization extends React.Component {
     //   //process the response here
     //   console.log(response);
     // });
-    console.log(gapi.client)
+    // console.log(gapi.client)
   }
 
   handleAuthClick () {
