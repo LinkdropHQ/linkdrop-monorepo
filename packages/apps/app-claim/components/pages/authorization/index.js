@@ -71,6 +71,7 @@ class Authorization extends React.Component {
           email
         }, _ => {
           this.getFiles({ email, avatar })
+          this.getContacts()
         })
       }
     })
@@ -80,7 +81,6 @@ class Authorization extends React.Component {
     const {
       chainId
     } = getHashVariables()
-
     gapi.client.drive.files.list({
       spaces: 'appDataFolder'
     }).then(response => {
@@ -138,6 +138,15 @@ class Authorization extends React.Component {
           })
       }
     })
+  }
+
+  getContacts () {
+    // fetch(`https://www.google.com/m8/feeds/contacts/default/thin?alt=json&access_token=${accessToken}&max-results=500&v=3.0`,
+    //   function(response){
+    //   //process the response here
+    //   console.log(response);
+    // });
+    console.log(gapi.client)
   }
 
   handleAuthClick () {
