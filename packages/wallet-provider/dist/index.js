@@ -7,8 +7,6 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports["default"] = void 0;
 
-var _slicedToArray2 = _interopRequireDefault(require("@babel/runtime/helpers/slicedToArray"));
-
 var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"));
 
 var _asyncToGenerator2 = _interopRequireDefault(require("@babel/runtime/helpers/asyncToGenerator"));
@@ -38,20 +36,13 @@ var Provider =
 function () {
   function Provider(opts) {
     (0, _classCallCheck2["default"])(this, Provider);
-    console.log({
-      opts: opts
-    });
     this.ensName = opts.ensName;
-    this.rpcUrl = opts.rpcUrl;
     this.network = opts.network || 'mainnet';
+    this.rpcUrl = opts.rpcUrl || "https://".concat(this.network, ".infura.io/v3/d4d1a2b933e048e28fb6fe1abe3e813a");
     this.confirmUrl = opts.confirmUrl;
 
     if (!opts.ensName) {
       throw new Error('ENS name should be provided');
-    }
-
-    if (!opts.rpcUrl) {
-      throw new Error('rpcUrl should be provided');
     }
 
     if (!opts.network) {
@@ -79,26 +70,23 @@ function () {
 
               case 4:
                 address = _context.sent;
-                console.log({
-                  address: address
-                });
-                _context.next = 11;
+                _context.next = 10;
                 break;
 
-              case 8:
-                _context.prev = 8;
+              case 7:
+                _context.prev = 7;
                 _context.t0 = _context["catch"](0);
                 throw new Error('Bad ENS name provided');
 
-              case 11:
+              case 10:
                 return _context.abrupt("return", address);
 
-              case 12:
+              case 11:
               case "end":
                 return _context.stop();
             }
           }
-        }, _callee, null, [[0, 8]]);
+        }, _callee, null, [[0, 7]]);
       }));
 
       function _getAddressFromEns(_x, _x2) {
@@ -108,29 +96,10 @@ function () {
       return _getAddressFromEns;
     }()
   }, {
-    key: "_parseDomain",
-    value: function _parseDomain(ensName) {
-      return ensName.split(/\.(.*)/).slice(0, 2);
-    }
-  }, {
     key: "_getConfirmationUrlFromEns",
     value: function _getConfirmationUrlFromEns(ensName) {
-      var _this$_parseDomain = this._parseDomain(ensName),
-          _this$_parseDomain2 = (0, _slicedToArray2["default"])(_this$_parseDomain, 2),
-          label = _this$_parseDomain2[0],
-          domain = _this$_parseDomain2[1];
-
-      console.log({
-        label: label,
-        domain: domain
-      });
       if (this.confirmUrl) return this.confirmUrl;
-
-      if (domain === 'argent.xyz') {
-        return 'https://argent.xyz';
-      } else {
-        return 'https://wallet.linkdrop.io/#/confirm';
-      }
+      return 'https://demo.wallet.linkdrop.io/#/confirm';
     }
   }, {
     key: "_initProvider",
@@ -298,7 +267,7 @@ function () {
       var VERSION = 0.1; // #TODO move to auto
 
       var fixtureSubprovider = new FixtureSubprovider({
-        web3_clientVersion: "UL/v".concat(VERSION, "/javascript"),
+        web3_clientVersion: "LD/v".concat(VERSION, "/javascript"),
         net_listening: true,
         eth_hashrate: '0x00',
         eth_mining: false,
@@ -310,14 +279,11 @@ function () {
       var cache = {};
       var walletSubprovider = new HookedWalletSubprovider({
         getAccounts: function getAccounts(cb) {
-          console.log('in getAccounts hooked');
           var result = [address];
           var error = null;
           cb(error, result);
         },
         processTransaction: function processTransaction(txParams, cb) {
-          console.log('publihshing transaction');
-
           var receiveMessage = function receiveMessage(event) {
             // Do we trust the sender of this message?
             // if (event.origin !== confirmationUrl) return
@@ -327,10 +293,8 @@ function () {
               var _event$data$payload = event.data.payload,
                   success = _event$data$payload.success,
                   txHash = _event$data$payload.txHash;
-              console.log('Got txHash ', txHash);
 
               if (cache[txHash]) {
-                console.log('Got the same message result, skipping...');
                 return null;
               }
 
@@ -347,7 +311,6 @@ function () {
 
           window.addEventListener('message', receiveMessage, false);
           var newWindow = window.open(confirmationUrl, '_blank');
-          console.log('sending transaction');
           setTimeout(function () {
             var data = {
               action: 'SEND_TRANSACTION',
@@ -383,28 +346,27 @@ function () {
                 switch (_context4.prev = _context4.next) {
                   case 0:
                     _context4.prev = 0;
-                    console.log('got request ', payload.method);
-                    _context4.next = 4;
+                    _context4.next = 3;
                     return _handleRequest2(payload);
 
-                  case 4:
+                  case 3:
                     _ref3 = _context4.sent;
                     result = _ref3.result;
                     end(null, result);
-                    _context4.next = 12;
+                    _context4.next = 11;
                     break;
 
-                  case 9:
-                    _context4.prev = 9;
+                  case 8:
+                    _context4.prev = 8;
                     _context4.t0 = _context4["catch"](0);
                     end(_context4.t0);
 
-                  case 12:
+                  case 11:
                   case "end":
                     return _context4.stop();
                 }
               }
-            }, _callee4, null, [[0, 9]]);
+            }, _callee4, null, [[0, 8]]);
           }));
 
           function handleRequest(_x6, _x7, _x8) {
@@ -424,7 +386,6 @@ function () {
 
       engine.isEnsLogin = true;
       engine.on = false;
-      console.log('engine is inited');
       engine.start();
       return engine;
     }
