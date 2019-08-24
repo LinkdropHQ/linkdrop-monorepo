@@ -36,6 +36,7 @@
     "test:demo": "NODE_ENV=test-demo NODE_PATH=./packages/apps/app-demo mocha packages/apps/app-demo/test/**/*.js  --compilers js:@babel/register --require ignore-styles --recursive",
     "test:claim": "NODE_ENV=test-claim NODE_PATH=./packages/apps/app-claim mocha packages/apps/app-claim/test/**/*.js  --compilers js:@babel/register --require ignore-styles --recursive",
     "build:sdk": "babel packages/sdk/src -d packages/sdk/dist",
+    "build:wallet-provider": "babel packages/wallet-provider/src -d packages/wallet-provider/dist",
     "retry-transaction": "npx babel-node packages/server/tasks/retry_transaction.js",
     "retry-operation": "npx babel-node packages/server/tasks/retry_operation.js"
   },
