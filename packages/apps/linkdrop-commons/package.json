@@ -1,6 +1,6 @@
 {
   "name": "@linkdrop/commons",
-  "version": "1.0.48",
+  "version": "1.0.70",
   "publishConfig": {
     "access": "public"
   },
@@ -11,7 +11,7 @@
     "extends": "../../../babel.config.js"
   },
   "dependencies": {
-    "@linkdrop/sdk": "^1.0.48"
+    "@linkdrop/sdk": "^1.0.70"
   },
   "gitHead": "7f2b8d66bb661b80e72dac1405b5836c3be53b60"
 }
