@@ -4,6 +4,7 @@ import Claim from './claim'
 import Wallet from './wallet'
 import Confirm from './confirm'
 import Authorization from './authorization'
+import Send from './send'
 
 export {
   NotFound,
@@ -11,5 +12,6 @@ export {
   Claim,
   Wallet,
   Confirm,
-  Authorization
+  Authorization,
+  Send
 }

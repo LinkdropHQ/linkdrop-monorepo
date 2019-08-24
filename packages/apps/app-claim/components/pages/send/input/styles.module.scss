@@ -1,0 +1,23 @@
+@import "variables";
+
+.container {
+  height: 70px;
+  display: flex;
+  padding: 0px 30px;
+  border-bottom: 1px solid $greyStrokeMenuColor;
+  align-items: center;
+}
+
+.input {
+  border: none;
+  font-size: 18px;
+  &::placeholder {
+    color: $dbBlueTransparent;
+  }
+}
+
+.title {
+  color: $dbBlue;
+  font-family: 'Inter-Bold';
+  font-size: 18px;
+}

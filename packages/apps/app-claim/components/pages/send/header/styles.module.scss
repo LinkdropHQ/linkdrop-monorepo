@@ -1,0 +1,36 @@
+@import "variables";
+
+.container {
+  padding: 0px 30px;
+  border-bottom: 1px solid $greyStrokeMenuColor;
+}
+
+.content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 90px;
+}
+
+.close {
+  max-width: 102px;
+}
+
+.amount {
+  max-width: 150px;
+}
+
+.button {
+  padding: 0px 15px;
+  min-width: auto;
+  font-size: 20px;
+  color: $whiteColor;
+  width: auto;
+  background: $dbBlue;
+}
+
+.input {
+  max-width: 100%;
+  font-size: 30px;
+  font-family: 'Inter-Bold';
+}

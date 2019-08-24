@@ -1,0 +1,28 @@
+@import "variables";
+
+.container {
+  padding: 15px 30px;
+  border-bottom: 1px solid $greyStrokeMenuColor;
+  height: 70px;
+  overflow: hidden;
+  transition: height .3s;
+  position: relative;
+}
+
+.asset {
+  padding-right: 40px;
+  cursor: pointer;
+}
+
+.arrow {
+  position: absolute;
+  right: 40px;
+  transition: transform .3s;
+  top: 26px;
+}
+
+.expanded {
+  .arrow {
+    transform: rotate(180deg);
+  }
+}
