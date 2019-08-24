@@ -19,13 +19,16 @@ import { claimAndDeploy } from './claimAndDeploy'
 
 class WalletSDK {
   //
-  constructor (chain = 'rinkeby') {
-    if (chain !== 'mainnet' && chain !== 'rinkeby') {
+  constructor (
+    chain = 'rinkeby',
+    infuraId = 'd4d1a2b933e048e28fb6fe1abe3e813a'
+  ) {
+    if (chain !== 'mainnet' && chain !== 'rinkeby' && chain !== 'goerli') {
       throw new Error('Chain not supported')
     }
 
     this.chain = chain
-    this.jsonRpcUrl = `https://${chain}.infura.io`
+    this.jsonRpcUrl = `https://${chain}.infura.io/v3/${infuraId}`
 
     this.sdk = new UniversalLoginSDK(
       `https://${chain}-ul.linkdrop.io`,
