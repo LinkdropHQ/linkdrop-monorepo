@@ -159,7 +159,7 @@ class Authorization extends React.Component {
     return <Page>
       <div className={styles.container}>
         <h2 className={styles.title} dangerouslySetInnerHTML={{ __html: this.t('titles.signIn') }} />
-        <Button inverted disabled={!enableAuthorize || loading} onClick={e => this.handleAuthClick(e)}>{this.t('titles.googleSignIn')}</Button>
+        <Button inverted loading={!enableAuthorize || loading} onClick={e => this.handleAuthClick(e)}>{this.t('titles.googleSignIn')}</Button>
       </div>
     </Page>
   }
