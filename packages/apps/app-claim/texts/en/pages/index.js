@@ -3,11 +3,13 @@ import page from './page'
 import wallet from './wallet'
 import confirm from './confirm'
 import authorization from './authorization'
+import send from './send'
 
 export default {
   claim,
   page,
   wallet,
   confirm,
-  authorization
+  authorization,
+  send
 }

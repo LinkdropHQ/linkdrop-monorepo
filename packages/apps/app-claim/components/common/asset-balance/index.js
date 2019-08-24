@@ -23,9 +23,9 @@ class AssetBalance extends React.Component {
         {finalIcon}
       </div>
       <div className={styles.symbol}>{symbol}</div>
-      <div className={styles.amount}>{amount}</div>
+      <div className={styles.amount}>{(amount || 0).toFixed(2)}</div>
       <span className={styles.divider}>/</span>
-      <div className={styles.price}>${finalPrice}</div>
+      <div className={styles.price}>${(finalPrice || 0).toFixed(2)}</div>
     </div>
   }
 }

@@ -61,7 +61,7 @@ class Wallet extends React.Component {
           </div>
         </div>
       </div>
-      <Button onClick={_ => {
+      {/* <Button onClick={_ => {
         if (navigator.share) {
           navigator.share({
             title: 'Web Fundamentals',
@@ -71,7 +71,7 @@ class Wallet extends React.Component {
             .then(() => console.log('Successful share'))
             .catch((error) => console.log('Error sharing', error))
         }
-      }}>call modal window</Button>
+      }}>call modal window</Button> */}
     </Page>
   }
 }
