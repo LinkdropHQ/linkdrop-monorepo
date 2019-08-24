@@ -1,6 +1,6 @@
 {
   "name": "@linkdrop/ui-kit",
-  "version": "1.0.47",
+  "version": "1.0.48",
   "publishConfig": {
     "access": "public"
   },
@@ -26,7 +26,7 @@
     "@babel/preset-env": "^7.4.2",
     "@babel/preset-react": "^7.0.0",
     "@babel/register": "^7.4.0",
-    "@linkdrop/sdk": "^1.0.47",
+    "@linkdrop/sdk": "^1.0.48",
     "@storybook/addon-info": "^5.0.10",
     "autoprefixer": "^9.5.1",
     "babel-eslint": "^8.2.3",
