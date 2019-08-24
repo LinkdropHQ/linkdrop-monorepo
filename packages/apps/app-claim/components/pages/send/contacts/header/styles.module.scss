@@ -1,0 +1,15 @@
+@import "variables";
+
+.container {
+  height: 30px;
+  display: flex;
+  align-items: center;
+  padding: 0px 30px;
+  background: $dbMenuFooter;
+}
+
+.title {
+  font-size: 14px;
+  text-transform: uppercase;
+  color: $dbGrey;
+}

@@ -8,15 +8,16 @@ import { Input, Button, Icons } from '@linkdrop/ui-kit'
 class Header extends React.Component {
   render () {
     return <div className={styles.container}>
-      <div className={styles.close}>
-        <Icons.Cross />
-      </div>
-      <div className={styles.amount} />
-      <div className={styles.input}>
-        <Input />
-      </div>
-      <div className={styles.controls}>
-        <Button className={styles.button}>{this.t('buttons.pay')}</Button>
+      <div className={styles.content}>
+        <div className={styles.close}>
+          <Icons.Cross />
+        </div>
+        <div className={styles.amount}>
+          <Input className={styles.input} />
+        </div>
+        <div className={styles.controls}>
+          <Button className={styles.button}>{this.t('buttons.pay')}</Button>
+        </div>
       </div>
     </div>
   }
