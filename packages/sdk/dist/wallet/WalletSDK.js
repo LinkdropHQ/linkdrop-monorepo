@@ -45,14 +45,15 @@ function () {
   //
   function WalletSDK() {
     var chain = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'rinkeby';
+    var infuraId = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'd4d1a2b933e048e28fb6fe1abe3e813a';
     (0, _classCallCheck2["default"])(this, WalletSDK);
 
-    if (chain !== 'mainnet' && chain !== 'rinkeby') {
+    if (chain !== 'mainnet' && chain !== 'rinkeby' && chain !== 'goerli') {
       throw new Error('Chain not supported');
     }
 
     this.chain = chain;
-    this.jsonRpcUrl = "https://".concat(chain, ".infura.io");
+    this.jsonRpcUrl = "https://".concat(chain, ".infura.io/v3/").concat(infuraId);
     this.sdk = new _sdk["default"]("https://".concat(chain, "-ul.linkdrop.io"), this.jsonRpcUrl);
   }
 
@@ -589,8 +590,8 @@ function () {
                 message = _objectSpread({}, message, {
                   operationType: _commons.OPERATION_CALL,
                   gasToken: _commons.ETHER_NATIVE_TOKEN.address,
-                  gasLimit: utils.bigNumberify('1000000'),
-                  gasPrice: utils.bigNumberify(String(20e9))
+                  gasLimit: _ethers.utils.bigNumberify('1000000'),
+                  gasPrice: _ethers.utils.bigNumberify(String(20e9))
                 });
                 console.log({
                   message: message
@@ -614,7 +615,7 @@ function () {
                 _context11.t0 = _context11["catch"](0);
                 return _context11.abrupt("return", {
                   errors: _context11.t0,
-                  susccess: false
+                  success: false
                 });
 
               case 14:
