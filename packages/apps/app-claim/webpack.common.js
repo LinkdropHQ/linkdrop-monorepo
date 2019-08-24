@@ -6,7 +6,7 @@ const webpack = require('webpack')
 const path = require('path')
 const autoprefixer = require('autoprefixer')
 const WorkboxPlugin = require('workbox-webpack-plugin')
-var CopyWebpackPlugin = require('copy-webpack-plugin')
+const CopyWebpackPlugin = require('copy-webpack-plugin')
 
 const CSSModuleLoader = {
   loader: 'css-loader',
@@ -114,6 +114,7 @@ module.exports = {
       AUTH_DISCOVERY_DOCS: JSON.stringify(process.env.AUTH_DISCOVERY_DOCS),
       AUTH_SCOPE: JSON.stringify(process.env.AUTH_SCOPE),
       API_HOST_GOERLI: JSON.stringify(process.env.API_HOST_GOERLI),
+      INFURA_PK: JSON.stringify(process.env.INFURA_PK),
       'process.env': {
         NODE_ENV: JSON.stringify(process.env.NODE_ENV || 'development')
       }
