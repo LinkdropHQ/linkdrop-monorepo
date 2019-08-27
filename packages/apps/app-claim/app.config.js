@@ -11,7 +11,8 @@
   AUTH_CLIENT_ID,
   AUTH_API_KEY,
   AUTH_DISCOVERY_DOCS,
-  AUTH_SCOPE,
+  AUTH_SCOPE_CONTACTS,
+  AUTH_SCOPE_DRIVE,
   INFURA_PK
 */
 
@@ -42,7 +43,8 @@ const infuraPk = INFURA_PK || config.infuraPk
 const authClientId = AUTH_CLIENT_ID || authConfig.clientId
 const authApiKey = AUTH_API_KEY || authConfig.apiKey
 const authDiscoveryDocs = (AUTH_DISCOVERY_DOCS !== undefined && JSON.parse(AUTH_DISCOVERY_DOCS)) || authConfig.discoveryDocs
-const authScope = AUTH_SCOPE || authConfig.scope
+const authScopeContacts = AUTH_SCOPE_CONTACTS || authConfig.scopes.contacts
+const authScopeDrive = AUTH_SCOPE_DRIVE || authConfig.scopes.drive
 
 module.exports = {
   claimHost,
@@ -57,6 +59,7 @@ module.exports = {
   authClientId,
   authApiKey,
   authDiscoveryDocs,
-  authScope,
+  authScopeContacts,
+  authScopeDrive,
   infuraPk
 }

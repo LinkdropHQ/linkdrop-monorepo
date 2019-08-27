@@ -45,7 +45,7 @@ class Menu extends React.Component {
       clientId: config.authClientId,
       apiKey: config.authApiKey,
       discoveryDocs: config.authDiscoveryDocs,
-      scope: config.authScope
+      scope: `${config.authScopeDrive} ${config.authScopeContacts}`
     }).then(_ => {
       // Listen for sign-in state changes.
       this.setState({

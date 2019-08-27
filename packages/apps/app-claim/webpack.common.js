@@ -112,7 +112,8 @@ module.exports = {
       AUTH_CLIENT_ID: JSON.stringify(process.env.AUTH_CLIENT_ID),
       AUTH_API_KEY: JSON.stringify(process.env.AUTH_API_KEY),
       AUTH_DISCOVERY_DOCS: JSON.stringify(process.env.AUTH_DISCOVERY_DOCS),
-      AUTH_SCOPE: JSON.stringify(process.env.AUTH_SCOPE),
+      AUTH_SCOPE_DRIVE: JSON.stringify(process.env.AUTH_SCOPE_DRIVE),
+      AUTH_SCOPE_CONTACTS: JSON.stringify(process.env.AUTH_SCOPE_CONTACTS),
       API_HOST_GOERLI: JSON.stringify(process.env.API_HOST_GOERLI),
       INFURA_PK: JSON.stringify(process.env.INFURA_PK),
       'process.env': {
