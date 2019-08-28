@@ -24,7 +24,7 @@ const generator = function * ({ payload }) {
       from: contractAddress,
       to: tokenAddress,
       data,
-      value: amountFormatted
+      value: '0'
     }
     const result = yield sdk.execute(message, privateKey)
     console.log({ result })
