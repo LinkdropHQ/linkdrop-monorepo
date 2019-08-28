@@ -31,3 +31,8 @@
   background: $blackColor;
   color: $whiteColor;
 }
+
+.disabled {
+  opacity: .3;
+  cursor: not-allowed;
+}

@@ -25,10 +25,13 @@ class Tabs extends React.Component {
     const { options = [], onChange, className } = this.props
     const { active } = this.state
     return <div className={classNames(styles.container, className)}>
-      {options.map(({ title, id }) => <div
+      {options.map(({ title, id, disabled }) => <div
         key={id}
-        className={classNames(styles.option, { [styles.active]: active === id })}
-        onClick={_ => this.setState({ active: id }, _ => onChange && onChange({ id }))}
+        className={classNames(styles.option, {
+          [styles.active]: active === id,
+          [styles.disabled]: disabled
+        })}
+        onClick={_ => !disabled && this.setState({ active: id }, _ => onChange && onChange({ id }))}
       >
         {title}
       </div>)}

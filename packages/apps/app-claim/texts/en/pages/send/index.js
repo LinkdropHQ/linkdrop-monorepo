@@ -4,7 +4,7 @@ export default {
   },
   titles: {
     to: 'To:',
-    toPlaceholder: 'Email, 0x Address',
+    toPlaceholder: 'ENS, 0x…',
     for: 'For:',
     forPlaceholder: 'dinner, to try, etc.',
     contacts: 'Contacts'

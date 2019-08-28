@@ -21,6 +21,7 @@ import Ethereum from './ethereum'
 import Done from './done'
 import About from './about'
 import Profile from './profile'
+import ExpandArrow from './expand-arrow'
 
 export default {
   LinkdropLogo,
@@ -45,5 +46,6 @@ export default {
   Ethereum,
   Done,
   About,
-  Profile
+  Profile,
+  ExpandArrow
 }

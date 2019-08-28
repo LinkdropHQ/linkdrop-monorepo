@@ -6,10 +6,17 @@
   padding: 0px 30px;
   border-bottom: 1px solid $greyStrokeMenuColor;
   align-items: center;
+
+  div {
+    &:last-child {
+      flex: 1;
+    }
+  }
 }
 
 .input {
   border: none;
+  width: 100%;
   font-size: 18px;
   &::placeholder {
     color: $dbBlueTransparent;

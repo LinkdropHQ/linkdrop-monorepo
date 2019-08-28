@@ -36,11 +36,13 @@ class Assets extends React.Component {
       return 0
     })
     return <div style={style} className={classNames(styles.container, { [styles.expanded]: expanded })}>
-      <div className={styles.arrow} onClick={e => {
-        e.stopPropagation()
-        this.setState({ expanded: !expanded })
-      }}>
-        <Icons.PolygonArrow fill='#000' />
+      <div
+        className={styles.arrow} onClick={e => {
+          e.stopPropagation()
+          this.setState({ expanded: !expanded })
+        }}
+      >
+        <Icons.ExpandArrow />
       </div>
       {items.map(({
         icon,
