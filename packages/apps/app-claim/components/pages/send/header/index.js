@@ -15,7 +15,7 @@ class Header extends React.Component {
   }
 
   render () {
-    const { sendTo } = this.props
+    const { sendTo, onSend } = this.props
     const { amount } = this.state
     return <div className={styles.container}>
       <div className={styles.content}>
@@ -36,6 +36,7 @@ class Header extends React.Component {
           <Button
             disabled={!sendTo || sendTo.length === 0 || Number(amount) === 0}
             className={styles.button}
+            onClick={_ => onSend && onSend({ amount })}
           >
             {this.t('buttons.pay')}
           </Button>

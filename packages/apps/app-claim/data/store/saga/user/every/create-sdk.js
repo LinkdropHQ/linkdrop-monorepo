@@ -5,7 +5,7 @@ import { defineNetworkName } from '@linkdrop/commons'
 
 const generator = function * ({ payload }) {
   try {
-    const { chainId = '4' } = payload
+    const { chainId = '1' } = payload
     const networkName = defineNetworkName({ chainId })
     const sdk = initializeWalletSdk({ chain: networkName, infuraPk: config.infuraPk })
     yield put({ type: 'USER.SET_SDK', payload: { sdk } })

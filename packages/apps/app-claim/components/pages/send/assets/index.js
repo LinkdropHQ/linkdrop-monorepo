@@ -11,23 +11,21 @@ class Assets extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      currentAsset: props.items[0].tokenAddress,
       expanded: false
     }
   }
 
   componentsWillReceiveProps ({ items }) {
-    const { items: prevItems } = this.props
+    const { items: prevItems, onChange } = this.props
     if (items && items.length > 0 && (!prevItems || prevItems.length === 0)) {
-      this.setState({
-        currentAsset: items[0].tokenAddress
-      })
+      onChange && onChange({ currentAsset: items[0].tokenAddress })
     }
   }
 
   render () {
-    const { expanded, currentAsset } = this.state
-    const { items } = this.props
+    const { expanded } = this.state
+    const { items, currentAsset, onChange } = this.props
+    if (!items || items.length === 0) { return null }
     const height = expanded ? `${(items.length * (40 + 15) + 30 - 15)}px` : '70px'
     const style = { height }
     items.sort((a, b) => {
@@ -53,8 +51,8 @@ class Assets extends React.Component {
       }) => <AssetBalance
         onClick={_ => {
           this.setState({
-            currentAsset: tokenAddress
-          })
+            expanded: false
+          }, _ => onChange && onChange({ currentAsset: tokenAddress }))
         }}
         key={tokenAddress}
         className={styles.asset}

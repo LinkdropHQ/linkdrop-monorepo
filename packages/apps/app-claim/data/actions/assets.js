@@ -26,6 +26,14 @@ class Assets {
   getItems ({ wallet, chainId }) {
     this.actions.dispatch({ type: '*ASSETS.GET_ITEMS', payload: { wallet, chainId } })
   }
+
+  sendErc20 ({ to, amount, tokenAddress, decimals }) {
+    this.actions.dispatch({ type: '*ASSETS.SEND_ERC20', payload: { to, amount, tokenAddress, decimals } })
+  }
+
+  sendEth ({ to, amount }) {
+    this.actions.dispatch({ type: '*ASSETS.SEND_ETH', payload: { to, amount } })
+  }
 }
 
 export default Assets
