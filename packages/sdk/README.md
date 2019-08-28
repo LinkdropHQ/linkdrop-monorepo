@@ -13,11 +13,11 @@ yarn add @linkdrop/sdk
 ## Usage
 
 ```js
-const LinkdropSDK = require('@linkdrop/sdk')
+const LinkdropSDK = require('@linkdrop/sdk').LinkdropSDK
 
 // OR
 
-import {LinkdropSDK} from '@linkdrop/sdk'
+import { LinkdropSDK } from '@linkdrop/sdk'
 ```
 
 ### Initialization
@@ -25,21 +25,23 @@ import {LinkdropSDK} from '@linkdrop/sdk'
 ```js
 const linkdropSDK = new LinkdropSDK({
   linkdropMasterAddress: <LINKDROP_MASTER_ADDRESS>,
+  factoryAddress = <LINKDROP_FACTORY_ADDRESS>,
   // optional params:
   // chain = <CHAIN>, // 'mainnet' by default
-  // chainId = <CHAIN_ID>, // getChainId(chain) by default
   // jsonRpcUrl = <JSON_RPC_URL>, // `https://${chain}.infura.io` by default,
   // apiHost = <API_HOST>, // `https://${chain}.linkdrop.io` by default
   // claimHost = <CLAIM_HOST>, // 'https://claim.linkdrop.io' by default
-  // factory = <LINKDROP_FACTORY_ADDRESS>, // '0x01e7F4C72182Eb4421AFB1Ec99cee9Ef5B83EE18' by default
 }))
 ```
 
-### Get proxy address
+You can deploy your own Linkdrop factory contract or use ours deployed on Mainnet, Rinkeby and Goerli networks at `0xBa051891B752ecE3670671812486fe8dd34CC1c8`
+
+
+### Precompute proxy address
 
 ```js
-const campaignId = 1
-const proxyAddress = linkdropSDK.getProxyAddress(campaignId)
+let campaignId = 1
+let proxyAddress = linkdropSDK.getProxyAddress(campaignId)
 ```
 
 ### Generate link for ETH or ERC20
