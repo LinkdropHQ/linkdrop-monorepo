@@ -46,7 +46,7 @@ class ClaimingProcessPage extends React.Component {
     }
     if (status != null && status === 'claimed' && prevStatus === null) {
       this.statusCheck && window.clearInterval(this.statusCheck)
-      this.actions().tokens.checkTransactionStatus({ transactionStatus: null })
+      this.actions().tokens.setTransactionStatus({ transactionStatus: null })
       window.setTimeout(_ => {
         this.setState({
           loading: false

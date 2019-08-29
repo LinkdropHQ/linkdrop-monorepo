@@ -44,12 +44,15 @@ class Send extends React.Component {
     if (status != null && status === 'sent' && prevStatus === null) {
       this.statusCheck && window.clearInterval(this.statusCheck)
       this.actions().assets.getItems({ chainId })
-      this.actions().tokens.checkTransactionStatus({ transactionStatus: null })
-      // window.setTimeout(_ => {
-      //   this.setState({
-      //     loading: false
-      //   }, _ => this.actions().assets.saveClaimedAssets())
-      // }, 3000)
+      this.actions().tokens.setTransactionStatus({ transactionStatus: null })
+    }
+
+    if (status != null && status === 'failed' && prevStatus === null) {
+      this.statusCheck && window.clearInterval(this.statusCheck)
+      this.actions().assets.getItems({ chainId })
+      this.actions().tokens.setTransactionStatus({ transactionStatus: null })
+      alert(`unfortunately your transaction was failed, check txhash: ${id}`)
+      this.actions().tokens.setTransactionId({ transactionId: null })
     }
   }
 
@@ -97,7 +100,6 @@ class Send extends React.Component {
     const { items } = this.props
     const { sendTo, currentAsset, amount } = this.state
     const { decimals } = items.find(item => item.tokenAddress === currentAsset)
-    alert(JSON.stringify({ sendTo, amount }))
     if (currentAsset === ethers.constants.AddressZero) {
       this.actions().assets.sendEth({ to: sendTo, amount })
     } else {

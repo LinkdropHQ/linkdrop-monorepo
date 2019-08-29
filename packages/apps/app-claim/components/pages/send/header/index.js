@@ -21,7 +21,7 @@ class Header extends React.Component {
       this.setState({
         finished: true
       }, _ => {
-        this.actions().tokens.checkTransactionStatus({ transactionStatus: null })
+        this.actions().tokens.setTransactionStatus({ transactionStatus: null })
         window.setTimeout(_ => this.setState({
           finished: false
         }), 3000)

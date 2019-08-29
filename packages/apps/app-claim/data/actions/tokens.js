@@ -18,6 +18,14 @@ class Tokens {
   checkIfClaimed ({ linkKey, chainId, linkdropMasterAddress, campaignId }) {
     this.actions.dispatch({ type: '*TOKENS.CHECK_IF_CLAIMED', payload: { linkKey, chainId, linkdropMasterAddress, campaignId } })
   }
+
+  setTransactionId ({ transactionId }) {
+    this.actions.dispatch({ type: 'TOKENS.SET_TRANSACTION_ID', payload: { transactionId } })
+  }
+
+  setTransactionStatus ({ transactionStatus }) {
+    this.actions.dispatch({ type: 'TOKENS.SET_TRANSACTION_STATUS', payload: { transactionStatus } })
+  }
 }
 
 export default Tokens

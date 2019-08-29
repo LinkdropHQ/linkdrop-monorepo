@@ -8,6 +8,10 @@ const generator = function * ({ payload }) {
     const networkName = defineNetworkName({ chainId })
     const provider = yield ethers.getDefaultProvider(networkName)
     const receipt = yield provider.getTransactionReceipt(transactionId)
+    if (receipt && receipt.status === 0) {
+      yield put({ type: 'TOKENS.SET_TRANSACTION_STATUS', payload: { transactionStatus: 'failed' } })
+      return yield put({ type: 'USER.SET_LOADING', payload: { loading: false } })
+    }
     if (receipt && receipt.confirmations != null && receipt.confirmations > 0) {
       yield put({ type: 'TOKENS.SET_TRANSACTION_ID', payload: { transactionId: null } })
       yield put({ type: 'TOKENS.SET_TRANSACTION_STATUS', payload: { transactionStatus: statusToAdd } })

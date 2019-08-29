@@ -1,28 +1,20 @@
-/* global web3 */
-import { mocks } from '@linkdrop/commons'
+import { defineNetworkName } from '@linkdrop/commons'
 import { put, select } from 'redux-saga/effects'
 import TokenMock from 'contracts/TokenMock.json'
-import { utils } from 'ethers'
-
-let web3Obj
-try {
-  web3Obj = web3
-} catch (e) {
-  web3Obj = new mocks.Web3Mock()
-}
+import { utils, ethers } from 'ethers'
 
 const generator = function * ({ payload }) {
   try {
     yield put({ type: 'USER.SET_LOADING', payload: { loading: true } })
-    const { to, amount, tokenAddress, decimals } = payload
+    const { to, amount, tokenAddress, decimals, chainId = '1' } = payload
     const sdk = yield select(generator.selectors.sdk)
+    const networkName = defineNetworkName({ chainId })
+    const provider = yield ethers.getDefaultProvider(networkName)
     const privateKey = yield select(generator.selectors.privateKey)
-    const tokenContract = yield web3Obj.eth.contract(TokenMock.abi).at(tokenAddress)
+    const tokenContract = new ethers.Contract(tokenAddress, TokenMock.abi, provider)
     const contractAddress = yield select(generator.selectors.contractAddress)
     const amountFormatted = utils.parseUnits(String(amount.trim()), decimals)
-
-    const data = yield tokenContract.transfer.getData(to, String(amountFormatted), { from: contractAddress })
-    alert(JSON.stringify({ to, amount: String(amountFormatted), from: { from: contractAddress } }))
+    const data = yield tokenContract.interface.functions.transfer.encode([to, amountFormatted])
     const message = {
       from: contractAddress,
       to: tokenAddress,
