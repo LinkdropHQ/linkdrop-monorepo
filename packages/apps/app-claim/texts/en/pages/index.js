@@ -4,6 +4,7 @@ import wallet from './wallet'
 import confirm from './confirm'
 import authorization from './authorization'
 import send from './send'
+import receive from './receive'
 
 export default {
   claim,
@@ -11,5 +12,6 @@ export default {
   wallet,
   confirm,
   authorization,
-  send
+  send,
+  receive
 }

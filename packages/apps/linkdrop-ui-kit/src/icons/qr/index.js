@@ -1,21 +1,18 @@
-import React from 'react'
 import variables from 'variables'
+import React from 'react'
 
 const Qr = props => (
-  <svg width={30} height={30} fill='none' {...props}>
+  <svg width={32} height={32} fill='none' {...props}>
     <path
-      d='M2.727 2.727v8.182h8.182V2.727H2.727zM0 0h13.636v13.636H0V0z'
+      d='M10.375 17.875H4.75A3.75 3.75 0 001 21.625v5.625A3.75 3.75 0 004.75 31h5.625a3.75 3.75 0 003.75-3.75v-5.625a3.75 3.75 0 00-3.75-3.75zm0 8.438a.938.938 0 01-.938.937h-3.75a.938.938 0 01-.937-.938v-3.75a.937.937 0 01.938-.937h3.75a.938.938 0 01.937.938v3.75zM27.25 1h-5.625a3.75 3.75 0 00-3.75 3.75v5.625a3.75 3.75 0 003.75 3.75h5.625a3.75 3.75 0 003.75-3.75V4.75A3.75 3.75 0 0027.25 1zm0 8.438a.938.938 0 01-.938.937h-3.75a.938.938 0 01-.937-.938v-3.75a.938.938 0 01.938-.937h3.75a.937.937 0 01.937.938v3.75zM10.375 1H4.75A3.75 3.75 0 001 4.75v5.625a3.75 3.75 0 003.75 3.75h5.625a3.75 3.75 0 003.75-3.75V4.75A3.75 3.75 0 0010.375 1zm0 8.438a.938.938 0 01-.938.937h-3.75a.938.938 0 01-.937-.938v-3.75a.937.937 0 01.938-.937h3.75a.937.937 0 01.937.938v3.75z'
       fill={variables.blackColor}
+      stroke='#fff'
+      strokeWidth={0.5}
     />
-    <path
-      d='M8.182 5.455H5.455v2.727h2.727V5.455zM8.182 21.818H5.455v2.727h2.727v-2.727zM21.818 16.364h-5.454v2.727h5.454v-2.727zM19.09 21.818h-2.726V30h2.727v-8.182zM24.545 27.273h-2.727V30h2.727v-2.727zM27.273 16.364h-2.727v2.727h2.727v-2.727zM24.545 5.455h-2.727v2.727h2.727V5.455z'
-      fill={variables.blackColor}
-    />
-    <path
-      d='M19.09 2.727v8.182h8.183V2.727H19.09zM16.365 0H30v13.636H16.364V0zM2.727 19.09v8.183h8.182V19.09H2.727zM0 16.365h13.636V30H0V16.364zM21.818 24.546v-2.728h5.455v2.727h-5.455z'
-      fill={variables.blackColor}
-    />
-    <path d='M30 30h-2.727V16.364H30V30z' fill={variables.blackColor} />
+    <circle cx={20.5} cy={20.5} r={2.5} fill={variables.blackColor} />
+    <circle cx={28} cy={20.5} r={2.5} fill={variables.blackColor} />
+    <circle cx={28} cy={28} r={2.5} fill={variables.blackColor} />
+    <circle cx={20.5} cy={28} r={2.5} fill={variables.blackColor} />
   </svg>
 )
 

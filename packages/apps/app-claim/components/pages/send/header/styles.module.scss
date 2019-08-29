@@ -23,11 +23,18 @@
 
 .button {
   padding: 0px 15px;
-  min-width: auto;
   font-size: 20px;
   color: $whiteColor;
   width: auto;
+  min-width: 65px;
   background: $dbBlue;
+}
+
+.finishedButton {
+  background: $greenColorTransparent;
+  min-width: 65px;
+  width: auto;
+  padding: 0px 15px;
 }
 
 .input {

@@ -5,7 +5,7 @@ import PropTypes from 'prop-types'
 
 class Button extends React.Component {
   render () {
-    const { disabled, target, children, inverted, onClick, className, size = 'normal', loading, href } = this.props
+    const { disabled, target, children, inverted, onClick, className, loadingClassName, size = 'normal', loading, href } = this.props
     if (href) {
       return <a
         href={href}
@@ -21,14 +21,14 @@ class Button extends React.Component {
       disabled={disabled}
       className={this.defineClassNames({ disabled, size, loading, className, inverted })}
     >
-      {loading ? <div className={styles.loading}><div /><div /><div /><div /></div> : children}
+      {loading ? <div className={classNames(styles.loading, loadingClassName)}><div /><div /><div /><div /></div> : children}
     </button>
   }
 
   defineClassNames ({ disabled, size, loading, className, inverted }) {
     return classNames(styles.container, className, styles[`${size}Size`], {
       [styles.disabled]: disabled,
-      [styles.inverted]: inverted || loading
+      [styles.inverted]: inverted
     })
   }
 }

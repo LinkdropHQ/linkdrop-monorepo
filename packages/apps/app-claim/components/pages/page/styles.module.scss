@@ -1,8 +1,18 @@
 .main {
-  min-height: calc(100vh - 150px);
+  height: calc(100vh - 150px);
   display: flex;
   align-items: center;
   justify-content: center;
-  overflow-x: hidden; 
   position: relative;
+}
+
+
+.container {
+  overflow: hidden;
+  max-width: 100vw;
+  &.hideHeader {
+    .main {
+      height: calc(100vh - 60px);
+    }
+  }
 }

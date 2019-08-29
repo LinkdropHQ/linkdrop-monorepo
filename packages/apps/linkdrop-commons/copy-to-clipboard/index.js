@@ -23,7 +23,7 @@ export default ({ value }) => {
 
     if (isOS()) {
       range = document.createRange()
-      range.selectNodeContents(textArea)
+      range.selectNode(textArea)
       selection = window.getSelection()
       selection.removeAllRanges()
       selection.addRange(range)

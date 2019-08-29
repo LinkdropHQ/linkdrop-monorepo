@@ -5,6 +5,7 @@ import styles from './styles.module'
 import text from 'texts'
 import { actions } from 'decorators'
 import config from 'app.config.js'
+import variables from 'variables'
 
 let gapiObj
 try {
@@ -61,7 +62,8 @@ class Menu extends React.Component {
     const MENU = [
       {
         title: text('common.walletHeader.menu.buyTokens'),
-        onClick: _ => this.actions().user.setMoonpayShow({ moonpayShow: true })
+        onClick: _ => this.actions().user.setMoonpayShow({ moonpayShow: true }),
+        color: variables.greenColor
       }, {
         title: text('common.walletHeader.menu.chat'),
         href: 'https://t.me/LinkdropHQ'
@@ -79,13 +81,15 @@ class Menu extends React.Component {
               location.reload(true)
             })
           }
-        }
+        },
+        color: variables.redColor
       }
     ]
     return <div className={styles.container}>
-      {MENU.map(({ title, href, onClick }) => {
-        if (href) { return <a traget='_blank' key={title} href={href} className={styles.menuItem}>{title}</a> }
-        return <div onClick={_ => onClick && onClick()} key={title} className={styles.menuItem}>{title}</div>
+      {MENU.map(({ title, href, onClick, color }) => {
+        const style = color ? { color } : {}
+        if (href) { return <a style={style} traget='_blank' key={title} href={href} className={styles.menuItem}>{title}</a> }
+        return <div style={style} onClick={_ => onClick && onClick()} key={title} className={styles.menuItem}>{title}</div>
       })}
     </div>
   }

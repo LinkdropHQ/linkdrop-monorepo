@@ -24,29 +24,38 @@ class WalletHeader extends React.Component {
     const { avatar, ens } = this.props
     return <div className={classNames(styles.container, {
       [styles.opened]: opened
-    })}>
+    })}
+    >
       <div className={styles.header}>
-        <div className={styles.headerIcon} onClick={_ => this.setState({
-          opened: !opened
-        })}>
+        <div
+          className={styles.headerIcon} onClick={_ => this.setState({
+            opened: !opened
+          })}
+        >
           <Icons.Profile />
         </div>
         <a href='/#/'>{this.t('titles.wallet')}</a>
       </div>
       <div className={styles.body}>
         <div className={styles.bodyHeader}>
-          <div className={styles.headerIcon} onClick={_ => this.setState({
-            opened: !opened
-          })}>
-            <Icons.Cross />
+          <div className={styles.bodyHeaderQrIcon} onClick={_ => { window.location.href = '/#/get' }}>
+            <Icons.Qr />
           </div>
           {this.t('titles.about')}
+          <div
+            className={styles.bodyHeaderCloseIcon} onClick={_ => this.setState({
+              opened: !opened
+            })}
+          >
+            <Icons.Cross />
+          </div>
         </div>
         <div className={styles.bodyMain}>
           <Scrollbars style={{
-            heigth: 'calc(100vh - 90px)',
+            height: 'calc(100vh - 90px)',
             width: '100%'
-          }}>
+          }}
+          >
             <div className={styles.bodyContent}>
               {this.renderAvatar({ avatar })}
               {this.renderName({ ens })}

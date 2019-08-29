@@ -7,9 +7,7 @@ const generator = function * ({ payload }) {
     const sdk = yield select(generator.selectors.sdk)
     const privateKey = yield select(generator.selectors.privateKey)
     const contractAddress = yield select(generator.selectors.contractAddress)
-    console.log({ to, amount })
     const amountFormatted = utils.parseEther(String(amount).trim())
-    console.log({ amountFormatted, contractAddress })
 
     const message = {
       from: contractAddress,
@@ -18,7 +16,15 @@ const generator = function * ({ payload }) {
       value: amountFormatted
     }
     const result = yield sdk.execute(message, privateKey)
-    console.log({ result })
+    const { success, errors, txHash } = result
+    if (success) {
+      yield put({ type: 'TOKENS.SET_TRANSACTION_ID', payload: { transactionId: txHash } })
+    } else {
+      if (errors.length > 0) {
+        yield put({ type: 'USER.SET_LOADING', payload: { loading: false } })
+        console.error(errors[0])
+      }
+    }
   } catch (e) {
     console.error(e)
   }

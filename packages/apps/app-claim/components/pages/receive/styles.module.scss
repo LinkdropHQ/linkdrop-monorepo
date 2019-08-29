@@ -1,0 +1,55 @@
+@import "variables";
+
+.container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100vw;
+}
+
+.qr {
+  width: 100%;
+  height: 210px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 1px solid $greyStrokeMenuColor;
+}
+
+.close {
+  position: absolute;
+  top: 30px;
+  left: 30px;
+}
+
+.address {
+  height: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 1px solid $greyStrokeMenuColor;
+  .addressText {
+    max-width: 315px;
+    width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    overflow: hidden;
+    font-size: 18px;
+    text-overflow: ellipsis;
+    color: $dbBlue;
+  }
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: 50px;
+}
+
+.button {
+  background-color: $dbBlue;
+  max-width: 300px;
+  min-width: 300px;
+}

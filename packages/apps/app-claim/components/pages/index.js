@@ -5,6 +5,7 @@ import Wallet from './wallet'
 import Confirm from './confirm'
 import Authorization from './authorization'
 import Send from './send'
+import Receive from './receive'
 
 export {
   NotFound,
@@ -13,5 +14,6 @@ export {
   Wallet,
   Confirm,
   Authorization,
-  Send
+  Send,
+  Receive
 }

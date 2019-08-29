@@ -13,13 +13,20 @@
   position: relative;
   font-family: 'Inter-Bold';
 
-  .headerIcon {
+  .bodyHeaderCloseIcon, .bodyHeaderQrIcon, .headerIcon {
     position: absolute;
-    left: 30px;
     top: 50%;
     cursor: pointer;
     transform: translateY(-50%);
     height: 40px;
+  }
+
+  .bodyHeaderCloseIcon {
+    right: 30px;
+  }
+
+  .bodyHeaderQrIcon, .headerIcon {
+    left: 30px;
   }
 
   a {
@@ -69,6 +76,8 @@
 
 .container {
   background: $whiteColor;
+  position: relative;
+  max-width: 100vw;
   &.opened {
     .body {
       right: 0;
