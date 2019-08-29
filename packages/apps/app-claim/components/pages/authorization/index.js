@@ -1,9 +1,9 @@
 /* global gapi */
 import React from 'react'
-import { Button } from '@linkdrop/ui-kit'
+import { Button, RetinaImage } from '@linkdrop/ui-kit'
 import styles from './styles.module'
 import { Page } from 'components/pages'
-import { getEns } from 'helpers'
+import { getEns, getImages } from 'helpers'
 import { actions, translate } from 'decorators'
 import config from 'app.config.js'
 import { getHashVariables } from '@linkdrop/commons'
@@ -149,7 +149,10 @@ class Authorization extends React.Component {
     return <Page>
       <div className={styles.container}>
         <h2 className={styles.title} dangerouslySetInnerHTML={{ __html: this.t('titles.signIn') }} />
-        <Button inverted loading={!enableAuthorize || loading} onClick={e => this.handleAuthClick(e)}>{this.t('titles.googleSignIn')}</Button>
+        <Button className={styles.button} inverted loading={!enableAuthorize || loading} onClick={e => this.handleAuthClick(e)}>
+          <RetinaImage width={30} {...getImages({ src: 'google' })} />
+          {this.t('titles.googleSignIn')}
+        </Button>
       </div>
     </Page>
   }

@@ -14,27 +14,13 @@
   color: $greyColor;
   transition: all .3s;
 
-  span {
+  a {
+    text-decoration: none;
+    transition: color .3s;
     color: $blackColor;
-    transition: all .3s;
-  }
-
-  &.withLink {
-    a {
-      text-decoration: none;
-      color: $greyColor;
-    }
-    span {
-      color: $blackColor;
-    }
     &:hover {
-      a {
-        text-decoration: none;
-        color: $textGreyColor;
-      }
-      span {
-        color: $textGreyColor;
-      }
+      text-decoration: none;
+      color: $textGreyColor;
     }
   }
 }

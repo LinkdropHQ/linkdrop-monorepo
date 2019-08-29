@@ -17,7 +17,7 @@ class Page extends React.Component {
         {this.props.children}
       </div>
       <Footer
-        content={<a href='https://t.me/LinkdropHQ' target='_blank'><RetinaImage width={138} {...getImages({ src: 'footer-image' })} /></a>}
+        content={text('components.footer.copyright', { href: 'https://t.me/LinkdropHQ' })}
       />
       {moonpayShow && <MoonpayWidget onClose={_ => this.actions().user.setMoonpayShow({ moonpayShow: false })} />}
     </div>

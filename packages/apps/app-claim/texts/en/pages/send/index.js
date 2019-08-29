@@ -7,6 +7,7 @@ export default {
     toPlaceholder: 'ENS, 0x…',
     for: 'For:',
     forPlaceholder: 'dinner, to try, etc.',
-    contacts: 'Contacts'
+    contacts: 'Contacts',
+    payViaLink: 'Pay via link'
   }
 }

@@ -7,16 +7,8 @@ import classNames from 'classnames'
 @actions(({ user: { loading, contractAddress }, assets: { items } }) => ({ items, loading, contractAddress }))
 @translate('pages.send')
 class Header extends React.Component {
-  constructor (props) {
-    super(props)
-    this.state = {
-      amount: 0
-    }
-  }
-
   render () {
-    const { sendTo, onSend } = this.props
-    const { amount } = this.state
+    const { sendTo, onSend, amount, onChange, loading } = this.props
     return <div className={styles.container}>
       <div className={styles.content}>
         <div className={styles.close} onClick={_ => { window.location.href = '/#/' }}>
@@ -26,7 +18,7 @@ class Header extends React.Component {
           <Input
             numberInput
             value={amount}
-            onChange={({ value }) => this.setState({ amount: value })}
+            onChange={({ value }) => onChange({ amount: value })}
             className={classNames(styles.input, {
               [styles.empty]: Number(amount) === 0
             })}
@@ -34,9 +26,10 @@ class Header extends React.Component {
         </div>
         <div className={styles.controls}>
           <Button
+            loading={loading}
             disabled={!sendTo || sendTo.length === 0 || Number(amount) === 0}
             className={styles.button}
-            onClick={_ => onSend && onSend({ amount })}
+            onClick={_ => onSend && onSend()}
           >
             {this.t('buttons.pay')}
           </Button>

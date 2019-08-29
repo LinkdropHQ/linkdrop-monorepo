@@ -5,7 +5,7 @@ class Footer extends React.Component {
   render () {
     const { content } = this.props
     return <footer className={styles.container}>
-      {content}
+      <div dangerouslySetInnerHTML={{ __html: content }} />
     </footer>
   }
 }

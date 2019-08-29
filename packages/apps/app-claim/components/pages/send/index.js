@@ -6,6 +6,7 @@ import Header from './header'
 import Assets from './assets'
 import Input from './input'
 import Contacts from './contacts'
+import LinkPay from './link-pay'
 import { getHashVariables } from '@linkdrop/commons'
 import { Scrollbars } from 'react-custom-scrollbars'
 import { ethers } from 'ethers'
@@ -17,7 +18,8 @@ class Send extends React.Component {
     super(props)
     this.state = {
       sendTo: '',
-      currentAsset: (props.items[0] || {}).tokenAddress
+      currentAsset: (props.items[0] || {}).tokenAddress,
+      amount: 0
     }
   }
 
@@ -32,9 +34,14 @@ class Send extends React.Component {
   }
 
   render () {
-    const { sendTo, currentAsset } = this.state
+    const { sendTo, currentAsset, amount } = this.state
     return <div className={styles.container}>
-      <Header sendTo={sendTo} onSend={({ amount }) => this.onSend({ amount })} />
+      <Header
+        sendTo={sendTo}
+        amount={amount}
+        onChange={({ amount }) => this.setState({ amount })}
+        onSend={_ => this.onSend()}
+      />
       <Scrollbars style={{
         heigth: 'calc(100vh - 90px)',
         width: '100%'
@@ -52,14 +59,15 @@ class Send extends React.Component {
           />
           {false && <Input title={this.t('titles.for')} placeholder={this.t('titles.forPlaceholder')} />}
           {false && <Contacts />}
+          <LinkPay title={this.t('titles.payViaLink')} disabled={!amount || !Number(amount)} />
         </div>
       </Scrollbars>
     </div>
   }
 
-  onSend ({ amount }) {
+  onSend () {
     const { items } = this.props
-    const { sendTo, currentAsset } = this.state
+    const { sendTo, currentAsset, amount } = this.state
     const { decimals } = items.find(item => item.tokenAddress === currentAsset)
     if (currentAsset === ethers.constants.AddressZero) {
       this.actions().assets.sendEth({ to: sendTo, amount })

@@ -1,3 +1,3 @@
 export default {
-  copyright: 'Powered by <span>Linkdrop</span>'
+  copyright: 'Powered by <a href="{{href}}" target="_blank">Linkdrop</a>'
 }
