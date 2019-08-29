@@ -22,7 +22,7 @@ const generator = function * ({ payload }) {
     const amountFormatted = utils.parseUnits(String(amount.trim()), decimals)
 
     const data = yield tokenContract.transfer.getData(to, String(amountFormatted), { from: contractAddress })
-    alert(JSON.stringify({ data }))
+    alert(JSON.stringify(to, String(amountFormatted), { from: contractAddress }))
     const message = {
       from: contractAddress,
       to: tokenAddress,
