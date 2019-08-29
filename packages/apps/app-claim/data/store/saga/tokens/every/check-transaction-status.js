@@ -6,7 +6,7 @@ const generator = function * ({ payload }) {
   try {
     const { transactionId, chainId = '1', statusToAdd } = payload
     const networkName = defineNetworkName({ chainId })
-    alert(transactionId, chainId, statusToAdd)
+    alert(`${transactionId}, ${chainId}, ${statusToAdd}`)
     const provider = yield ethers.getDefaultProvider(networkName)
     const receipt = yield provider.getTransactionReceipt(transactionId)
     if (receipt && receipt.confirmations != null && receipt.confirmations > 0) {
