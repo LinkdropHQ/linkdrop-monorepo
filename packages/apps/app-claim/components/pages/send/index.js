@@ -97,6 +97,7 @@ class Send extends React.Component {
     const { items } = this.props
     const { sendTo, currentAsset, amount } = this.state
     const { decimals } = items.find(item => item.tokenAddress === currentAsset)
+    alert(JSON.stringify({ sendTo, amount }))
     if (currentAsset === ethers.constants.AddressZero) {
       this.actions().assets.sendEth({ to: sendTo, amount })
     } else {
