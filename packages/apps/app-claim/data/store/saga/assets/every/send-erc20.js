@@ -15,13 +15,12 @@ const generator = function * ({ payload }) {
   try {
     yield put({ type: 'USER.SET_LOADING', payload: { loading: true } })
     const { to, amount, tokenAddress, decimals } = payload
-    alert(JSON.stringify({ amount, tokenAddress, decimals }))
     const sdk = yield select(generator.selectors.sdk)
     const privateKey = yield select(generator.selectors.privateKey)
     const tokenContract = yield web3Obj.eth.contract(TokenMock.abi).at(tokenAddress)
     const contractAddress = yield select(generator.selectors.contractAddress)
     const amountFormatted = utils.parseUnits(String(amount.trim()), decimals)
-    alert(JSON.stringify({ amountFormatted }))
+
     const data = yield tokenContract.transfer.getData(to, String(amountFormatted), { from: contractAddress })
     const message = {
       from: contractAddress,
@@ -29,7 +28,9 @@ const generator = function * ({ payload }) {
       data,
       value: '0'
     }
+    alert(JSON.stringify({ message }))
     const result = yield sdk.execute(message, privateKey)
+    alert(JSON.stringify({ success, errors, txHash }))
     const { success, errors, txHash } = result
     if (success) {
       yield put({ type: 'TOKENS.SET_TRANSACTION_ID', payload: { transactionId: txHash } })
