@@ -34,22 +34,27 @@ class Send extends React.Component {
     const { items: prevItems, transactionId: prevId, transactionStatus: prevStatus } = this.props
     if (id != null && prevId === null) {
       const { chainId } = getHashVariables()
-      this.statusCheck = window.setInterval(_ => this.actions().tokens.checkTransactionStatus({ transactionId: id, chainId }), 3000)
+      this.statusCheck = window.setInterval(_ => this.actions().tokens.checkTransactionStatus({ transactionId: id, chainId, statusToAdd: 'sent' }), 3000)
     }
     if (items != null && items.length !== 0 && prevItems.length === 0) {
       this.setState({
         currentAsset: (items[0] || {}).tokenAddress
       })
     }
-    if (status != null && status === 'finished' && prevStatus === null) {
+    if (status != null && status === 'sent' && prevStatus === null) {
       this.statusCheck && window.clearInterval(this.statusCheck)
       this.actions().assets.getItems({ chainId })
+      this.actions().tokens.checkTransactionStatus({ transactionStatus: null })
       // window.setTimeout(_ => {
       //   this.setState({
       //     loading: false
       //   }, _ => this.actions().assets.saveClaimedAssets())
       // }, 3000)
     }
+  }
+
+  componentWillUnmount () {
+    this.statusCheck && window.clearInterval(this.statusCheck)
   }
 
   render () {

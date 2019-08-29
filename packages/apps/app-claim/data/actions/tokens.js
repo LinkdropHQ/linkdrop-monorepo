@@ -11,8 +11,8 @@ class Tokens {
     this.actions.dispatch({ type: '*TOKENS.CLAIM_TOKENS_ERC721', payload: { wallet, campaignId, nftAddress, tokenId, weiAmount, expirationTime, linkKey, linkdropSignerSignature } })
   }
 
-  checkTransactionStatus ({ transactionId, chainId }) {
-    this.actions.dispatch({ type: '*TOKENS.CHECK_TRANSACTION_STATUS', payload: { transactionId, chainId } })
+  checkTransactionStatus ({ transactionId, chainId, statusToAdd }) {
+    this.actions.dispatch({ type: '*TOKENS.CHECK_TRANSACTION_STATUS', payload: { transactionId, chainId, statusToAdd } })
   }
 
   checkIfClaimed ({ linkKey, chainId, linkdropMasterAddress, campaignId }) {

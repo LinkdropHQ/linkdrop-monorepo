@@ -17,12 +17,15 @@ class Header extends React.Component {
 
   componentWillReceiveProps ({ transactionStatus: status }) {
     const { transactionStatus: prevStatus } = this.props
-    if (status != null && status === 'finished' && prevStatus === null) {
+    if (status != null && status === 'sent' && prevStatus === null) {
       this.setState({
         finished: true
-      }, _ => window.setTimeout(_ => this.setState({
-        finished: false
-      }), 3000))
+      }, _ => {
+        this.actions().tokens.checkTransactionStatus({ transactionStatus: null })
+        window.setTimeout(_ => this.setState({
+          finished: false
+        }), 3000)
+      })
     }
   }
 

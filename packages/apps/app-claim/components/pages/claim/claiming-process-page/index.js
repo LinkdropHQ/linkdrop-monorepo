@@ -42,11 +42,11 @@ class ClaimingProcessPage extends React.Component {
     const { transactionId: prevId, transactionStatus: prevStatus } = this.props
     if (id != null && prevId === null) {
       const { chainId } = getHashVariables()
-      this.statusCheck = window.setInterval(_ => this.actions().tokens.checkTransactionStatus({ transactionId: id, chainId }), 3000)
+      this.statusCheck = window.setInterval(_ => this.actions().tokens.checkTransactionStatus({ transactionId: id, chainId, statusToAdd: 'claimed' }), 3000)
     }
-    if (status != null && prevStatus === null) {
+    if (status != null && status === 'claimed' && prevStatus === null) {
       this.statusCheck && window.clearInterval(this.statusCheck)
-
+      this.actions().tokens.checkTransactionStatus({ transactionStatus: null })
       window.setTimeout(_ => {
         this.setState({
           loading: false
