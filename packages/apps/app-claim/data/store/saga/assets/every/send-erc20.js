@@ -22,18 +22,17 @@ const generator = function * ({ payload }) {
     const amountFormatted = utils.parseUnits(String(amount.trim()), decimals)
 
     const data = yield tokenContract.transfer.getData(to, String(amountFormatted), { from: contractAddress })
+    alert(JSON.stringify({ data }))
     const message = {
       from: contractAddress,
       to: tokenAddress,
       data,
       value: '0'
     }
-    alert(JSON.stringify({ message }))
     const result = yield sdk.execute(message, privateKey)
 
     const { success, errors, txHash } = result
     alert(JSON.stringify({ success, errors, txHash }))
-    alert(JSON.stringify({ message }))
     if (success) {
       yield put({ type: 'TOKENS.SET_TRANSACTION_ID', payload: { transactionId: txHash } })
     } else {
