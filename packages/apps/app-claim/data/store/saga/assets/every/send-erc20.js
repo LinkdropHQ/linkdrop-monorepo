@@ -21,6 +21,7 @@ const generator = function * ({ payload }) {
     const tokenContract = yield web3Obj.eth.contract(TokenMock.abi).at(tokenAddress)
     const contractAddress = yield select(generator.selectors.contractAddress)
     const amountFormatted = utils.parseUnits(String(amount.trim()), decimals)
+    alert(JSON.stringify({ amountFormatted }))
     const data = yield tokenContract.transfer.getData(to, String(amountFormatted), { from: contractAddress })
     const message = {
       from: contractAddress,
