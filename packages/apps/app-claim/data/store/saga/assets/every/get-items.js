@@ -3,6 +3,8 @@ import { getItems, getAssetPrice } from 'data/api/assets'
 import { ethers, utils } from 'ethers'
 import TokenMock from 'contracts/TokenMock.json'
 import { defineNetworkName } from '@linkdrop/commons'
+import { multiply, add, bignumber } from 'mathjs'
+import { getImages } from 'helpers'
 
 const getTokenData = function * ({ address, symbol, decimals, chainId, provider, contractAddress }) {
   let assetPrice = 0
@@ -45,7 +47,7 @@ const generator = function * ({ payload }) {
     let assetsStorage = []
     if ((total && total > 0)) {
       const assets = yield all(docs.map(({ contract: { address, symbol, decimals } }) => getTokenData({ address, symbol, decimals, chainId, provider, contractAddress })))
-      console.log({ assets })
+      console.log({ assets, multiply, add, bignumber })
       assetsStorage = assetsStorage.concat(assets)
     }
 
@@ -62,6 +64,7 @@ const generator = function * ({ payload }) {
         symbol: 'ETH',
         decimals: 18,
         type: 'erc20',
+        icon: getImages({ src: 'ether' }).image,
         price: assetPrice
       }])
     }
