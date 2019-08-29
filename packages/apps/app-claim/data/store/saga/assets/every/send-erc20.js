@@ -29,6 +29,7 @@ const generator = function * ({ payload }) {
     }
     const result = yield sdk.execute(message, privateKey)
     const { success, errors, txHash } = result
+    alert(success, txHash)
     if (success) {
       yield put({ type: 'TOKENS.SET_TRANSACTION_ID', payload: { transactionId: txHash } })
     } else {
