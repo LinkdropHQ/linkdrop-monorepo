@@ -3,6 +3,6 @@ export default {
     digitalAssets: 'Digital Assets'
   },
   buttons: {
-    goTo: 'Swap Tokens via {{title}}'
+    goTo: 'Trade Tokens via {{title}}'
   }
 }
