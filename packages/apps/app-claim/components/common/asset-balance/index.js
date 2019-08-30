@@ -18,7 +18,12 @@ class AssetBalance extends React.Component {
     const { loading, symbol, amount, onClick, icon, tokenAddress, price, className } = this.props
     const finalIcon = iconType === 'default' ? <img onError={_ => this.setState({ iconType: 'blank' })} className={styles.iconImg} src={icon} /> : <span />
     const finalPrice = String(multiply(bignumber(price), bignumber(amount)))
-    return <div onClick={_ => onClick && onClick()} className={classNames(styles.container, className, { [styles.loading]: loading })}>
+    return <div
+      onClick={_ => onClick && onClick()} className={classNames(styles.container, className, {
+        [styles.loading]: loading,
+        [styles.eth]: symbol === 'ETH'
+      })}
+    >
       <div className={styles.icon}>
         {finalIcon}
       </div>

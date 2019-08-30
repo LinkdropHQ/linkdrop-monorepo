@@ -48,7 +48,6 @@ class ClaimingFinishedPage extends React.Component {
     const dapp = dapps[dappId]
     if (!dapp) { return null }
     const { label, url } = dapp
-
     const { ens } = this.props
     const { chainId } = getHashVariables()
     const network = defineNetworkName({ chainId })

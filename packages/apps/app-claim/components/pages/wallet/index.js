@@ -1,13 +1,13 @@
-/* global navigator */
 import React from 'react'
 import { translate, actions } from 'decorators'
 import { Page } from 'components/pages'
 import styles from './styles.module'
-import { Icons, Loading, Tabs } from '@linkdrop/ui-kit'
+import { Icons, Loading } from '@linkdrop/ui-kit'
 import { AssetBalance, AccountBalance } from 'components/common'
 import classNames from 'classnames'
 import { countFinalPrice } from 'helpers'
 import { getHashVariables } from '@linkdrop/commons'
+import { ControlTabs } from 'components/pages/common'
 
 @actions(({ user: { loading, contractAddress }, assets: { items } }) => ({ items, loading, contractAddress }))
 @translate('pages.wallet')
@@ -58,27 +58,11 @@ class Wallet extends React.Component {
                 icon={icon}
               />)}
             </div>
-            {this.renderTabs()}
+            <ControlTabs />
           </div>
         </div>
       </div>
     </Page>
-  }
-
-  renderTabs () {
-    const options = [
-      { title: this.t('titles.request'), id: 'request', disabled: true },
-      { title: this.t('titles.pay'), id: 'pay' }
-    ]
-    return <Tabs
-      options={options}
-      className={styles.tabs}
-      onChange={({ id }) => {
-        if (id === 'pay') {
-          window.location.href = '/#/send'
-        }
-      }}
-    />
   }
 }
 

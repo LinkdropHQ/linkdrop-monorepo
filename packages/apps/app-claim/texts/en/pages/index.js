@@ -5,6 +5,7 @@ import confirm from './confirm'
 import authorization from './authorization'
 import send from './send'
 import receive from './receive'
+import common from './common'
 
 export default {
   claim,
@@ -13,5 +14,6 @@ export default {
   confirm,
   authorization,
   send,
-  receive
+  receive,
+  common
 }

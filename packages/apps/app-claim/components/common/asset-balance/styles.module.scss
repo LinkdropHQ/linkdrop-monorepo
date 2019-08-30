@@ -12,6 +12,13 @@
   &.loading {
     opacity: .3;
   }
+
+  &.eth {
+    .icon {
+      border: 1px solid $blackColor;
+      padding: 6px;
+    }
+  }
 }
 
 .icon {
@@ -22,9 +29,7 @@
   justify-content: center;
   border-radius: 40px;
   margin-right: 15px;
-  padding: 6px;
   overflow: hidden;
-  border: 1px solid $blackColor;
 }
 
 .iconImg {

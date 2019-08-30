@@ -6,6 +6,7 @@ import Confirm from './confirm'
 import Authorization from './authorization'
 import Send from './send'
 import Receive from './receive'
+import Common from './common'
 
 export {
   NotFound,
@@ -15,5 +16,6 @@ export {
   Confirm,
   Authorization,
   Send,
-  Receive
+  Receive,
+  Common
 }
