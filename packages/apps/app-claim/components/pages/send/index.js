@@ -44,13 +44,11 @@ class Send extends React.Component {
     if (status != null && status === 'sent' && prevStatus === null) {
       this.statusCheck && window.clearInterval(this.statusCheck)
       this.actions().assets.getItems({ chainId })
-      this.actions().tokens.setTransactionStatus({ transactionStatus: null })
     }
 
     if (status != null && status === 'failed' && prevStatus === null) {
       this.statusCheck && window.clearInterval(this.statusCheck)
       this.actions().assets.getItems({ chainId })
-      this.actions().tokens.setTransactionStatus({ transactionStatus: null })
       alert(`unfortunately your transaction was failed, check txhash: ${id}`)
       this.actions().tokens.setTransactionId({ transactionId: null })
     }

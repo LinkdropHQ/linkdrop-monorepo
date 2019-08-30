@@ -17,6 +17,7 @@ class Header extends React.Component {
 
   componentWillReceiveProps ({ transactionStatus: status }) {
     const { transactionStatus: prevStatus } = this.props
+    console.log({ status, prevStatus })
     if (status != null && status === 'sent' && prevStatus === null) {
       this.setState({
         finished: true

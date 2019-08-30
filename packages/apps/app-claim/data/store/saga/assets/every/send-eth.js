@@ -3,6 +3,7 @@ import { utils } from 'ethers'
 
 const generator = function * ({ payload }) {
   try {
+    yield put({ type: 'USER.SET_LOADING', payload: { loading: true } })
     const { to, amount } = payload
     const sdk = yield select(generator.selectors.sdk)
     const privateKey = yield select(generator.selectors.privateKey)
@@ -17,6 +18,7 @@ const generator = function * ({ payload }) {
     }
     const result = yield sdk.execute(message, privateKey)
     const { success, errors, txHash } = result
+    alert(JSON.stringify({ success, errors, txHash }))
     if (success) {
       yield put({ type: 'TOKENS.SET_TRANSACTION_ID', payload: { transactionId: txHash } })
     } else {
