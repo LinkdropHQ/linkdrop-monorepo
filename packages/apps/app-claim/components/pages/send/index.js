@@ -63,6 +63,7 @@ class Send extends React.Component {
 
   componentWillUnmount () {
     this.actions().user.setLoading({ loading: false })
+    this.actions().tokens.setTransactionId({ transactionId: null })
     this.statusCheck && window.clearInterval(this.statusCheck)
   }
 
