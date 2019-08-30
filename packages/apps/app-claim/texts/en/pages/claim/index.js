@@ -13,7 +13,7 @@ export default {
   buttons: {
     useWallet: 'Use {{wallet}}',
     copyLink: 'Copy link',
-    goTo: 'Go to {{title}}'
+    goTo: 'Swap Tokens via {{title}}'
   },
   errors: {
     LINKDROP_PROXY_CONTRACT_PAUSED: {
