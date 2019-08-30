@@ -68,7 +68,20 @@ class ClaimingProcessPage extends React.Component {
     return <div className={commonStyles.container}>
       <AccountBalance balance={finalPrice} loading={loading} />
       <TokensAmount loading={loading} symbol={symbol} amount={balanceFormatted} />
-      {itemsToClaim.map(({ icon, symbol, balanceFormatted, tokenAddress, price }) => <AssetBalance key={tokenAddress} loading={loading} symbol={symbol} amount={balanceFormatted} price={price} icon={icon} />)}
+      {itemsToClaim.map(({
+        icon,
+        symbol,
+        balanceFormatted,
+        tokenAddress,
+        price
+      }) => <AssetBalance
+        key={tokenAddress}
+        loading={loading}
+        symbol={symbol}
+        amount={balanceFormatted}
+        price={price}
+        icon={icon}
+      />)}
     </div>
   }
 }

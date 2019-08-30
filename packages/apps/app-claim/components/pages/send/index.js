@@ -25,15 +25,8 @@ class Send extends React.Component {
     }
   }
 
-  componentDidMount () {
-    const { items, chainId } = this.props
-    if (!items || items.length === 0) {
-      this.actions().assets.getItems({ chainId })
-    }
-  }
-
   componentWillReceiveProps ({ chainId, items, transactionId: id, transactionStatus: status }) {
-    const { items: prevItems, transactionId: prevId, transactionStatus: prevStatus } = this.props
+    const { contractAddress, items: prevItems, transactionId: prevId, transactionStatus: prevStatus } = this.props
     if (id != null && prevId === null) {
       const { chainId } = getHashVariables()
       this.statusCheck = window.setInterval(_ => this.actions().tokens.checkTransactionStatus({ transactionId: id, chainId, statusToAdd: 'sent' }), 3000)
@@ -48,7 +41,7 @@ class Send extends React.Component {
     }
     if (status != null && status === 'sent' && prevStatus === null) {
       this.statusCheck && window.clearInterval(this.statusCheck)
-      this.actions().assets.getItems({ chainId })
+      this.actions().assets.getItems({ chainId, wallet: contractAddress })
       this.setState({
         sendTo: '',
         amount: 0,
@@ -58,7 +51,6 @@ class Send extends React.Component {
 
     if (status != null && status === 'failed' && prevStatus === null) {
       this.statusCheck && window.clearInterval(this.statusCheck)
-      this.actions().assets.getItems({ chainId })
       alert(`unfortunately your transaction was failed, check txhash: ${id}`)
       this.actions().tokens.setTransactionId({ transactionId: null })
       this.setState({

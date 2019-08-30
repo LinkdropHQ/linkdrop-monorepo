@@ -19,16 +19,6 @@ class Wallet extends React.Component {
     }
   }
 
-  componentDidMount () {
-    const { items } = this.props
-    const {
-      chainId
-    } = getHashVariables()
-    if (!items || items.length === 0) {
-      this.actions().assets.getItems({ chainId })
-    }
-  }
-
   render () {
     const { expandAssets } = this.state
     const { items, loading } = this.props

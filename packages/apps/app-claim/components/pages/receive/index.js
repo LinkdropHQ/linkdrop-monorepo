@@ -28,10 +28,7 @@ class Receive extends React.Component {
 
           <div className={styles.controls}>
             <Button
-              onClick={_ => {
-                console.log({ contractAddress })
-                copyToClipboard({ value: contractAddress })
-              }} className={styles.button}
+              onClick={_ => copyToClipboard({ value: contractAddress })} className={styles.button}
             >Copy
             </Button>
           </div>
