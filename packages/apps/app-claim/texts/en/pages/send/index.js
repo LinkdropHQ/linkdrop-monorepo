@@ -9,5 +9,8 @@ export default {
     forPlaceholder: 'dinner, to try, etc.',
     contacts: 'Contacts',
     payViaLink: 'Pay via link'
+  },
+  texts: {
+    details: 'It may take a few minutes. <a target="_blank" href={{link}}>Details</a>'
   }
 }

@@ -10,6 +10,7 @@ import LinkPay from './link-pay'
 import { getHashVariables } from '@linkdrop/commons'
 import { Scrollbars } from 'react-custom-scrollbars'
 import { ethers } from 'ethers'
+import config from 'config-claim'
 
 @actions(({ tokens: { transactionId, transactionStatus }, user: { chainId, loading, contractAddress }, assets: { items } }) => ({ transactionId, transactionStatus, items, loading, contractAddress, chainId }))
 @translate('pages.send')
@@ -19,7 +20,8 @@ class Send extends React.Component {
     this.state = {
       sendTo: '',
       currentAsset: (props.items[0] || {}).tokenAddress,
-      amount: 0
+      amount: 0,
+      showTx: false
     }
   }
 
@@ -35,6 +37,9 @@ class Send extends React.Component {
     if (id != null && prevId === null) {
       const { chainId } = getHashVariables()
       this.statusCheck = window.setInterval(_ => this.actions().tokens.checkTransactionStatus({ transactionId: id, chainId, statusToAdd: 'sent' }), 3000)
+      window.setTimeout(_ => this.setState({
+        showTx: true
+      }), 2000)
     }
     if (items != null && items.length !== 0 && prevItems.length === 0) {
       this.setState({
@@ -46,7 +51,8 @@ class Send extends React.Component {
       this.actions().assets.getItems({ chainId })
       this.setState({
         sendTo: '',
-        amount: 0
+        amount: 0,
+        showTx: false
       })
     }
 
@@ -57,7 +63,8 @@ class Send extends React.Component {
       this.actions().tokens.setTransactionId({ transactionId: null })
       this.setState({
         sendTo: '',
-        amount: 0
+        amount: 0,
+        showTx: false
       })
     }
   }
@@ -67,8 +74,8 @@ class Send extends React.Component {
   }
 
   render () {
-    const { sendTo, currentAsset, amount } = this.state
-    const { loading } = this.props
+    const { sendTo, currentAsset, amount, showTx } = this.state
+    const { loading, transactionId, chainId } = this.props
     return <Page hideHeader>
       <div className={styles.container}>
         <Header
@@ -96,6 +103,12 @@ class Send extends React.Component {
             {false && <Input title={this.t('titles.for')} placeholder={this.t('titles.forPlaceholder')} />}
             {false && <Contacts />}
             {false && <LinkPay title={this.t('titles.payViaLink')} disabled={!amount || !Number(amount) || loading} />}
+            {showTx && <div
+              className={styles.note}
+              dangerouslySetInnerHTML={{
+                __html: this.t('texts.details', { link: `${chainId === '4' ? config.etherscanRinkeby : config.etherscanMainnet}${transactionId}` })
+              }}
+            />}
           </div>
         </Scrollbars>
       </div>

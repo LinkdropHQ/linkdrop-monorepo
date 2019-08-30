@@ -9,3 +9,13 @@
   z-index: 2;
   background: $whiteColor;
 }
+
+.note {
+  font-size: 14px;
+  text-align: center;
+
+  a {
+    text-decoration: none;
+    color: $dbBlue;
+  }
+}
