@@ -8,6 +8,7 @@ import classNames from 'classnames'
 import { getHashVariables, defineNetworkName } from '@linkdrop/commons'
 import { Button, Icons, Loading } from '@linkdrop/ui-kit'
 import { getCurrentAsset, countFinalPrice } from 'helpers'
+import { ControlTabs } from 'components/pages/common'
 
 @actions(({ assets: { items, itemsToClaim }, user: { ens } }) => ({ items, ens }))
 @translate('pages.claim')
@@ -53,7 +54,7 @@ class ClaimingFinishedPage extends React.Component {
     const network = defineNetworkName({ chainId })
     const confirmUrl = encodeURIComponent(`${window.origin}/#/confirm`)
     const dappUrl = `${url}?user=${ens}&network=${network}&confirmUrl=${confirmUrl}`
-    return <Button href={dappUrl} target='_blank'>{this.t('buttons.goTo', { title: label })}</Button>
+    return <Button className={styles.button} inverted href={dappUrl} target='_blank'>{this.t('buttons.goTo', { title: label })}</Button>
   }
 
   renderAllAssets ({ items, expandAssets }) {
@@ -78,6 +79,7 @@ class ClaimingFinishedPage extends React.Component {
             icon={icon}
           />)}
         </div>
+        <ControlTabs />
         {this.renderDappButton()}
       </div>
     </div>
