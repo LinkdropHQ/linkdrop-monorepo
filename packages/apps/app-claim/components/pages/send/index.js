@@ -111,12 +111,15 @@ class Send extends React.Component {
 
   onSend () {
     const { items } = this.props
+    const {
+      chainId = '1'
+    } = getHashVariables()
     const { sendTo, currentAsset, amount } = this.state
     const { decimals } = items.find(item => item.tokenAddress === currentAsset)
     if (currentAsset === ethers.constants.AddressZero) {
-      this.actions().assets.sendEth({ to: sendTo, amount })
+      this.actions().assets.sendEth({ to: sendTo, amount, chainId })
     } else {
-      this.actions().assets.sendErc20({ to: sendTo, amount, tokenAddress: currentAsset, decimals })
+      this.actions().assets.sendErc20({ to: sendTo, chainId, amount, tokenAddress: currentAsset, decimals })
     }
   }
 }

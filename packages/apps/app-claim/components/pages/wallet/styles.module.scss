@@ -50,4 +50,11 @@
   max-width: 300px;
   width: 300px;
   min-width: 300px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+  line-height: 50px;
+  padding-top: 0;
+  padding-bottom: 0;
 }

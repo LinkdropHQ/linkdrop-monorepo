@@ -7,14 +7,18 @@ const generator = function * ({ payload }) {
   try {
     yield put({ type: 'USER.SET_LOADING', payload: { loading: true } })
     const { to, amount, tokenAddress, decimals, chainId = '1' } = payload
+    let address = to
     const sdk = yield select(generator.selectors.sdk)
     const networkName = defineNetworkName({ chainId })
     const provider = yield ethers.getDefaultProvider(networkName)
+    if (to.indexOf('.') > -1) {
+      address = yield provider.resolveName(to)
+    }
     const privateKey = yield select(generator.selectors.privateKey)
     const tokenContract = new ethers.Contract(tokenAddress, TokenMock.abi, provider)
     const contractAddress = yield select(generator.selectors.contractAddress)
     const amountFormatted = utils.parseUnits(String(amount.trim()), decimals)
-    const data = yield tokenContract.interface.functions.transfer.encode([to, amountFormatted])
+    const data = yield tokenContract.interface.functions.transfer.encode([address, amountFormatted])
     const message = {
       from: contractAddress,
       to: tokenAddress,
@@ -29,10 +33,13 @@ const generator = function * ({ payload }) {
     } else {
       if (errors.length > 0) {
         yield put({ type: 'USER.SET_LOADING', payload: { loading: false } })
+        window.alert('Some error occured')
         console.error(errors[0])
       }
     }
   } catch (e) {
+    yield put({ type: 'USER.SET_LOADING', payload: { loading: false } })
+    window.alert('Some error occured')
     console.error(e)
   }
 }
