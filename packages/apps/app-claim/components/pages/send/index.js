@@ -62,6 +62,7 @@ class Send extends React.Component {
   }
 
   componentWillUnmount () {
+    this.actions().user.setLoading({ loading: false })
     this.statusCheck && window.clearInterval(this.statusCheck)
   }
 
