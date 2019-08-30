@@ -6,6 +6,7 @@ import { Page } from 'components/pages'
 import classNames from 'classnames'
 import QRCode from 'qrcode.react'
 import { copyToClipboard } from '@linkdrop/commons'
+import { prepareRedirectUrl } from 'helpers'
 
 @actions(({ user: { loading, contractAddress }, assets: { items } }) => ({ contractAddress, items, loading }))
 @translate('pages.receive')
@@ -14,7 +15,7 @@ class Receive extends React.Component {
     const { contractAddress } = this.props
     return <Page hideHeader>
       <div className={classNames(styles.container)}>
-        <div className={styles.close} onClick={_ => { window.location.href = '/#/' }}>
+        <div className={styles.close} onClick={_ => { window.location.href = prepareRedirectUrl({ link: '/#/' }) }}>
           <Icons.Cross />
         </div>
         <div className={styles.content}>

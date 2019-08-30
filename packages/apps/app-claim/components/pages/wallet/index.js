@@ -2,14 +2,15 @@ import React from 'react'
 import { translate, actions } from 'decorators'
 import { Page } from 'components/pages'
 import styles from './styles.module'
-import { Icons, Loading } from '@linkdrop/ui-kit'
+import { Icons, Loading, Button } from '@linkdrop/ui-kit'
 import { AssetBalance, AccountBalance } from 'components/common'
 import classNames from 'classnames'
 import { countFinalPrice } from 'helpers'
-import { getHashVariables } from '@linkdrop/commons'
+import { getHashVariables, defineNetworkName } from '@linkdrop/commons'
 import { ControlTabs } from 'components/pages/common'
+import dapps from 'dapps'
 
-@actions(({ user: { loading, contractAddress }, assets: { items } }) => ({ items, loading, contractAddress }))
+@actions(({ user: { loading, contractAddress, ens }, assets: { items } }) => ({ items, loading, contractAddress, ens }))
 @translate('pages.wallet')
 class Wallet extends React.Component {
   constructor (props) {
@@ -17,6 +18,22 @@ class Wallet extends React.Component {
     this.state = {
       expandAssets: false
     }
+  }
+
+  renderDappButton () {
+    const {
+      dappId
+    } = getHashVariables()
+    if (!dappId) { return null }
+    const dapp = dapps[dappId]
+    if (!dapp) { return null }
+    const { label, url } = dapp
+    const { ens } = this.props
+    const { chainId } = getHashVariables()
+    const network = defineNetworkName({ chainId })
+    const confirmUrl = encodeURIComponent(`${window.origin}/#/confirm`)
+    const dappUrl = `${url}?user=${ens}&network=${network}&confirmUrl=${confirmUrl}`
+    return <Button className={styles.button} inverted href={dappUrl} target='_blank'>{this.t('buttons.goTo', { title: label })}</Button>
   }
 
   render () {
@@ -49,6 +66,7 @@ class Wallet extends React.Component {
               />)}
             </div>
             <ControlTabs />
+            {this.renderDappButton()}
           </div>
         </div>
       </div>

@@ -4,6 +4,7 @@ import styles from './styles.module'
 import { Input, Button, Icons } from '@linkdrop/ui-kit'
 import classNames from 'classnames'
 import variables from 'variables'
+import { prepareRedirectUrl } from 'helpers'
 
 @actions(({ user: { loading, contractAddress }, tokens: { transactionStatus }, assets: { items } }) => ({ transactionStatus, items, loading, contractAddress }))
 @translate('pages.send')
@@ -35,7 +36,7 @@ class Header extends React.Component {
     const { finished } = this.state
     return <div className={styles.container}>
       <div className={styles.content}>
-        <div className={styles.close} onClick={_ => { window.location.href = '/#/' }}>
+        <div className={styles.close} onClick={_ => { window.location.href = prepareRedirectUrl({ link: '/#/' }) }}>
           <Icons.Cross />
         </div>
         <div className={styles.amount}>

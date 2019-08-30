@@ -8,6 +8,7 @@ import Footer from './footer'
 import Name from './name'
 import { Scrollbars } from 'react-custom-scrollbars'
 import variables from 'variables'
+import { prepareRedirectUrl } from 'helpers'
 
 @actions(({ user: { ens, avatar } }) => ({ ens, avatar }))
 @translate('common.walletHeader')
@@ -22,6 +23,7 @@ class WalletHeader extends React.Component {
   render () {
     const { opened } = this.state
     const { avatar, ens } = this.props
+
     return <div className={classNames(styles.container, {
       [styles.opened]: opened
     })}
@@ -34,11 +36,11 @@ class WalletHeader extends React.Component {
         >
           <Icons.Profile />
         </div>
-        <a href='/#/'>{this.t('titles.wallet')}</a>
+        <a href={prepareRedirectUrl({ link: '/#/' })}>{this.t('titles.wallet')}</a>
       </div>
       <div className={styles.body}>
         <div className={styles.bodyHeader}>
-          <div className={styles.bodyHeaderQrIcon} onClick={_ => { window.location.href = '/#/get' }}>
+          <div className={styles.bodyHeaderQrIcon} onClick={_ => { window.location.href = prepareRedirectUrl({ link: '/#/get' }) }}>
             <Icons.Qr />
           </div>
           {this.t('titles.about')}

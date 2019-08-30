@@ -2,6 +2,7 @@ import React from 'react'
 import { translate } from 'decorators'
 import styles from './styles.module'
 import { Tabs } from '@linkdrop/ui-kit'
+import { prepareRedirectUrl } from 'helpers'
 
 @translate('pages.common.controlTabs')
 class ControlTabs extends React.Component {
@@ -16,9 +17,9 @@ class ControlTabs extends React.Component {
         className={styles.tabs}
         onChange={({ id }) => {
           if (id === 'pay') {
-            window.location.href = '/#/send'
+            window.location.href = prepareRedirectUrl({ link: '/#/send' })
           } else if (id === 'request') {
-            window.location.href = '/#/get'
+            window.location.href = prepareRedirectUrl({ link: '/#/get' })
           }
         }}
       />

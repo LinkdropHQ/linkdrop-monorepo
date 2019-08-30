@@ -33,7 +33,6 @@ const getTokenData = function * ({ address, symbol, decimals, chainId, provider,
 
 const generator = function * ({ payload }) {
   try {
-    yield put({ type: 'USER.SET_LOADING', payload: { loading: true } })
     const { chainId = '1' } = payload
     const contractAddress = yield select(generator.selectors.contractAddress)
     if (chainId === '4') {
@@ -47,7 +46,6 @@ const generator = function * ({ payload }) {
     let assetsStorage = []
     if ((total && total > 0)) {
       const assets = yield all(docs.map(({ contract: { address, symbol, decimals } }) => getTokenData({ address, symbol, decimals, chainId, provider, contractAddress })))
-      console.log({ assets, multiply, add, bignumber })
       assetsStorage = assetsStorage.concat(assets)
     }
 
@@ -69,7 +67,6 @@ const generator = function * ({ payload }) {
       }])
     }
     yield put({ type: 'ASSETS.SET_ITEMS', payload: { items: assetsStorage || [] } })
-    yield put({ type: 'USER.SET_LOADING', payload: { loading: false } })
   } catch (e) {
     console.error(e)
   }

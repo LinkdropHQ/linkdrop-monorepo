@@ -1,3 +1,5 @@
+@import "variables";
+
 .container {
   display: flex;
   align-items: center;
@@ -40,4 +42,12 @@
       transform: rotate(180deg);
     }
   }
+}
+
+.button {
+  color: $dbBlue;
+  border: 1px solid $dbBlue;
+  max-width: 300px;
+  width: 300px;
+  min-width: 300px;
 }

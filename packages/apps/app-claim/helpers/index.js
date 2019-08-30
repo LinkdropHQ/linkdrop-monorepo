@@ -5,6 +5,7 @@ import getWalletData from './get-wallet-data'
 import getCurrentAsset from './get-current-asset'
 import getEns from './get-ens'
 import countFinalPrice from './count-final-price'
+import prepareRedirectUrl from './prepare-redirect-url'
 
 export {
   getImages,
@@ -13,5 +14,6 @@ export {
   getWalletData,
   getCurrentAsset,
   getEns,
-  countFinalPrice
+  countFinalPrice,
+  prepareRedirectUrl
 }
