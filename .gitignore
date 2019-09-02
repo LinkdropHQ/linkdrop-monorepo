@@ -18,6 +18,7 @@ config.json
 app.config.json
 server.config.json
 scripts.config.json
+auth.config.json
 
 packages/apps/app-claim/node_modules/
 packages/apps/app-claim/assets/scripts/
