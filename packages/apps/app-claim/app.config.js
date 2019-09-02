@@ -27,7 +27,10 @@ try {
 try {
   authConfig = require('../../../configs/auth.config.json')
 } catch (e) {
-  authConfig = {}
+  authConfig = {
+    scopes: {},
+    discoveryDocs: []
+  }
 }
 
 const masterCopy = MASTER_COPY || String(config.masterCopy)
