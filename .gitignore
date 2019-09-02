@@ -15,10 +15,10 @@ packages/scripts/output
 # Configs
 .env
 config.json
-app.config.json
-server.config.json
-scripts.config.json
-auth.config.json
+configs/app.config.json
+configs/server.config.json
+configs/scripts.config.json
+configs/auth.config.json
 
 packages/apps/app-claim/node_modules/
 packages/apps/app-claim/assets/scripts/
