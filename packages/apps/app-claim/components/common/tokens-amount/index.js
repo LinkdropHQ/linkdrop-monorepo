@@ -16,6 +16,8 @@ class TokensAmount extends React.Component {
   }
 
   componentDidMount () {
+    const { alreadyClaimed } = this.props
+    if (alreadyClaimed) { return }
     window.setTimeout(_ => this.setState({ showMessage: true }), 3000)
   }
 

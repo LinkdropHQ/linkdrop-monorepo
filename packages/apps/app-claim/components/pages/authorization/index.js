@@ -45,7 +45,8 @@ class Authorization extends React.Component {
       clientId: config.authClientId,
       apiKey: config.authApiKey,
       discoveryDocs: config.authDiscoveryDocs,
-      scope: `${config.authScopeDrive} ${config.authScopeContacts}`
+      // scope: `${config.authScopeDrive} ${config.authScopeContacts}`
+      scope: config.authScopeDrive
     }).then(_ => {
       // Listen for sign-in state changes.
       const authInstance = gapi.auth2.getAuthInstance()
