@@ -97,7 +97,7 @@ class Send extends React.Component {
             {false && <Input title={this.t('titles.for')} placeholder={this.t('titles.forPlaceholder')} />}
             {false && <Contacts />}
             {false && <LinkPay title={this.t('titles.payViaLink')} disabled={!amount || !Number(amount) || loading} />}
-            {showTx && <div
+            {showTx && transactionId && <div
               className={styles.note}
               dangerouslySetInnerHTML={{
                 __html: this.t('texts.details', { link: `${chainId === '4' ? config.etherscanRinkeby : config.etherscanMainnet}${transactionId}` })

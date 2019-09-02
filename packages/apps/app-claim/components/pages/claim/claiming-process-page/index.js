@@ -56,8 +56,11 @@ class ClaimingProcessPage extends React.Component {
   }
 
   render () {
-    const { itemsToClaim } = this.props
+    const { itemsToClaim, transactionId } = this.props
     const { loading } = this.state
+    const {
+      chainId
+    } = getHashVariables()
     const mainAsset = getCurrentAsset({ itemsToClaim })
     if (!mainAsset) { return null }
     const finalPrice = itemsToClaim.reduce((sum, item) => {
@@ -67,7 +70,7 @@ class ClaimingProcessPage extends React.Component {
     const { balanceFormatted, symbol } = mainAsset
     return <div className={commonStyles.container}>
       <AccountBalance balance={finalPrice} loading={loading} />
-      <TokensAmount loading={loading} symbol={symbol} amount={balanceFormatted} />
+      <TokensAmount chainId={chainId} transactionId={transactionId} loading={loading} symbol={symbol} amount={balanceFormatted} />
       {itemsToClaim.map(({
         icon,
         symbol,

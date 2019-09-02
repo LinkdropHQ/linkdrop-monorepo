@@ -37,7 +37,6 @@ class ClaimingFinishedPage extends React.Component {
       <AccountBalance balance={finalPrice} />
       {!showAssets && <TokensAmount alreadyClaimed={alreadyClaimed} symbol={symbol} amount={balanceFormatted} />}
       {showAssets && this.renderAllAssets({ items, expandAssets })}
-
     </div>
   }
 

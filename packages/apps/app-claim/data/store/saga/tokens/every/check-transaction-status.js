@@ -10,6 +10,7 @@ const generator = function * ({ payload }) {
     const receipt = yield provider.getTransactionReceipt(transactionId)
     if (receipt && receipt.status === 0) {
       yield put({ type: 'TOKENS.SET_TRANSACTION_STATUS', payload: { transactionStatus: 'failed' } })
+      yield put({ type: 'TOKENS.SET_TRANSACTION_ID', payload: { transactionId: null } })
       return yield put({ type: 'USER.SET_LOADING', payload: { loading: false } })
     }
     if (receipt && receipt.confirmations != null && receipt.confirmations > 0) {
