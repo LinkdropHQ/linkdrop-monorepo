@@ -1,6 +1,6 @@
 {
   "name": "@linkdrop/sdk",
-  "version": "1.0.73",
+  "version": "1.0.10",
   "main": "dist/index.js",
   "license": "MIT",
   "publishConfig": {

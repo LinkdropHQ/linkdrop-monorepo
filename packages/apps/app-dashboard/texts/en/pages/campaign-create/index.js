@@ -53,7 +53,6 @@ export default {
     codeDetails: 'See the code and details',
     contractParams: 'Linkdrop Contract parameters',
     masterAddress: 'Master Address: <span>{{address}}</span>',
-    factoryAddress: 'Factory Address: <span>{{address}}</span>',
     signingKey: 'Signing Key: <span>{{signingKey}}</span>',
     downloadFile: 'Download CSV file',
     manual: 'Manual distribution',
@@ -92,12 +91,7 @@ import LinkdropSDK from '@linkdrop/sdk'
 // initialization
 const linkdropSDK = LinkdropSDK({
   linkdropMasterAddress: '{{masterAddress}}',
-  factoryAddress: '{{factoryAddress}}',
-  // optional params
-  // chain: '{{chain}}',
-  // jsonRpcUrl = <JSON_RPC_URL>, // https://{{chain}}.infura.io by default,
-  // apiHost = <API_HOST>, // https://{{chain}}.linkdrop.io by default
-  // claimHost = <CLAIM_HOST>, // 'https://claim.linkdrop.io' by default
+  chain = '{{chain}}'
 })
 
 // generate links for ETH and ERC20
