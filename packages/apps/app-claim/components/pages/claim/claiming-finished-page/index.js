@@ -2,7 +2,7 @@ import React from 'react'
 import { translate, actions } from 'decorators'
 import styles from './styles.module'
 import commonStyles from '../styles.module'
-import { TokensAmount, AssetBalance, AccountBalance } from 'components/common'
+import { TokensAmount, AssetBalance, AccountBalance, Confetti } from 'components/common'
 import dapps from 'dapps'
 import classNames from 'classnames'
 import { getHashVariables, defineNetworkName } from '@linkdrop/commons'
@@ -26,16 +26,17 @@ class ClaimingFinishedPage extends React.Component {
   }
 
   render () {
-    const { items, itemsToClaim, alreadyClaimed, loading } = this.props
+    const { items, itemsToClaim, alreadyClaimed, loading, claimingFinished } = this.props
     const { showAssets, expandAssets } = this.state
     const finalPrice = countFinalPrice({ items })
     const mainAsset = getCurrentAsset({ itemsToClaim })
     if (!mainAsset) { return null }
     const { balanceFormatted, symbol } = mainAsset
     return <div className={commonStyles.container}>
+      {claimingFinished && <Confetti recycle={!showAssets} />}
       {loading && <Loading withOverlay />}
       <AccountBalance balance={finalPrice} />
-      {!showAssets && <TokensAmount alreadyClaimed={alreadyClaimed} symbol={symbol} amount={balanceFormatted} />}
+      {!showAssets && <TokensAmount alreadyClaimed={alreadyClaimed} claimingFinished={claimingFinished} symbol={symbol} amount={balanceFormatted} />}
       {showAssets && this.renderAllAssets({ items, expandAssets })}
     </div>
   }

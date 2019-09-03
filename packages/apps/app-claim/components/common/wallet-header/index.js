@@ -43,13 +43,12 @@ class WalletHeader extends React.Component {
           <div className={styles.bodyHeaderQrIcon} onClick={_ => { window.location.href = prepareRedirectUrl({ link: '/#/get' }) }}>
             <Icons.Qr />
           </div>
-          {this.t('titles.about')}
           <div
             className={styles.bodyHeaderCloseIcon} onClick={_ => this.setState({
               opened: !opened
             })}
           >
-            <Icons.Cross />
+            <Icons.CloseArrow />
           </div>
         </div>
         <div className={styles.bodyMain}>

@@ -6,6 +6,7 @@ import text from 'texts'
 import { actions } from 'decorators'
 import config from 'app.config.js'
 import variables from 'variables'
+import { prepareRedirectUrl } from 'helpers'
 
 let gapiObj
 try {
@@ -62,9 +63,12 @@ class Menu extends React.Component {
     const { gapiObj } = this.state
     const MENU = [
       {
-        title: text('common.walletHeader.menu.buyTokens'),
+        title: text('common.walletHeader.menu.addFunds'),
         onClick: _ => this.actions().user.setMoonpayShow({ moonpayShow: true }),
         color: variables.greenColor
+      }, {
+        title: text('common.walletHeader.menu.withdraw'),
+        href: prepareRedirectUrl({ link: '/#/send' })
       }, {
         title: text('common.walletHeader.menu.chat'),
         href: 'https://t.me/LinkdropHQ'

@@ -72,7 +72,7 @@ class Header extends React.Component {
       className={styles.button}
       onClick={_ => onSend && onSend()}
     >
-      {this.t('buttons.pay')}
+      {this.t('buttons.send')}
     </Button>
   }
 }

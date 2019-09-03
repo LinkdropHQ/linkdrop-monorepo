@@ -7,18 +7,28 @@
 
 .content {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   height: 90px;
+  position: relative;
 }
 
 .close {
-  max-width: 102px;
   cursor: pointer;
+  position: absolute;
+  top: 30px;
+  left: 0px;
+}
+
+.controls {
+  position: absolute;
+  top: 20px;
+  right: 0px;
 }
 
 .amount {
   max-width: 150px;
+  width: 33%;
 }
 
 .button {

@@ -16,8 +16,8 @@ class TokensAmount extends React.Component {
   }
 
   componentDidMount () {
-    const { alreadyClaimed } = this.props
-    if (alreadyClaimed) { return }
+    const { alreadyClaimed, claimingFinished } = this.props
+    if (alreadyClaimed || claimingFinished) { return }
     window.setTimeout(_ => this.setState({ showMessage: true }), 3000)
   }
 
@@ -31,17 +31,19 @@ class TokensAmount extends React.Component {
       alreadyClaimed,
       link,
       transactionId,
-      chainId = '1'
+      chainId = '1',
+      claimingFinished
     } = this.props
-    const text = this.defineText({ loading, symbol, amount })
+    const text = this.defineText({ loading, symbol, amount, claimingFinished, alreadyClaimed })
     const icon = this.defineIcon({ loading })
     return <div className={styles.wrapper}>
       <div className={classNames(styles.container, {
         [styles.loading]: loading,
-        [styles.alreadyClaimed]: alreadyClaimed
+        [styles.alreadyClaimed]: alreadyClaimed,
+        [styles.claimingFinished]: claimingFinished
       })}
       >
-        {icon} {text}
+        {!alreadyClaimed && icon} {text}
       </div>
       {showMessage && transactionId && <div
         className={styles.message}
@@ -52,9 +54,10 @@ class TokensAmount extends React.Component {
     </div>
   }
 
-  defineText ({ loading, amount, symbol }) {
+  defineText ({ loading, amount, symbol, alreadyClaimed, claimingFinished }) {
     if (loading) return `${this.t('titles.claiming')} ${amount} ${symbol}...`
-    return `${amount} ${symbol} ${this.t('titles.claimed')}`
+    if (claimingFinished) return `${amount} ${symbol} ${this.t('titles.claimed')}`
+    if (alreadyClaimed) return this.t('titles.alreadyClaimed')
   }
 
   defineIcon ({ loading }) {

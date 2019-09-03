@@ -22,6 +22,7 @@ import Done from './done'
 import About from './about'
 import Profile from './profile'
 import ExpandArrow from './expand-arrow'
+import CloseArrow from './close-arrow'
 
 export default {
   LinkdropLogo,
@@ -47,5 +48,6 @@ export default {
   Done,
   About,
   Profile,
-  ExpandArrow
+  ExpandArrow,
+  CloseArrow
 }

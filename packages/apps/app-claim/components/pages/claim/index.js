@@ -126,6 +126,7 @@ class Claim extends React.Component {
         // claiming finished successfully
         return <ClaimingFinishedPage
           {...commonData}
+          claimingFinished
         />
       default:
         // зloading

@@ -1,6 +1,6 @@
 export default {
   buttons: {
-    pay: 'Pay'
+    send: 'Send'
   },
   titles: {
     to: 'To:',
