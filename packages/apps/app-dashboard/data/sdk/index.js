@@ -1,5 +1,5 @@
 import LinkdropSDK from '@linkdrop/sdk/src/index'
-export default ({ claimHost, linkdropMasterAddress, chainId, jsonRpcUrl, apiHost, factoryAddress }) => LinkdropSDK({
+export default ({ claimHost, linkdropMasterAddress, chainId, jsonRpcUrl, apiHost, factoryAddress }) => new LinkdropSDK({
   linkdropMasterAddress,
   chain: chainId,
   claimHost,

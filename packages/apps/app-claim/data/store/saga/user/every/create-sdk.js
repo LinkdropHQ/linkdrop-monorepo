@@ -15,7 +15,7 @@ const generator = function * ({ payload }) {
     const apiHost = Number(chainId) === 1 ? apiHostMainnet : apiHostRinkeby
     const sdk = initializeSdk({ factoryAddress: factory, chain: networkName, linkdropMasterAddress, jsonRpcUrl, apiHost })
     yield put({ type: 'USER.SET_SDK', payload: { sdk } })
-    const address = sdk.computeProxyAddress(factory, linkdropMasterAddress, campaignId)
+    const address = sdk.getProxyAddress(campaignId)
     const provider = yield ethers.getDefaultProvider(networkName)
     const linkWallet = yield new ethers.Wallet(linkKey, provider)
     const linkId = yield linkWallet.address
