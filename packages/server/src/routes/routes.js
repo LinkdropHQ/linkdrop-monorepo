@@ -22,6 +22,12 @@ const routes = {
       controller: 'lastTxHashController',
       method: 'getLastTxHashById'
     }
+  },
+  '/utils/get-coinbase-deeplink': {
+    post: {
+      controller: 'utilsController',
+      method: 'getCoinbaseDeepLink'
+    }
   }
 }
 
