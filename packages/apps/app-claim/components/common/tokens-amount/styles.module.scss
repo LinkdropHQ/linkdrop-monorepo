@@ -27,10 +27,13 @@
     color: $dbBlue;
   }
 
-  &.claimingFinished {
+  &.claimingFinished,
+  &.sendingFinished {
     background-color: $greenColorTransparent;
     color: $greenColor;
   }
+
+
 
   &.alreadyClaimed {
     background-color: $alreadyClaimedColor;

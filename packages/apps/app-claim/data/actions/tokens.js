@@ -26,6 +26,10 @@ class Tokens {
   setTransactionStatus ({ transactionStatus }) {
     this.actions.dispatch({ type: 'TOKENS.SET_TRANSACTION_STATUS', payload: { transactionStatus } })
   }
+
+  setTransactionData ({ transactionData }) {
+    this.actions.dispatch({ type: 'TOKENS.SET_TRANSACTION_DATA', payload: { transactionData } })
+  }
 }
 
 export default Tokens

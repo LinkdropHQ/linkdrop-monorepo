@@ -7,12 +7,13 @@ import classNames from 'classnames'
 import QRCode from 'qrcode.react'
 import { copyToClipboard } from '@linkdrop/commons'
 import { prepareRedirectUrl } from 'helpers'
+import config from 'config-claim'
 
-@actions(({ user: { loading, contractAddress }, assets: { items } }) => ({ contractAddress, items, loading }))
+@actions(({ user: { loading, contractAddress, chainId }, assets: { items } }) => ({ contractAddress, items, loading, chainId }))
 @translate('pages.receive')
 class Receive extends React.Component {
   render () {
-    const { contractAddress } = this.props
+    const { contractAddress, chainId = '1' } = this.props
     return <Page hideHeader>
       <div className={classNames(styles.container)}>
         <div className={styles.close} onClick={_ => { window.location.href = prepareRedirectUrl({ link: '/#/' }) }}>
@@ -20,11 +21,16 @@ class Receive extends React.Component {
         </div>
         <div className={styles.content}>
           <div className={styles.qr}>
-            <QRCode size={132} value={contractAddress} />
+            <div className={styles.qrItem}><QRCode size={132} value={contractAddress} /></div>
           </div>
 
           <div className={styles.address}>
-            <div className={styles.addressText}>{contractAddress}</div>
+            <div className={styles.addressText}>
+              {contractAddress}
+              <a target='_blank' href={`${chainId === '4' ? config.etherscanRinkeby : config.etherscanMainnet}address/${contractAddress}`}>
+                <span className={styles.addressCheck}>!</span>
+              </a>
+            </div>
           </div>
 
           <div className={styles.controls}>

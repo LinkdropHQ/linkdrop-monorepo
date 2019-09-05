@@ -8,7 +8,6 @@ import classNames from 'classnames'
 import { getHashVariables, defineNetworkName } from '@linkdrop/commons'
 import { Button, Icons, Loading } from '@linkdrop/ui-kit'
 import { getCurrentAsset, countFinalPrice } from 'helpers'
-import { ControlTabs } from 'components/pages/common'
 
 @actions(({ assets: { items, itemsToClaim }, user: { ens } }) => ({ items, ens }))
 @translate('pages.claim')
@@ -79,7 +78,6 @@ class ClaimingFinishedPage extends React.Component {
             icon={icon}
           />)}
         </div>
-        <ControlTabs />
         {this.renderDappButton()}
       </div>
     </div>

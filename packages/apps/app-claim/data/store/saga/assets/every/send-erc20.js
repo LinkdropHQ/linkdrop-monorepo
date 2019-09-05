@@ -26,14 +26,23 @@ const generator = function * ({ payload }) {
       value: '0'
     }
     const result = yield sdk.execute(message, privateKey)
-
     const { success, errors, txHash } = result
     if (success) {
       yield put({ type: 'TOKENS.SET_TRANSACTION_ID', payload: { transactionId: txHash } })
+      yield put({
+        type: 'TOKENS.SET_TRANSACTION_DATA',
+        payload: {
+          transactionData: {
+            value: String(amount.trim()),
+            tokenAddress,
+            status: 'loading'
+          }
+        }
+      })
     } else {
+      window.alert('Some error occured')
+      yield put({ type: 'USER.SET_LOADING', payload: { loading: false } })
       if (errors.length > 0) {
-        yield put({ type: 'USER.SET_LOADING', payload: { loading: false } })
-        window.alert('Some error occured')
         console.error(errors[0])
       }
     }

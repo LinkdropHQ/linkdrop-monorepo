@@ -21,7 +21,8 @@ class Send extends React.Component {
       sendTo: '',
       currentAsset: (props.items[0] || {}).tokenAddress,
       amount: 0,
-      showTx: false
+      showTx: false,
+      error: null
     }
   }
 
@@ -30,7 +31,7 @@ class Send extends React.Component {
     if (id != null && prevId === null) {
       const { chainId } = getHashVariables()
       this.statusCheck = window.setInterval(_ => this.actions().tokens.checkTransactionStatus({ transactionId: id, chainId, statusToAdd: 'sent' }), 3000)
-      window.setTimeout(_ => this.setState({
+      this.showTxHash = window.setTimeout(_ => this.setState({
         showTx: true
       }), 2000)
     }
@@ -40,24 +41,21 @@ class Send extends React.Component {
       })
     }
     if (status != null && status === 'sent' && prevStatus === null) {
-      this.statusCheck && window.clearInterval(this.statusCheck)
       this.actions().assets.getItems({ chainId, wallet: contractAddress })
-      this.setState({
-        sendTo: '',
-        amount: 0,
-        showTx: false
-      })
     }
-
     if (status != null && status === 'failed' && prevStatus === null) {
-      this.statusCheck && window.clearInterval(this.statusCheck)
       alert(`unfortunately your transaction was failed, check txhash: ${id}`)
       this.actions().tokens.setTransactionId({ transactionId: null })
+    }
+
+    if (status != null && (status === 'failed' || status === 'sent') && prevStatus === null) {
       this.setState({
         sendTo: '',
         amount: 0,
-        showTx: false
+        showTx: false,
+        error: null
       })
+      this.statusCheck && window.clearInterval(this.statusCheck)
     }
   }
 
@@ -65,17 +63,19 @@ class Send extends React.Component {
     this.actions().user.setLoading({ loading: false })
     this.actions().tokens.setTransactionId({ transactionId: null })
     this.statusCheck && window.clearInterval(this.statusCheck)
+    this.showTxHash && window.clearTimeout(this.showTxHash)
   }
 
   render () {
-    const { sendTo, currentAsset, amount, showTx } = this.state
+    const { sendTo, currentAsset, amount, showTx, error } = this.state
     const { loading, transactionId, chainId } = this.props
     return <Page hideHeader>
       <div className={styles.container}>
         <Header
           sendTo={sendTo}
+          error={error}
           amount={amount}
-          onChange={({ amount }) => this.setState({ amount })}
+          onChange={({ amount }) => this.changeAmount({ amount })}
           onSend={_ => this.onSend()}
         />
         <Scrollbars style={{
@@ -84,7 +84,7 @@ class Send extends React.Component {
         }}
         >
           <div className={styles.content}>
-            <Assets onChange={({ currentAsset }) => this.setState({ currentAsset })} currentAsset={currentAsset} />
+            <Assets onChange={({ currentAsset }) => this.changeAsset({ asset: currentAsset })} currentAsset={currentAsset} />
             <Input
               onChange={({ value }) => this.setState({
                 sendTo: value
@@ -100,13 +100,36 @@ class Send extends React.Component {
             {showTx && transactionId && <div
               className={styles.note}
               dangerouslySetInnerHTML={{
-                __html: this.t('texts.details', { link: `${chainId === '4' ? config.etherscanRinkeby : config.etherscanMainnet}${transactionId}` })
+                __html: this.t('texts.details', { link: `${chainId === '4' ? config.etherscanRinkeby : config.etherscanMainnet}tx/${transactionId}` })
               }}
             />}
+            {error && <div className={styles.error}>{error}</div>}
           </div>
         </Scrollbars>
       </div>
     </Page>
+  }
+
+  changeAmount ({ amount }) {
+    this.setState({
+      amount
+    }, _ => this.checkBalance({ amount }))
+  }
+
+  changeAsset ({ asset }) {
+    const { amount } = this.state
+    this.setState({
+      currentAsset: asset
+    }, _ => this.checkBalance({ amount }))
+  }
+
+  checkBalance ({ amount }) {
+    const { items } = this.props
+    const { currentAsset } = this.state
+    const { balanceFormatted } = items.find(item => item.tokenAddress === currentAsset)
+    this.setState({
+      error: Number(balanceFormatted) < Number(amount) ? this.t('errors.balance') : null
+    })
   }
 
   onSend () {

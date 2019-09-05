@@ -65,7 +65,8 @@ class Menu extends React.Component {
       {
         title: text('common.walletHeader.menu.addFunds'),
         onClick: _ => this.actions().user.setMoonpayShow({ moonpayShow: true }),
-        color: variables.greenColor
+        color: variables.greenColor,
+        logo: '$'
       }, {
         title: text('common.walletHeader.menu.withdraw'),
         href: prepareRedirectUrl({ link: '/#/send' })
@@ -91,10 +92,29 @@ class Menu extends React.Component {
       }
     ]
     return <div className={styles.container}>
-      {MENU.map(({ title, href, onClick, color }) => {
+      {MENU.map(({ title, href, onClick, color, logo }) => {
         const style = color ? { color } : {}
-        if (href) { return <a style={style} traget='_blank' key={title} href={href} className={styles.menuItem}>{title}</a> }
-        return <div style={style} onClick={_ => onClick && onClick()} key={title} className={styles.menuItem}>{title}</div>
+        if (href) {
+          return <a
+            style={style}
+            traget='_blank'
+            key={title}
+            href={href}
+            className={styles.menuItem}
+          >
+            {logo && <div className={styles.menuItemLogo}>{logo}</div>}
+            {title}
+          </a>
+        }
+        return <div
+          style={style}
+          onClick={_ => onClick && onClick()}
+          key={title}
+          className={styles.menuItem}
+        >
+          {logo && <div className={styles.menuItemLogo}>{logo}</div>}
+          {title}
+        </div>
       })}
     </div>
   }

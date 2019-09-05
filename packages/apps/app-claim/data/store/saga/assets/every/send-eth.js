@@ -26,10 +26,20 @@ const generator = function * ({ payload }) {
     const { success, errors, txHash } = result
     if (success) {
       yield put({ type: 'TOKENS.SET_TRANSACTION_ID', payload: { transactionId: txHash } })
+      yield put({
+        type: 'TOKENS.SET_TRANSACTION_DATA',
+        payload: {
+          transactionData: {
+            value: String(amount.trim()),
+            tokenAddress: ethers.constants.AddressZero,
+            status: 'loading'
+          }
+        }
+      })
     } else {
+      yield put({ type: 'USER.SET_LOADING', payload: { loading: false } })
+      window.alert('Some error occured')
       if (errors.length > 0) {
-        yield put({ type: 'USER.SET_LOADING', payload: { loading: false } })
-        window.alert('Some error occured')
         console.error(errors[0])
       }
     }

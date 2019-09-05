@@ -5,6 +5,7 @@
   top: 0;
   left: 0;
   height: 100vh;
+  padding-top: 30px;
   width: 100vw;
 }
 
@@ -15,7 +16,15 @@
   align-items: center;
   justify-content: center;
   border-bottom: 1px solid $greyStrokeMenuColor;
+
+  .qrItem {
+    padding: 5px 5px 2px 5px;
+    border: 1px solid $dbBlue;
+    border-radius: 5px;
+  }
 }
+
+
 
 .close {
   position: absolute;
@@ -28,15 +37,34 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  position: relative;
   border-bottom: 1px solid $greyStrokeMenuColor;
+
   .addressText {
     max-width: 315px;
     width: 100%;
     overflow: hidden;
     white-space: nowrap;
     overflow: hidden;
+    padding-right: 30px;
     font-size: 18px;
     text-overflow: ellipsis;
+    color: $dbBlue;
+  }
+
+  .addressCheck {
+    width: 30px;
+    height: 30px;
+    border-radius: 30px;
+    border: 1px solid $dbBlue;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    line-height: 1;
+    position: absolute;
+    right: 25px;
+    top: 50%;
+    transform: translateY(-50%);
     color: $dbBlue;
   }
 }

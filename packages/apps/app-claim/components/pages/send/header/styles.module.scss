@@ -3,6 +3,14 @@
 .container {
   padding: 0px 30px;
   border-bottom: 1px solid $greyStrokeMenuColor;
+
+
+  &.loading {
+    .close {
+      cursor: not-allowed;
+      opacity: .4;
+    }
+  }
 }
 
 .content {
@@ -18,6 +26,10 @@
   position: absolute;
   top: 30px;
   left: 0px;
+
+  &.loading {
+
+  }
 }
 
 .controls {
@@ -35,7 +47,7 @@
   padding: 0px 15px;
   font-size: 20px;
   color: $whiteColor;
-  width: auto;
+  width: 65px;
   min-width: 65px;
   background: $dbBlue;
 }
@@ -43,7 +55,7 @@
 .finishedButton {
   background: $greenColorTransparent;
   min-width: 65px;
-  width: auto;
+  width: 65px;
   padding: 0px 15px;
 }
 
@@ -52,8 +64,18 @@
   font-size: 30px!important;
   font-family: 'Inter-Bold'!important;
   text-align: center;
+  transition: border-color .3s;
+
+  &:focus {
+    border-color: $dbBlue;
+  }
 
   &.empty {
     color: $dbBlueTransparent;
+  }
+
+  &.errored {
+    color: $redColor;
+    border-color: $redColor;
   }
 }

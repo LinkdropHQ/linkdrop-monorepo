@@ -32,15 +32,18 @@ class TokensAmount extends React.Component {
       link,
       transactionId,
       chainId = '1',
-      claimingFinished
+      claimingFinished,
+      sendLoading,
+      sendingFinished
     } = this.props
-    const text = this.defineText({ loading, symbol, amount, claimingFinished, alreadyClaimed })
-    const icon = this.defineIcon({ loading })
+    const text = this.defineText({ sendLoading, sendingFinished, loading, symbol, amount, claimingFinished, alreadyClaimed })
+    const icon = this.defineIcon({ loading: loading || sendLoading })
     return <div className={styles.wrapper}>
       <div className={classNames(styles.container, {
-        [styles.loading]: loading,
+        [styles.loading]: loading || sendLoading,
         [styles.alreadyClaimed]: alreadyClaimed,
-        [styles.claimingFinished]: claimingFinished
+        [styles.claimingFinished]: claimingFinished,
+        [styles.sendingFinished]: sendingFinished
       })}
       >
         {!alreadyClaimed && icon} {text}
@@ -48,16 +51,18 @@ class TokensAmount extends React.Component {
       {showMessage && transactionId && <div
         className={styles.message}
         dangerouslySetInnerHTML={{
-          __html: this.t('titles.loadingNote', { link: `${chainId === '4' ? config.etherscanRinkeby : config.etherscanMainnet}${transactionId}` })
+          __html: this.t('titles.loadingNote', { link: `${chainId === '4' ? config.etherscanRinkeby : config.etherscanMainnet}tx/${transactionId}` })
         }}
       />}
     </div>
   }
 
-  defineText ({ loading, amount, symbol, alreadyClaimed, claimingFinished }) {
+  defineText ({ loading, sendLoading, sendingFinished, amount, symbol, alreadyClaimed, claimingFinished }) {
     if (loading) return `${this.t('titles.claiming')} ${amount} ${symbol}...`
+    if (sendLoading) return `${amount} ${symbol} ${this.t('titles.sending')}...`
     if (claimingFinished) return `${amount} ${symbol} ${this.t('titles.claimed')}`
     if (alreadyClaimed) return this.t('titles.alreadyClaimed')
+    if (sendingFinished) return `${amount} ${symbol} ${this.t('titles.sent')}`
   }
 
   defineIcon ({ loading }) {

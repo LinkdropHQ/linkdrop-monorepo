@@ -1,6 +1,6 @@
 {
-  "etherscanMainnet": "https://etherscan.io/tx/",
-  "etherscanRinkeby": "https://rinkeby.etherscan.io/tx/",
+  "etherscanMainnet": "https://etherscan.io/",
+  "etherscanRinkeby": "https://rinkeby.etherscan.io/",
   "openseaMainnet": "https://api.opensea.io",
   "openseaRinkeby": "https://rinkeby-api.opensea.io",
   "trustWallet": "https://api.trustwalletapp.com"

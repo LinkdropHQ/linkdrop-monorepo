@@ -12,5 +12,8 @@ export default {
   },
   texts: {
     details: 'It may take a few minutes. <a target="_blank" href={{link}}>Details</a>'
+  },
+  errors: {
+    balance: 'Not enough balance'
   }
 }
