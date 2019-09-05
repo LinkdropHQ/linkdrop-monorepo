@@ -3,6 +3,9 @@
 .container {
   max-width: 230px;
   width: 100%;
+  text-decoration: none;
+  text-transform: none;
+  color: $blackColor;
   border-radius: 20px;
   border: 1px solid $greyStrokeMenuColor;
   padding: 10px 15px;

@@ -1,6 +1,4 @@
-.container {
-  
-}
+@import "variables";
 
 .title {
   text-align: center;
@@ -9,7 +7,23 @@
 
 .button {
   width: 300px;
+  border-color: $dbGrey;
+  margin-bottom: 20px;
+
   img {
     margin-right: 35px;
+  }
+}
+
+.note {
+  color: $textGreyColor;
+  text-align: center;
+  font-size: 14px;
+}
+
+.buttonLoading {
+  div {
+    border-color: 2px solid $dbGrey!important;
+    border-color: $dbGrey transparent transparent transparent!important;
   }
 }

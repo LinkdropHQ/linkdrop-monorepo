@@ -20,7 +20,7 @@ class Send extends React.Component {
     this.state = {
       sendTo: '',
       currentAsset: (props.items[0] || {}).tokenAddress,
-      amount: 0,
+      amount: null,
       showTx: false,
       error: null
     }
@@ -51,7 +51,7 @@ class Send extends React.Component {
     if (status != null && (status === 'failed' || status === 'sent') && prevStatus === null) {
       this.setState({
         sendTo: '',
-        amount: 0,
+        amount: null,
         showTx: false,
         error: null
       })

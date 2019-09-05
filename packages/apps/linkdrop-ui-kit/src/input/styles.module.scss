@@ -10,6 +10,11 @@
   color: $blackColor;
   outline: none;
   padding: 0 10px;
+  box-shadow: none;
+
+  input {
+    box-shadow: none;
+  }
 }
 
 .centered {

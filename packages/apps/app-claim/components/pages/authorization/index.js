@@ -150,10 +150,11 @@ class Authorization extends React.Component {
     return <Page>
       <div className={styles.container}>
         <h2 className={styles.title} dangerouslySetInnerHTML={{ __html: this.t('titles.signIn') }} />
-        <Button className={styles.button} inverted loading={!enableAuthorize || loading} onClick={e => this.handleAuthClick(e)}>
+        <Button loadingClassName={styles.buttonLoading} className={styles.button} inverted loading={!enableAuthorize || loading} onClick={e => this.handleAuthClick(e)}>
           <RetinaImage width={30} {...getImages({ src: 'google' })} />
           {this.t('titles.googleSignIn')}
         </Button>
+        <div className={styles.note} dangerouslySetInnerHTML={{ __html: this.t('texts.backup') }} />
       </div>
     </Page>
   }

@@ -2,23 +2,28 @@
 
 .header, .bodyHeader {
   display: flex;
-  align-items: center;
+  
   padding-top: 0px;
   padding-bottom: 0px;
   width: 100%;
   justify-content: center;
   text-align: center;
-  height: 90px;
   font-size: 30px;
   position: relative;
   font-family: 'Inter-Bold';
 
-  .bodyHeaderCloseIcon, .bodyHeaderQrIcon, .headerIcon {
+  .headerIcon {
     position: absolute;
     top: 50%;
     cursor: pointer;
     transform: translateY(-50%);
     height: 40px;
+  }
+
+  .bodyHeaderCloseIcon, .bodyHeaderQrIcon {
+    position: absolute;
+    bottom: 0%;
+    cursor: pointer;
   }
 
   .bodyHeaderCloseIcon {
@@ -35,9 +40,18 @@
   }
 }
 
+.bodyHeader {
+  height: 60px;
+}
+
+.header {
+  align-items: center;
+  height: 90px;
+}
+
 
 .bodyMain {
-  height: calc(100vh - 90px);
+  height: calc(100vh - 60px);
 }
 
 .body {

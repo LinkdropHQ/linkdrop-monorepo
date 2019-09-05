@@ -25,7 +25,7 @@ class Input extends React.Component {
   }
 
   render () {
-    const { mask, className, disabled, placeholder, centered, numberInput, extraInfo } = this.props
+    const { mask, type = 'text', className, disabled, placeholder, centered, numberInput, extraInfo } = this.props
     const { value } = this.state
     if (numberInput) return this.renderNumberInput()
     if (mask) return this.renderMaskInput()
@@ -33,7 +33,7 @@ class Input extends React.Component {
       {extraInfo && <div className={styles.extraInfo}>
         <Icons.InformationIcon />
       </div>}
-      <input placeholder={placeholder} disabled={disabled} value={value} className={this.defineClassNames({ className, disabled, centered })} onChange={e => this.changeValue(e)} />
+      <input type={type} placeholder={placeholder} disabled={disabled} value={value} className={this.defineClassNames({ className, disabled, centered })} onChange={e => this.changeValue(e)} />
     </div>
   }
 
@@ -61,9 +61,9 @@ class Input extends React.Component {
 
   renderNumberInput () {
     const { value } = this.state
-    const { className, suffix, disabled, centered, format, decimalSeparator } = this.props
+    const { className, suffix, disabled, centered, format, decimalSeparator, placeholder } = this.props
     return <div className={styles.wrapper}>
-      <NumberFormat decimalSeparator={decimalSeparator} decimalScale={8} format={format} disabled={disabled} renderText={value => !disabled && <div>{value}</div>} value={value || 0} suffix={` ${suffix || ''}`} className={this.defineClassNames({ className, disabled, centered })} onChange={e => this.changeValue(e)} />
+      <NumberFormat decimalSeparator={decimalSeparator} decimalScale={8} placeholder={placeholder} format={format} disabled={disabled} renderText={value => !disabled && <div>{value}</div>} value={value} suffix={` ${suffix || ''}`} className={this.defineClassNames({ className, disabled, centered })} onChange={e => this.changeValue(e)} />
     </div>
   }
 }
@@ -75,6 +75,7 @@ Input.propTypes = {
     PropTypes.string,
     PropTypes.number
   ]),
+  type: PropTypes.string,
   onChange: PropTypes.func,
   disabled: PropTypes.bool,
   placeholder: PropTypes.string,

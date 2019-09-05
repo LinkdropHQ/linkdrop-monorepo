@@ -2,12 +2,10 @@ import React from 'react'
 import { translate, actions } from 'decorators'
 import { Page } from 'components/pages'
 import styles from './styles.module'
-import { Icons, Loading, Button } from '@linkdrop/ui-kit'
-import { AssetBalance, AccountBalance, TokensAmount } from 'components/common'
-import classNames from 'classnames'
+import { Loading } from '@linkdrop/ui-kit'
+import { AccountBalance, TokensAmount } from 'components/common'
+import { AssetsList } from 'components/pages/common'
 import { countFinalPrice } from 'helpers'
-import { getHashVariables, defineNetworkName } from '@linkdrop/commons'
-import dapps from 'dapps'
 
 @actions(({ tokens: { transactionData, transactionId, transactionStatus }, user: { chainId, loading, contractAddress, ens }, assets: { items } }) => ({
   transactionData,
@@ -24,14 +22,12 @@ class Wallet extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      expandAssets: false,
       sendingAssets: {}
     }
   }
 
   componentDidMount () {
     const { transactionData, items, transactionId, chainId } = this.props
-    console.log({ transactionData })
     if (transactionData && transactionData.tokenAddress) {
       const currentItem = items.find(item => item.tokenAddress === transactionData.tokenAddress)
       if (!currentItem) { return }
@@ -52,7 +48,6 @@ class Wallet extends React.Component {
           }), 3000)
           return
         }
-        console.log('staring to check!')
         this.statusCheck = window.setInterval(_ => this.actions().tokens.checkTransactionStatus({ transactionId, chainId, statusToAdd: 'sent' }), 3000)
       })
     }
@@ -61,7 +56,6 @@ class Wallet extends React.Component {
   componentWillReceiveProps ({ contractAddress, chainId, transactionId: id, transactionStatus: status }) {
     const { transactionId: prevId, transactionStatus: prevStatus } = this.props
     const { sendingAssets } = this.state
-    console.log({ status, prevStatus })
     if (status != null && status === 'sent' && prevStatus === null) {
       this.actions().assets.getItems({ chainId, wallet: contractAddress })
     }
@@ -94,24 +88,8 @@ class Wallet extends React.Component {
     this.statusCheck && window.clearInterval(this.statusCheck)
   }
 
-  renderDappButton () {
-    const {
-      dappId
-    } = getHashVariables()
-    if (!dappId) { return null }
-    const dapp = dapps[dappId]
-    if (!dapp) { return null }
-    const { label, url } = dapp
-    const { ens } = this.props
-    const { chainId } = getHashVariables()
-    const network = defineNetworkName({ chainId })
-    const confirmUrl = encodeURIComponent(`${window.origin}/#/confirm`)
-    const dappUrl = `${url}?user=${ens}&network=${network}&confirmUrl=${confirmUrl}`
-    return <Button className={styles.button} inverted href={dappUrl} target='_blank'>{this.t('buttons.goTo', { title: label })}</Button>
-  }
-
   render () {
-    const { expandAssets, sendingAssets } = this.state
+    const { sendingAssets } = this.state
     const { items, loading, chainId } = this.props
     const finalPrice = countFinalPrice({ items })
     return <Page dynamicHeader>
@@ -119,30 +97,7 @@ class Wallet extends React.Component {
         {loading && <Loading withOverlay />}
         <AccountBalance balance={finalPrice} />
         {this.renderLoader({ sendingAssets })}
-        <div className={classNames(styles.assets, { [styles.assetsExpanded]: expandAssets })}>
-          <div className={styles.assetsHeader} onClick={_ => this.setState({ expandAssets: !expandAssets })}>
-            {this.t('titles.digitalAssets')}
-            <Icons.PolygonArrow fill='#000' />
-          </div>
-          <div className={styles.assetsContent}>
-            <div className={styles.assetsContentItems}>
-              {items.map(({
-                icon,
-                symbol,
-                balanceFormatted,
-                tokenAddress,
-                price
-              }) => <AssetBalance
-                key={tokenAddress}
-                symbol={symbol}
-                amount={balanceFormatted}
-                price={price}
-                icon={icon}
-              />)}
-            </div>
-            {this.renderDappButton()}
-          </div>
-        </div>
+        <AssetsList />
       </div>
     </Page>
   }

@@ -10,7 +10,7 @@ import { Scrollbars } from 'react-custom-scrollbars'
 import variables from 'variables'
 import { prepareRedirectUrl } from 'helpers'
 
-@actions(({ user: { ens, avatar } }) => ({ ens, avatar }))
+@actions(({ user: { ens, avatar, chainId } }) => ({ chainId, ens, avatar }))
 @translate('common.walletHeader')
 class WalletHeader extends React.Component {
   constructor (props) {
@@ -22,7 +22,7 @@ class WalletHeader extends React.Component {
 
   render () {
     const { opened } = this.state
-    const { avatar, ens } = this.props
+    const { avatar, ens, chainId } = this.props
 
     return <div className={classNames(styles.container, {
       [styles.opened]: opened
@@ -53,13 +53,13 @@ class WalletHeader extends React.Component {
         </div>
         <div className={styles.bodyMain}>
           <Scrollbars style={{
-            height: 'calc(100vh - 90px)',
+            height: 'calc(100vh - 60px)',
             width: '100%'
           }}
           >
             <div className={styles.bodyContent}>
               {this.renderAvatar({ avatar })}
-              {this.renderName({ ens })}
+              {this.renderName({ ens, chainId })}
             </div>
             <Menu />
             <Footer />
@@ -78,8 +78,8 @@ class WalletHeader extends React.Component {
     return <div className={styles.avatar} style={{ backgroundImage: `url(${avatar})` }} />
   }
 
-  renderName ({ ens }) {
-    if (ens) { return <Name ens={ens} /> }
+  renderName ({ ens, chainId }) {
+    if (ens) { return <Name ens={ens} chainId={chainId} /> }
   }
 }
 

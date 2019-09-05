@@ -28,7 +28,7 @@ class Receive extends React.Component {
             <div className={styles.addressText}>
               {contractAddress}
               <a target='_blank' href={`${chainId === '4' ? config.etherscanRinkeby : config.etherscanMainnet}address/${contractAddress}`}>
-                <span className={styles.addressCheck}>!</span>
+                <span className={styles.addressCheck}>i</span>
               </a>
             </div>
           </div>

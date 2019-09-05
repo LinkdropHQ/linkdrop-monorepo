@@ -72,7 +72,11 @@
 
   &.empty {
     color: $dbBlueTransparent;
+    &::placeholder {
+      color: $dbBlueTransparent;
+    }
   }
+
 
   &.errored {
     color: $redColor;

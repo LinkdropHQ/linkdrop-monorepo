@@ -38,6 +38,7 @@ class Header extends React.Component {
 
   render () {
     const { sendTo, onSend, amount, onChange, loading, error, transactionId } = this.props
+    console.log({ amount })
     const { finished } = this.state
     return <div className={classNames(styles.container, { [styles.loading]: loading && !transactionId })}>
       <div className={styles.content}>
@@ -51,12 +52,14 @@ class Header extends React.Component {
         </div>
         <div className={styles.amount}>
           <Input
+            type='number'
             numberInput
+            placeholder='0'
             value={amount}
             disabled={loading}
             onChange={({ value }) => onChange({ amount: value })}
             className={classNames(styles.input, {
-              [styles.empty]: Number(amount) === 0,
+              [styles.empty]: amount === null || Number(amount) === 0,
               [styles.errored]: error && error === this.t('errors.balance')
             })}
           />
