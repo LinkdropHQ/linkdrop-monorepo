@@ -47,24 +47,31 @@ class AssetsList extends React.Component {
         </div>
         <div className={styles.assetsContent}>
           <div className={styles.assetsContentItems}>
-            {items.map(({
-              icon,
-              symbol,
-              balanceFormatted,
-              tokenAddress,
-              price
-            }) => <AssetBalance
-              key={tokenAddress}
-              symbol={symbol}
-              amount={balanceFormatted}
-              price={price}
-              icon={icon}
-            />)}
+            {this.renderAssets({ items })}
           </div>
           {this.renderDappButton()}
         </div>
       </div>
     </div>
+  }
+
+  renderAssets ({ items }) {
+    // if (items.length === 0) {
+    return <div className={styles.note} dangerouslySetInnerHTML={{ __html: this.t('texts.empty') }} />
+    // }
+    // return items.map(({
+    //   icon,
+    //   symbol,
+    //   balanceFormatted,
+    //   tokenAddress,
+    //   price
+    // }) => <AssetBalance
+    //   key={tokenAddress}
+    //   symbol={symbol}
+    //   amount={balanceFormatted}
+    //   price={price}
+    //   icon={icon}
+    // />)
   }
 }
 

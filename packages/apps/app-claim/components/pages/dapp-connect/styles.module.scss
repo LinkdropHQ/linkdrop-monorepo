@@ -1,0 +1,38 @@
+@import "variables";
+
+.container {
+
+}
+
+.content {
+  padding: 20px 30px 50px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.footer {
+  text-align: center;
+  color: $textGreyColor;
+
+  a {
+    color: $textGreyColor;
+  }
+}
+
+.title {
+  margin-bottom: 40px;
+  font-size: 24px;
+  span {
+    color: $dbBlue;
+  }
+}
+
+
+.button {
+  max-width: 300px;
+  min-width: 300px;
+  background: $dbBlue;
+}
+

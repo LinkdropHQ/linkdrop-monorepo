@@ -71,7 +71,7 @@ class Menu extends React.Component {
         title: text('common.walletHeader.menu.withdraw'),
         href: prepareRedirectUrl({ link: '/#/send' })
       }, {
-        title: text('common.walletHeader.menu.chat'),
+        title: text('common.walletHeader.menu.support'),
         href: 'https://t.me/LinkdropHQ'
       }, {
         title: text('common.walletHeader.menu.legal'),

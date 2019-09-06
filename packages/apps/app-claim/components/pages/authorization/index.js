@@ -93,7 +93,7 @@ class Authorization extends React.Component {
             alt: 'media'
           })
           .execute(response => {
-            const { privateKey, contractAddress, avatar, ens } = response
+            const { privateKey, contractAddress, ens } = response
             this.actions().user.setUserData({ privateKey, contractAddress, ens, avatar })
           })
       } else {
@@ -154,7 +154,7 @@ class Authorization extends React.Component {
           <RetinaImage width={30} {...getImages({ src: 'google' })} />
           {this.t('titles.googleSignIn')}
         </Button>
-        <div className={styles.note} dangerouslySetInnerHTML={{ __html: this.t('texts.backup') }} />
+        <div className={styles.note} dangerouslySetInnerHTML={{ __html: this.t('texts.backup', { href: 'https://www.notion.so/linkdrop/Help-Center-9cf549af5f614e1caee6a660a93c489b#49e760a3af404bb99d91450a16fa8a80' }) }} />
       </div>
     </Page>
   }

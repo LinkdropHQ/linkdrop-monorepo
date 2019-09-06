@@ -1,7 +1,7 @@
 import React from 'react'
 import i18next from 'i18next'
 import { Route, Switch } from 'react-router-dom'
-import { Claim, NotFound, Wallet, Confirm, Authorization, Send, Receive } from 'components/pages'
+import { Claim, DappConnect, NotFound, Wallet, DappConfirm, Confirm, Authorization, Send, Receive } from 'components/pages'
 import './styles'
 import { Loading } from '@linkdrop/ui-kit'
 import { getHashVariables } from '@linkdrop/commons'
@@ -44,6 +44,12 @@ class AppRouter extends React.Component {
       <Route path='/confirm' component={Confirm} />
       <Route path='/get' component={Receive} />
       <Route path='/send' component={Send} />
+
+      {/* dapp pages */}
+      <Route path='/dapp-connect' component={DappConnect} />
+      <Route path='/dapp-confirm' component={DappConfirm} />
+      {/* dapp pages */}
+
       <Route path='/' component={Wallet} />
       <Route path='*' component={NotFound} />
     </Switch>

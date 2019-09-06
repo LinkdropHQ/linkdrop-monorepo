@@ -34,7 +34,7 @@ class WalletHeader extends React.Component {
             opened: !opened
           })}
         >
-          <Icons.Profile />
+          {this.renderProfileIcon({ avatar })}
         </div>
         <a href={prepareRedirectUrl({ link: '/#/' })}>{this.t('titles.wallet')}</a>
       </div>
@@ -76,6 +76,16 @@ class WalletHeader extends React.Component {
       </div>
     }
     return <div className={styles.avatar} style={{ backgroundImage: `url(${avatar})` }} />
+  }
+
+  renderProfileIcon ({ avatar }) {
+    if (!avatar || avatar === 'undefined') {
+      return <Icons.Profile />
+    }
+    return <div
+      className={classNames(styles.avatar, styles.avatarSmall)}
+      style={{ backgroundImage: `url(${avatar})` }}
+    />
   }
 
   renderName ({ ens, chainId }) {

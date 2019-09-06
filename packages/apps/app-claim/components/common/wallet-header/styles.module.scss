@@ -70,21 +70,28 @@
     display: flex;
     align-items: center;
     flex-direction: column;
-
-    .avatar {
-      margin-bottom: 15px;
-      height: 80px;
-      width: 80px;
-      border-radius: 80px;
-      background-repeat: no-repeat;
-      background-size: contain;
-    }
   }
 
   .bodyHeader {
     .headerIcon {
       height: 34px;
     }
+  }
+}
+
+.avatar {
+  margin-bottom: 15px;
+  height: 80px;
+  width: 80px;
+  border-radius: 80px;
+  background-repeat: no-repeat;
+  background-size: contain;
+
+  &.avatarSmall {
+    height: 40px;
+    width: 40px;
+    border: 2px solid $blackColor;
+    border-radius: 40px;
   }
 }
 

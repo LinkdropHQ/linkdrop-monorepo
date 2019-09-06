@@ -4,6 +4,7 @@ import AssetBalance from './asset-balance'
 import AccountBalance from './account-balance'
 import MoonpayWidget from './moonpay-widget'
 import Confetti from './confetti'
+import DappHeader from './dapp-header'
 
 export {
   WalletHeader,
@@ -11,5 +12,6 @@ export {
   AssetBalance,
   AccountBalance,
   MoonpayWidget,
-  Confetti
+  Confetti,
+  DappHeader
 }

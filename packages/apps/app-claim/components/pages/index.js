@@ -7,6 +7,8 @@ import Authorization from './authorization'
 import Send from './send'
 import Receive from './receive'
 import Common from './common'
+import DappConnect from './dapp-connect'
+import DappConfirm from './dapp-confirm'
 
 export {
   NotFound,
@@ -17,5 +19,7 @@ export {
   Authorization,
   Send,
   Receive,
-  Common
+  Common,
+  DappConnect,
+  DappConfirm
 }

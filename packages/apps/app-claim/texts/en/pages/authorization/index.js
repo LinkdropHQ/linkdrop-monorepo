@@ -4,6 +4,6 @@ export default {
     googleSignIn: 'Sign in with Google'
   },
   texts: {
-    backup: 'We use your email for backup<br/>and recovery your wallet'
+    backup: 'Access your wallet with your Google<br/>account on other devices <a target="_blank" href={{href}}>Learn more</a>'
   }
 }

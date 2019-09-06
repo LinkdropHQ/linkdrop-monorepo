@@ -6,6 +6,8 @@ import authorization from './authorization'
 import send from './send'
 import receive from './receive'
 import common from './common'
+import dappConnect from './dapp-connect'
+import dappConfirm from './dapp-confirm'
 
 export default {
   claim,
@@ -15,5 +17,7 @@ export default {
   authorization,
   send,
   receive,
-  common
+  common,
+  dappConnect,
+  dappConfirm
 }

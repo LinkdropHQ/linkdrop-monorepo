@@ -5,7 +5,7 @@ export default {
     wallet: 'Wallet'
   },
   menu: {
-    chat: 'Chat',
+    support: 'Support',
     legal: 'Legal',
     logOut: 'Log Out',
     addFunds: 'Add Funds',
