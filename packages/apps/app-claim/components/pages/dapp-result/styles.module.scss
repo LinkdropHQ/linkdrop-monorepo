@@ -1,12 +1,15 @@
 @import "variables";
 
+.container {
+
+}
+
 .content {
   padding: 20px 30px 50px;
   text-align: center;
   display: flex;
   flex-direction: column;
   align-items: center;
-  max-width: 300px;
 }
 
 .footer {
@@ -31,4 +34,3 @@
   min-width: 300px;
   background: $dbBlue;
 }
-

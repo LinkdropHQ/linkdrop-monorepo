@@ -8,6 +8,7 @@ import receive from './receive'
 import common from './common'
 import dappConnect from './dapp-connect'
 import dappConfirm from './dapp-confirm'
+import dappResult from './dapp-result'
 
 export default {
   claim,
@@ -19,5 +20,6 @@ export default {
   receive,
   common,
   dappConnect,
-  dappConfirm
+  dappConfirm,
+  dappResult
 }

@@ -56,22 +56,22 @@ class AssetsList extends React.Component {
   }
 
   renderAssets ({ items }) {
-    // if (items.length === 0) {
-    return <div className={styles.note} dangerouslySetInnerHTML={{ __html: this.t('texts.empty') }} />
-    // }
-    // return items.map(({
-    //   icon,
-    //   symbol,
-    //   balanceFormatted,
-    //   tokenAddress,
-    //   price
-    // }) => <AssetBalance
-    //   key={tokenAddress}
-    //   symbol={symbol}
-    //   amount={balanceFormatted}
-    //   price={price}
-    //   icon={icon}
-    // />)
+    if (items.length === 0) {
+      return <div className={styles.note} dangerouslySetInnerHTML={{ __html: this.t('texts.empty') }} />
+    }
+    return items.map(({
+      icon,
+      symbol,
+      balanceFormatted,
+      tokenAddress,
+      price
+    }) => <AssetBalance
+      key={tokenAddress}
+      symbol={symbol}
+      amount={balanceFormatted}
+      price={price}
+      icon={icon}
+    />)
   }
 }
 
