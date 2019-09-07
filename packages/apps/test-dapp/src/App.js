@@ -1,6 +1,6 @@
 /* global zeroExInstant */
 import React from 'react'
-import Provider from './provider'
+import WalletProvider from '@linkdrop/wallet-provider'
 import Web3 from 'web3'
 import qs from 'querystring'
 import './App.css'
@@ -54,10 +54,8 @@ class App extends React.Component {
       confirmUrl = confirmUrl || urlParams.confirmUrl
       
       console.log('getting provider...')
-      const rpcUrl = `https://${network}.infura.io/v3/d4d1a2b933e048e28fb6fe1abe3e813a`
-      console.log({ rpcUrl })
-      const card = new Provider({ ensName, network, rpcUrl, confirmUrl })
-
+      const card = new WalletProvider({ ensName, network, confirmUrl })
+      
       await card.provider.enable()
       
       console.log('got provider')

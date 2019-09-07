@@ -5,23 +5,17 @@ const FixtureSubprovider = require('web3-provider-engine/subproviders/fixture.js
 const FilterSubprovider = require('web3-provider-engine/subproviders/filters.js')
 const HookedWalletSubprovider = require('web3-provider-engine/subproviders/hooked-wallet.js')
 const SubscriptionsSubprovider = require('web3-provider-engine/subproviders/subscriptions.js')
-
 const ethers = require('ethers')
 
 class Provider {
   constructor (opts) {
-    console.log({ opts })
     this.ensName = opts.ensName
-    this.rpcUrl = opts.rpcUrl
     this.network = opts.network || 'mainnet'
+    this.rpcUrl = opts.rpcUrl || `https://${this.network}.infura.io/v3/d4d1a2b933e048e28fb6fe1abe3e813a`
     this.confirmUrl = opts.confirmUrl
     
     if (!opts.ensName) {
       throw new Error('ENS name should be provided')
-    }
-    
-    if (!opts.rpcUrl) {
-      throw new Error('rpcUrl should be provided')
     }
     
     if (!opts.network) {
@@ -36,28 +30,16 @@ class Provider {
     try {
       const provider = ethers.getDefaultProvider(network)
       address = await provider.resolveName(ensName)
-      console.log({ address })
     } catch (err) {
       throw new Error('Bad ENS name provided')
     }
     return address
   }
-
-  _parseDomain (ensName) {
-    return ensName.split(/\.(.*)/).slice(0, 2)
-  }
-  
   
   _getConfirmationUrlFromEns (ensName) {
-    const [ label, domain ] = this._parseDomain(ensName)
-    console.log({ label, domain })
     if (this.confirmUrl) return this.confirmUrl
     
-    if (domain === 'argent.xyz') {
-      return 'https://argent.xyz'
-    } else {
-      return 'https://wallet.linkdrop.io/#/confirm'
-    }
+    return 'https://demo.wallet.linkdrop.io/#/confirm'
   }
   
   _initProvider () {
@@ -138,7 +120,7 @@ class Provider {
     }
     const VERSION = 0.1 // #TODO move to auto
     const fixtureSubprovider = new FixtureSubprovider({
-      web3_clientVersion: `UL/v${VERSION}/javascript`,
+      web3_clientVersion: `LD/v${VERSION}/javascript`,
       net_listening: true,
       eth_hashrate: '0x00',
       eth_mining: false,
@@ -151,14 +133,11 @@ class Provider {
     const cache = {}
     const walletSubprovider = new HookedWalletSubprovider({
       getAccounts: cb => {
-        console.log('in getAccounts hooked')
         const result = [address]
         const error = null
         cb(error, result)
       },
       processTransaction: (txParams, cb) => {
-        console.log('publihshing transaction')
-
         const receiveMessage = (event) => {
           // Do we trust the sender of this message?
           // if (event.origin !== confirmationUrl) return
@@ -166,9 +145,7 @@ class Provider {
 
           if (event.data.action === 'PASS_TRANSACTION_RESULT') {
             const { success, txHash } = event.data.payload
-            console.log('Got txHash ', txHash)
             if (cache[txHash]) {
-              console.log('Got the same message result, skipping...')
               return null
             }
             cache[txHash] = true
@@ -184,7 +161,6 @@ class Provider {
         window.addEventListener('message', receiveMessage, false)
         
         const newWindow = window.open(confirmationUrl, '_blank')
-        console.log('sending transaction')
         setTimeout(() => {
           const data = { action: 'SEND_TRANSACTION', payload: { txParams } }
           newWindow.postMessage(data, confirmationUrl)
@@ -204,7 +180,6 @@ class Provider {
     engine.addProvider({
       handleRequest: async (payload, next, end) => {
         try {
-          console.log('got request ', payload.method)
           const { result } = await handleRequest(payload)
           end(null, result)
         } catch (error) {
@@ -220,8 +195,6 @@ class Provider {
 
     engine.isEnsLogin = true
     engine.on = false
-    
-    console.log('engine is inited')
     engine.start()
     return engine
   }
