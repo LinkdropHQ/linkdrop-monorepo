@@ -5,21 +5,44 @@ import styles from './styles.module'
 import { translate, actions } from 'decorators'
 import connectToParent from 'penpal/lib/connectToParent'
 
+const timeout = async ms => new Promise(resolve => setTimeout(resolve, ms))
+
 @actions(({ user: { ens, contractAddress } }) => ({ ens, contractAddress }))
 @translate('pages.dappConnect')
 class DappConnect extends React.Component {
+
+  constructor (props) {
+    console.log("In constuctor")
+    super(props)
+    this.waitingUserAction = false
+    this.action = null
+  }
   
   async componentDidMount () {
-
     const { contractAddress } = this.props
     
     const connection = connectToParent({
       // Methods child is exposing to parent
       methods: {
-        connect (ensName) {
-          // 1. show modal
-          // 2. verify ens
-          // return ens
+        connect: (ensName) => {
+          return new Promise(async (resolve, reject) => {
+            // 1. show modal
+            this.communication.showWidget()
+
+            this.waitingUserAction = true
+            
+            // wait for user input
+            while (this.waitingUserAction === true) await timeout(300)
+            
+            this.communication.hideWidget()
+            if (this.action === 'confirm') {
+              resolve()
+            } else { 
+              reject(new Error('User rejected action'))
+            }
+
+            this.action = null
+          })
         },
         getAccounts () {
           console.log('WALLET: getting accounts: ', contractAddress)
@@ -31,7 +54,13 @@ class DappConnect extends React.Component {
   }
 
   _closeModal () {
-    this.communication.hideWidget()
+    this.action = 'cancel'
+    this.waitingUserAction = false
+  }
+
+  _onConfirmClick () {
+    this.action = 'confirm'
+    this.waitingUserAction = false
   }
   
   render () {
@@ -46,7 +75,7 @@ class DappConnect extends React.Component {
         <div className={styles.title} dangerouslySetInnerHTML={{ __html: this.t('titles.loggedIn', { ens }) }} />
       <Button
         className={styles.button}
-        onClick={this._closeModal.bind(this)}
+        onClick={this._onConfirmClick.bind(this)}
         >
           {this.t('buttons.continue')}
         </Button>

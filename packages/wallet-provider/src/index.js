@@ -81,7 +81,7 @@ class Provider {
     
     engine.enable = async () => {
       this.widget = await this._initWidget()
-      this._showWidget()
+      await this.widget.communication.connect()
     }
 
     async function handleRequest (payload) {

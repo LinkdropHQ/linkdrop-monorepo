@@ -21,7 +21,7 @@ class App extends React.Component {
     const { ensName, network, confirmUrl } = this._getParamsFromUrl()
     this.network = network
     if (ensName) {
-      await this._connect(ensName, network, confirmUrl)
+      this._connect(ensName, network, confirmUrl)
     }
     this.setState({
       loading: false
@@ -80,7 +80,6 @@ class App extends React.Component {
       const errMsg = 'Error connecting with ENS'
       console.log(errMsg)
       console.log(error)
-      window.alert(errMsg)
     }
   }
 
