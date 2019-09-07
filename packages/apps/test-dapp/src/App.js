@@ -61,7 +61,7 @@ class App extends React.Component {
       console.log('got provider')
       this.provider = card.provider
       this.web3 = new Web3(card.provider)
-      console.log('got web3 ', this.web3)
+      // console.log('got web3 ', this.web3)
 
       const accs = await this.web3.eth.getAccounts()
       console.log({ accs })

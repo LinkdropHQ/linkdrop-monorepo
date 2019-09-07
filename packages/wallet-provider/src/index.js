@@ -1,3 +1,4 @@
+import connectToChild from 'penpal/lib/connectToChild'
 import { styles } from './styles'
 const ProviderEngine = require('web3-provider-engine')
 const RpcSubprovider = require('web3-provider-engine/subproviders/rpc')
@@ -22,9 +23,8 @@ class Provider {
     if (!opts.network) {
       throw new Error('network should be provided')
     }
-    
+    this.widget = null    
     this.provider = this._initProvider()
-    this._initWidget()
   }
 
   _initWidget () {
@@ -44,10 +44,22 @@ class Provider {
         document.body.appendChild(container)
         document.head.appendChild(style)
 
-        console.log('Iframe loaded')
-        resolve(true)
-      }
+        const connection = connectToChild({
+          // The iframe to which a connection should be made
+          iframe,
+          // Methods the parent is exposing to the child
+          methods: {
+            // add(num1, num2) {
+            //   return num1 + num2
+            // }
+          }
+        })
 
+        const communication = await connection.promise
+        
+        resolve({ iframe, communication })
+      }
+      
       if (['loaded', 'interactive', 'complete'].indexOf(document.readyState) > -1) {
         onload()
       } else {
@@ -56,31 +68,15 @@ class Provider {
     })
   }
   
-  async _getAddressFromEns (ensName, network) {
-    let address
-    try {
-      const provider = ethers.getDefaultProvider(network)
-      address = await provider.resolveName(ensName)
-    } catch (err) {
-      throw new Error('Bad ENS name provided')
-    }
-    return address
-  }
-  
-  _getConfirmationUrlFromEns (ensName) {
-    if (this.confirmUrl) return this.confirmUrl
-    
-    return 'https://demo.wallet.linkdrop.io/#/confirm'
-  }
-  
   _initProvider () {
     const engine = new ProviderEngine()
     let address
     let confirmationUrl
     
     engine.enable = async () => {
-      address = await this._getAddressFromEns(this.ensName, this.network)
-      confirmationUrl = this._getConfirmationUrlFromEns(this.ensName)
+      this.widget = await this._initWidget()
+      console.log("Enabled")
+      console.log(this.widget)
     }
 
     async function handleRequest (payload) {
@@ -163,9 +159,14 @@ class Provider {
     // hack to deal with multiple received messages via PostMessage
     const cache = {}
     const walletSubprovider = new HookedWalletSubprovider({
-      getAccounts: cb => {
-        const result = [address]
-        const error = null
+      getAccounts: async cb => {
+        let result, error
+        console.log("getting accounts")
+        try {
+          result = await this.widget.communication.getAccounts()
+        } catch (err) {
+          error = err
+        }
         cb(error, result)
       },
       processTransaction: (txParams, cb) => {
