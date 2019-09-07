@@ -8,8 +8,8 @@ import connectToParent from 'penpal/lib/connectToParent'
 @actions(({ user: { ens, contractAddress } }) => ({ ens, contractAddress }))
 @translate('pages.dappConnect')
 class DappConnect extends React.Component {
-
-  componentDidMount () {
+  
+  async componentDidMount () {
 
     const { contractAddress } = this.props
     
@@ -27,6 +27,11 @@ class DappConnect extends React.Component {
         }
       }
     })
+    this.communication = await connection.promise        
+  }
+
+  _closeModal () {
+    this.communication.hideWidget()
   }
   
   render () {
@@ -34,14 +39,14 @@ class DappConnect extends React.Component {
     return <div className={styles.container}>
       <DappHeader
         title={this.t('titles.wallet')}
-        onClose={_ => console.log('here is the close event')}
+        onClose={this._closeModal.bind(this)}
       />
 
       <div className={styles.content}>
         <div className={styles.title} dangerouslySetInnerHTML={{ __html: this.t('titles.loggedIn', { ens }) }} />
-        <Button
-          className={styles.button}
-          onClick={_ => console.log('here is the continue event')}
+      <Button
+        className={styles.button}
+        onClick={this._closeModal.bind(this)}
         >
           {this.t('buttons.continue')}
         </Button>

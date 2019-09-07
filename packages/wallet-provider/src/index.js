@@ -23,7 +23,7 @@ class Provider {
     if (!opts.network) {
       throw new Error('network should be provided')
     }
-    this.widget = null    
+    this.widget = null
     this.provider = this._initProvider()
   }
 
@@ -49,14 +49,12 @@ class Provider {
           iframe,
           // Methods the parent is exposing to the child
           methods: {
-            // add(num1, num2) {
-            //   return num1 + num2
-            // }
+            showWidget: this._showWidget.bind(this),
+            hideWidget: this._hideWidget.bind(this)
           }
         })
 
         const communication = await connection.promise
-        
         resolve({ iframe, communication })
       }
       
@@ -67,6 +65,14 @@ class Provider {
       }
     })
   }
+
+  _showWidget () {
+    this.widget.iframe.style.display = 'block'
+  }
+
+  _hideWidget () {
+    this.widget.iframe.style.display = 'none'
+  }
   
   _initProvider () {
     const engine = new ProviderEngine()
@@ -75,8 +81,7 @@ class Provider {
     
     engine.enable = async () => {
       this.widget = await this._initWidget()
-      console.log("Enabled")
-      console.log(this.widget)
+      this._showWidget()
     }
 
     async function handleRequest (payload) {
