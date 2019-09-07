@@ -1,3 +1,4 @@
+import { styles } from './styles'
 const ProviderEngine = require('web3-provider-engine')
 const RpcSubprovider = require('web3-provider-engine/subproviders/rpc')
 const CacheSubprovider = require('web3-provider-engine/subproviders/cache.js')
@@ -23,8 +24,38 @@ class Provider {
     }
     
     this.provider = this._initProvider()
+    this._initWidget()
   }
 
+  _initWidget () {
+    return new Promise((resolve, reject) => {
+      const onload = async () => {
+        const style = document.createElement('style')
+        style.innerHTML = styles
+
+        const container = document.createElement('div')
+        container.className = 'ld-widget-container'
+                
+        const iframe = document.createElement('iframe')
+        iframe.src = 'http://localhost:9002/#/dapp-connect'
+        iframe.className = 'ld-widget-iframe'
+        
+        container.appendChild(iframe)
+        document.body.appendChild(container)
+        document.head.appendChild(style)
+
+        console.log('Iframe loaded')
+        resolve(true)
+      }
+
+      if (['loaded', 'interactive', 'complete'].indexOf(document.readyState) > -1) {
+        onload()
+      } else {
+        window.addEventListener('load', onload.bind(this), false)
+      }
+    })
+  }
+  
   async _getAddressFromEns (ensName, network) {
     let address
     try {
