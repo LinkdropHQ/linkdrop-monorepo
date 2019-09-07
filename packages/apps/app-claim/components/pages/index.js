@@ -9,6 +9,7 @@ import Receive from './receive'
 import Common from './common'
 import DappConnect from './dapp-connect'
 import DappConfirm from './dapp-confirm'
+import DappResult from './dapp-result'
 
 export {
   NotFound,
@@ -21,5 +22,6 @@ export {
   Receive,
   Common,
   DappConnect,
-  DappConfirm
+  DappConfirm,
+  DappResult
 }

@@ -1,6 +1,10 @@
 export default {
   titles: {
+    wallet: 'Wallet',
     success: 'Success!',
-    youReceived: 'You received:'
+    received: 'You received:'
+  },
+  buttons: {
+    ok: 'Ok'
   }
 }

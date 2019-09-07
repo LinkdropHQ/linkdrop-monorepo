@@ -55,10 +55,13 @@ class DappConfirm extends React.Component {
 
   renderAsset ({ currentAsset }) {
     if (currentAsset) {
-      return <AssetBalance
-        {...currentAsset}
-        amount={currentAsset.balanceFormatted}
-      />
+      return <div className={styles.assets}>
+        <div className={styles.subtitle}>{this.t('titles.spend')}</div>
+        <AssetBalance
+          {...currentAsset}
+          amount={currentAsset.balanceFormatted}
+        />
+      </div>
     }
     return null
   }

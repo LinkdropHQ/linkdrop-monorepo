@@ -10,6 +10,13 @@
   margin: 0 auto;
 }
 
+.subtitle {
+  font-size: 18px;
+  color: $textGreyColor;
+  text-align: left;
+  margin-bottom: 10px;
+}
+
 .footer {
   text-align: center;
   color: $textGreyColor;
@@ -17,6 +24,10 @@
   a {
     color: $textGreyColor;
   }
+}
+
+.assets {
+  margin-bottom: 10px;
 }
 
 .title {

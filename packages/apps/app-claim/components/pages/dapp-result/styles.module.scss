@@ -1,15 +1,13 @@
 @import "variables";
 
-.container {
-
-}
-
 .content {
   padding: 20px 30px 50px;
   text-align: center;
   display: flex;
   flex-direction: column;
   align-items: center;
+  max-width: 300px;
+  margin: 0 auto;
 }
 
 .footer {
@@ -21,12 +19,19 @@
   }
 }
 
+.assets {
+  margin-bottom: 10px;
+}
+
 .title {
-  margin-bottom: 40px;
   font-size: 24px;
-  span {
-    color: $dbBlue;
+  &.titleSuccess {
+    color: $greenColor;
   }
+}
+
+.titles {
+  margin-bottom: 30px;
 }
 
 .button {
