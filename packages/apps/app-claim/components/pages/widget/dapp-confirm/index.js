@@ -4,27 +4,31 @@ import { Button } from '@linkdrop/ui-kit'
 import styles from './styles.module'
 import { translate, actions } from 'decorators'
 import { getHashVariables } from '@linkdrop/commons'
-import { ethers } from 'ethers'
+import { utils } from 'ethers'
 
 @actions(({ user: { ens, contractAddress }, assets: { itemsToClaim } }) => ({ contractAddress, ens, itemsToClaim }))
 @translate('pages.dappConfirm')
 class DappConfirm extends React.Component {
+  componentDidUpdate (prevProps) {
+    if (prevProps.txParams && prevProps.txParams.value === this.props.txParams.value) return null
+    this._getEthCost()
+  }
+
   componentDidMount () {
-    // just pass these variables as post message data
-    const amount = '2967240000000000'
-    const tokenAddress = '0x0000000000000000000000000000000000000000'
+    this._getEthCost()
+  }
+  
+  _getEthCost () {
+  // just pass these variables as post message data
+    const amount = utils.bigNumberify(this.props.txParams.value).toString()
+    console.log({ amount })
     const {
       chainId = '1'
     } = getHashVariables()
-    if (tokenAddress === ethers.constants.AddressZero) {
-      this.actions().assets.getEthData({ chainId, weiAmount: amount })
-    } else {
-      this.actions().assets.getTokenERC20Data({ tokenAddress, tokenAmount: amount, chainId })
-    }
+    this.actions().assets.getEthData({ chainId, weiAmount: amount })
   }
 
   _onConfirmTx () {
-    console.log("in _confirmTx: ", this.props.txParams)
     const txHash = '0xd8e96a2702b81e7350f6d907ec0754cf02a7cb911a872e9f0a74310644700f76'
     this.props.onConfirmClick(txHash)
   }
@@ -32,7 +36,7 @@ class DappConfirm extends React.Component {
   render () {
     // dont pay much attention to the name of variable itemsToClaim, I will change it soon
     const { itemsToClaim, onCancelClick } = this.props
-    const currentAsset = itemsToClaim[0]
+    const currentAsset = itemsToClaim[itemsToClaim.length - 1] // hack to update values as action adds new assets in array on view update
     return <div className={styles.container}>
       <DappHeader
         title={this.t('titles.wallet')}
@@ -61,6 +65,7 @@ class DappConfirm extends React.Component {
 
   renderAsset ({ currentAsset }) {
     if (currentAsset) {
+      console.log({ currentAsset, amount: currentAsset.balanceFormatted })
       return <div className={styles.assets}>
         <div className={styles.subtitle}>{this.t('titles.spend')}</div>
         <AssetBalance
