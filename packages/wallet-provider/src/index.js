@@ -173,7 +173,12 @@ class Provider {
       processTransaction: async (txParams, cb) => {        
         let result, error
         try {
-          result = await this.widget.communication.sendTransaction(txParams)
+          const { txHash, success, errors } = await this.widget.communication.sendTransaction(txParams)
+          if (success) {
+            result = txHash
+          } else {
+            error = errors[0] || 'Error while sending transaction'
+          }
         } catch (err) {
           error = err
         }

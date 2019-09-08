@@ -6,7 +6,7 @@ import { translate, actions } from 'decorators'
 import { getHashVariables } from '@linkdrop/commons'
 import { utils } from 'ethers'
 
-@actions(({ user: { ens, contractAddress }, assets: { itemsToClaim } }) => ({ contractAddress, ens, itemsToClaim }))
+@actions(({ user: { ens, contractAddress, sdk, privateKey }, assets: { itemsToClaim } }) => ({ contractAddress, ens, sdk, privateKey, itemsToClaim }))
 @translate('pages.dappConfirm')
 class DappConfirm extends React.Component {
   componentDidUpdate (prevProps) {
@@ -28,9 +28,23 @@ class DappConfirm extends React.Component {
     this.actions().assets.getEthData({ chainId, weiAmount: amount })
   }
 
-  _onConfirmTx () {
-    const txHash = '0xd8e96a2702b81e7350f6d907ec0754cf02a7cb911a872e9f0a74310644700f76'
-    this.props.onConfirmClick(txHash)
+  async _onConfirmTx () {
+    const { sdk, privateKey, contractAddress } = this.props
+    const {
+      data,
+      to,
+      value
+    } = this.props.txParams
+
+    const message = {
+      from: contractAddress,
+      data: data || '0x0',
+      to: to || '0x0',
+      value: value || '0x0'
+    }
+    const { txHash, success, errors } = await sdk.execute(message, privateKey)
+    
+    this.props.onConfirmClick({ txHash, success, errors })
   }
   
   render () {
