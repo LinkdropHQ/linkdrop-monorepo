@@ -18,10 +18,10 @@ class App extends React.Component {
   }
 
   async componentDidMount () {
-    const { ensName, network, confirmUrl } = this._getParamsFromUrl()
+    const { ensName, network, widgetUrl } = this._getParamsFromUrl()
     this.network = network
     if (ensName) {
-      this._connect(ensName, network, confirmUrl)
+      this._connect(ensName, network, widgetUrl)
     }
     this.setState({
       loading: false
@@ -30,7 +30,7 @@ class App extends React.Component {
   
   _getParamsFromUrl () {
     let ensName
-    let confirmUrl
+    let widgetUrl
     let network = 'mainnet'
 
     const paramsFragment = document.location.search.substr(1)
@@ -38,23 +38,23 @@ class App extends React.Component {
       const query = qs.parse(paramsFragment)
       network = query.network || 'mainnet'
       ensName = query.user
-      if (query.confirmUrl) {
-        confirmUrl = decodeURIComponent(query.confirmUrl)
+      if (query.widgetUrl) {
+        widgetUrl = decodeURIComponent(query.widgetUrl)
       }      
     }
-    return { ensName, network, confirmUrl }
+    return { ensName, network, widgetUrl }
   }
   
-  async _connect (ensName, network, confirmUrl) {
+  async _connect (ensName, network, widgetUrl) {
     try {
       const urlParams = this._getParamsFromUrl()
 
       ensName = ensName || urlParams.ensName
       network = network || urlParams.network
-      confirmUrl = confirmUrl || urlParams.confirmUrl
+      widgetUrl = widgetUrl || urlParams.widgetUrl
       
       console.log('getting provider...')
-      const card = new WalletProvider({ ensName, network, confirmUrl })
+      const card = new WalletProvider({ ensName, network, widgetUrl })
       
       await card.provider.enable()
       

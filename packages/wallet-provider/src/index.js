@@ -13,7 +13,7 @@ class Provider {
     this.ensName = opts.ensName
     this.network = opts.network || 'mainnet'
     this.rpcUrl = opts.rpcUrl || `https://${this.network}.infura.io/v3/d4d1a2b933e048e28fb6fe1abe3e813a`
-    this.confirmUrl = opts.confirmUrl
+    this.widgetUrl = opts.widgetUrl
     
     if (!opts.ensName) {
       throw new Error('ENS name should be provided')
@@ -36,7 +36,7 @@ class Provider {
         container.className = 'ld-widget-container'
                 
         const iframe = document.createElement('iframe')
-        iframe.src = 'http://localhost:9002/#/widget'
+        iframe.src = this.widgetUrl || 'https://demo.wallet.linkdrop.io/#/widget'
         iframe.className = 'ld-widget-iframe'
         
         container.appendChild(iframe)
