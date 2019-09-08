@@ -1,14 +1,13 @@
 import React from 'react'
 import { translate, actions } from 'decorators'
 import connectToParent from 'penpal/lib/connectToParent'
-import ConnectScreen from './ConnectScreen'
+import ConnectScreen from './dapp-connect'
 
 const timeout = async ms => new Promise(resolve => setTimeout(resolve, ms))
 
 @actions(({ user: { ens, contractAddress } }) => ({ ens, contractAddress }))
 @translate('pages.dappConnect')
 class WalletWidget extends React.Component {
-
   constructor (props) {
     console.log("In constuctor")
     super(props)
@@ -42,7 +41,7 @@ class WalletWidget extends React.Component {
             this.communication.hideWidget()
             if (this.action === 'confirm') {
               resolve()
-            } else { 
+            } else {
               reject(new Error('User rejected action'))
             }
 

@@ -37,7 +37,7 @@ class Provider {
         container.className = 'ld-widget-container'
                 
         const iframe = document.createElement('iframe')
-        iframe.src = 'http://localhost:9002/#/dapp-connect'
+        iframe.src = 'http://localhost:9002/#/widget'
         iframe.className = 'ld-widget-iframe'
         
         container.appendChild(iframe)
