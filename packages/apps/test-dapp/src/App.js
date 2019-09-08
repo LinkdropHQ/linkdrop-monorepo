@@ -76,6 +76,8 @@ class App extends React.Component {
       console.log({
         balance
       })
+
+      this._openZrxInstantModal()
     } catch (error) {
       const errMsg = 'Error connecting with ENS'
       console.log(errMsg)
