@@ -2,6 +2,7 @@ import React from 'react'
 import { translate, actions } from 'decorators'
 import connectToParent from 'penpal/lib/connectToParent'
 import ConnectScreen from './dapp-connect'
+import ConfirmTransactionScreen from './dapp-confirm'
 const EventEmitter = require('events')
 
 @actions(({ user: { ens, contractAddress } }) => ({ ens, contractAddress }))
@@ -11,10 +12,11 @@ class WalletWidget extends React.Component {
     console.log("In constuctor")
     super(props)
     this.state = {
-      screen: null
+      screen: null,
+      txParams: null
     }
 
-    this.eventEmitter = new EventEmitter()    
+    this.eventEmitter = new EventEmitter()
   }
   
   async componentDidMount () {
@@ -25,29 +27,15 @@ class WalletWidget extends React.Component {
       methods: {
         sendTransaction: async (txParams) => {
           console.log({ txParams })
+          this.setState({
+            screen: 'CONFIRM_TRANSACTION_SCREEN',
+            txParams
+          })
+          return this._showModalAndWaitUserAction()
         },
         connect: (ensName) => {
-          return new Promise(async (resolve, reject) => {
-
-            this.setState({
-              screen: 'CONNECT_SCREEN'
-            })
-            
-            // 1. show modal
-            this.communication.showWidget()
-            this.waitingUserAction = true
-            
-            // wait for user input
-            this.eventEmitter.on('userAction', (action) => { 
-              this.communication.hideWidget()
-              if (action === 'confirm') {
-                resolve()
-              } else {
-                reject(new Error('User rejected action'))
-              }
-            })
-
-          })
+          this.setState({ screen: 'CONNECT_SCREEN' })
+          return this._showModalAndWaitUserAction()
         },
         getAccounts () {
           console.log('WALLET: getting accounts: ', contractAddress)
@@ -58,12 +46,33 @@ class WalletWidget extends React.Component {
     this.communication = await connection.promise        
   }
 
+  _showModalAndWaitUserAction () { 
+    return new Promise(async (resolve, reject) => {
+      // show modal
+      this.communication.showWidget()
+      
+      // wait for user input
+      this.eventEmitter.on('userAction', ({ action, payload }) => {
+
+        // hide modal
+        this.communication.hideWidget()
+
+        // resolve or reject
+        if (action === 'confirm') {
+          resolve(payload)
+        } else {
+          reject(new Error('User rejected action'))
+        }
+      })
+    })
+  }
+  
   _onCancelClick () {
-    this.eventEmitter.emit('userAction', 'cancel')
+    this.eventEmitter.emit('userAction', { action: 'cancel', payload: null })
   }
 
-  _onConfirmClick () {
-    this.eventEmitter.emit('userAction', 'confirm')
+  _onConfirmClick (result) {
+    this.eventEmitter.emit('userAction', { action: 'confirm', payload: result })
   }
   
   render () {
@@ -75,9 +84,12 @@ class WalletWidget extends React.Component {
       onCancelClick={this._onCancelClick.bind(this)} />
     }
 
-    // if (this.state.screen === 'CONFIRM_TRANSACTION_SCREEN') {
-    //   return null
-    // }    
+    if (this.state.screen === 'CONFIRM_TRANSACTION_SCREEN') {
+      return <ConfirmTransactionScreen
+      txParams={this.state.txParams}
+      onConfirmClick={this._onConfirmClick.bind(this)}
+      onCancelClick={this._onCancelClick.bind(this)} />      
+    }    
   }
 }
 

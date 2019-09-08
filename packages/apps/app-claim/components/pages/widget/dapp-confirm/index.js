@@ -23,14 +23,20 @@ class DappConfirm extends React.Component {
     }
   }
 
+  _onConfirmTx () {
+    console.log("in _confirmTx: ", this.props.txParams)
+    const txHash = '0xd8e96a2702b81e7350f6d907ec0754cf02a7cb911a872e9f0a74310644700f76'
+    this.props.onConfirmClick(txHash)
+  }
+  
   render () {
     // dont pay much attention to the name of variable itemsToClaim, I will change it soon
-    const { itemsToClaim } = this.props
+    const { itemsToClaim, onCancelClick } = this.props
     const currentAsset = itemsToClaim[0]
     return <div className={styles.container}>
       <DappHeader
         title={this.t('titles.wallet')}
-        onClose={_ => console.log('here is the close event')}
+        onClose={onCancelClick}
       />
 
       <div className={styles.content}>
@@ -41,7 +47,7 @@ class DappConfirm extends React.Component {
         {this.renderAsset({ currentAsset })}
         <Button
           className={styles.button}
-          onClick={_ => console.log('here is the continue event')}
+          onClick={this._onConfirmTx.bind(this)}
         >
           {this.t('buttons.confirm')}
         </Button>
