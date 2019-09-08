@@ -1,21 +1,22 @@
 import React from 'react'
-import { DappHeader } from 'components/common'
-import { Button } from '@linkdrop/ui-kit'
-import styles from './styles.module'
 import { translate, actions } from 'decorators'
 import connectToParent from 'penpal/lib/connectToParent'
+import ConnectScreen from './ConnectScreen'
 
 const timeout = async ms => new Promise(resolve => setTimeout(resolve, ms))
 
 @actions(({ user: { ens, contractAddress } }) => ({ ens, contractAddress }))
 @translate('pages.dappConnect')
-class DappConnect extends React.Component {
+class WalletWidget extends React.Component {
 
   constructor (props) {
     console.log("In constuctor")
     super(props)
     this.waitingUserAction = false
     this.action = null
+    this.state = {
+      screen: null
+    }
   }
   
   async componentDidMount () {
@@ -26,9 +27,13 @@ class DappConnect extends React.Component {
       methods: {
         connect: (ensName) => {
           return new Promise(async (resolve, reject) => {
+
+            this.setState({
+              screen: 'CONNECT_SCREEN'
+            })
+            
             // 1. show modal
             this.communication.showWidget()
-
             this.waitingUserAction = true
             
             // wait for user input
@@ -53,7 +58,7 @@ class DappConnect extends React.Component {
     this.communication = await connection.promise        
   }
 
-  _closeModal () {
+  _onCancelClick () {
     this.action = 'cancel'
     this.waitingUserAction = false
   }
@@ -64,28 +69,18 @@ class DappConnect extends React.Component {
   }
   
   render () {
-    const { ens } = this.props
-    return <div className={styles.container}>
-      <DappHeader
-        title={this.t('titles.wallet')}
-        onClose={this._closeModal.bind(this)}
-      />
+    if (!this.state.screen) return null
 
-      <div className={styles.content}>
-        <div className={styles.title} dangerouslySetInnerHTML={{ __html: this.t('titles.loggedIn', { ens }) }} />
-      <Button
-        className={styles.button}
-        onClick={this._onConfirmClick.bind(this)}
-        >
-          {this.t('buttons.continue')}
-        </Button>
-      </div>
-      <div
-        className={styles.footer}
-        dangerouslySetInnerHTML={{ __html: this.t('texts.dapp') }}
-      />
-    </div>
+    if (this.state.screen === 'CONNECT_SCREEN') {
+      return <ConnectScreen
+      onConfirmClick={this._onConfirmClick.bind(this)}
+      onCancelClick={this._onCancelClick.bind(this)} />
+    }
+
+    // if (this.state.screen === 'CONFIRM_TRANSACTION_SCREEN') {
+    //   return null
+    // }    
   }
 }
 
-export default DappConnect
+export default WalletWidget

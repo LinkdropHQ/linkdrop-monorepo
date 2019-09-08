@@ -166,7 +166,6 @@ class Provider {
     const walletSubprovider = new HookedWalletSubprovider({
       getAccounts: async cb => {
         let result, error
-        console.log("getting accounts")
         try {
           result = await this.widget.communication.getAccounts()
         } catch (err) {
