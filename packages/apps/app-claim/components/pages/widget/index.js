@@ -24,6 +24,28 @@ class WalletWidget extends React.Component {
     const connection = connectToParent({
       // Methods child is exposing to parent
       methods: {
+        sendTransaction: async (txParams) => {
+          console.log({txParams})
+            this.setState({
+              screen: 'CONNECT_SCREEN'
+            })
+            
+            // 1. show modal
+            this.communication.showWidget()
+            this.waitingUserAction = true
+            
+            // wait for user input
+            while (this.waitingUserAction === true) await timeout(300)
+            
+            this.communication.hideWidget()
+            if (this.action === 'confirm') {
+              resolve()
+            } else {
+              reject(new Error('User rejected action'))
+            }
+
+            this.action = null          
+        },
         connect: (ensName) => {
           return new Promise(async (resolve, reject) => {
 

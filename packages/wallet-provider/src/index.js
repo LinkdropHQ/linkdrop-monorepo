@@ -7,7 +7,6 @@ const FixtureSubprovider = require('web3-provider-engine/subproviders/fixture.js
 const FilterSubprovider = require('web3-provider-engine/subproviders/filters.js')
 const HookedWalletSubprovider = require('web3-provider-engine/subproviders/hooked-wallet.js')
 const SubscriptionsSubprovider = require('web3-provider-engine/subproviders/subscriptions.js')
-const ethers = require('ethers')
 
 class Provider {
   constructor (opts) {
@@ -77,7 +76,6 @@ class Provider {
   _initProvider () {
     const engine = new ProviderEngine()
     let address
-    let confirmationUrl
     
     engine.enable = async () => {
       this.widget = await this._initWidget()
@@ -162,7 +160,6 @@ class Provider {
     const cacheSubprovider = new CacheSubprovider()
 
     // hack to deal with multiple received messages via PostMessage
-    const cache = {}
     const walletSubprovider = new HookedWalletSubprovider({
       getAccounts: async cb => {
         let result, error
@@ -173,34 +170,40 @@ class Provider {
         }
         cb(error, result)
       },
-      processTransaction: (txParams, cb) => {
-        const receiveMessage = (event) => {
-          // Do we trust the sender of this message?
-          // if (event.origin !== confirmationUrl) return
-          if (event.origin !== confirmationUrl.substring(event.origin.length, -1)) return
+      processTransaction: async (txParams, cb) => {
+        // const receiveMessage = (event) => {
+        //   // Do we trust the sender of this message?
+        //   // if (event.origin !== confirmationUrl) return
+        //   if (event.origin !== confirmationUrl.substring(event.origin.length, -1)) return
 
-          if (event.data.action === 'PASS_TRANSACTION_RESULT') {
-            const { success, txHash } = event.data.payload
-            if (cache[txHash]) {
-              return null
-            }
-            cache[txHash] = true
-            if (success) {
-              cb(null, txHash)
-            } else {
-              const error = 'Transaction was rejected by user'
-              cb(error)
-            }
-          }
-        }
-
-        window.addEventListener('message', receiveMessage, false)
+        //   if (event.data.action === 'PASS_TRANSACTION_RESULT') {
+        //     const { success, txHash } = event.data.payload
+        //     if (cache[txHash]) {
+        //       return null
+        //     }
+        //     cache[txHash] = true
+        //     if (success) {
+        //       cb(null, txHash)
+        //     } else {
+        //       const error = 'Transaction was rejected by user'
+        //       cb(error)
+        //     }
+        //   }
+        // }
+        // window.addEventListener('message', receiveMessage, false)
+        // const newWindow = window.open(confirmationUrl, '_blank')
+        // setTimeout(() => {
+        //   const data = { action: 'SEND_TRANSACTION', payload: { txParams } }
+        //   newWindow.postMessage(data, confirmationUrl)
+        // }, 1000)
         
-        const newWindow = window.open(confirmationUrl, '_blank')
-        setTimeout(() => {
-          const data = { action: 'SEND_TRANSACTION', payload: { txParams } }
-          newWindow.postMessage(data, confirmationUrl)
-        }, 1000)
+        let result, error
+        try {
+          result = await this.widget.communication.sendTransaction(txParams)
+        } catch (err) {
+          error = err
+        }
+        cb(error, result)
       }
     })
     
