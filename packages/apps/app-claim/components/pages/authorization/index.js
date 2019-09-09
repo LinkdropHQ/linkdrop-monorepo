@@ -70,13 +70,13 @@ class Authorization extends React.Component {
   updateSigninStatus ({ authInstance }) {
     console.log('updateSigninStatus loaded')
     if (!authInstance) { return }
-    this.checkAuth && window.clearInterval(this.checkAuth)
     const isSignedIn = authInstance.isSignedIn.get()
     console.log({ isSignedIn })
     this.setState({
       enableAuthorize: !isSignedIn
     }, _ => {
       if (isSignedIn) {
+        this.checkAuth && window.clearInterval(this.checkAuth)
         const email = authInstance.currentUser.get().getBasicProfile().getEmail()
         const avatar = authInstance.currentUser.get().getBasicProfile().getImageUrl()
         this.setState({
