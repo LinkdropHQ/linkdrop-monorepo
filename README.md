@@ -4,7 +4,7 @@ This branch of the monorepo contains the code for white-label web-wallet widget 
  
 Our team has a long history of focusing on the crypto onboarding problem. Specifically, on getting users for dapps outside of the existing crypto userbase. We're started out with onboarding users to crypto by claimable links - linkdrop.io.  
 
-After we've [launched the Dashboard](https://medium.com/linkdrophq/https-medium-com-linkdrophq-dashboard-launch-d8b3a2c8eec9) to generate linkdrop marketing campaigns, we learned that we solved only one part of the onboarding problem for users: getting crypto to try out the dapp. We figured that installing separate software (chromse extention or mobile app) to try a dapp is too much to ask for mainstream user.    
+After we've [launched the Dashboard](https://medium.com/linkdrophq/https-medium-com-linkdrophq-dashboard-launch-d8b3a2c8eec9) to generate linkdrop marketing campaigns, we learned that we solved only one part of the onboarding problem: getting crypto to try out a dapp. We figured that installing separate software (chromse extention or mobile app) to try a dapp is too much ask for mainstream users.    
   
 That's why for the scope of the IDEO+CoinList hackathon, we decided to solve this problem by building a white-label wallet widget (think Intercom, but for crypto wallet), which any dapp can easily customize and integrate natively. We believe in combination with linkdrop campaigns the webwallet will provide dapps the powerful tooling to attract and retain non-crypto users.  
 
@@ -32,9 +32,6 @@ https://youtu.be/6V2DLXk6Tmo
 - A demo dapp integrating the wallet widget - https://zrx-instant-demo.linkdrop.io/. It's based on ZRX Instant. 
 - Web-wallet - https://demo.wallet.linkdrop.io/
 
-## Disclaimer
-This is a work in progress. Expect breaking changes. The code has not been audited and therefore can not be considered secure.
-
 ## Code structure
 
 **Wallet-codebase (in scope for the IDEO+CoinList hackathon):**
@@ -49,6 +46,8 @@ This is a work in progress. Expect breaking changes. The code has not been audit
 - [Scripts](https://github.com/LinkdropHQ/linkdrop-monorepo/tree/master/packages/scripts)  - scripts for setting up, deploying, generating links and claiming linkdrops
 - [Configs](https://github.com/LinkdropHQ/linkdrop-monorepo/tree/master/configs) - configs used in other components (SDK, server, web apps)
 
+## Disclaimer
+This is a work in progress. Expect breaking changes. The code has not been audited and therefore can not be considered secure.
 
 ## License
 The current codebase is released under the [MIT License](https://opensource.org/licenses/MIT)
