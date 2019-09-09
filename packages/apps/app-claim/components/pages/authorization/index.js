@@ -30,7 +30,6 @@ class Authorization extends React.Component {
       script.setAttribute('async', true)
       script.onload = _ => this.handleClientLoad()
       script.onreadystatechange = function () {
-        console.log('this.readyState: ', this.readyState)
         if (this.readyState === 'complete') this.onload()
       }
       document.body.appendChild(script)
@@ -38,12 +37,10 @@ class Authorization extends React.Component {
   }
 
   handleClientLoad () {
-    console.log('handleClientLoad loaded')
     gapi.load('client:auth2', _ => this.initClient())
   }
 
   initClient () {
-    console.log('initClient loaded')
     gapi.client.init({
       clientId: config.authClientId,
       apiKey: config.authApiKey,
@@ -51,32 +48,24 @@ class Authorization extends React.Component {
       // scope: `${config.authScopeDrive} ${config.authScopeContacts}`
       scope: config.authScopeDrive
     }).then(_ => {
-      console.log('initClient then:')
       // Listen for sign-in state changes.
       const authInstance = gapi.auth2.getAuthInstance()
-      this.updateSigninStatus({ authInstance })
-
-      this.checkAuth = window.setInterval(_ => {
-        const authInstance = gapi.auth2.getAuthInstance()
-        this.updateSigninStatus({ authInstance })
-      }, 3000)
-      // authInstance.isSignedIn.listen(isSignedIn => this.updateSigninStatus({ authInstance }))
+      authInstance.isSignedIn.listen(isSignedIn => this.updateSigninStatus({ authInstance }))
       // Handle the initial sign-in state.
+      this.updateSigninStatus({ authInstance })
     }, error => {
       console.error(error)
     })
   }
 
   updateSigninStatus ({ authInstance }) {
-    console.log('updateSigninStatus loaded')
     if (!authInstance) { return }
     const isSignedIn = authInstance.isSignedIn.get()
-    console.log({ isSignedIn })
+
     this.setState({
       enableAuthorize: !isSignedIn
     }, _ => {
       if (isSignedIn) {
-        this.checkAuth && window.clearInterval(this.checkAuth)
         const email = authInstance.currentUser.get().getBasicProfile().getEmail()
         const avatar = authInstance.currentUser.get().getBasicProfile().getImageUrl()
         this.setState({
@@ -96,7 +85,6 @@ class Authorization extends React.Component {
       spaces: 'appDataFolder'
     }).then(response => {
       const files = response.result.files.filter(file => file.name === 'linkdrop-data.json')
-      console.log({ files })
       if (files && files.length > 0) {
         const id = files[0].id
         gapi.client.drive.files
@@ -105,7 +93,6 @@ class Authorization extends React.Component {
             alt: 'media'
           })
           .execute(response => {
-            console.log('from authorization.js', { response })
             const { privateKey, contractAddress, ens } = response
             this.actions().user.setUserData({ privateKey, contractAddress, ens, avatar })
           })
