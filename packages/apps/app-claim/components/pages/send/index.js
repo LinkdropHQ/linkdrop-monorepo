@@ -11,8 +11,9 @@ import { getHashVariables } from '@linkdrop/commons'
 import { Scrollbars } from 'react-custom-scrollbars'
 import { ethers } from 'ethers'
 import config from 'config-claim'
+import classNames from 'classnames'
 
-@actions(({ tokens: { transactionId, transactionStatus }, user: { chainId, loading, contractAddress }, assets: { items } }) => ({ transactionId, transactionStatus, items, loading, contractAddress, chainId }))
+@actions(({ tokens: { transactionId, transactionStatus }, user: { chainId, loading, contractAddress, errors }, assets: { items } }) => ({ errors, transactionId, transactionStatus, items, loading, contractAddress, chainId }))
 @translate('pages.send')
 class Send extends React.Component {
   constructor (props) {
@@ -68,7 +69,7 @@ class Send extends React.Component {
 
   render () {
     const { sendTo, currentAsset, amount, showTx, error } = this.state
-    const { loading, transactionId, chainId } = this.props
+    const { loading, transactionId, chainId, errors } = this.props
     return <Page hideHeader>
       <div className={styles.container}>
         <Header
@@ -89,6 +90,9 @@ class Send extends React.Component {
               onChange={({ value }) => this.setState({
                 sendTo: value
               })}
+              className={classNames(styles.input, {
+                [styles.inputErrored]: errors && errors[0]
+              })}
               disabled={loading}
               value={sendTo}
               title={this.t('titles.to')}
@@ -103,11 +107,21 @@ class Send extends React.Component {
                 __html: this.t('texts.details', { link: `${chainId === '4' ? config.etherscanRinkeby : config.etherscanMainnet}tx/${transactionId}` })
               }}
             />}
-            {error && <div className={styles.error}>{error}</div>}
+            {this.renderErrors({ error, errors })}
           </div>
         </Scrollbars>
       </div>
     </Page>
+  }
+
+  renderErrors ({ error, errors }) {
+    if (error) {
+      return <div className={styles.error}>{error}</div>
+    }
+
+    if (errors && errors[0]) {
+      return <div className={styles.error}>{this.t(`errors.${errors[0]}`)}</div>
+    }
   }
 
   changeAmount ({ amount }) {
