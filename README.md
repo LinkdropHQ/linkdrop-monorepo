@@ -4,7 +4,7 @@ This branch of the Linkdrop-monorepo contains the code for a white-label web-wal
  
 Starting with the launch of [eth2.io](https://eth2.io/) our team has a long history of working on the problem of introducing and onboarding new people to digital assets. Specifically we've focused on getting users outside the regular crypto nieche to try out new dapps via clicking a "Linkdrop", which is basically a claimable digital assets inside links / QR codes, enabeling receivers without wallets to claim digital assets.
 
-Wehen we recently [launched the Linkdrop Dashboard](https://medium.com/linkdrophq/https-medium-com-linkdrophq-dashboard-launch-d8b3a2c8eec9) enabeling to mass-generate linkdrop based marketing campaigns, we learned that we solved only one part of the onboarding problem: getting crypto to try out a dapp. We figured that installing separate software (chromse extention or mobile app) to try a dapp is too much ask for mainstream users.    
+When we recently [launched the Linkdrop Dashboard](https://medium.com/linkdrophq/https-medium-com-linkdrophq-dashboard-launch-d8b3a2c8eec9), we learned that we solved only one part of the onboarding problem for our customers: getting crypto to try out a dapp. We figured that installing separate software (chromse extention or mobile app) to try a dapp is too much ask for mainstream users.    
   
 That's why for the scope of the IDEO+CoinList hackathon, we decided to solve this problem by building a white-label wallet widget (think Intercom, but for crypto wallet), which any dapp can easily customize and integrate natively. We believe in combination with linkdrop campaigns the webwallet will provide dapps the powerful tooling to attract and retain non-crypto users.  
 
@@ -50,4 +50,4 @@ https://youtu.be/6V2DLXk6Tmo
 This is a work in progress. Expect breaking changes. The code has not been audited and therefore can not be considered secure.
 
 ## License
-The current codebase is released under the [MIT License](https://opensource.org/licenses/MIT)
+The current codebase is released under the [GPL 3.0 license](https://www.gnu.org/licenses/gpl-3.0.en.html)
