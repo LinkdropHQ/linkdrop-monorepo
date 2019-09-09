@@ -30,6 +30,7 @@ class Authorization extends React.Component {
       script.setAttribute('async', true)
       script.onload = _ => this.handleClientLoad()
       script.onreadystatechange = function () {
+        console.log('this.readyState: ', this.readyState)
         if (this.readyState === 'complete') this.onload()
       }
       document.body.appendChild(script)
@@ -37,10 +38,12 @@ class Authorization extends React.Component {
   }
 
   handleClientLoad () {
+    console.log('handleClientLoad loaded')
     gapi.load('client:auth2', _ => this.initClient())
   }
 
   initClient () {
+    console.log('initClient loaded')
     gapi.client.init({
       clientId: config.authClientId,
       apiKey: config.authApiKey,
@@ -48,6 +51,7 @@ class Authorization extends React.Component {
       // scope: `${config.authScopeDrive} ${config.authScopeContacts}`
       scope: config.authScopeDrive
     }).then(_ => {
+      console.log('initClient then:')
       // Listen for sign-in state changes.
       const authInstance = gapi.auth2.getAuthInstance()
       authInstance.isSignedIn.listen(isSignedIn => this.updateSigninStatus({ authInstance }))
@@ -59,6 +63,7 @@ class Authorization extends React.Component {
   }
 
   updateSigninStatus ({ authInstance }) {
+    console.log('updateSigninStatus loaded')
     if (!authInstance) { return }
     const isSignedIn = authInstance.isSignedIn.get()
     console.log({ isSignedIn })
