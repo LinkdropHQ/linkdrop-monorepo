@@ -1,10 +1,10 @@
-# Wallet widget for the IDEO+CoinList Hackathon  
-## Web-wallet widget as the next step in solving the onboarding problem
-This branch of the monorepo contains the code for white-label web-wallet widget we're building for the [IDEO + CoinList hackathon](https://coinlist.co/build/ideo).  
+# Wallet widget for IDEO x CoinList Hackathon  
+## Web-wallet widget as the next step in solving the Web3 onboarding problem
+This branch of the Linkdrop-monorepo contains the code for a white-label web-wallet widget we're building for the [IDEO + CoinList hackathon](https://coinlist.co/build/ideo).  
  
-Our team has a long history of focusing on the crypto onboarding problem. Specifically, on getting users for dapps outside of the existing crypto userbase. We're started out with onboarding users to crypto by claimable links - linkdrop.io.  
+Starting with the launch of [eth2.io](https://eth2.io/) our team has a long history of working on the problem of introducing and onboarding new people to digital assets. Specifically we've focused on getting users outside the regular crypto nieche to try out new dapps via clicking a "Linkdrop", which is basically a claimable digital assets inside links / QR codes, enabeling receivers without wallets to claim digital assets.
 
-After we've [launched the Dashboard](https://medium.com/linkdrophq/https-medium-com-linkdrophq-dashboard-launch-d8b3a2c8eec9) to generate linkdrop marketing campaigns, we learned that we solved only one part of the onboarding problem: getting crypto to try out a dapp. We figured that installing separate software (chromse extention or mobile app) to try a dapp is too much ask for mainstream users.    
+Wehen we recently [launched the Linkdrop Dashboard](https://medium.com/linkdrophq/https-medium-com-linkdrophq-dashboard-launch-d8b3a2c8eec9) enabeling to mass-generate linkdrop based marketing campaigns, we learned that we solved only one part of the onboarding problem: getting crypto to try out a dapp. We figured that installing separate software (chromse extention or mobile app) to try a dapp is too much ask for mainstream users.    
   
 That's why for the scope of the IDEO+CoinList hackathon, we decided to solve this problem by building a white-label wallet widget (think Intercom, but for crypto wallet), which any dapp can easily customize and integrate natively. We believe in combination with linkdrop campaigns the webwallet will provide dapps the powerful tooling to attract and retain non-crypto users.  
 
@@ -37,7 +37,7 @@ https://youtu.be/6V2DLXk6Tmo
 **Wallet-codebase (in scope for the IDEO+CoinList hackathon):**
 - [wallet](https://github.com/LinkdropHQ/linkdrop-monorepo/tree/master/packages/apps/app-claim) - web-wallet widget code
 - [wallet-provider](https://github.com/LinkdropHQ/linkdrop-monorepo/tree/master/packages/apps/app-claim) - web3 provider for dapps to integrate the widget wallet
-- [Dapp example](https://github.com/LinkdropHQ/linkdrop-monorepo/tree/master/packages/apps/app-claim) - to show how dapps can use linkdrop campaigns and web-wallet in combination for the best onboarding experience, we've build an example dapp based on the ZRX Instant. We've deployed it publicly here - https://zrx-instant-demo.linkdrop.io/
+- [Dapp example](https://github.com/LinkdropHQ/linkdrop-monorepo/tree/master/packages/apps/app-claim) - to show how dapps can use linkdrop campaigns and web-wallet in combination for the best onboarding experience, we've build an example dapp based on the 0x Instant. We've deployed it publicly here - https://zrx-instant-demo.linkdrop.io/
 
 **Original Linkdrop-specific codebase:**
 - [Contracts](https://github.com/LinkdropHQ/linkdrop-monorepo/tree/master/packages/contracts) - linkdrop contracts
