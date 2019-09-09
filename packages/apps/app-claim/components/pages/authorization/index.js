@@ -54,9 +54,14 @@ class Authorization extends React.Component {
       console.log('initClient then:')
       // Listen for sign-in state changes.
       const authInstance = gapi.auth2.getAuthInstance()
-      authInstance.isSignedIn.listen(isSignedIn => this.updateSigninStatus({ authInstance }))
-      // Handle the initial sign-in state.
       this.updateSigninStatus({ authInstance })
+
+      this.checkAuth = window.setInterval(_ => {
+        const authInstance = gapi.auth2.getAuthInstance()
+        this.updateSigninStatus({ authInstance })
+      }, 3000)
+      // authInstance.isSignedIn.listen(isSignedIn => this.updateSigninStatus({ authInstance }))
+      // Handle the initial sign-in state.
     }, error => {
       console.error(error)
     })
@@ -65,6 +70,7 @@ class Authorization extends React.Component {
   updateSigninStatus ({ authInstance }) {
     console.log('updateSigninStatus loaded')
     if (!authInstance) { return }
+    this.checkAuth && window.clearInterval(this.checkAuth)
     const isSignedIn = authInstance.isSignedIn.get()
     console.log({ isSignedIn })
     this.setState({
