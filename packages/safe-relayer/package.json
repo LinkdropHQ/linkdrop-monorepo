@@ -1,0 +1,35 @@
+{
+  "name": "safe-relayer",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "start": "npx babel-node index",
+    "dev": "nodemon --exec npx babel-node index"
+  },
+  "dependencies": {
+    "@gnosis.pm/safe-contracts": "^1.0.0",
+    "@hapi/boom": "^7.4.3",
+    "cors": "^2.8.5",
+    "express-async-handler": "^1.1.4",
+    "mongoose": "^5.5.6",
+    "util": "^0.12.1",
+    "winston": "^3.2.1"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.4.3",
+    "@babel/core": "^7.4.3",
+    "@babel/node": "^7.2.2",
+    "@babel/polyfill": "^7.4.3",
+    "@babel/preset-env": "^7.4.3",
+    "@babel/register": "^7.4.0",
+    "nodemon": "^1.18.11",
+    "shipit-cli": "^4.2.0",
+    "shipit-deploy": "^4.1.4",
+    "truffle": "4.1.14"
+  },
+  "babel": {
+    "extends": "../../babel.config.js"
+  }
+}
