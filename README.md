@@ -24,4 +24,4 @@ You can generate new campaign at https://dashboard.linkdrop.io. The Dashboard su
 
 
 ## License
-The current codebase is released under the [MIT License](https://opensource.org/licenses/MIT)
+The current codebase is released under the [GPL 3.0 open-source license](https://www.gnu.org/licenses/gpl-3.0.en.html)
