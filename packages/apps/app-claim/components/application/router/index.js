@@ -35,7 +35,7 @@ class AppRouter extends React.Component {
     if (!sdk) {
       return <Loading />
     }
-    // сдк
+    // sdk
     if (sdk && (!ens || !privateKey || !contractAddress)) {
       return <Authorization />
     }
