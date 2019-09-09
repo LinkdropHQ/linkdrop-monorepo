@@ -19,16 +19,12 @@ class Authorization extends React.Component {
   }
 
   componentDidMount () {
-    console.log("comp did mount")
     this.actions().user.createWallet()
-    console.log("wallet created")
   }
 
   componentWillReceiveProps ({ privateKey, contractAddress }) {
-    console.log("componentWillReceiveProps")
     const { contractAddress: prevContractAddress, privateKey: prevPrivateKey } = this.props
     if (privateKey && contractAddress && !prevContractAddress && !prevPrivateKey) {
-      console.log("adding script to the document")
       const script = document.createElement('script')
       script.setAttribute('src', 'https://apis.google.com/js/api.js')
       script.setAttribute('async', true)
@@ -46,7 +42,6 @@ class Authorization extends React.Component {
   }
 
   initClient () {
-    console.log("initing client")
     gapi.client.init({
       clientId: config.authClientId,
       apiKey: config.authApiKey,
@@ -151,7 +146,6 @@ class Authorization extends React.Component {
   }
 
   render () {
-    console.log("in auth render")
     const { loading } = this.props
     const { enableAuthorize } = this.state
     return <Page>
