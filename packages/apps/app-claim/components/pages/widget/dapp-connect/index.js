@@ -4,22 +4,22 @@ import { Button } from '@linkdrop/ui-kit'
 import styles from './styles.module'
 import { translate, actions } from 'decorators'
 
-@actions(({ user: { ens } }) => ({ ens }))
+@actions(({ user: { ens, contractAddress } }) => ({ ens, contractAddress }))
 @translate('pages.dappConnect')
 class DappConnect extends React.Component {
   render () {
-    const { ens } = this.props
+    const { ens, onConfirmClick, onCancelClick } = this.props
     return <div className={styles.container}>
       <DappHeader
         title={this.t('titles.wallet')}
-        onClose={_ => console.log('here is the close event')}
+        onClose={onCancelClick}
       />
 
       <div className={styles.content}>
         <div className={styles.title} dangerouslySetInnerHTML={{ __html: this.t('titles.loggedIn', { ens }) }} />
-        <Button
-          className={styles.button}
-          onClick={_ => console.log('here is the continue event')}
+      <Button
+        className={styles.button}
+        onClick={onConfirmClick}
         >
           {this.t('buttons.continue')}
         </Button>

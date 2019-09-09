@@ -1,3 +1,5 @@
+import connectToChild from 'penpal/lib/connectToChild'
+import { styles } from './styles'
 const ProviderEngine = require('web3-provider-engine')
 const RpcSubprovider = require('web3-provider-engine/subproviders/rpc')
 const CacheSubprovider = require('web3-provider-engine/subproviders/cache.js')
@@ -6,68 +8,78 @@ const FilterSubprovider = require('web3-provider-engine/subproviders/filters.js'
 const HookedWalletSubprovider = require('web3-provider-engine/subproviders/hooked-wallet.js')
 const SubscriptionsSubprovider = require('web3-provider-engine/subproviders/subscriptions.js')
 
-const ethers = require('ethers')
-
 class Provider {
   constructor (opts) {
-    console.log({ opts })
     this.ensName = opts.ensName
-    this.rpcUrl = opts.rpcUrl
     this.network = opts.network || 'mainnet'
-    this.confirmUrl = opts.confirmUrl
+    this.rpcUrl = opts.rpcUrl || `https://${this.network}.infura.io/v3/d4d1a2b933e048e28fb6fe1abe3e813a`
+    this.widgetUrl = opts.widgetUrl
     
     if (!opts.ensName) {
       throw new Error('ENS name should be provided')
     }
     
-    if (!opts.rpcUrl) {
-      throw new Error('rpcUrl should be provided')
-    }
-    
     if (!opts.network) {
       throw new Error('network should be provided')
     }
-    
+    this.widget = null
     this.provider = this._initProvider()
   }
 
-  async _getAddressFromEns (ensName, network) {
-    let address
-    try {
-      const provider = ethers.getDefaultProvider(network)
-      address = await provider.resolveName(ensName)
-      console.log({ address })
-    } catch (err) {
-      throw new Error('Bad ENS name provided')
-    }
-    return address
+  _initWidget () {
+    return new Promise((resolve, reject) => {
+      const onload = async () => {
+        const style = document.createElement('style')
+        style.innerHTML = styles
+
+        const container = document.createElement('div')
+        container.className = 'ld-widget-container'
+                
+        const iframe = document.createElement('iframe')
+        iframe.src = this.widgetUrl || 'https://demo.wallet.linkdrop.io/#/widget'
+        iframe.className = 'ld-widget-iframe'
+        
+        container.appendChild(iframe)
+        document.body.appendChild(container)
+        document.head.appendChild(style)
+
+        const connection = connectToChild({
+          // The iframe to which a connection should be made
+          iframe,
+          // Methods the parent is exposing to the child
+          methods: {
+            showWidget: this._showWidget.bind(this),
+            hideWidget: this._hideWidget.bind(this)
+          }
+        })
+
+        const communication = await connection.promise
+        resolve({ iframe, communication })
+      }
+      
+      if (['loaded', 'interactive', 'complete'].indexOf(document.readyState) > -1) {
+        onload()
+      } else {
+        window.addEventListener('load', onload.bind(this), false)
+      }
+    })
   }
 
-  _parseDomain (ensName) {
-    return ensName.split(/\.(.*)/).slice(0, 2)
+  _showWidget () {
+    this.widget.iframe.style.display = 'block'
   }
-  
-  
-  _getConfirmationUrlFromEns (ensName) {
-    const [ label, domain ] = this._parseDomain(ensName)
-    console.log({ label, domain })
-    if (this.confirmUrl) return this.confirmUrl
-    
-    if (domain === 'argent.xyz') {
-      return 'https://argent.xyz'
-    } else {
-      return 'https://wallet.linkdrop.io/#/confirm'
-    }
+
+  _hideWidget () {
+    this.widget.iframe.style.display = 'none'
   }
   
   _initProvider () {
     const engine = new ProviderEngine()
     let address
-    let confirmationUrl
     
     engine.enable = async () => {
-      address = await this._getAddressFromEns(this.ensName, this.network)
-      confirmationUrl = this._getConfirmationUrlFromEns(this.ensName)
+      this.widget = await this._initWidget()
+      await this.widget.communication.connect()
     }
 
     async function handleRequest (payload) {
@@ -138,7 +150,7 @@ class Provider {
     }
     const VERSION = 0.1 // #TODO move to auto
     const fixtureSubprovider = new FixtureSubprovider({
-      web3_clientVersion: `UL/v${VERSION}/javascript`,
+      web3_clientVersion: `LD/v${VERSION}/javascript`,
       net_listening: true,
       eth_hashrate: '0x00',
       eth_mining: false,
@@ -148,47 +160,29 @@ class Provider {
     const cacheSubprovider = new CacheSubprovider()
 
     // hack to deal with multiple received messages via PostMessage
-    const cache = {}
     const walletSubprovider = new HookedWalletSubprovider({
-      getAccounts: cb => {
-        console.log('in getAccounts hooked')
-        const result = [address]
-        const error = null
+      getAccounts: async cb => {
+        let result, error
+        try {
+          result = await this.widget.communication.getAccounts()
+        } catch (err) {
+          error = err
+        }
         cb(error, result)
       },
-      processTransaction: (txParams, cb) => {
-        console.log('publihshing transaction')
-
-        const receiveMessage = (event) => {
-          // Do we trust the sender of this message?
-          // if (event.origin !== confirmationUrl) return
-          if (event.origin !== confirmationUrl.substring(event.origin.length, -1)) return
-
-          if (event.data.action === 'PASS_TRANSACTION_RESULT') {
-            const { success, txHash } = event.data.payload
-            console.log('Got txHash ', txHash)
-            if (cache[txHash]) {
-              console.log('Got the same message result, skipping...')
-              return null
-            }
-            cache[txHash] = true
-            if (success) {
-              cb(null, txHash)
-            } else {
-              const error = 'Transaction was rejected by user'
-              cb(error)
-            }
+      processTransaction: async (txParams, cb) => {        
+        let result, error
+        try {
+          const { txHash, success, errors } = await this.widget.communication.sendTransaction(txParams)
+          if (success) {
+            result = txHash
+          } else {
+            error = errors[0] || 'Error while sending transaction'
           }
+        } catch (err) {
+          error = err
         }
-
-        window.addEventListener('message', receiveMessage, false)
-        
-        const newWindow = window.open(confirmationUrl, '_blank')
-        console.log('sending transaction')
-        setTimeout(() => {
-          const data = { action: 'SEND_TRANSACTION', payload: { txParams } }
-          newWindow.postMessage(data, confirmationUrl)
-        }, 1000)
+        cb(error, result)
       }
     })
     
@@ -204,7 +198,6 @@ class Provider {
     engine.addProvider({
       handleRequest: async (payload, next, end) => {
         try {
-          console.log('got request ', payload.method)
           const { result } = await handleRequest(payload)
           end(null, result)
         } catch (error) {
@@ -220,8 +213,6 @@ class Provider {
 
     engine.isEnsLogin = true
     engine.on = false
-    
-    console.log('engine is inited')
     engine.start()
     return engine
   }

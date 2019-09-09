@@ -38,7 +38,6 @@ class Header extends React.Component {
 
   render () {
     const { sendTo, onSend, amount, onChange, loading, error, transactionId } = this.props
-    console.log({ amount })
     const { finished } = this.state
     return <div className={classNames(styles.container, { [styles.loading]: loading && !transactionId })}>
       <div className={styles.content}>
