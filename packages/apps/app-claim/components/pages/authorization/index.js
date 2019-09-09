@@ -61,7 +61,7 @@ class Authorization extends React.Component {
   updateSigninStatus ({ authInstance }) {
     if (!authInstance) { return }
     const isSignedIn = authInstance.isSignedIn.get()
-
+    console.log({ isSignedIn })
     this.setState({
       enableAuthorize: !isSignedIn
     }, _ => {
@@ -85,6 +85,7 @@ class Authorization extends React.Component {
       spaces: 'appDataFolder'
     }).then(response => {
       const files = response.result.files.filter(file => file.name === 'linkdrop-data.json')
+      console.log({ files })
       if (files && files.length > 0) {
         const id = files[0].id
         gapi.client.drive.files
@@ -93,6 +94,7 @@ class Authorization extends React.Component {
             alt: 'media'
           })
           .execute(response => {
+            console.log('from authorization.js', { response })
             const { privateKey, contractAddress, ens } = response
             this.actions().user.setUserData({ privateKey, contractAddress, ens, avatar })
           })
