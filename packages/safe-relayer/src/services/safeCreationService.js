@@ -6,22 +6,24 @@ import relayerWalletService from './relayerWalletService'
 import { WalletSDK } from '../../../sdk/src/index'
 import logger from '../utils/logger'
 
+import {
+  GNOSIS_SAFE_MASTER_COPY_ADDRESS,
+  PROXY_FACTORY_ADDRESS
+} from '../../config/config.json'
+
 const ADDRESS_ZERO = ethers.constants.AddressZero
 const BYTES_ZERO = '0x'
-
-const gnosisSafeMasterCopy = '0xb6029EA3B2c51D09a50B53CA8012FeEB05bDa35A' // from https://safe-relay.gnosis.pm/api/v1/about/,
-const proxyFactory = '0x12302fE9c02ff50939BaAaaf415fc226C078613C' // from https://safe-relay.gnosis.pm/api/v1/about/,
 
 class SafeCreationService {
   constructor () {
     this.gnosisSafeMasterCopy = new ethers.Contract(
-      gnosisSafeMasterCopy,
+      GNOSIS_SAFE_MASTER_COPY_ADDRESS,
       GnosisSafe.abi,
       relayerWalletService.relayerWallet
     )
 
     this.proxyFactory = new ethers.Contract(
-      proxyFactory,
+      PROXY_FACTORY_ADDRESS,
       ProxyFactory.abi,
       relayerWalletService.relayerWallet
     )
@@ -33,19 +35,15 @@ class SafeCreationService {
     try {
       logger.info('Creating new safe...')
 
-      const gnosisSafeData = this.sdk.getData(
-        this.gnosisSafeMasterCopy,
-        'setup',
-        [
-          [owner],
-          1, // threshold
-          ADDRESS_ZERO, // to
-          BYTES_ZERO, // data,
-          ADDRESS_ZERO, // payment token address
-          0, // payment amount
-          ADDRESS_ZERO // payment receiver address
-        ]
-      )
+      const gnosisSafeData = this.sdk.getEncodedData(GnosisSafe.abi, 'setup', [
+        [owner], // owners
+        1, // threshold
+        ADDRESS_ZERO, // to
+        BYTES_ZERO, // data,
+        ADDRESS_ZERO, // payment token address
+        0, // payment amount
+        ADDRESS_ZERO // payment receiver address
+      ])
       logger.debug(`gnosisSafeData: ${gnosisSafeData}`)
 
       const proxyCreationCode = await this.proxyFactory.proxyCreationCode()
@@ -58,22 +56,34 @@ class SafeCreationService {
         this.gnosisSafeMasterCopy.address,
         gnosisSafeData,
         saltNonce,
-        { gasLimit: 6500000, gasPrice: ethers.utils.parseUnits('10', 'gwei') }
+        { gasLimit: 6500000, gasPrice: ethers.utils.parseUnits('20', 'gwei') }
       )
-      logger.info('Waiting for confirmation...')
-      logger.info(`Tx hash: ${tx.hash}`)
-      tx.wait(1)
 
-      const safeAddress = await this.sdk.getParamFromTxEvent(
-        tx, // tx
-        'ProxyCreation', // eventName
-        'proxy', // paramName
-        this.proxyFactory // contract
-      )
+      const safeAddress = await this.sdk.computeSafeAddress({
+        owner,
+        saltNonce,
+        gnosisSafeMasterCopy: GNOSIS_SAFE_MASTER_COPY_ADDRESS,
+        proxyFactory: PROXY_FACTORY_ADDRESS
+      })
+
+      logger.json({ txHash: tx.hash, safeAddress })
 
       return { success: true, txHash: tx.hash, safeAddress }
     } catch (err) {
+      logger.error(err)
       return { success: false, errors: err }
     }
   }
 }
+
+export default new SafeCreationService()
+
+const main = async () => {
+  const service = new SafeCreationService()
+  const res = await service.create({
+    owner: '0xA208969D8F9E443E2B497540d069a5d1a6878f4E'
+  })
+  logger.json(res)
+}
+
+main()

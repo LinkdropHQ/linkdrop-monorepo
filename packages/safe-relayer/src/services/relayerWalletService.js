@@ -1,6 +1,7 @@
 import assert from 'assert'
 import { ethers } from 'ethers'
-const { JSON_RPC_URL, RELAYER_PRIVATE_KEY } = '../../config/config.json'
+
+import { JSON_RPC_URL, RELAYER_PRIVATE_KEY } from '../../config/config.json'
 
 assert(JSON_RPC_URL && JSON_RPC_URL !== '', 'Please provide json rpc url')
 assert(
