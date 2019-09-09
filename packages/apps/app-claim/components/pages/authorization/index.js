@@ -37,7 +37,6 @@ class Authorization extends React.Component {
   }
 
   handleClientLoad () {
-    console.log("client inited")
     gapi.load('client:auth2', _ => this.initClient())
   }
 
