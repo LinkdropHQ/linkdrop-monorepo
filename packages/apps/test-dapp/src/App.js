@@ -1,6 +1,6 @@
 /* global zeroExInstant */
 import React from 'react'
-import Provider from './provider'
+import WalletProvider from '@linkdrop/wallet-provider'
 import Web3 from 'web3'
 import qs from 'querystring'
 import './App.css'
@@ -18,10 +18,10 @@ class App extends React.Component {
   }
 
   async componentDidMount () {
-    const { ensName, network, confirmUrl } = this._getParamsFromUrl()
+    const { ensName, network, widgetUrl } = this._getParamsFromUrl()
     this.network = network
     if (ensName) {
-      await this._connect(ensName, network, confirmUrl)
+      this._connect(ensName, network, widgetUrl)
     }
     this.setState({
       loading: false
@@ -30,7 +30,7 @@ class App extends React.Component {
   
   _getParamsFromUrl () {
     let ensName
-    let confirmUrl
+    let widgetUrl
     let network = 'mainnet'
 
     const paramsFragment = document.location.search.substr(1)
@@ -38,32 +38,30 @@ class App extends React.Component {
       const query = qs.parse(paramsFragment)
       network = query.network || 'mainnet'
       ensName = query.user
-      if (query.confirmUrl) {
-        confirmUrl = decodeURIComponent(query.confirmUrl)
+      if (query.widgetUrl) {
+        widgetUrl = decodeURIComponent(query.widgetUrl)
       }      
     }
-    return { ensName, network, confirmUrl }
+    return { ensName, network, widgetUrl }
   }
   
-  async _connect (ensName, network, confirmUrl) {
+  async _connect (ensName, network, widgetUrl) {
     try {
       const urlParams = this._getParamsFromUrl()
 
       ensName = ensName || urlParams.ensName
       network = network || urlParams.network
-      confirmUrl = confirmUrl || urlParams.confirmUrl
+      widgetUrl = widgetUrl || urlParams.widgetUrl
       
       console.log('getting provider...')
-      const rpcUrl = `https://${network}.infura.io/v3/d4d1a2b933e048e28fb6fe1abe3e813a`
-      console.log({ rpcUrl })
-      const card = new Provider({ ensName, network, rpcUrl, confirmUrl })
-
+      const card = new WalletProvider({ ensName, network, widgetUrl })
+      
       await card.provider.enable()
       
       console.log('got provider')
       this.provider = card.provider
       this.web3 = new Web3(card.provider)
-      console.log('got web3 ', this.web3)
+      // console.log('got web3 ', this.web3)
 
       const accs = await this.web3.eth.getAccounts()
       console.log({ accs })
@@ -78,11 +76,12 @@ class App extends React.Component {
       console.log({
         balance
       })
+
+      this._openZrxInstantModal()
     } catch (error) {
       const errMsg = 'Error connecting with ENS'
       console.log(errMsg)
       console.log(error)
-      window.alert(errMsg)
     }
   }
 

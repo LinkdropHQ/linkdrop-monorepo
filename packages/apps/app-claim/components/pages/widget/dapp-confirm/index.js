@@ -4,33 +4,57 @@ import { Button } from '@linkdrop/ui-kit'
 import styles from './styles.module'
 import { translate, actions } from 'decorators'
 import { getHashVariables } from '@linkdrop/commons'
-import { ethers } from 'ethers'
+import { utils } from 'ethers'
 
-@actions(({ user: { ens, contractAddress }, assets: { itemsToClaim } }) => ({ contractAddress, ens, itemsToClaim }))
+@actions(({ user: { ens, contractAddress, sdk, privateKey }, assets: { itemsToClaim } }) => ({ contractAddress, ens, sdk, privateKey, itemsToClaim }))
 @translate('pages.dappConfirm')
 class DappConfirm extends React.Component {
+  componentDidUpdate (prevProps) {
+    if (prevProps.txParams && prevProps.txParams.value === this.props.txParams.value) return null
+    this._getEthCost()
+  }
+
   componentDidMount () {
-    // just pass these variables as post message data
-    const amount = '2967240000000000'
-    const tokenAddress = '0x0000000000000000000000000000000000000000'
+    this._getEthCost()
+  }
+  
+  _getEthCost () {
+  // just pass these variables as post message data
+    const amount = utils.bigNumberify(this.props.txParams.value).toString()
+    console.log({ amount })
     const {
       chainId = '1'
     } = getHashVariables()
-    if (tokenAddress === ethers.constants.AddressZero) {
-      this.actions().assets.getEthData({ chainId, weiAmount: amount })
-    } else {
-      this.actions().assets.getTokenERC20Data({ tokenAddress, tokenAmount: amount, chainId })
-    }
+    this.actions().assets.getEthData({ chainId, weiAmount: amount })
   }
 
+  async _onConfirmTx () {
+    const { sdk, privateKey, contractAddress } = this.props
+    const {
+      data,
+      to,
+      value
+    } = this.props.txParams
+
+    const message = {
+      from: contractAddress,
+      data: data || '0x0',
+      to: to || '0x0',
+      value: value || '0x0'
+    }
+    const { txHash, success, errors } = await sdk.execute(message, privateKey)
+    
+    this.props.onConfirmClick({ txHash, success, errors })
+  }
+  
   render () {
     // dont pay much attention to the name of variable itemsToClaim, I will change it soon
-    const { itemsToClaim } = this.props
-    const currentAsset = itemsToClaim[0]
+    const { itemsToClaim, onCancelClick } = this.props
+    const currentAsset = itemsToClaim[itemsToClaim.length - 1] // hack to update values as action adds new assets in array on view update
     return <div className={styles.container}>
       <DappHeader
         title={this.t('titles.wallet')}
-        onClose={_ => console.log('here is the close event')}
+        onClose={onCancelClick}
       />
 
       <div className={styles.content}>
@@ -41,7 +65,7 @@ class DappConfirm extends React.Component {
         {this.renderAsset({ currentAsset })}
         <Button
           className={styles.button}
-          onClick={_ => console.log('here is the continue event')}
+          onClick={this._onConfirmTx.bind(this)}
         >
           {this.t('buttons.confirm')}
         </Button>
@@ -55,6 +79,7 @@ class DappConfirm extends React.Component {
 
   renderAsset ({ currentAsset }) {
     if (currentAsset) {
+      console.log({ currentAsset, amount: currentAsset.balanceFormatted })
       return <div className={styles.assets}>
         <div className={styles.subtitle}>{this.t('titles.spend')}</div>
         <AssetBalance
