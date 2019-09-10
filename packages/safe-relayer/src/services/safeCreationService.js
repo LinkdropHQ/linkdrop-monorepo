@@ -19,13 +19,13 @@ class SafeCreationService {
     this.gnosisSafeMasterCopy = new ethers.Contract(
       GNOSIS_SAFE_MASTER_COPY_ADDRESS,
       GnosisSafe.abi,
-      relayerWalletService.relayerWallet
+      relayerWalletService.provider
     )
 
     this.proxyFactory = new ethers.Contract(
       PROXY_FACTORY_ADDRESS,
       ProxyFactory.abi,
-      relayerWalletService.relayerWallet
+      relayerWalletService.wallet
     )
 
     this.sdk = new WalletSDK()
@@ -77,13 +77,3 @@ class SafeCreationService {
 }
 
 export default new SafeCreationService()
-
-const main = async () => {
-  const service = new SafeCreationService()
-  const res = await service.create({
-    owner: '0xA208969D8F9E443E2B497540d069a5d1a6878f4E'
-  })
-  logger.json(res)
-}
-
-main()

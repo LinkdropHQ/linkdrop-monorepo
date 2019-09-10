@@ -1,9 +1,13 @@
 import assert from 'assert'
 import { ethers } from 'ethers'
 
-import { JSON_RPC_URL, RELAYER_PRIVATE_KEY } from '../../config/config.json'
+import {
+  CHAIN,
+  INFURA_API_TOKEN,
+  RELAYER_PRIVATE_KEY
+} from '../../config/config.json'
 
-assert(JSON_RPC_URL && JSON_RPC_URL !== '', 'Please provide json rpc url')
+assert(CHAIN && CHAIN !== '', 'Please provide chain')
 assert(
   RELAYER_PRIVATE_KEY && RELAYER_PRIVATE_KEY !== '',
   'Please provide relayer private key'
@@ -11,8 +15,13 @@ assert(
 
 class RelayerWalletService {
   constructor () {
-    this.provider = new ethers.providers.JsonRpcProvider(JSON_RPC_URL)
-    this.relayerWallet = new ethers.Wallet(RELAYER_PRIVATE_KEY, this.provider)
+    this.chain = CHAIN
+    this.jsonRpcUrl =
+      INFURA_API_TOKEN && INFURA_API_TOKEN !== ''
+        ? `https://${this.chain}.infura.io/v3/${INFURA_API_TOKEN}`
+        : `https://${this.chain}.infura.io`
+    this.provider = new ethers.providers.JsonRpcProvider(this.jsonRpcUrl)
+    this.wallet = new ethers.Wallet(RELAYER_PRIVATE_KEY, this.provider)
   }
 }
 

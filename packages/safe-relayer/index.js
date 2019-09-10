@@ -2,6 +2,7 @@ import connectDB from './config/db'
 import logger from './src/utils/logger'
 import express from 'express'
 import cors from 'cors'
+import safesRouter from './src/routes/safes'
 const app = express()
 
 // Init middlewares
@@ -25,7 +26,7 @@ connectDB()
 
 // Define routes
 app.get('/', (req, res) => res.send('Safe Relay Service'))
-// app.use('/api/users', usersRouter)
+app.use('/api/safes', safesRouter)
 
 // Boom error handling middleware
 app.use((err, req, res, next) => {
