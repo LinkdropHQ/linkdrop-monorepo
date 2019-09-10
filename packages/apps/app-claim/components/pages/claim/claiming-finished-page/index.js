@@ -3,7 +3,7 @@ import { translate, actions } from 'decorators'
 import commonStyles from '../styles.module'
 import { TokensAmount, AccountBalance, Confetti } from 'components/common'
 import { Loading } from '@linkdrop/ui-kit'
-import { getCurrentAsset, countFinalPrice } from 'helpers'
+import { getCurrentAsset } from 'helpers'
 import { AssetsList } from 'components/pages/common'
 
 @actions(({ assets: { items, itemsToClaim }, user: { ens } }) => ({ items, ens }))
@@ -23,14 +23,13 @@ class ClaimingFinishedPage extends React.Component {
   render () {
     const { items, itemsToClaim, alreadyClaimed, loading, claimingFinished } = this.props
     const { showAssets } = this.state
-    const finalPrice = countFinalPrice({ items })
     const mainAsset = getCurrentAsset({ itemsToClaim })
     if (!mainAsset) { return null }
     const { balanceFormatted, symbol } = mainAsset
     return <div className={commonStyles.container}>
       {claimingFinished && <Confetti recycle={!showAssets} />}
       {loading && <Loading withOverlay />}
-      <AccountBalance balance={finalPrice} />
+      <AccountBalance items={items} />
       {!showAssets && <TokensAmount alreadyClaimed={alreadyClaimed} claimingFinished={claimingFinished} symbol={symbol} amount={balanceFormatted} />}
       {showAssets && <AssetsList />}
     </div>
