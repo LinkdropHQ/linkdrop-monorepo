@@ -1,7 +1,7 @@
 import sigUtil from 'eth-sig-util'
 import { Buffer } from 'buffer'
 import BigNumber from 'bignumber.js'
-import assert from 'assert'
+import assert from 'assert-js'
 import { ethers } from 'ethers'
 import GnosisSafe from '@gnosis.pm/safe-contracts/build/contracts/GnosisSafe'
 
@@ -34,17 +34,17 @@ export const signTx = ({
   refundReceiver,
   nonce
 }) => {
-  assert(safe, 'Safe address is required')
-  assert(privateKey, 'Private key is required')
-  assert(to, 'To is required')
-  assert(value, 'Value is required')
-  assert(data, 'Data is required')
-  assert(safeTxGas, 'Safe tx gas is required')
-  assert(baseGas, 'Base gas is required')
-  assert(gasPrice, 'Gas price is required')
-  assert(gasToken, 'Gas token is required')
-  assert(refundReceiver, 'Refund receiver address is required')
-  assert(nonce, 'Nonce is required')
+  assert.string(safe, 'Safe address is required')
+  assert.string(privateKey, 'Private key is required')
+  assert.string(to, 'To is required')
+  assert.integer(value, 'Value is required')
+  assert.string(data, 'Data is required')
+  assert.integer(safeTxGas, 'Safe tx gas is required')
+  assert.integer(baseGas, 'Base gas is required')
+  assert.integer(gasPrice, 'Gas price is required')
+  assert.string(gasToken, 'Gas token is required')
+  assert.string(refundReceiver, 'Refund receiver address is required')
+  assert.integer(nonce, 'Nonce is required')
 
   if (privateKey.includes('0x')) {
     privateKey = privateKey.replace('0x', '')
@@ -53,20 +53,6 @@ export const signTx = ({
   privateKey = Buffer.from(privateKey, 'hex')
 
   const typedData = getTypedData({
-    safe,
-    to,
-    value,
-    data,
-    operation,
-    safeTxGas,
-    baseGas,
-    gasPrice,
-    gasToken,
-    refundReceiver,
-    nonce
-  })
-
-  console.log({
     safe,
     to,
     value,

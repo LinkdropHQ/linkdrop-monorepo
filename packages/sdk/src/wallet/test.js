@@ -10,13 +10,13 @@ const main = async () => {
 
   const privateKey = ''
   const safe = '0x563df37ff1e6a70d6d0af364a9ca95c31ea61c94'
-  const sig = sdk.signTx({
+  const response = await sdk.executeTx({
     safe,
     privateKey,
     to: '0x646F6381010bA304cA1f912d6E7BB9972b4b6f56',
     value: 1234
   })
-  console.log('sig: ', sig)
+  console.log({ response })
 }
 
 main()

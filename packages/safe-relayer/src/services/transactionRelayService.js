@@ -5,7 +5,7 @@ import relayerWalletService from './relayerWalletService'
 import logger from '../utils/logger'
 
 class TransactionRelayService {
-  async execute ({
+  async executeTx ({
     safe,
     to,
     value,
@@ -18,17 +18,6 @@ class TransactionRelayService {
     refundReceiver,
     signature
   }) {
-    assert(safe, 'Safe address is required')
-    assert(to, 'To is required')
-    assert(value, 'Value is required')
-    assert(data, 'Data is required')
-    assert(safeTxGas, 'Safe tx gas is required')
-    assert(baseGas, 'Base gas is required')
-    assert(gasPrice, 'Gas price is required')
-    assert(gasToken, 'Gas token is required')
-    assert(refundReceiver, 'Refund receiver address is required')
-    assert(signature, 'Signature is required')
-
     try {
       const gnosisSafe = new ethers.Contract(
         safe,

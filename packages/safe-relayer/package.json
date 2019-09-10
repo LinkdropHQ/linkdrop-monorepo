@@ -12,6 +12,7 @@
     "@gnosis.pm/safe-contracts": "^1.0.0",
     "@hapi/boom": "^7.4.3",
     "assert": "^2.0.0",
+    "assert-js": "^0.22.0",
     "axios": "^0.19.0",
     "cors": "^2.8.5",
     "ethers": "^4.0.37",

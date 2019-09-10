@@ -1,5 +1,5 @@
 import axios from 'axios'
-import assert from 'assert'
+import assert from 'assert-js'
 
 /**
  * Function to create new safe
@@ -8,9 +8,9 @@ import assert from 'assert'
  * @returns {Object} {success, txHash, safe, errors}
  */
 export const createSafe = async ({ apiHost, owner }) => {
-  assert(owner, 'Please provide owner address')
+  assert.string(owner, 'Please provide owner address')
 
-  const response = await axios.post(`${apiHost}/api/safes`, { owner })
+  const response = await axios.post(`${apiHost}/api/v1/safes`, { owner })
   const { success, txHash, safe, errors } = response.data
 
   console.log('SDK', {

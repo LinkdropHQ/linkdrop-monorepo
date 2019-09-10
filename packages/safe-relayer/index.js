@@ -3,6 +3,8 @@ import logger from './src/utils/logger'
 import express from 'express'
 import cors from 'cors'
 import safesRouter from './src/routes/safes'
+import transactionsRouter from './src/routes/transactions'
+
 const app = express()
 
 // Init middlewares
@@ -26,7 +28,8 @@ connectDB()
 
 // Define routes
 app.get('/', (req, res) => res.send('Safe Relay Service'))
-app.use('/api/safes', safesRouter)
+app.use('/api/v1/safes', safesRouter)
+app.use('/api/v1/safes/execute', transactionsRouter)
 
 // Boom error handling middleware
 app.use((err, req, res, next) => {

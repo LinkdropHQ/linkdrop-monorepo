@@ -16,10 +16,10 @@ assert(
 class RelayerWalletService {
   constructor () {
     this.chain = CHAIN
-    this.jsonRpcUrl =
-      INFURA_API_TOKEN && INFURA_API_TOKEN !== ''
-        ? `https://${this.chain}.infura.io/v3/${INFURA_API_TOKEN}`
-        : `https://${this.chain}.infura.io`
+    this.jsonRpcUrl = 'https://rinkeby.infura.io'
+    // INFURA_API_TOKEN && INFURA_API_TOKEN !== ''
+    //   ? `https://${this.chain}.infura.io/v3/${INFURA_API_TOKEN}`
+    //   : `https://${this.chain}.infura.io`
     this.provider = new ethers.providers.JsonRpcProvider(this.jsonRpcUrl)
     this.wallet = new ethers.Wallet(RELAYER_PRIVATE_KEY, this.provider)
   }
