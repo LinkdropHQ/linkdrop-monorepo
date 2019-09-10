@@ -2,6 +2,7 @@ import axios from 'axios'
 import assert from 'assert'
 import { ethers } from 'ethers'
 import { signTx } from './signTx'
+import GnosisSafe from '@gnosis.pm/safe-contracts/build/contracts/GnosisSafe'
 
 /**
  * Function to execute safe transaction
@@ -23,7 +24,7 @@ export const execute = async ({
   gasToken,
   refundReceiver
 }) => {
-  // assert(owner, 'Please provide owner wallet')
+  assert(owner, 'Please provide owner wallet')
   const provider = new ethers.providers.JsonRpcProvider(jsonRpcUrl)
   const gnosisSafe = new ethers.Contract(safe, GnosisSafe.abi, provider)
   const nonce = await gnosisSafe.nonce()

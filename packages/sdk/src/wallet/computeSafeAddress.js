@@ -1,5 +1,6 @@
 import GnosisSafe from '@gnosis.pm/safe-contracts/build/contracts/GnosisSafe'
 import ProxyFactory from '@gnosis.pm/safe-contracts/build/contracts/ProxyFactory'
+import assert from 'assert'
 
 import { ethers } from 'ethers'
 import { getEncodedData, buildCreate2Address } from './utils'
@@ -9,6 +10,14 @@ ethers.errors.setLogLevel('error')
 const ADDRESS_ZERO = ethers.constants.AddressZero
 const BYTES_ZERO = '0x'
 
+/**
+ * Function to precompute safe address
+ * @param {String} owner Safe owner's address
+ * @param {Number} saltNonce Random salt nonce
+ * @param {String} gnosisSafeMasterCopy Deployed gnosis safe mastercopy address
+ * @param {String} proxyFactory Deployed proxy factory address
+ * @param {String} jsonRpcUrl JSON RPC URL
+ */
 export const computeSafeAddress = async ({
   owner,
   saltNonce,
@@ -16,8 +25,13 @@ export const computeSafeAddress = async ({
   proxyFactory,
   jsonRpcUrl
 }) => {
-  const provider = new ethers.providers.JsonRpcProvider(jsonRpcUrl)
+  assert(owner, 'Owner address is required')
+  assert(saltNonce, 'Salt nonce is required')
+  assert(gnosisSafeMasterCopy, 'Gnosis safe mastercopy addres is required')
+  assert(proxyFactory, 'Proxy factory address is required')
+  assert(jsonRpcUrl, ' Json rpc url is required')
 
+  const provider = new ethers.providers.JsonRpcProvider(jsonRpcUrl)
   const gnosisSafeData = getEncodedData(GnosisSafe.abi, 'setup', [
     [owner], // owners
     1, // threshold
