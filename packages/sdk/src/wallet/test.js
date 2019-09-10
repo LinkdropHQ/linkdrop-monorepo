@@ -8,8 +8,7 @@ const main = async () => {
   //   )
   //   console.log('response: ', response)
 
-  const privateKey =
-    'EEDFA6C63D0B44CE6C511C7A9425A8668DFADFC8F47FF24647A92489D5A913CC'
+  const privateKey = ''
   const safe = '0x563df37ff1e6a70d6d0af364a9ca95c31ea61c94'
   const sig = sdk.signTx({
     safe,

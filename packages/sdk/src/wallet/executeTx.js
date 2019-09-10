@@ -7,9 +7,21 @@ import GnosisSafe from '@gnosis.pm/safe-contracts/build/contracts/GnosisSafe'
 /**
  * Function to execute safe transaction
  * @param {String} apiHost API host
- * @param {String} owner Safe owner's wallet
+ * @param {String} jsonRpcUrl JSON RPC URL
+ * @param {String} safe Safe address
+ * @param {String} privateKey Safe owner's private key
+ * @param {String} to To
+ * @param {Number} value Value
+ * @param {String} data Data
+ * @param {Number} operation Operation
+ * @param {Number} safeTxGas Safe tx gas
+ * @param {Number} baseGas Base gas
+ * @param {Number} gasPrice Gas price
+ * @param {String} gasToken Gas token
+ * @param {String} refundReceiver Refund receiver
+ * @returns {Object} {success, txHash, errors}
  */
-export const execute = async ({
+export const executeTx = async ({
   apiHost,
   jsonRpcUrl,
   safe,
@@ -24,7 +36,7 @@ export const execute = async ({
   gasToken,
   refundReceiver
 }) => {
-  assert(owner, 'Please provide owner wallet')
+  assert(apiHost, 'Api host is required')
   const provider = new ethers.providers.JsonRpcProvider(jsonRpcUrl)
   const gnosisSafe = new ethers.Contract(safe, GnosisSafe.abi, provider)
   const nonce = await gnosisSafe.nonce()

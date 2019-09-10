@@ -3,6 +3,8 @@ import { getEncodedData, getParamFromTxEvent } from './utils'
 import { computeSafeAddress } from './computeSafeAddress'
 import { createSafe } from './createSafe'
 import { signTx } from './signTx'
+import { executeTx } from './executeTx'
+
 class WalletSDK {
   constructor (chain = 'rinkeby') {
     this.chain = chain
@@ -58,9 +60,55 @@ class WalletSDK {
   /**
    * Function to create new safe
    * @param {String} owner Safe owner's address
+   * @returns {Object} {success, txHash, safe, errors}
    */
   async createSafe (owner) {
     return createSafe({ apiHost: this.apiHost, owner })
+  }
+
+  /**
+   * Function to execute safe transaction
+   * @param {String} safe Safe address
+   * @param {String} privateKey Safe owner's private key
+   * @param {String} to To
+   * @param {Number} value Value
+   * @param {String} data Data
+   * @param {Number} operation Operation
+   * @param {Number} safeTxGas Safe tx gas
+   * @param {Number} baseGas Base gas
+   * @param {Number} gasPrice Gas price
+   * @param {String} gasToken Gas token
+   * @param {String} refundReceiver Refund receiver
+   * @returns {Object} {success, txHash, errors}
+   */
+  async executeTx ({
+    safe,
+    privateKey,
+    to,
+    value,
+    data = '0x',
+    operation = 0,
+    safeTxGas = 0,
+    baseGas = 0,
+    gasPrice = 0,
+    gasToken = '0x0000000000000000000000000000000000000000',
+    refundReceiver = '0x0000000000000000000000000000000000000000'
+  }) {
+    return executeTx({
+      apiHost: this.apiHost,
+      jsonRpcUrl: this.jsonRpcUrl,
+      safe,
+      privateKey,
+      to,
+      value,
+      data,
+      operation,
+      safeTxGas,
+      baseGas,
+      gasPrice,
+      gasToken,
+      refundReceiver
+    })
   }
 
   /**
@@ -77,6 +125,7 @@ class WalletSDK {
    * @param {String} gasToken Gas token
    * @param {String} refundReceiver Refund receiver
    * @param {Number} nonce Safe's nonce
+   * @returns {String} Signature
    */
   signTx ({
     safe,

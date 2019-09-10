@@ -11,9 +11,6 @@ import {
   PROXY_FACTORY_ADDRESS
 } from '../../config/config.json'
 
-const ADDRESS_ZERO = ethers.constants.AddressZero
-const BYTES_ZERO = '0x'
-
 class TransactionRelayService {
   constructor () {
     this.gnosisSafeMasterCopy = new ethers.Contract(
@@ -50,8 +47,6 @@ class TransactionRelayService {
         GnosisSafe.abi,
         relayerWalletService.wallet
       )
-      const nonce = await gnosisSafe.nonce()
-      console.log('nonce: ', nonce)
 
       logger.debug('Submitting safe transaction...')
       const tx = await gnosisSafe.execTransaction(
@@ -95,4 +90,3 @@ const main = async () => {
   })
   console.log('txHash: ', txHash)
 }
-main()

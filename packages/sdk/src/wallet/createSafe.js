@@ -5,6 +5,7 @@ import assert from 'assert'
  * Function to create new safe
  * @param {String} apiHost API host
  * @param {String} owner Safe owner's address
+ * @returns {Object} {success, txHash, safe, errors}
  */
 export const createSafe = async ({ apiHost, owner }) => {
   assert(owner, 'Please provide owner address')
