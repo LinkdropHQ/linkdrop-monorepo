@@ -11,7 +11,7 @@ class App extends React.Component {
     this.state = {
       address: null,
       connected: false,
-      ensNameInput: '',
+      ensNameInput: 'wallet.linkdrop.io',
       loading: true
     }
     this.walletWindow = null    
@@ -113,8 +113,10 @@ class App extends React.Component {
     return (
       <div>
         <h3> Connect your account </h3>
+
+      {/*
         <input className='ens-input' placeholder='Your ENS, e.g. user.my-wallet.eth' type='text' name='ens' onChange={({ target }) => this.setState({ ensNameInput: target.value })} />
-        <br/>
+        <br/>*/}
         <button className='App-link' onClick={() => {
           this._connect(this.state.ensNameInput)
         }}>Connect</button>
@@ -152,7 +154,7 @@ class App extends React.Component {
     return (
           <div>
         <p>
-        Logged in as <span style={{fontWeight: 'bold'}}> {this.state.ensName} </span>
+        Logged in {/* as <span style={{fontWeight: 'bold'}}> {this.state.ensName} </span>*/ }
         <br/>
         <small> { this.state.address } </small>
         </p>
