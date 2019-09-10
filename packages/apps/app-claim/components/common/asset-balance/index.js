@@ -2,6 +2,7 @@ import React from 'react'
 import styles from './styles.module'
 import { translate } from 'decorators'
 import classNames from 'classnames'
+import { roundAmount } from 'helpers'
 import { multiply, bignumber } from 'mathjs'
 
 @translate('common.assetBalance')
@@ -28,9 +29,9 @@ class AssetBalance extends React.Component {
         {finalIcon}
       </div>
       <div className={styles.symbol}>{symbol}</div>
-      <div className={styles.amount}>{(Number(amount) || 0).toFixed(2)}</div>
+      <div className={styles.amount}>{roundAmount({ amount })}</div>
       <span className={styles.divider}>/</span>
-      <div className={styles.price}>${(Number(finalPrice) || 0).toFixed(2)}</div>
+      <div className={styles.price}>${roundAmount({ amount: finalPrice, roundTo: 100 })}</div>
     </div>
   }
 }

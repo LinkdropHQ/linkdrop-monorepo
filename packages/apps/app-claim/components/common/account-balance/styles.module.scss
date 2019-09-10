@@ -13,7 +13,13 @@
 .currency {
   font-size: 45px;
   left: -30px;
+  max-width: 40px;
   position: absolute;
+
+  img {
+    max-width: 100%;
+    transform: translateX(-14px);
+  }
 }
 
 .balance {

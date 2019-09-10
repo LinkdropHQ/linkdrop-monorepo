@@ -3,22 +3,47 @@ import PropTypes from 'prop-types'
 import styles from './styles.module'
 import classNames from 'classnames'
 import { translate } from 'decorators'
-import { countFinalPrice } from 'helpers'
+import { countFinalPrice, roundAmount } from 'helpers'
+import { ethers } from 'ethers'
 
 @translate('common.accountBalance')
 class AccountBalance extends React.Component {
   render () {
     const { loading, items } = this.props
     const finalPrice = countFinalPrice({ items })
-
-    return null
+    const coreAsset = this.defineCoreAsset({ items })
+    if (!coreAsset) { return null }
+    const currency = this.renderCurrency({ coreAsset, finalPrice })
+    const balance = this.renderBalance({ coreAsset, finalPrice })
     return <div className={classNames(styles.container, {
       [styles.loading]: loading
     })}
     >
-      <span className={styles.currency}>$</span>
-      <span className={styles.balance}>{(balance || 0).toFixed(2)}</span>
+      <span className={styles.currency}>{currency}</span>
+      <span className={styles.balance}>{roundAmount({ amount: balance, hideFloat: true, roundTo: 100 })}</span>
     </div>
+  }
+
+  defineCoreAsset ({ items }) {
+    const eth = items.find(item => item.tokenAddress === ethers.constants.AddressZero)
+    if (eth) { return eth }
+    const assetWithPrice = items.find(item => item.price > 0)
+    if (assetWithPrice) { return assetWithPrice }
+    if (items[0]) { return items[0] }
+  }
+
+  renderCurrency ({ coreAsset, finalPrice }) {
+    if (finalPrice && finalPrice > 0) return '$'
+    return <img src={coreAsset.icon} />
+  }
+
+  renderBalance ({ coreAsset, finalPrice }) {
+    if (finalPrice != null && Number(finalPrice.toFixed(2)) > 0) {
+      return finalPrice
+    }
+    if (coreAsset && Number(coreAsset.balanceFormatted) > 0) {
+      return coreAsset.balanceFormatted
+    }
   }
 }
 
