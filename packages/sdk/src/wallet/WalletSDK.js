@@ -1,11 +1,13 @@
 import { ethers } from 'ethers'
 import { getEncodedData, getParamFromTxEvent } from './utils'
 import { computeSafeAddress } from './computeSafeAddress'
-
+import { createSafe } from './createSafe'
+import { signTx } from './signTx'
 class WalletSDK {
   constructor (chain = 'rinkeby') {
     this.chain = chain
     this.jsonRpcUrl = `https://${chain}.infura.io`
+    this.apiHost = 'http://localhost:5050'
   }
 
   /**
@@ -50,6 +52,59 @@ class WalletSDK {
       gnosisSafeMasterCopy,
       proxyFactory,
       jsonRpcUrl: this.jsonRpcUrl
+    })
+  }
+
+  /**
+   * Function to create new safe
+   * @param {String} owner Safe owner's address
+   */
+  async createSafe (owner) {
+    return createSafe({ apiHost: this.apiHost, owner })
+  }
+
+  /**
+   * Function to sign safe transaction
+   * @param {String} safe Safe address
+   * @param {String} privateKey Safe owner's private key
+   * @param {String} to To
+   * @param {Number} value Value
+   * @param {String} data Data
+   * @param {Number} operation Operation
+   * @param {Number} safeTxGas Safe tx gas
+   * @param {Number} baseGas Base gas
+   * @param {Number} gasPrice Gas price
+   * @param {String} gasToken Gas token
+   * @param {String} refundReceiver Refund receiver
+   * @param {Number} nonce Safe's nonce
+   */
+  signTx ({
+    safe,
+    privateKey,
+    to,
+    value,
+    data = '0x',
+    nonce = 0,
+    operation = 0,
+    safeTxGas = 0,
+    baseGas = 0,
+    gasPrice = 0,
+    gasToken = '0x0000000000000000000000000000000000000000',
+    refundReceiver = '0x0000000000000000000000000000000000000000'
+  }) {
+    return signTx({
+      safe,
+      privateKey,
+      to,
+      value,
+      data,
+      operation,
+      safeTxGas,
+      baseGas,
+      gasPrice,
+      gasToken,
+      refundReceiver,
+      nonce
     })
   }
 }

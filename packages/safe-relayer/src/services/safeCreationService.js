@@ -59,16 +59,16 @@ class SafeCreationService {
         { gasLimit: 6500000, gasPrice: ethers.utils.parseUnits('20', 'gwei') }
       )
 
-      const safeAddress = await this.sdk.computeSafeAddress({
+      const safe = await this.sdk.computeSafeAddress({
         owner,
         saltNonce,
         gnosisSafeMasterCopy: GNOSIS_SAFE_MASTER_COPY_ADDRESS,
         proxyFactory: PROXY_FACTORY_ADDRESS
       })
 
-      logger.json({ txHash: tx.hash, safeAddress })
+      logger.json({ txHash: tx.hash, safe })
 
-      return { success: true, txHash: tx.hash, safeAddress }
+      return { success: true, txHash: tx.hash, safe }
     } catch (err) {
       logger.error(err)
       return { success: false, errors: err }
@@ -77,3 +77,10 @@ class SafeCreationService {
 }
 
 export default new SafeCreationService()
+
+const main = async () => {
+  const sdk = new WalletSDK()
+
+  const res = await sdk.createSafe('0xA208969D8F9E443E2B497540d069a5d1a6878f4E')
+  logger.json(res)
+}

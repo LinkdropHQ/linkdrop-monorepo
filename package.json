@@ -11,7 +11,8 @@
       "packages/apps/*"
     ],
     "nohoist": [
-      "**/truffle"
+      "**/truffle",
+      "**/truffle/**"
     ]
   },
   "scripts": {

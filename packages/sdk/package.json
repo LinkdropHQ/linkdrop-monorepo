@@ -10,8 +10,15 @@
     "extends": "../babel.config.js"
   },
   "dependencies": {
+    "@gnosis.pm/safe-contracts": "^1.0.0",
+    "assert": "^2.0.0",
     "axios": "^0.18.1",
+    "bignumber.js": "^9.0.0",
+    "eth-sig-util": "^2.4.4",
     "ethers": "^4.0.27"
   },
-  "gitHead": "414d0e9ecca3fab72be5820c3046207b0b5415b2"
+  "gitHead": "414d0e9ecca3fab72be5820c3046207b0b5415b2",
+  "devDependencies": {
+    "truffle": "4.1.14"
+  }
 }
