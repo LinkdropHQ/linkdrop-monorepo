@@ -25,3 +25,9 @@
   text-align: center;
   color: $redColor;
 }
+
+.input {
+  &.inputErrored {
+    color: $redColor;
+  }
+}

@@ -31,8 +31,8 @@ class AssetsList extends React.Component {
     const { ens } = this.props
     const { chainId } = getHashVariables()
     const network = defineNetworkName({ chainId })
-    const confirmUrl = encodeURIComponent(`${window.origin}/#/confirm`)
-    const dappUrl = `${url}?user=${ens}&network=${network}&confirmUrl=${confirmUrl}`
+    const widgetUrl = encodeURIComponent(`${window.origin}/#/widget`)
+    const dappUrl = `${url}?user=${ens}&network=${network}&widgetUrl=${widgetUrl}`
     return <Button className={styles.button} inverted href={dappUrl} target='_blank'>{this.t('buttons.goTo', { title: label })}</Button>
   }
 

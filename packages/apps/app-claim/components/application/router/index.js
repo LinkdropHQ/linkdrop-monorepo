@@ -1,7 +1,7 @@
 import React from 'react'
 import i18next from 'i18next'
 import { Route, Switch } from 'react-router-dom'
-import { Claim, DappResult, DappConnect, NotFound, Wallet, DappConfirm, Confirm, Authorization, Send, Receive } from 'components/pages'
+import { Claim, Widget, NotFound, Wallet, Confirm, Authorization, Send, Receive } from 'components/pages'
 import './styles'
 import { Loading } from '@linkdrop/ui-kit'
 import { getHashVariables } from '@linkdrop/commons'
@@ -32,10 +32,11 @@ class AppRouter extends React.Component {
 
   render () {
     const { sdk, privateKey, contractAddress, ens } = this.props
+    console.log('from router.js', { sdk, privateKey, contractAddress, ens })
     if (!sdk) {
       return <Loading />
     }
-    // сдк
+    // sdk
     if (sdk && (!ens || !privateKey || !contractAddress)) {
       return <Authorization />
     }
@@ -45,11 +46,8 @@ class AppRouter extends React.Component {
       <Route path='/get' component={Receive} />
       <Route path='/send' component={Send} />
 
-      {/* dapp pages */}
-      <Route path='/dapp-connect' component={DappConnect} />
-      <Route path='/dapp-confirm' component={DappConfirm} />
-      <Route path='/dapp-result' component={DappResult} />
-      {/* dapp pages */}
+      {/* widget page */}
+      <Route path='/widget' component={Widget} />
 
       <Route path='/' component={Wallet} />
       <Route path='*' component={NotFound} />

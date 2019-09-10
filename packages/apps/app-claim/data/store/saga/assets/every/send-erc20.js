@@ -2,18 +2,25 @@ import { defineNetworkName } from '@linkdrop/commons'
 import { put, select } from 'redux-saga/effects'
 import TokenMock from 'contracts/TokenMock.json'
 import { utils, ethers } from 'ethers'
+import { convertEns } from './helpers'
 
 const generator = function * ({ payload }) {
   try {
     yield put({ type: 'USER.SET_LOADING', payload: { loading: true } })
+    yield put({ type: 'USER.SET_ERRORS', payload: { errors: [] } })
     const { to, amount, tokenAddress, decimals, chainId = '1' } = payload
     let address = to
     const sdk = yield select(generator.selectors.sdk)
     const networkName = defineNetworkName({ chainId })
     const provider = yield ethers.getDefaultProvider(networkName)
     if (to.indexOf('.') > -1) {
-      address = yield provider.resolveName(to)
+      address = yield convertEns({ ens: to, provider })
     }
+    if (!address) {
+      yield put({ type: 'USER.SET_LOADING', payload: { loading: false } })
+      return yield put({ type: 'USER.SET_ERRORS', payload: { errors: ['ENS_INVALID'] } })
+    }
+
     const privateKey = yield select(generator.selectors.privateKey)
     const tokenContract = new ethers.Contract(tokenAddress, TokenMock.abi, provider)
     const contractAddress = yield select(generator.selectors.contractAddress)

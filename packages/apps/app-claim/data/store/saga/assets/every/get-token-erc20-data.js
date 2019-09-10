@@ -12,17 +12,15 @@ const generator = function * ({ payload }) {
     const provider = yield ethers.getDefaultProvider(networkName)
     let decimals
     let symbol
-    let icon
+    const icon = `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${tokenAddress.toLowerCase()}/logo.png`
     if (tokenAddress.toLowerCase() === '0x89d24a6b4ccb1b6faa2625fe562bdd9a23260359') {
       // DAI token has problem with fetching decimals
       decimals = 18
       symbol = 'DAI'
-      icon = `https://trustwalletapp.com/images/tokens/${tokenAddress.toLowerCase()}.png`
     } else {
       const contract = yield new ethers.Contract(tokenAddress, TokenMock.abi, provider)
       decimals = yield contract.decimals()
       symbol = yield contract.symbol()
-      icon = `https://trustwalletapp.com/images/tokens/${tokenAddress.toLowerCase()}.png`
     }
     let assetPrice = 0
     if (Number(chainId) === 1) {
