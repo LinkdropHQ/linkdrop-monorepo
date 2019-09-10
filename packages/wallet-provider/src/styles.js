@@ -38,4 +38,21 @@ export const styles = `
     overflow: hidden;
     z-index: 2147483000;
   }
+
+.ld-widget-icon {
+  z-index: 2147483647;        
+  position: fixed;
+  bottom: 60px;
+  right: 30px;
+  height: 50px;
+  background: blue;
+  border-radius: 50%;
+  width: 50px;  
+}
+
+.ld-widget-icon:hover {
+
+  background: darkblue;
+  cursor: pointer;
+}
 `

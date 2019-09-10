@@ -26,6 +26,25 @@ class Provider {
     this.provider = this._initProvider()
   }
 
+  _addWidgetIcon () {
+    const iconEl = document.createElement('div')
+    iconEl.className = 'ld-widget-icon'
+    document.body.appendChild(iconEl)
+
+    iconEl.addEventListener('click', (event) => {
+      // Log the clicked element in the console
+      console.log(event.target)
+
+      // hide or show widget window
+      this._toggleWidget()
+      
+    }, false)
+  }
+
+  _toggleWidget () {
+    this.widget.iframe.style.display = (this.widget.iframe.style.display === 'none') ? 'block': 'none'
+  }
+  
   _initWidget () {
     return new Promise((resolve, reject) => {
       const onload = async () => {
@@ -43,6 +62,8 @@ class Provider {
         document.body.appendChild(container)
         document.head.appendChild(style)
 
+        this._addWidgetIcon()
+        
         const connection = connectToChild({
           // The iframe to which a connection should be made
           iframe,
