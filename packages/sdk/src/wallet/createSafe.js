@@ -13,13 +13,6 @@ export const createSafe = async ({ apiHost, owner }) => {
   const response = await axios.post(`${apiHost}/api/v1/safes`, { owner })
   const { success, txHash, safe, errors } = response.data
 
-  console.log('SDK', {
-    success,
-    txHash,
-    safe,
-    errors
-  })
-
   return {
     success,
     txHash,

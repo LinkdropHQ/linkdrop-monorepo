@@ -84,12 +84,6 @@ export const executeTx = async ({
 
   const { success, txHash, errors } = response.data
 
-  console.log('SDK', {
-    success,
-    txHash,
-    errors
-  })
-
   return {
     success,
     txHash,
