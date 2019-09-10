@@ -78,9 +78,9 @@ class SafeCreationService {
 
 export default new SafeCreationService()
 
-const main = async () => {
-  const sdk = new WalletSDK()
+// const main = async () => {
+//   const sdk = new WalletSDK()
 
-  const res = await sdk.createSafe('0xA208969D8F9E443E2B497540d069a5d1a6878f4E')
-  logger.json(res)
-}
+//   const res = await sdk.createSafe('0xA208969D8F9E443E2B497540d069a5d1a6878f4E')
+//   logger.json(res)
+// }

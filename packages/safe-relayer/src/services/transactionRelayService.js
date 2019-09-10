@@ -1,33 +1,10 @@
 import GnosisSafe from '@gnosis.pm/safe-contracts/build/contracts/GnosisSafe'
-import ProxyFactory from '@gnosis.pm/safe-contracts/build/contracts/ProxyFactory'
 import { ethers } from 'ethers'
 import assert from 'assert'
 import relayerWalletService from './relayerWalletService'
-import { WalletSDK } from '../../../sdk/src/index'
 import logger from '../utils/logger'
 
-import {
-  GNOSIS_SAFE_MASTER_COPY_ADDRESS,
-  PROXY_FACTORY_ADDRESS
-} from '../../config/config.json'
-
 class TransactionRelayService {
-  constructor () {
-    this.gnosisSafeMasterCopy = new ethers.Contract(
-      GNOSIS_SAFE_MASTER_COPY_ADDRESS,
-      GnosisSafe.abi,
-      relayerWalletService.provider
-    )
-
-    this.proxyFactory = new ethers.Contract(
-      PROXY_FACTORY_ADDRESS,
-      ProxyFactory.abi,
-      relayerWalletService.wallet
-    )
-
-    this.sdk = new WalletSDK()
-  }
-
   async execute ({
     safe,
     to,
@@ -41,6 +18,17 @@ class TransactionRelayService {
     refundReceiver,
     signature
   }) {
+    assert(safe, 'Safe address is required')
+    assert(to, 'To is required')
+    assert(value, 'Value is required')
+    assert(data, 'Data is required')
+    assert(safeTxGas, 'Safe tx gas is required')
+    assert(baseGas, 'Base gas is required')
+    assert(gasPrice, 'Gas price is required')
+    assert(gasToken, 'Gas token is required')
+    assert(refundReceiver, 'Refund receiver address is required')
+    assert(signature, 'Signature is required')
+
     try {
       const gnosisSafe = new ethers.Contract(
         safe,
@@ -63,30 +51,31 @@ class TransactionRelayService {
         { gasPrice: ethers.utils.parseUnits('20', 'gwei') }
       )
       logger.debug(`Tx hash: ${tx.hash}`)
-      return tx.hash
+      return { success: true, txHash: tx.hash }
     } catch (err) {
       logger.error(err)
+      return { success: false, errors: err }
     }
   }
 }
 
 export default new TransactionRelayService()
 
-const main = async () => {
-  const transactionRelayService = new TransactionRelayService()
-  const txHash = await transactionRelayService.execute({
-    safe: '0x563df37ff1e6a70d6d0af364a9ca95c31ea61c94',
-    to: '0x646F6381010bA304cA1f912d6E7BB9972b4b6f56',
-    value: 1234,
-    data: '0x',
-    operation: 0,
-    safeTxGas: 0,
-    baseGas: 0,
-    gasPrice: 0,
-    gasToken: '0x0000000000000000000000000000000000000000',
-    refundReceiver: '0x0000000000000000000000000000000000000000',
-    signature:
-      '0xd87b24dadad5110acc87f58954453672d2f3ccde6238b51ec495148348fb05a6259f87356383673a4f225032c2586a14403e54f3cd6b43487ede30441a281cd21b'
-  })
-  console.log('txHash: ', txHash)
-}
+// const main = async () => {
+//   const transactionRelayService = new TransactionRelayService()
+//   const txHash = await transactionRelayService.execute({
+//     safe: '0x563df37ff1e6a70d6d0af364a9ca95c31ea61c94',
+//     to: '0x646F6381010bA304cA1f912d6E7BB9972b4b6f56',
+//     value: 1234,
+//     data: '0x',
+//     operation: 0,
+//     safeTxGas: 0,
+//     baseGas: 0,
+//     gasPrice: 0,
+//     gasToken: '0x0000000000000000000000000000000000000000',
+//     refundReceiver: '0x0000000000000000000000000000000000000000',
+//     signature:
+//       '0xd87b24dadad5110acc87f58954453672d2f3ccde6238b51ec495148348fb05a6259f87356383673a4f225032c2586a14403e54f3cd6b43487ede30441a281cd21b'
+//   })
+//   console.log('txHash: ', txHash)
+// }

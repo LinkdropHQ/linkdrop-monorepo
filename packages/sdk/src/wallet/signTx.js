@@ -38,9 +38,12 @@ export const signTx = ({
   assert(privateKey, 'Private key is required')
   assert(to, 'To is required')
   assert(value, 'Value is required')
+  assert(data, 'Data is required')
   assert(safeTxGas, 'Safe tx gas is required')
   assert(baseGas, 'Base gas is required')
   assert(gasPrice, 'Gas price is required')
+  assert(gasToken, 'Gas token is required')
+  assert(refundReceiver, 'Refund receiver address is required')
   assert(nonce, 'Nonce is required')
 
   if (privateKey.includes('0x')) {

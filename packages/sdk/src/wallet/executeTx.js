@@ -37,6 +37,18 @@ export const executeTx = async ({
   refundReceiver
 }) => {
   assert(apiHost, 'Api host is required')
+  assert(jsonRpcUrl, 'Json rpc url is required')
+  assert(safe, 'Safe address is required')
+  assert(privateKey, 'Private key is required')
+  assert(to, 'To is required')
+  assert(value, 'Value is required')
+  assert(data, 'Data is required')
+  assert(safeTxGas, 'Safe tx gas is required')
+  assert(baseGas, 'Base gas is required')
+  assert(gasPrice, 'Gas price is required')
+  assert(gasToken, 'Gas token is required')
+  assert(refundReceiver, 'Refund receiver address is required')
+
   const provider = new ethers.providers.JsonRpcProvider(jsonRpcUrl)
   const gnosisSafe = new ethers.Contract(safe, GnosisSafe.abi, provider)
   const nonce = await gnosisSafe.nonce()
