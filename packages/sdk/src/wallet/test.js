@@ -8,7 +8,7 @@ const main = async () => {
   //   )
   //   console.log('response: ', response)
 
-  const privateKey = ''
+  const privateKey = undefined
   const safe = '0x563df37ff1e6a70d6d0af364a9ca95c31ea61c94'
   const response = await sdk.executeTx({
     safe,

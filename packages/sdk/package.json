@@ -10,6 +10,7 @@
     "extends": "../babel.config.js"
   },
   "dependencies": {
+    "@ensdomains/ens": "^0.3.11",
     "@gnosis.pm/safe-contracts": "^1.0.0",
     "assert": "^2.0.0",
     "assert-js": "^0.22.0",

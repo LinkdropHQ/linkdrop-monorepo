@@ -9,6 +9,7 @@
     "dev": "nodemon --exec npx babel-node index"
   },
   "dependencies": {
+    "@ensdomains/ens": "^0.3.11",
     "@gnosis.pm/safe-contracts": "^1.0.0",
     "@hapi/boom": "^7.4.3",
     "assert": "^2.0.0",

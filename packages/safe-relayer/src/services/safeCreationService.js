@@ -1,18 +1,24 @@
 import GnosisSafe from '@gnosis.pm/safe-contracts/build/contracts/GnosisSafe'
 import ProxyFactory from '@gnosis.pm/safe-contracts/build/contracts/ProxyFactory'
+import MultiSend from '@gnosis.pm/safe-contracts/build/contracts/MultiSend'
 import { ethers } from 'ethers'
 import assert from 'assert'
 import relayerWalletService from './relayerWalletService'
 import { WalletSDK } from '../../../sdk/src/index'
 import logger from '../utils/logger'
+import { ENS, FIFSRegistrar } from '@ensdomains/ens'
 
 import {
   GNOSIS_SAFE_MASTER_COPY_ADDRESS,
-  PROXY_FACTORY_ADDRESS
+  PROXY_FACTORY_ADDRESS,
+  MULTISEND_LIBRARY_ADDRESS
 } from '../../config/config.json'
 
 const ADDRESS_ZERO = ethers.constants.AddressZero
 const BYTES_ZERO = '0x'
+
+const CALL_OP = 0
+const DELEGATECALL_OP = 1
 
 class SafeCreationService {
   constructor () {
@@ -28,6 +34,12 @@ class SafeCreationService {
       relayerWalletService.wallet
     )
 
+    this.multiSend = new ethers.Contract(
+      MULTISEND_LIBRARY_ADDRESS,
+      MultiSend.abi,
+      relayerWalletService.provider
+    )
+
     this.sdk = new WalletSDK()
   }
 
@@ -35,7 +47,7 @@ class SafeCreationService {
     try {
       logger.info('Creating new safe...')
 
-      const gnosisSafeData = this.sdk.getEncodedData(GnosisSafe.abi, 'setup', [
+      const gnosisSafeData = this.sdk.encodeParams(GnosisSafe.abi, 'setup', [
         [owner], // owners
         1, // threshold
         ADDRESS_ZERO, // to
@@ -77,10 +89,3 @@ class SafeCreationService {
 }
 
 export default new SafeCreationService()
-
-// const main = async () => {
-//   const sdk = new WalletSDK()
-
-//   const res = await sdk.createSafe('0xA208969D8F9E443E2B497540d069a5d1a6878f4E')
-//   logger.json(res)
-// }

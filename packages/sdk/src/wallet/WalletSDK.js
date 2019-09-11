@@ -1,5 +1,5 @@
 import { ethers } from 'ethers'
-import { getEncodedData, getParamFromTxEvent } from './utils'
+import { encodeParams, encodeData, getParamFromTxEvent } from './utils'
 import { computeSafeAddress } from './computeSafeAddress'
 import { createSafe } from './createSafe'
 import { signTx } from './signTx'
@@ -13,14 +13,18 @@ class WalletSDK {
   }
 
   /**
-   * @dev Function to get encoded params data from contract
+   * @dev Function to get encoded params data from contract abi
    * @param {Object} abi Contract abi
    * @param {String} method Function name
    * @param {Array<T>} params Array of function params to be encoded
    * @return Encoded params data
    */
-  getEncodedData (abi, method, params) {
-    return getEncodedData(abi, method, params)
+  encodeParams (abi, method, params) {
+    return encodeParams(abi, method, params)
+  }
+
+  encodeData (operation, to, value, data) {
+    return encodeData(operation, to, value, data)
   }
 
   /**
