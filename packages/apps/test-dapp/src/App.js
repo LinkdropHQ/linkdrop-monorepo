@@ -11,21 +11,29 @@ class App extends React.Component {
     this.state = {
       address: null,
       connected: false,
-      ensNameInput: 'wallet.linkdrop.io',
       loading: true
     }
-    this.walletWindow = null    
+    this.walletWindow = null
   }
 
   async componentDidMount () {
-    const { ensName, network, widgetUrl } = this._getParamsFromUrl()
+    const { network } = this._getParamsFromUrl()
     this.network = network
-    if (ensName) {
-      this._connect(ensName, network, widgetUrl)
-    }
+    this._initProvider()
+
     this.setState({
       loading: false
     })
+  }
+
+  async _initProvider () {
+    const urlParams = this._getParamsFromUrl()
+    
+    const network = urlParams.network
+    const widgetUrl = urlParams.widgetUrl
+    
+    console.log('getting provider...')
+    this.widget = new WalletProvider({ ensName: 'wallet.linkdrop.io', network, widgetUrl })
   }
   
   _getParamsFromUrl () {
@@ -47,22 +55,14 @@ class App extends React.Component {
   
   async _connect (ensName, network, widgetUrl) {
     try {
-      const urlParams = this._getParamsFromUrl()
 
-      ensName = ensName || urlParams.ensName
-      network = network || urlParams.network
-      widgetUrl = widgetUrl || urlParams.widgetUrl
-      
-      console.log('getting provider...')
-      const card = new WalletProvider({ ensName, network, widgetUrl })
-      
-      await card.provider.enable()
+      await this.widget.provider.enable()
       
       console.log('got provider')
-      this.provider = card.provider
-      this.web3 = new Web3(card.provider)
-      // console.log('got web3 ', this.web3)
 
+      this.web3 = new Web3(this.widget.provider)
+      // console.log('got web3 ', this.web3)
+      
       const accs = await this.web3.eth.getAccounts()
       console.log({ accs })
       const address = accs[0]
@@ -103,7 +103,7 @@ class App extends React.Component {
     zeroExInstant.render(
       {
           orderSource: 'https://api.radarrelay.com/0x/v2/',
-          provider: this.provider
+          provider: this.widget.provider
         },
       'body'
     )
@@ -112,18 +112,12 @@ class App extends React.Component {
   _renderIfNotLoggedIn () {
     return (
       <div>
-        <h3> Connect your account </h3>
+        <h3> Connect your wallet </h3>
 
-      {/*
-        <input className='ens-input' placeholder='Your ENS, e.g. user.my-wallet.eth' type='text' name='ens' onChange={({ target }) => this.setState({ ensNameInput: target.value })} />
-        <br/>*/}
         <button className='App-link' onClick={() => {
-          this._connect(this.state.ensNameInput)
+          this.provider._сonnect()
         }}>Connect</button>
 
-        <p style={{ fontSize: 10, textDecoration: 'none', marginTop: 30 }}>
-        Don't have an account?  <a style={{ color: 'blue' }} href='http://localhost:3000' target='_blank' ref='no-follow'> Create new one </a>
-        </p>
       </div>
     )
   }

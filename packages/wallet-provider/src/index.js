@@ -22,7 +22,7 @@ class Provider {
     if (!opts.network) {
       throw new Error('network should be provided')
     }
-    this.widget = null
+    this._initWidgetFrame()
     this.provider = this._initProvider()
   }
 
@@ -48,9 +48,6 @@ class Provider {
   _initWidget () {
     return new Promise((resolve, reject) => {
       const onload = async () => {
-        const style = document.createElement('style')
-        style.innerHTML = styles
-
         const container = document.createElement('div')
         container.className = 'ld-widget-container'
                 
@@ -62,7 +59,7 @@ class Provider {
         
         container.appendChild(iframe)
         document.body.appendChild(container)
-        document.head.appendChild(style)
+
 
         const connection = connectToChild({
           // The iframe to which a connection should be made
@@ -93,14 +90,19 @@ class Provider {
   _hideWidget () {
     this.widget.iframe.style.display = 'none'
   }
+
+  async _initWidgetFrame () {
+     this.widget = await this._initWidget()
+     this._addWidgetIcon()
+   }
+
   
   _initProvider () {
     const engine = new ProviderEngine()
     let address
+
     
     engine.enable = async () => {
-      this.widget = await this._initWidget()
-      this._addWidgetIcon()
       await this.widget.communication.connect()
     }
 
