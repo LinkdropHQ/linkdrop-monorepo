@@ -56,7 +56,7 @@ class AssetsList extends React.Component {
   }
 
   renderAssets ({ items }) {
-    if (items.length === 0) {
+    if (!items || items.length === 0) {
       return <div className={styles.note} dangerouslySetInnerHTML={{ __html: this.t('texts.empty') }} />
     }
     return items.map(({

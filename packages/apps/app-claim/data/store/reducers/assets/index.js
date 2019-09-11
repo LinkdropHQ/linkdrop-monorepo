@@ -2,7 +2,7 @@ import reducers from './reducers'
 
 const initialState = {
   itemsToClaim: [],
-  items: [],
+  items: null,
   loading: false
 }
 
