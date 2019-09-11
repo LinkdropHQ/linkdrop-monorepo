@@ -50,7 +50,10 @@ class Provider {
       const onload = async () => {
         const container = document.createElement('div')
         container.className = 'ld-widget-container'
-                
+
+        const style = document.createElement('style')
+        style.innerHTML = styles
+        
         const iframe = document.createElement('iframe')
         // iframe.src = this.widgetUrl || 'https://demo.wallet.linkdrop.io/'
         iframe.src = this.widgetUrl || 'http://localhost:9002'
@@ -59,8 +62,9 @@ class Provider {
         
         container.appendChild(iframe)
         document.body.appendChild(container)
-
-
+        document.head.appendChild(style)
+        
+        
         const connection = connectToChild({
           // The iframe to which a connection should be made
           iframe,
@@ -100,7 +104,6 @@ class Provider {
   _initProvider () {
     const engine = new ProviderEngine()
     let address
-
     
     engine.enable = async () => {
       await this.widget.communication.connect()
@@ -189,6 +192,7 @@ class Provider {
         let result, error
         try {
           result = await this.widget.communication.getAccounts()
+          address = result[0]
         } catch (err) {
           error = err
         }

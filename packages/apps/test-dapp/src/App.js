@@ -115,7 +115,7 @@ class App extends React.Component {
         <h3> Connect your wallet </h3>
 
         <button className='App-link' onClick={() => {
-          this.provider._сonnect()
+          this._connect()
         }}>Connect</button>
 
       </div>
