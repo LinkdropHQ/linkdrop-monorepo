@@ -14,6 +14,9 @@ class Provider {
     this.network = opts.network || 'mainnet'
     this.rpcUrl = opts.rpcUrl || `https://${this.network}.infura.io/v3/d4d1a2b933e048e28fb6fe1abe3e813a`
     this.widgetUrl = opts.widgetUrl
+    this.onConnect = opts.onConnect
+
+    this._enabled = false
     
     if (!opts.ensName) {
       throw new Error('ENS name should be provided')
@@ -41,8 +44,12 @@ class Provider {
     }, false)
   }
 
-  _toggleWidget () {
-    this.widget.iframe.style.display = (this.widget.iframe.style.display === 'none') ? 'block' : 'none'
+  async _toggleWidget () {
+    this.widget.iframe.style.display = (this.widget.iframe.style.display === 'none') ? 'block' : 'none'    
+    if (!this.enabled) {
+      await this.provider.enable()
+      this.onConnect()
+    }
   }
   
   _initWidget () {
@@ -96,17 +103,27 @@ class Provider {
   }
 
   async _initWidgetFrame () {
-     this.widget = await this._initWidget()
-     this._addWidgetIcon()
+    this.widget = await this._initWidget()
+    this._addWidgetIcon()    
    }
-
   
   _initProvider () {
     const engine = new ProviderEngine()
     let address
     
     engine.enable = async () => {
-      await this.widget.communication.connect()
+      if (!this.enabled) {
+        this.enabled = true
+        this._showWidget()
+        try {
+          await this.widget.communication.connect()
+          this._hideWidget()
+        } catch (err) {
+          this._hideWidget()
+          throw err
+        }
+      }
+      return null
     }
 
     async function handleRequest (payload) {

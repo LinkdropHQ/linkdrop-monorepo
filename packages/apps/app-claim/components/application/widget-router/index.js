@@ -69,16 +69,11 @@ class WidgetRouter extends React.Component {
 
   _showModalAndWaitUserAction () { 
     return new Promise(async (resolve, reject) => {
-      // show modal
-      this.communication.showWidget()
+      // // show modal
+      // this.communication.showWidget()
       
       // wait for user input
       this.eventEmitter.on('userAction', ({ action, payload }) => {
-        
-        // hide modal
-        this.communication.hideWidget()
-
-        this.setState({ screen: null, connected: true })
         
         // resolve or reject
         if (action === 'confirm') {
@@ -86,6 +81,10 @@ class WidgetRouter extends React.Component {
         } else {
           reject(new Error('User rejected action'))
         }
+
+        setTimeout(() => { 
+          this.setState({ screen: null, connected: true })
+        }, 500)
       })
     })
   }

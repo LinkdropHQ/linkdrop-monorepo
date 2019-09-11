@@ -33,7 +33,12 @@ class App extends React.Component {
     const widgetUrl = urlParams.widgetUrl
     
     console.log('getting provider...')
-    this.widget = new WalletProvider({ ensName: 'wallet.linkdrop.io', network, widgetUrl })
+    this.widget = new WalletProvider({
+      ensName: 'wallet.linkdrop.io',
+      network,
+      widgetUrl,
+      onConnect: this._connect.bind(this)
+    })
   }
   
   _getParamsFromUrl () {
@@ -53,7 +58,7 @@ class App extends React.Component {
     return { ensName, network, widgetUrl }
   }
   
-  async _connect (ensName, network, widgetUrl) {
+  async _connect () {
     try {
 
       await this.widget.provider.enable()
@@ -61,7 +66,6 @@ class App extends React.Component {
       console.log('got provider')
 
       this.web3 = new Web3(this.widget.provider)
-      // console.log('got web3 ', this.web3)
       
       const accs = await this.web3.eth.getAccounts()
       console.log({ accs })
@@ -70,8 +74,7 @@ class App extends React.Component {
 
       const balance = await this.web3.eth.getBalance(address)
       this.setState({
-        connected: true,
-        ensName
+        connected: true
       })
       console.log({
         balance
