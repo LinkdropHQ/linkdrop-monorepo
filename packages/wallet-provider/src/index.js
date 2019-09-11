@@ -42,7 +42,7 @@ class Provider {
   }
 
   _toggleWidget () {
-    this.widget.iframe.style.display = (this.widget.iframe.style.display === 'none') ? 'block': 'none'
+    this.widget.iframe.style.display = (this.widget.iframe.style.display === 'none') ? 'block' : 'none'
   }
   
   _initWidget () {
@@ -55,15 +55,15 @@ class Provider {
         container.className = 'ld-widget-container'
                 
         const iframe = document.createElement('iframe')
-        iframe.src = this.widgetUrl || 'https://demo.wallet.linkdrop.io/#/widget'
+        // iframe.src = this.widgetUrl || 'https://demo.wallet.linkdrop.io/'
+        iframe.src = this.widgetUrl || 'http://localhost:9002'
+        //iframe.src = this.widgetUrl || 'http://localhost:9002/#/receive?weiAmount=10000000000000000&tokenAddress=0xa3b5fdeb5dbc592ffc5e222223376464b9c56fb8&tokenAmount=25000000000000000000&expirationTime=1900000000000&version=1&chainId=1&linkKey=0x3ca4d810347f1d8dcb4c9407c1345356a18d12ea35fcf5c5a7828d11448a76e9&linkdropMasterAddress=0x6c0f58ad4eb24da5769412bf34ddee698c4d185b&linkdropSignerSignature=0x10c69d7836aa78bc73e6fe55354853c825f7987e0955fa644b883ca6547382b16915a21213b7922aeb8a05c6380d5cc9ffcf2656f973396c4aa17673652a4fe51b&campaignId=10&dappId=zrx-instant'
         iframe.className = 'ld-widget-iframe'
         
         container.appendChild(iframe)
         document.body.appendChild(container)
         document.head.appendChild(style)
 
-        this._addWidgetIcon()
-        
         const connection = connectToChild({
           // The iframe to which a connection should be made
           iframe,
@@ -100,6 +100,7 @@ class Provider {
     
     engine.enable = async () => {
       this.widget = await this._initWidget()
+      this._addWidgetIcon()
       await this.widget.communication.connect()
     }
 

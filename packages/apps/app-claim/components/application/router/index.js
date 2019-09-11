@@ -23,11 +23,14 @@ class AppRouter extends React.Component {
   }
 
   componentDidMount () {
-    let {
-      chainId
-    } = getHashVariables()
-    chainId = chainId || '1'
-    this.actions().user.createSdk({ chainId })
+    const { sdk } = this.props
+    if (!sdk) { 
+      let {
+        chainId
+      } = getHashVariables()
+      chainId = chainId || '1'
+      this.actions().user.createSdk({ chainId })
+    }
   }
 
   render () {
@@ -40,15 +43,12 @@ class AppRouter extends React.Component {
     if (sdk && (!ens || !privateKey || !contractAddress)) {
       return <Authorization />
     }
+
     return <Switch>
       <Route path='/receive' component={Claim} />
       <Route path='/confirm' component={Confirm} />
       <Route path='/get' component={Receive} />
       <Route path='/send' component={Send} />
-
-      {/* widget page */}
-      <Route path='/widget' component={Widget} />
-
       <Route path='/' component={Wallet} />
       <Route path='*' component={NotFound} />
     </Switch>
