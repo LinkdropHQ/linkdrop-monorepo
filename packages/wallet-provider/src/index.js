@@ -14,9 +14,6 @@ class Provider {
     this.network = opts.network || 'mainnet'
     this.rpcUrl = opts.rpcUrl || `https://${this.network}.infura.io/v3/d4d1a2b933e048e28fb6fe1abe3e813a`
     this.widgetUrl = opts.widgetUrl
-    this.onConnect = opts.onConnect
-
-    this._enabled = false
     
     if (!opts.ensName) {
       throw new Error('ENS name should be provided')
@@ -25,7 +22,6 @@ class Provider {
     if (!opts.network) {
       throw new Error('network should be provided')
     }
-    this._initWidgetFrame()
     this.provider = this._initProvider()
   }
 
@@ -45,11 +41,7 @@ class Provider {
   }
 
   async _toggleWidget () {
-    this.widget.iframe.style.display = (this.widget.iframe.style.display === 'none') ? 'block' : 'none'    
-    if (!this.enabled) {
-      await this.provider.enable()
-      this.onConnect()
-    }
+    this.widget.iframe.style.display = (this.widget.iframe.style.display === 'block') ? 'none' : 'block'
   }
   
   _initWidget () {
@@ -95,16 +87,20 @@ class Provider {
   }
 
   _showWidget () {
-    this.widget.iframe.style.display = 'block'
+    if (this.widget) { 
+      this.widget.iframe.style.display = 'block'
+    }
   }
 
   _hideWidget () {
-    this.widget.iframe.style.display = 'none'
+    if (this.widget) {     
+      this.widget.iframe.style.display = 'none'
+    }
   }
 
   async _initWidgetFrame () {
     this.widget = await this._initWidget()
-    this._addWidgetIcon()    
+    this._addWidgetIcon()
    }
   
   _initProvider () {
@@ -112,18 +108,16 @@ class Provider {
     let address
     
     engine.enable = async () => {
-      if (!this.enabled) {
-        this.enabled = true
-        this._showWidget()
-        try {
-          await this.widget.communication.connect()
-          this._hideWidget()
-        } catch (err) {
-          this._hideWidget()
-          throw err
-        }
+      await this._initWidgetFrame()
+      
+      // this._showWidget()
+      try {
+        await this.widget.communication.connect()
+        this._hideWidget()
+      } catch (err) {
+        this._hideWidget()
+        throw err
       }
-      return null
     }
 
     async function handleRequest (payload) {

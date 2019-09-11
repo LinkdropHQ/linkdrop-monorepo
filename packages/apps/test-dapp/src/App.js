@@ -28,7 +28,6 @@ class App extends React.Component {
 
   async _initProvider () {
     const urlParams = this._getParamsFromUrl()
-    
     const network = urlParams.network
     const widgetUrl = urlParams.widgetUrl
     
@@ -36,10 +35,12 @@ class App extends React.Component {
     this.widget = new WalletProvider({
       ensName: 'wallet.linkdrop.io',
       network,
-      widgetUrl,
-      onConnect: this._connect.bind(this)
+      widgetUrl
     })
+
+    this._connect()
   }
+  
   
   _getParamsFromUrl () {
     let ensName
@@ -60,7 +61,7 @@ class App extends React.Component {
   
   async _connect () {
     try {
-
+      
       await this.widget.provider.enable()
       
       console.log('got provider')
@@ -118,7 +119,7 @@ class App extends React.Component {
         <h3> Connect your wallet </h3>
 
         <button className='App-link' onClick={() => {
-          this._connect()
+          this.widget._showWidget()
         }}>Connect</button>
 
       </div>

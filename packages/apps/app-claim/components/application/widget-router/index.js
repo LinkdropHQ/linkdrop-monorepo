@@ -78,13 +78,13 @@ class WidgetRouter extends React.Component {
         // resolve or reject
         if (action === 'confirm') {
           resolve(payload)
-        } else {
-          reject(new Error('User rejected action'))
-        }
+          setTimeout(() => {
+            this.setState({ screen: null, connected: true })
+          }, 500)
 
-        setTimeout(() => { 
-          this.setState({ screen: null, connected: true })
-        }, 500)
+        } else { // on close click          
+          this.communication.hideWidget()
+        }
       })
     })
   }
