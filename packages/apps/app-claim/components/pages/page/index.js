@@ -33,9 +33,6 @@ class Page extends React.Component {
       <div className={styles.main}>
         {children}
       </div>
-      <Footer
-        content={text('components.footer.copyright', { href: 'https://t.me/LinkdropHQ' })}
-      />
       {moonpayShow && <MoonpayWidget onClose={_ => this.actions().user.setMoonpayShow({ moonpayShow: false })} />}
     </div>
   }
