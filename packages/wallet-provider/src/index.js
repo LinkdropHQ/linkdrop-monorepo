@@ -203,6 +203,7 @@ class Provider {
         let result, error
         try {
           result = await this.widget.communication.getAccounts()
+          console.log({ result })
           address = result[0]
         } catch (err) {
           error = err

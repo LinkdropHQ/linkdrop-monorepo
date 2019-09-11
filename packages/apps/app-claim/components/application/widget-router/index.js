@@ -32,7 +32,6 @@ class WidgetRouter extends React.Component {
   }
   
   async componentDidMount () {
-    const { contractAddress } = this.props
     const { sdk } = this.props
     if (!sdk) { 
       let {
@@ -43,6 +42,7 @@ class WidgetRouter extends React.Component {
       this.actions().user.createSdk({ chainId })
     }
 
+    const component = this
     const connection = connectToParent({
       // Methods child is exposing to parent
       methods: {
@@ -59,6 +59,7 @@ class WidgetRouter extends React.Component {
           return this._showModalAndWaitUserAction()
         },
         getAccounts () {
+          const contractAddress = component._getContractAddress()
           console.log('WALLET: getting accounts: ', contractAddress)
           return [contractAddress]
         }
@@ -67,6 +68,11 @@ class WidgetRouter extends React.Component {
     this.communication = await connection.promise
   }
 
+  _getContractAddress () {
+    const { contractAddress } = this.props
+    return contractAddress
+  }
+  
   _showModalAndWaitUserAction () { 
     return new Promise(async (resolve, reject) => {
       // // show modal
