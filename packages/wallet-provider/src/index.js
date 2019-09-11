@@ -119,9 +119,9 @@ class Provider {
       // this._showWidget()
       try {
         await this.widget.communication.connect()
-        this._hideWidget()
+        // this._hideWidget()
       } catch (err) {
-        this._hideWidget()
+        /// this._hideWidget()
         throw err
       }
     }

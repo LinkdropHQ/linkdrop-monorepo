@@ -75,8 +75,6 @@ class WidgetRouter extends React.Component {
   
   _showModalAndWaitUserAction () { 
     return new Promise(async (resolve, reject) => {
-      // // show modal
-      // this.communication.showWidget()
       
       // wait for user input
       this.eventEmitter.on('userAction', ({ action, payload }) => {
@@ -88,6 +86,11 @@ class WidgetRouter extends React.Component {
             this.setState({ screen: null, connected: true })
           }, 500)
 
+          // hide widget if it's not a claim link
+          if (window.location.hash.indexOf('/receive') === -1) {
+            this.communication.hideWidget()
+          }
+          
         } else { // on close click          
           this.communication.hideWidget()
         }
