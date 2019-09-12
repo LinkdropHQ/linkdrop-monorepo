@@ -4,6 +4,9 @@ import WalletProvider from '@linkdrop/wallet-provider'
 import Web3 from 'web3'
 import qs from 'querystring'
 import './App.css'
+import { Button } from '@linkdrop/ui-kit'
+import Page from './page'
+import styles from './app.module.scss'
 
 class App extends React.Component {
   constructor (props) {
@@ -105,25 +108,27 @@ class App extends React.Component {
           orderSource: 'https://api.radarrelay.com/0x/v2/',
           provider: this.provider
         },
-      'body'
+      '.page-widget'
     )
   }
 
   _renderIfNotLoggedIn () {
     return (
       <div>
-        <h3> Connect your account </h3>
+        <h3 className={styles.title}> Connect<br/>your account </h3>
 
       {/*
         <input className='ens-input' placeholder='Your ENS, e.g. user.my-wallet.eth' type='text' name='ens' onChange={({ target }) => this.setState({ ensNameInput: target.value })} />
         <br/>*/}
-        <button className='App-link' onClick={() => {
-          this._connect(this.state.ensNameInput)
-        }}>Connect</button>
 
-        <p style={{ fontSize: 10, textDecoration: 'none', marginTop: 30 }}>
-        Don't have an account?  <a style={{ color: 'blue' }} href='http://localhost:3000' target='_blank' ref='no-follow'> Create new one </a>
-        </p>
+        <Button
+          className={styles.button}
+          onClick={() => {
+            this._connect(this.state.ensNameInput)
+          }}
+        >
+          Connect
+        </Button>
       </div>
     )
   }
@@ -152,26 +157,23 @@ class App extends React.Component {
 
   _renderIfLoggedIn () {
     return (
-          <div>
+      <div>
         <p>
-        Logged in {/* as <span style={{fontWeight: 'bold'}}> {this.state.ensName} </span>*/ }
-        <br/>
-        <small> { this.state.address } </small>
+          Logged in {/* as <span style={{fontWeight: 'bold'}}> {this.state.ensName} </span>*/ }
+          <br/>
+          <small> { this.state.address } </small>
         </p>
-        
-      { this._renderButton() }
-   
-
+        { this._renderButton() }
         <p>
-        <a style={{ fontSize: 10, color: 'blue', textDecoration: 'none' }} onClick={() => {
-          this.setState({
-            ensNameInput: null,
-            ensName: null,
-            connected: false
-          })
-        }} href='javascript:;'> Logout </a>
+          <a style={{ fontSize: 10, color: 'blue', textDecoration: 'none' }} onClick={() => {
+            this.setState({
+              ensNameInput: null,
+              ensName: null,
+              connected: false
+            })
+          }} href='javascript:;'> Logout </a>
         </p>
-        </div>
+      </div>
     )
   }
   
@@ -180,17 +182,9 @@ class App extends React.Component {
       return (<div>Loading...</div>)
     }    
     return (
-        <div className='App'>
-        <header className='App-header'>
-        <h1>
-        0x Instant Demo      
-      </h1>
-
-      {
-        this.state.connected ? this._renderIfLoggedIn() : this._renderIfNotLoggedIn()
-      }
-        </header>
-        </div>
+        <Page>
+          {this.state.connected ? this._renderIfLoggedIn() : this._renderIfNotLoggedIn()}
+        </Page>
     )
   }
 }
