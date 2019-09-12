@@ -31,7 +31,7 @@ export const encodeParams = (abi, method, params) => {
  * @param {Number} value
  * @param {String} data
  */
-export const encodeData = (operation, to, value, data) => {
+export const encodeDataForMultiSend = (operation, to, value, data) => {
   const transactionWrapper = new ethers.utils.Interface([
     'function send(uint8 operation, address to, uint256 value, bytes data)'
   ])

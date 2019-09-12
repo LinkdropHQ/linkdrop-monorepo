@@ -3,11 +3,12 @@ import { ethers } from 'ethers'
 import { ENS, FIFSRegistrar } from '@ensdomains/ens'
 import { ENS_ADDRESS } from '../../config/config.json'
 import relayerWalletService from './relayerWalletService'
-
-assert.string(ENS_ADDRESS, 'Please provide ens address of the network')
+import sdkService from './sdkService'
 
 class ENSService {
   constructor () {
+    assert.string(ENS_ADDRESS, 'Please provide ens address of the network')
+
     this.ens = new ethers.Contract(
       ENS_ADDRESS,
       ENS.abi,
@@ -15,9 +16,8 @@ class ENSService {
     )
   }
 
-  getOwner (name) {
-    const node = ethers.utils.namehash(name)
-    return this.ens.owner(node)
+  async getOwner (name) {
+    return sdkService.walletSDK.getEnsOwner(name)
   }
 }
 

@@ -1,5 +1,9 @@
 import { ethers } from 'ethers'
-import { encodeParams, encodeData, getParamFromTxEvent } from './utils'
+import {
+  encodeParams,
+  encodeDataForMultiSend,
+  getParamFromTxEvent
+} from './utils'
 import { computeSafeAddress } from './computeSafeAddress'
 import { createSafe } from './createSafe'
 import { signTx } from './signTx'
@@ -24,8 +28,8 @@ class WalletSDK {
     return encodeParams(abi, method, params)
   }
 
-  encodeData (operation, to, value, data) {
-    return encodeData(operation, to, value, data)
+  encodeDataForMultiSend (operation, to, value, data) {
+    return encodeDataForMultiSend(operation, to, value, data)
   }
 
   /**
@@ -46,29 +50,32 @@ class WalletSDK {
    * @param {String | Number} saltNonce Random salt nonce
    * @param {String} gnosisSafeMasterCopy Deployed gnosis safe mastercopy address
    * @param {String} proxyFactory Deployed proxy factory address
+   * @param {String} jsonRpcUrl JSON RPC URL (optional)
    */
   async computeSafeAddress ({
     owner,
     saltNonce,
-    gnosisSafeMasterCopy = '0xb6029EA3B2c51D09a50B53CA8012FeEB05bDa35A', // from https://safe-relay.gnosis.pm/api/v1/about/,
-    proxyFactory = '0x12302fE9c02ff50939BaAaaf415fc226C078613C' // from https://safe-relay.gnosis.pm/api/v1/about/,
+    gnosisSafeMasterCopy = '0xb6029EA3B2c51D09a50B53CA8012FeEB05bDa35A', // from https://safe-relay.gnosis.pm/api/v1/about/
+    proxyFactory = '0x12302fE9c02ff50939BaAaaf415fc226C078613C', // from https://safe-relay.gnosis.pm/api/v1/about/
+    jsonRpcUrl = this.jsonRpcUrl
   }) {
     return computeSafeAddress({
       owner,
       saltNonce,
       gnosisSafeMasterCopy,
       proxyFactory,
-      jsonRpcUrl: this.jsonRpcUrl
+      jsonRpcUrl
     })
   }
 
   /**
    * Function to create new safe
    * @param {String} owner Safe owner's address
+   * @param {String} apiHost API host (optional)
    * @returns {Object} {success, txHash, safe, errors}
    */
-  async createSafe (owner) {
-    return createSafe({ apiHost: this.apiHost, owner })
+  async createSafe (owner, apiHost = this.apiHost) {
+    return createSafe({ apiHost, owner })
   }
 
   /**
@@ -77,13 +84,15 @@ class WalletSDK {
    * @param {String} privateKey Safe owner's private key
    * @param {String} to To
    * @param {Number} value Value
-   * @param {String} data Data
-   * @param {Number} operation Operation
-   * @param {Number} safeTxGas Safe tx gas
-   * @param {Number} baseGas Base gas
-   * @param {Number} gasPrice Gas price
-   * @param {String} gasToken Gas token
-   * @param {String} refundReceiver Refund receiver
+   * @param {String} data Data (optional)
+   * @param {Number} operation Operation (optional)
+   * @param {Number} safeTxGas Safe tx gas (optional)
+   * @param {Number} baseGas Base gas (optional)
+   * @param {Number} gasPrice Gas price (optional)
+   * @param {String} gasToken Gas token (optional)
+   * @param {String} refundReceiver Refund receiver (optional)
+   * @param {String} apiHost API host (optional)
+   * @param {String} jsonRpcUrl JSON RPC URL (optional)
    * @returns {Object} {success, txHash, errors}
    */
   async executeTx ({
@@ -97,11 +106,13 @@ class WalletSDK {
     baseGas = 0,
     gasPrice = 0,
     gasToken = '0x0000000000000000000000000000000000000000',
-    refundReceiver = '0x0000000000000000000000000000000000000000'
+    refundReceiver = '0x0000000000000000000000000000000000000000',
+    apiHost = this.apiHost,
+    jsonRpcUrl = this.jsonRpcUrl
   }) {
     return executeTx({
-      apiHost: this.apiHost,
-      jsonRpcUrl: this.jsonRpcUrl,
+      apiHost,
+      jsonRpcUrl,
       safe,
       privateKey,
       to,
@@ -122,13 +133,13 @@ class WalletSDK {
    * @param {String} privateKey Safe owner's private key
    * @param {String} to To
    * @param {Number} value Value
-   * @param {String} data Data
-   * @param {Number} operation Operation
-   * @param {Number} safeTxGas Safe tx gas
-   * @param {Number} baseGas Base gas
-   * @param {Number} gasPrice Gas price
-   * @param {String} gasToken Gas token
-   * @param {String} refundReceiver Refund receiver
+   * @param {String} data Data (optional)
+   * @param {Number} operation Operation (optional)
+   * @param {Number} safeTxGas Safe tx gas (optional)
+   * @param {Number} baseGas Base gas (optional)
+   * @param {Number} gasPrice Gas price (optional)
+   * @param {String} gasToken Gas token (optional)
+   * @param {String} refundReceiver Refund receiver (optional)
    * @param {Number} nonce Safe's nonce
    * @returns {String} Signature
    */
@@ -138,13 +149,13 @@ class WalletSDK {
     to,
     value,
     data = '0x',
-    nonce = 0,
     operation = 0,
     safeTxGas = 0,
     baseGas = 0,
     gasPrice = 0,
     gasToken = '0x0000000000000000000000000000000000000000',
-    refundReceiver = '0x0000000000000000000000000000000000000000'
+    refundReceiver = '0x0000000000000000000000000000000000000000',
+    nonce
   }) {
     return signTx({
       safe,
@@ -165,10 +176,12 @@ class WalletSDK {
   /**
    * Function to get owner of ENS identifier
    * @param {String} name ENS identifier (e.g 'alice.eth')
+   * @param {String} chain Chain identifier (optional)
+   * @param {String} jsonRpcUrl JSON RPC URL (optional)
    * @return {String} ENS identifier owner's address
    */
-  async getEnsOwner (name) {
-    return getEnsOwner({ name, chain: this.chain, jsonRpcUrl: this.jsonRpcUrl })
+  async getEnsOwner (name, chain = this.chain, jsonRpcUrl = this.jsonRpcUrl) {
+    return getEnsOwner({ name, chain, jsonRpcUrl })
   }
 }
 
