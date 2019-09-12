@@ -41,6 +41,7 @@ class DappConfirm extends React.Component {
       from: contractAddress,
       data: data || '0x0',
       to: to || '0x0',
+      operationType: 0,
       value: value || '0x0'
     }
     const { txHash, success, errors } = await sdk.execute(message, privateKey)

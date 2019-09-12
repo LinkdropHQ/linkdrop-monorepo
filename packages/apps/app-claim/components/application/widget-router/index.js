@@ -46,11 +46,11 @@ class WidgetRouter extends React.Component {
           screen: 'CONFIRM_TRANSACTION_SCREEN',
           txParams
         })
-        return this._showModalAndWaitUserAction()
+        return this._awaitUserTransactionConfirmation()
       },
       connect: (ensName) => {
         this.setState({ screen: 'CONNECT_SCREEN' })
-        return this._showModalAndWaitUserAction()
+        return this._awaitUserConnectConfirmation()
       },
       getAccounts () {
         const contractAddress = component._getContractAddress()
@@ -66,14 +66,37 @@ class WidgetRouter extends React.Component {
     const { contractAddress } = this.props
     return contractAddress
   }
-  
-  _showModalAndWaitUserAction () { 
+
+  _awaitUserTransactionConfirmation () { 
+    return new Promise(async (resolve, reject) => {
+      widgetService.showWidget()
+      
+      // wait for user input
+      widgetService.eventEmitter.on('userAction', ({ action, payload }) => {
+
+        widgetService.hideWidget()
+        
+        // resolve or reject
+        if (action === 'confirm') {
+          resolve(payload)
+        } else { // on close click          
+          reject(new Error('User rejected action'))
+        }
+
+        setTimeout(() => {
+          this.setState({ screen: null })
+        }, 500)
+      })
+    })
+  }
+
+  _awaitUserConnectConfirmation () { 
     return new Promise(async (resolve, reject) => {
       
       // wait for user input
       widgetService.eventEmitter.on('userAction', ({ action, payload }) => {
         
-        // resolve or reject
+        // resolve or close modal
         if (action === 'confirm') {
           resolve(payload)
           setTimeout(() => {
@@ -84,14 +107,12 @@ class WidgetRouter extends React.Component {
           if (window.location.hash.indexOf('/receive') === -1) {
             widgetService.hideWidget()
           }
-          
         } else { // on close click          
           widgetService.hideWidget()
         }
       })
     })
-  }
-  
+  }  
   
   render () {
     const { sdk, privateKey, contractAddress, ens } = this.props
