@@ -14,6 +14,11 @@ class ENSService {
       relayerWalletService.wallet
     )
   }
+
+  getOwner (name) {
+    const node = ethers.utils.namehash(name)
+    return this.ens.owner(node)
+  }
 }
 
 export default new ENSService()

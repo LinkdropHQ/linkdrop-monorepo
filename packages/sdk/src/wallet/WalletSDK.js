@@ -4,6 +4,7 @@ import { computeSafeAddress } from './computeSafeAddress'
 import { createSafe } from './createSafe'
 import { signTx } from './signTx'
 import { executeTx } from './executeTx'
+import { getEnsOwner } from './ensUtils'
 
 class WalletSDK {
   constructor (chain = 'rinkeby') {
@@ -159,6 +160,15 @@ class WalletSDK {
       refundReceiver,
       nonce
     })
+  }
+
+  /**
+   * Function to get owner of ENS identifier
+   * @param {String} name ENS identifier (e.g 'alice.eth')
+   * @return {String} ENS identifier owner's address
+   */
+  async getEnsOwner (name) {
+    return getEnsOwner({ name, chain: this.chain, jsonRpcUrl: this.jsonRpcUrl })
   }
 }
 
