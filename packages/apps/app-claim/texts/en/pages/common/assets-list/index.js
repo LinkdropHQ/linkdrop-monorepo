@@ -6,6 +6,7 @@ export default {
     empty: 'Your future tokens<br/>will be organized here'
   },
   buttons: {
-    goTo: 'Swap Tokens'
+    goTo: 'Swap Tokens',
+    continue: 'Continue'
   }
 }
