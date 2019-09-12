@@ -18,7 +18,6 @@
 
 export const styles = `
 .ld-widget-container {
-  position: fixed;
   width: 100%;    
   top: 0px;
   height: 100%;
@@ -28,7 +27,7 @@ export const styles = `
 .ld-widget-iframe {
   position: absolute;
   height: 450px;
-  display: block;
+  display: none;
   bottom: 85px;
   right: 20px;
   border: none;

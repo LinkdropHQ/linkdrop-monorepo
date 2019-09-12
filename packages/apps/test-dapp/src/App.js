@@ -14,22 +14,36 @@ class App extends React.Component {
     this.state = {
       address: null,
       connected: false,
-      ensNameInput: 'wallet.linkdrop.io',
       loading: true
     }
-    this.walletWindow = null    
+    this.walletWindow = null
   }
 
   async componentDidMount () {
-    const { ensName, network, widgetUrl } = this._getParamsFromUrl()
+    const { network } = this._getParamsFromUrl()
     this.network = network
-    if (ensName) {
-      this._connect(ensName, network, widgetUrl)
-    }
+    this._initProvider()
+
     this.setState({
       loading: false
     })
   }
+
+  async _initProvider () {
+    const urlParams = this._getParamsFromUrl()
+    const network = urlParams.network
+    const widgetUrl = urlParams.widgetUrl
+    
+    console.log('getting provider...')
+    this.widget = new WalletProvider({
+      ensName: 'wallet.linkdrop.io',
+      network,
+      widgetUrl
+    })
+
+    this._connect()
+  }
+  
   
   _getParamsFromUrl () {
     let ensName
@@ -48,24 +62,15 @@ class App extends React.Component {
     return { ensName, network, widgetUrl }
   }
   
-  async _connect (ensName, network, widgetUrl) {
+  async _connect () {
     try {
-      const urlParams = this._getParamsFromUrl()
-
-      ensName = ensName || urlParams.ensName
-      network = network || urlParams.network
-      widgetUrl = widgetUrl || urlParams.widgetUrl
       
-      console.log('getting provider...')
-      const card = new WalletProvider({ ensName, network, widgetUrl })
-      
-      await card.provider.enable()
+      await this.widget.provider.enable()
       
       console.log('got provider')
-      this.provider = card.provider
-      this.web3 = new Web3(card.provider)
-      // console.log('got web3 ', this.web3)
 
+      this.web3 = new Web3(this.widget.provider)
+      
       const accs = await this.web3.eth.getAccounts()
       console.log({ accs })
       const address = accs[0]
@@ -73,8 +78,7 @@ class App extends React.Component {
 
       const balance = await this.web3.eth.getBalance(address)
       this.setState({
-        connected: true,
-        ensName
+        connected: true
       })
       console.log({
         balance
@@ -106,7 +110,7 @@ class App extends React.Component {
     zeroExInstant.render(
       {
           orderSource: 'https://api.radarrelay.com/0x/v2/',
-          provider: this.provider
+          provider: this.widget.provider
         },
       '.page-widget'
     )
@@ -124,7 +128,8 @@ class App extends React.Component {
         <Button
           className={styles.button}
           onClick={() => {
-            this._connect(this.state.ensNameInput)
+            this.widget._showWidget()
+            // this._connect(this.state.ensNameInput)
           }}
         >
           Connect

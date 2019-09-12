@@ -22,7 +22,6 @@ class Provider {
     if (!opts.network) {
       throw new Error('network should be provided')
     }
-    this.widget = null
     this.provider = this._initProvider()
   }
 
@@ -41,29 +40,36 @@ class Provider {
     }, false)
   }
 
-  _toggleWidget () {
-    this.widget.iframe.style.display = (this.widget.iframe.style.display === 'none') ? 'block' : 'none'
+  async _toggleWidget () {
+    this.widget.iframe.style.display = (this.widget.iframe.style.display === 'block') ? 'none' : 'block'
   }
   
   _initWidget () {
     return new Promise((resolve, reject) => {
       const onload = async () => {
-        const style = document.createElement('style')
-        style.innerHTML = styles
-
         const container = document.createElement('div')
         container.className = 'ld-widget-container'
-                
+
+        const style = document.createElement('style')
+        style.innerHTML = styles
+        
         const iframe = document.createElement('iframe')
         // iframe.src = this.widgetUrl || 'https://demo.wallet.linkdrop.io/'
-        iframe.src = this.widgetUrl || 'http://localhost:9002'
-        //iframe.src = this.widgetUrl || 'http://localhost:9002/#/receive?weiAmount=10000000000000000&tokenAddress=0xa3b5fdeb5dbc592ffc5e222223376464b9c56fb8&tokenAmount=25000000000000000000&expirationTime=1900000000000&version=1&chainId=1&linkKey=0x3ca4d810347f1d8dcb4c9407c1345356a18d12ea35fcf5c5a7828d11448a76e9&linkdropMasterAddress=0x6c0f58ad4eb24da5769412bf34ddee698c4d185b&linkdropSignerSignature=0x10c69d7836aa78bc73e6fe55354853c825f7987e0955fa644b883ca6547382b16915a21213b7922aeb8a05c6380d5cc9ffcf2656f973396c4aa17673652a4fe51b&campaignId=10&dappId=zrx-instant'
+        let iframeSrc = this.widgetUrl || 'http://localhost:9002'
+
+        // propagate claim params to iframe window
+        if (window.location.hash.indexOf('#/receive') > -1) {
+          iframeSrc += window.location.hash
+        }        
+        
+        iframe.src = iframeSrc
         iframe.className = 'ld-widget-iframe'
         
         container.appendChild(iframe)
         document.body.appendChild(container)
         document.head.appendChild(style)
-
+        
+        
         const connection = connectToChild({
           // The iframe to which a connection should be made
           iframe,
@@ -87,21 +93,37 @@ class Provider {
   }
 
   _showWidget () {
-    this.widget.iframe.style.display = 'block'
+    if (this.widget) { 
+      this.widget.iframe.style.display = 'block'
+    }
   }
 
   _hideWidget () {
-    this.widget.iframe.style.display = 'none'
+    if (this.widget) {     
+      this.widget.iframe.style.display = 'none'
+    }
   }
+
+  async _initWidgetFrame () {
+    this.widget = await this._initWidget()
+    this._addWidgetIcon()
+   }
   
   _initProvider () {
     const engine = new ProviderEngine()
     let address
     
     engine.enable = async () => {
-      this.widget = await this._initWidget()
-      this._addWidgetIcon()
-      await this.widget.communication.connect()
+      await this._initWidgetFrame()
+      
+      // this._showWidget()
+      try {
+        await this.widget.communication.connect()
+        // this._hideWidget()
+      } catch (err) {
+        /// this._hideWidget()
+        throw err
+      }
     }
 
     async function handleRequest (payload) {
@@ -187,6 +209,8 @@ class Provider {
         let result, error
         try {
           result = await this.widget.communication.getAccounts()
+          console.log({ result })
+          address = result[0]
         } catch (err) {
           error = err
         }

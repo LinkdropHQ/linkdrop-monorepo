@@ -1,11 +1,10 @@
 import React from 'react'
 import { translate, actions } from 'decorators'
 import styles from './styles.module'
-import { getHashVariables, defineNetworkName } from '@linkdrop/commons'
-import dapps from 'dapps'
 import classNames from 'classnames'
 import { Icons, Button } from '@linkdrop/ui-kit'
 import { AssetBalance } from 'components/common'
+import widgetService from 'data/api/widget'
 
 @actions(({ user: { ens }, assets: { items } }) => ({
   items,
@@ -21,19 +20,7 @@ class AssetsList extends React.Component {
   }
 
   renderDappButton () {
-    const {
-      dappId
-    } = getHashVariables()
-    if (!dappId) { return null }
-    const dapp = dapps[dappId]
-    if (!dapp) { return null }
-    const { label, url } = dapp
-    const { ens } = this.props
-    const { chainId } = getHashVariables()
-    const network = defineNetworkName({ chainId })
-    const widgetUrl = encodeURIComponent(`${window.origin}/#/widget`)
-    const dappUrl = `${url}?user=${ens}&network=${network}&widgetUrl=${widgetUrl}`
-    return <Button className={styles.button} inverted href={dappUrl} target='_blank'>{this.t('buttons.goTo', { title: label })}</Button>
+    return <Button className={styles.button} inverted onClick={() => widgetService.hideWidget()} >{this.t('buttons.continue')}</Button>
   }
 
   render () {
