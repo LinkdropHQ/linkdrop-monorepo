@@ -46,15 +46,19 @@ class SafeCreationService {
     try {
       logger.info('Creating new safe...')
 
-      const gnosisSafeData = this.sdk.encodeParams(GnosisSafe.abi, 'setup', [
-        [owner], // owners
-        1, // threshold
-        ADDRESS_ZERO, // to
-        BYTES_ZERO, // data,
-        ADDRESS_ZERO, // payment token address
-        0, // payment amount
-        ADDRESS_ZERO // payment receiver address
-      ])
+      const gnosisSafeData = sdkService.walletSDK.encodeParams(
+        GnosisSafe.abi,
+        'setup',
+        [
+          [owner], // owners
+          1, // threshold
+          ADDRESS_ZERO, // to
+          BYTES_ZERO, // data,
+          ADDRESS_ZERO, // payment token address
+          0, // payment amount
+          ADDRESS_ZERO // payment receiver address
+        ]
+      )
       logger.debug(`gnosisSafeData: ${gnosisSafeData}`)
 
       const saltNonce = new Date().getTime()
@@ -79,7 +83,7 @@ class SafeCreationService {
       return { success: true, txHash: tx.hash, safe }
     } catch (err) {
       logger.error(err)
-      return { success: false, errors: err }
+      return { success: false, errors: err.message || err }
     }
   }
 
@@ -87,15 +91,25 @@ class SafeCreationService {
     try {
       logger.info('Creating new safe with ENS...')
 
-      const gnosisSafeData = this.sdk.encodeParams(GnosisSafe.abi, 'setup', [
-        [owner], // owners
-        1, // threshold
-        ADDRESS_ZERO, // to
-        BYTES_ZERO, // data,
-        ADDRESS_ZERO, // payment token address
-        0, // payment amount
-        ADDRESS_ZERO // payment receiver address
-      ])
+      const ensOwner = await ensService.getOwner(name)
+      assert.true(
+        ensOwner === ADDRESS_ZERO,
+        'Provided name already has an owner'
+      )
+
+      const gnosisSafeData = sdkService.walletSDK.encodeParams(
+        GnosisSafe.abi,
+        'setup',
+        [
+          [owner], // owners
+          1, // threshold
+          ADDRESS_ZERO, // to
+          BYTES_ZERO, // data,
+          ADDRESS_ZERO, // payment token address
+          0, // payment amount
+          ADDRESS_ZERO // payment receiver address
+        ]
+      )
       logger.debug(`gnosisSafeData: ${gnosisSafeData}`)
 
       const saltNonce = new Date().getTime()
@@ -136,7 +150,7 @@ class SafeCreationService {
       )
       logger.debug(`registerEnsData: ${registerEnsData}`)
 
-      const registerEnsMultiSendData = sdkService.walletSDK.encodeData(
+      const registerEnsMultiSendData = sdkService.walletSDK.encodeDataForMultiSend(
         CALL_OP,
         registrar.address,
         0,
@@ -166,7 +180,7 @@ class SafeCreationService {
       return { success: true, txHash: tx.hash, safe }
     } catch (err) {
       logger.error(err)
-      return { success: false, errors: err }
+      return { success: false, errors: err.message || err }
     }
   }
 }

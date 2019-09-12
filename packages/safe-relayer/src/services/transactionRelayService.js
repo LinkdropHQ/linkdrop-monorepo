@@ -43,7 +43,7 @@ class TransactionRelayService {
       return { success: true, txHash: tx.hash }
     } catch (err) {
       logger.error(err)
-      return { success: false, errors: err }
+      return { success: false, errors: err.message || err }
     }
   }
 }

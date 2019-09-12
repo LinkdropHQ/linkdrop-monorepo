@@ -18,7 +18,7 @@ class ENSService {
 
   async getOwner (name) {
     return sdkService.walletSDK.getEnsOwner({
-      name,
+      name: `${name}.${ENS_DOMAIN}`,
       chain: relayerWalletService.chain,
       jsonRpcUrl: relayerWalletService.jsonRpcUrl
     })
