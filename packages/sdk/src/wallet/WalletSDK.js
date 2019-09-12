@@ -180,7 +180,11 @@ class WalletSDK {
    * @param {String} jsonRpcUrl JSON RPC URL (optional)
    * @return {String} ENS identifier owner's address
    */
-  async getEnsOwner (name, chain = this.chain, jsonRpcUrl = this.jsonRpcUrl) {
+  async getEnsOwner ({
+    name,
+    chain = this.chain,
+    jsonRpcUrl = this.jsonRpcUrl
+  }) {
     return getEnsOwner({ name, chain, jsonRpcUrl })
   }
 }
