@@ -7,6 +7,9 @@ import safeCreationService from '../services/safeCreationService'
 
 export const create = wrapAsync(async (req, res, next) => {
   try {
+    logger.info('POST api/v1/safes/create')
+    logger.json(req.body, 'info')
+
     const { owner } = req.body
     assert.string(owner, 'Owner is required')
 
@@ -27,6 +30,9 @@ export const create = wrapAsync(async (req, res, next) => {
 
 export const createWithENS = wrapAsync(async (req, res, next) => {
   try {
+    logger.info('POST api/v1/safes/createWithENS')
+    logger.json(req.body, 'info')
+
     const { owner, name } = req.body
     assert.string(owner, 'Owner is required')
     assert.string(name, 'Name is required')

@@ -5,7 +5,7 @@ import {
   getParamFromTxEvent
 } from './utils'
 import { computeSafeAddress } from './computeSafeAddress'
-import { createSafe } from './createSafe'
+import { create, createWithENS } from './createSafe'
 import { signTx } from './signTx'
 import { executeTx } from './executeTx'
 import { getEnsOwner } from './ensUtils'
@@ -74,8 +74,19 @@ class WalletSDK {
    * @param {String} apiHost API host (optional)
    * @returns {Object} {success, txHash, safe, errors}
    */
-  async createSafe (owner, apiHost = this.apiHost) {
-    return createSafe({ apiHost, owner })
+  async create ({ owner, apiHost = this.apiHost }) {
+    return create({ owner, apiHost })
+  }
+
+  /**
+   * Function to create new safe
+   * @param {String} owner Safe owner's address
+   * @param {String} name ENS name to register for safe
+   * @param {String} apiHost API host (optional)
+   * @returns {Object} {success, txHash, safe, errors}
+   */
+  async createWithENS ({ owner, name, apiHost = this.apiHost }) {
+    return createWithENS({ owner, name, apiHost })
   }
 
   /**

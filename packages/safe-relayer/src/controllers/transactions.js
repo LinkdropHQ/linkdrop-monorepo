@@ -7,6 +7,9 @@ import transactionRelayService from '../services/transactionRelayService'
 
 export const executeTx = wrapAsync(async (req, res, next) => {
   try {
+    logger.info('POST api/v1/safes/execute')
+    logger.json(req.body, 'info')
+
     const {
       safe,
       to,

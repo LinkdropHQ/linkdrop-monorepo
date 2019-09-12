@@ -8,24 +8,25 @@ import sdkService from './sdkService'
 class ENSService {
   constructor () {
     assert.string(ENS_ADDRESS, 'Please provide ens address of the network')
+    assert.string(ENS_DOMAIN, 'Ens domain is required')
 
     this.ens = new ethers.Contract(
       ENS_ADDRESS,
       ENS.abi,
       relayerWalletService.wallet
     )
+    this.ensDomain = ENS_DOMAIN
   }
 
   async getOwner (name) {
     return sdkService.walletSDK.getEnsOwner({
-      name: `${name}.${ENS_DOMAIN}`,
+      name,
       chain: relayerWalletService.chain,
       jsonRpcUrl: relayerWalletService.jsonRpcUrl
     })
   }
 
   async getRegistrarContract () {
-    assert.string(ENS_DOMAIN, 'Ens domain is required')
     const registrar = await this.getOwner(ENS_DOMAIN)
     return new ethers.Contract(
       registrar,
