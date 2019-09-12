@@ -5,6 +5,7 @@ import styles from './styles.module'
 import { translate, actions } from 'decorators'
 import { getHashVariables } from '@linkdrop/commons'
 import { utils } from 'ethers'
+import widgetService from 'data/api/widget'
 
 @actions(({ user: { ens, contractAddress, sdk, privateKey }, assets: { itemsToClaim } }) => ({ contractAddress, ens, sdk, privateKey, itemsToClaim }))
 @translate('pages.dappConfirm')
@@ -44,17 +45,17 @@ class DappConfirm extends React.Component {
     }
     const { txHash, success, errors } = await sdk.execute(message, privateKey)
     
-    this.props.onConfirmClick({ txHash, success, errors })
+    widgetService.onConfirmClick({ txHash, success, errors })
   }
   
   render () {
     // dont pay much attention to the name of variable itemsToClaim, I will change it soon
-    const { itemsToClaim, onCancelClick } = this.props
+    const { itemsToClaim } = this.props
     const currentAsset = itemsToClaim[itemsToClaim.length - 1] // hack to update values as action adds new assets in array on view update
     return <div className={styles.container}>
       <DappHeader
         title={this.t('titles.wallet')}
-        onClose={onCancelClick}
+        onClose={() => widgetService.onCloseClick()}
       />
 
       <div className={styles.content}>
