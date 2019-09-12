@@ -35,7 +35,6 @@ class AppRouter extends React.Component {
 
   render () {
     const { sdk, privateKey, contractAddress, ens } = this.props
-    console.log('from router.js', { sdk, privateKey, contractAddress, ens })
     if (!sdk) {
       return <Loading />
     }

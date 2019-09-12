@@ -12,11 +12,10 @@ class AccountBalance extends React.Component {
     const { loading, items } = this.props
     const finalPrice = countFinalPrice({ items })
     const coreAsset = this.defineCoreAsset({ items })
-    if (!coreAsset) { return null }
-    const currency = this.renderCurrency({ coreAsset, finalPrice })
-    const balance = this.renderBalance({ coreAsset, finalPrice })
+    const currency = this.renderCurrency({ loading, coreAsset, finalPrice })
+    const balance = this.renderBalance({ loading, coreAsset, finalPrice })
     return <div className={classNames(styles.container, {
-      [styles.loading]: loading
+      [styles.loading]: loading || items === null
     })}
     >
       <span className={styles.currency}>{currency}</span>
@@ -25,6 +24,7 @@ class AccountBalance extends React.Component {
   }
 
   defineCoreAsset ({ items }) {
+    if (!items) return null
     const eth = items.find(item => item.tokenAddress === ethers.constants.AddressZero)
     if (eth) { return eth }
     const assetWithPrice = items.find(item => item.price > 0)
@@ -32,18 +32,20 @@ class AccountBalance extends React.Component {
     if (items[0]) { return items[0] }
   }
 
-  renderCurrency ({ coreAsset, finalPrice }) {
-    if (finalPrice && finalPrice > 0) return '$'
+  renderCurrency ({ loading, coreAsset, finalPrice }) {
+    if ((finalPrice && finalPrice > 0) || loading || !coreAsset) return '$'
     return <img src={coreAsset.icon} />
   }
 
-  renderBalance ({ coreAsset, finalPrice }) {
+  renderBalance ({ loading, coreAsset, finalPrice }) {
+    if (loading || !coreAsset) return 0
     if (finalPrice != null && Number(finalPrice.toFixed(2)) > 0) {
       return finalPrice
     }
     if (coreAsset && Number(coreAsset.balanceFormatted) > 0) {
       return coreAsset.balanceFormatted
     }
+    return 0
   }
 }
 
