@@ -12,8 +12,9 @@
   "dependencies": {
     "@ensdomains/ens": "^0.3.11",
     "@linkdrop/contracts": "^1.0.47",
-    "@universal-login/commons": "^0.3.18",
-    "@universal-login/sdk": "^0.3.18",
+    "@universal-login/commons": "0.3.18",
+    "@universal-login/contracts": "0.3.18",    
+    "@universal-login/sdk": "0.3.18",
     "axios": "^0.18.1",
     "buffer": "^5.2.1",
     "eth-sig-util": "^2.3.0",
