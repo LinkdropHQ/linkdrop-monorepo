@@ -7,8 +7,8 @@ import sdkService from './sdkService'
 
 class ENSService {
   constructor () {
-    assert.string(ENS_ADDRESS, 'Please provide ens address of the network')
-    assert.string(ENS_DOMAIN, 'Ens domain is required')
+    assert.string(ENS_ADDRESS, 'ENS address is required')
+    assert.string(ENS_DOMAIN, 'ENS domain is required')
 
     this.ens = new ethers.Contract(
       ENS_ADDRESS,

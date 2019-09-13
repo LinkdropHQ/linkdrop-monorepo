@@ -4,17 +4,17 @@ import * as safesController from '../controllers/safes'
 const router = express.Router()
 
 /**
- * @route POST api/v1/safes/create
+ * @route POST api/v1/safes/
  * @desc Create new safe
  * @access Public
  */
-router.post('/create', safesController.create)
+router.post('/', safesController.create)
 
 /**
- * @route POST api/v1/safes/createWithENS
- * @desc Create new safe and initialize with ens name
+ * @route POST api/v1/safes/claimAndCreate
+ * @desc Claim linkdrop, create new safe and initialize it with ens name
  * @access Public
  */
-router.post('/createWithENS', safesController.createWithENS)
+router.post('/claimAndCreate', safesController.claimAndCreate)
 
 export default router

@@ -5,16 +5,22 @@ import {
   getParamFromTxEvent
 } from './utils'
 import { computeSafeAddress } from './computeSafeAddress'
-import { create, createWithENS } from './createSafe'
+import { create, claimAndCreate } from './createSafe'
 import { signTx } from './signTx'
 import { executeTx } from './executeTx'
 import { getEnsOwner } from './ensUtils'
 
 class WalletSDK {
-  constructor (chain = 'rinkeby') {
+  constructor (
+    chain = 'rinkeby',
+    gnosisSafeMasterCopy = '0xb6029EA3B2c51D09a50B53CA8012FeEB05bDa35A', // from https://safe-relay.gnosis.pm/api/v1/about/
+    proxyFactory = '0x12302fE9c02ff50939BaAaaf415fc226C078613C' // from https://safe-relay.gnosis.pm/api/v1/about/
+  ) {
     this.chain = chain
     this.jsonRpcUrl = `https://${chain}.infura.io`
     this.apiHost = 'http://localhost:5050'
+    this.gnosisSafeMasterCopy = gnosisSafeMasterCopy
+    this.proxyFactory = proxyFactory
   }
 
   /**
@@ -50,13 +56,12 @@ class WalletSDK {
    * @param {String | Number} saltNonce Random salt nonce
    * @param {String} gnosisSafeMasterCopy Deployed gnosis safe mastercopy address
    * @param {String} proxyFactory Deployed proxy factory address
-   * @param {String} jsonRpcUrl JSON RPC URL (optional)
    */
-  async computeSafeAddress ({
+  computeSafeAddress ({
     owner,
     saltNonce,
-    gnosisSafeMasterCopy = '0xb6029EA3B2c51D09a50B53CA8012FeEB05bDa35A', // from https://safe-relay.gnosis.pm/api/v1/about/
-    proxyFactory = '0x12302fE9c02ff50939BaAaaf415fc226C078613C', // from https://safe-relay.gnosis.pm/api/v1/about/
+    gnosisSafeMasterCopy = this.gnosisSafeMasterCopy,
+    proxyFactory = this.proxyFactory,
     jsonRpcUrl = this.jsonRpcUrl
   }) {
     return computeSafeAddress({
@@ -71,22 +76,12 @@ class WalletSDK {
   /**
    * Function to create new safe
    * @param {String} owner Safe owner's address
-   * @param {String} apiHost API host (optional)
-   * @returns {Object} {success, txHash, safe, errors}
-   */
-  async create ({ owner, apiHost = this.apiHost }) {
-    return create({ owner, apiHost })
-  }
-
-  /**
-   * Function to create new safe
-   * @param {String} owner Safe owner's address
    * @param {String} name ENS name to register for safe
    * @param {String} apiHost API host (optional)
    * @returns {Object} {success, txHash, safe, errors}
    */
-  async createWithENS ({ owner, name, apiHost = this.apiHost }) {
-    return createWithENS({ owner, name, apiHost })
+  async create ({ owner, name, apiHost = this.apiHost }) {
+    return create({ owner, name, apiHost })
   }
 
   /**
@@ -197,6 +192,55 @@ class WalletSDK {
     jsonRpcUrl = this.jsonRpcUrl
   }) {
     return getEnsOwner({ name, chain, jsonRpcUrl })
+  }
+
+  /**
+   *
+   * @param {String} weiAmount Wei amount
+   * @param {String} tokenAddress Token address
+   * @param {String} tokenAmount Token amount
+   * @param {String} expirationTime Link expiration timestamp
+   * @param {String} linkKey Ephemeral key assigned to link
+   * @param {String} linkdropMasterAddress Linkdrop master address
+   * @param {String} linkdropSignerSignature Linkdrop signer signature
+   * @param {String} campaignId Campaign id
+   * @param {String} gnosisSafeMasterCopy Deployed gnosis safe mastercopy address (optional)
+   * @param {String} proxyFactory Deployed proxy factory address (optional)
+   * @param {String} owner Safe owner address
+   * @param {String} name ENS name to register for safe
+   * @param {String} apiHost API host (optional)
+   * @returns {Object} {success, txHash, safe, errors}
+   */
+  async claimAndCreate ({
+    weiAmount,
+    tokenAddress,
+    tokenAmount,
+    expirationTime,
+    linkKey,
+    linkdropMasterAddress,
+    linkdropSignerSignature,
+    campaignId,
+    gnosisSafeMasterCopy = this.gnosisSafeMasterCopy,
+    proxyFactory = this.proxyFactory,
+    owner,
+    name,
+    apiHost = this.apiHost
+  }) {
+    return claimAndCreate({
+      weiAmount,
+      tokenAddress,
+      tokenAmount,
+      expirationTime,
+      linkKey,
+      linkdropMasterAddress,
+      linkdropSignerSignature,
+      campaignId,
+      gnosisSafeMasterCopy,
+      proxyFactory,
+      owner,
+      name,
+      apiHost
+    })
   }
 }
 
