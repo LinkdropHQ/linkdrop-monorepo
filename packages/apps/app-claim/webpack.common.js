@@ -100,12 +100,9 @@ module.exports = {
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
     new webpack.DefinePlugin({
-      JSON_RPC_URL: JSON.stringify(process.env.JSON_RPC_URL),
       MASTER_COPY: JSON.stringify(process.env.MASTER_COPY),
       FACTORY: JSON.stringify(process.env.FACTORY),
-      API_HOST_RINKEBY: JSON.stringify(process.env.API_HOST_RINKEBY),
-      API_HOST_MAINNET: JSON.stringify(process.env.API_HOST_MAINNET),
-      CLAIM_HOST: JSON.stringify(process.env.CLAIM_HOST),
+      INFURA_PK: JSON.stringify(process.env.INFURA_PK),
       INITIAL_BLOCK_RINKEBY: JSON.stringify(process.env.INITIAL_BLOCK_RINKEBY),
       INITIAL_BLOCK_MAINNET: JSON.stringify(process.env.INITIAL_BLOCK_MAINNET),
       'process.env': {
