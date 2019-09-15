@@ -23,6 +23,10 @@ const generator = function * ({ payload }) {
       decimals = 18
       symbol = 'DAI'
       icon = `https://trustwalletapp.com/images/tokens/${tokenAddress.toLowerCase()}.png`
+    } else if (tokenAddress.toLowerCase() === '0xeb269732ab75a6fd61ea60b06fe994cd32a83549') {
+      decimals = 18
+      symbol = 'USDx'
+      icon = `https://trustwalletapp.com/images/tokens/${tokenAddress.toLowerCase()}.png`
     } else {
       const contract = yield new ethers.Contract(tokenAddress, TokenMock.abi, provider)
       decimals = yield contract.decimals()
