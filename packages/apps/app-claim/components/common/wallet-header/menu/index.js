@@ -63,7 +63,7 @@ class Menu extends React.Component {
     const { gapiObj } = this.state
     const MENU = [
       {
-        title: text('common.walletHeader.menu.addFunds'),
+        title: text('common.walletHeader.menu.buyTokens'),
         onClick: _ => this.actions().user.setMoonpayShow({ moonpayShow: true }),
         color: variables.greenColor,
         logo: '$'

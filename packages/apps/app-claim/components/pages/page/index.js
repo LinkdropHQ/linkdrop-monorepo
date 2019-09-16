@@ -24,12 +24,12 @@ class Page extends React.Component {
   }
 
   render () {
-    const { dynamicHeader, moonpayShow, children, hideHeader } = this.props
+    const { dynamicHeader, moonpayShow, children, hideHeader, disableProfile } = this.props
     return <div className={classNames(styles.container, {
       [styles.hideHeader]: hideHeader
     })}
     >
-      {this.renderHeader({ hideHeader, dynamicHeader })}
+      {this.renderHeader({ hideHeader, dynamicHeader, disableProfile })}
       <div className={styles.main}>
         {children}
       </div>
@@ -37,9 +37,9 @@ class Page extends React.Component {
     </div>
   }
 
-  renderHeader ({ hideHeader, dynamicHeader }) {
+  renderHeader ({ hideHeader, dynamicHeader, disableProfile }) {
     if (hideHeader) { return null }
-    if (dynamicHeader) { return <WalletHeader /> }
+    if (dynamicHeader) { return <WalletHeader disableProfile={disableProfile} /> }
     return <Header title={this.t('titles.getTokens')} />
   }
 }

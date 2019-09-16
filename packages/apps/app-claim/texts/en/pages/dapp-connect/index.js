@@ -1,7 +1,7 @@
 export default {
   titles: {
     wallet: 'Wallet',
-    loggedIn: 'You logged in as <br><span>{{ens}}</span>'
+    loggedIn: 'Login as<br><span>{{ens}}</span>'
   },
   buttons: {
     continue: 'Continue'

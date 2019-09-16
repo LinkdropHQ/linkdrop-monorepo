@@ -147,14 +147,14 @@ class Authorization extends React.Component {
   render () {
     const { loading } = this.props
     const { enableAuthorize } = this.state
-    return <Page>
+    return <Page dynamicHeader disableProfile>
       <div className={styles.container}>
         <h2 className={styles.title} dangerouslySetInnerHTML={{ __html: this.t('titles.signIn') }} />
         <Button loadingClassName={styles.buttonLoading} className={styles.button} inverted loading={!enableAuthorize || loading} onClick={e => this.handleAuthClick(e)}>
           <RetinaImage width={30} {...getImages({ src: 'google' })} />
           {this.t('titles.googleSignIn')}
         </Button>
-        <div className={styles.note} dangerouslySetInnerHTML={{ __html: this.t('texts.backup', { href: 'https://www.notion.so/linkdrop/Help-Center-9cf549af5f614e1caee6a660a93c489b#49e760a3af404bb99d91450a16fa8a80' }) }} />
+        <div className={styles.note} dangerouslySetInnerHTML={{ __html: this.t('texts.backup', { href: 'https://www.notion.so/linkdrop/Help-Center-9cf549af5f614e1caee6a660a93c489b#d0a28202100d4512bbeb52445e6db95b' }) }} />
       </div>
     </Page>
   }

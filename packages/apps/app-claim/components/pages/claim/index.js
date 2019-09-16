@@ -86,7 +86,6 @@ class Claim extends React.Component {
   }
 
   render () {
-    console.log("rendering receive")
     return <Page dynamicHeader>
       {this.renderCurrentPage()}
     </Page>
@@ -100,8 +99,6 @@ class Claim extends React.Component {
     } = getHashVariables()
     const commonData = { linkdropMasterAddress, chainId, itemsToClaim, loading: userLoading || loading, wallet: contractAddress }
 
-    console.log({ commonData, errors, step })
-    
     if (errors && errors.length > 0) {
       // if some errors occured and can be found in redux store, then show error page
       return <ErrorPage error={errors[0]} />

@@ -9,7 +9,7 @@
   text-align: center;
   font-size: 30px;
   position: relative;
-  font-family: 'Inter-Bold';
+  font-family: 'Inter-Medium';
 
   .headerIcon {
     position: absolute;
@@ -35,7 +35,8 @@
 
   a {
     text-decoration: none!important;
-    color: $blackColor!important;
+    color: $dbBlue!important;
+    font-size: 24px;
   }
 }
 
@@ -88,10 +89,10 @@
   border: 3px solid $greyStrokeMenuColor;
 
   &.avatarSmall {
-    height: 40px;
-    width: 40px;
+    height: 35px;
+    width: 35px;
     border: 2px solid $blackColor;
-    border-radius: 40px;
+    border-radius: 35px;
   }
 }
 

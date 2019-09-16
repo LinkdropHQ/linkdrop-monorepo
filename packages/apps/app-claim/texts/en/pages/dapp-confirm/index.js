@@ -5,9 +5,10 @@ export default {
     spend: 'Spend:'
   },
   buttons: {
-    confirm: 'Confirm'
+    confirm: 'Confirm',
+    cancel: 'Cancel'
   },
   texts: {
-    dapp: 'Always make sure you trust DApps<br/>you interact with <a href={{href}}>Learn more</a>'
+    dapp: 'Always make sure you trust DApps<br/>you interact with <a target="_blank" href={{href}}>Learn more</a>'
   }
 }

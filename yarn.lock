@@ -2293,14 +2293,6 @@
     npmlog "^4.1.2"
     write-file-atomic "^2.3.0"
 
-"@linkdrop/sdk@^1.0.70":
-  version "1.0.73"
-  resolved "https://registry.yarnpkg.com/@linkdrop/sdk/-/sdk-1.0.73.tgz#6d01c24958c8b033d9cedf6e86faa74236812d73"
-  integrity sha512-qSx2ud104Gkw1hHOGJBY4Hrk62S4FdXk44y80kkh9v7pu0cjszCWBX9dzof5T8ZXAZzsLXukFTd7kLXXxqP7Jw==
-  dependencies:
-    axios "^0.18.1"
-    ethers "^4.0.27"
-
 "@mrmlnc/readdir-enhanced@^2.2.1":
   version "2.2.1"
   resolved "https://registry.yarnpkg.com/@mrmlnc/readdir-enhanced/-/readdir-enhanced-2.2.1.tgz#524af240d1a360527b730475ecfa1344aa540dde"
@@ -22721,7 +22713,7 @@ web3-provider-engine@^15.0.0:
     eth-block-tracker "^4.2.0"
     eth-json-rpc-filters "^4.0.2"
     eth-json-rpc-infura "^3.1.0"
-    eth-json-rpc-middleware "github:walletconnect/eth-json-rpc-middleware"
+    eth-json-rpc-middleware "^4.1.1"
     eth-sig-util "^1.4.2"
     ethereumjs-block "^1.2.2"
     ethereumjs-tx "^1.2.0"
@@ -23169,6 +23161,7 @@ websocket@1.0.29:
   dependencies:
     debug "^2.2.0"
     es5-ext "^0.10.50"
+    gulp "^4.0.2"
     nan "^2.14.0"
     typedarray-to-buffer "^3.1.5"
     yaeti "^0.0.6"

@@ -22,20 +22,20 @@ class WalletHeader extends React.Component {
 
   render () {
     const { opened } = this.state
-    const { avatar, ens, chainId } = this.props
+    const { avatar, ens, chainId, disableProfile } = this.props
 
     return <div className={classNames(styles.container, {
       [styles.opened]: opened
     })}
     >
       <div className={styles.header}>
-        <div
+        {!disableProfile && <div
           className={styles.headerIcon} onClick={_ => this.setState({
             opened: !opened
           })}
         >
           {this.renderProfileIcon({ avatar })}
-        </div>
+        </div>}
         <a href={prepareRedirectUrl({ link: '/#/' })}>{this.t('titles.wallet')}</a>
       </div>
       <div className={styles.body}>

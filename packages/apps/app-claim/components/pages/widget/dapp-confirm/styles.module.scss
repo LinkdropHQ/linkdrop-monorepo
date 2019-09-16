@@ -1,7 +1,7 @@
 @import "variables";
 
 .content {
-  padding: 20px 30px 50px;
+  padding: 20px 0px 20px;
   text-align: center;
   display: flex;
   flex-direction: column;
@@ -26,20 +26,35 @@
   }
 }
 
+.controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
 .assets {
   margin-bottom: 10px;
+  width: 100%;
 }
 
 .title {
-  margin-bottom: 40px;
+  margin-bottom: 20px;
   font-size: 24px;
   span {
     color: $dbBlue;
   }
 }
 
-.button {
-  max-width: 300px;
-  min-width: 300px;
+.buttonConfirm {
+  max-width: 198px;
+  min-width: 198px;
   background: $dbBlue;
+}
+
+.buttonCancel {
+  border-color: $textGreyColor;
+  max-width: 90px;
+  color: $textGreyColor;
+  min-width: 90px;
 }
