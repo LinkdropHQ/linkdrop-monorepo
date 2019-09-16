@@ -587,10 +587,10 @@ function () {
               case 0:
                 _context11.prev = 0;
                 message = _objectSpread({}, message, {
-                  operationType: _commons.OPERATION_CALL,
+                  operationType: 0,
                   gasToken: _commons.ETHER_NATIVE_TOKEN.address,
-                  gasLimit: utils.bigNumberify('1000000'),
-                  gasPrice: utils.bigNumberify(String(20e9))
+                  gasLimit: _ethers.utils.bigNumberify('1000000'),
+                  gasPrice: _ethers.utils.bigNumberify(String(30e9))
                 });
                 console.log({
                   message: message
@@ -614,7 +614,7 @@ function () {
                 _context11.t0 = _context11["catch"](0);
                 return _context11.abrupt("return", {
                   errors: _context11.t0,
-                  susccess: false
+                  success: false
                 });
 
               case 14:
