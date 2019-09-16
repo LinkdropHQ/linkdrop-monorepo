@@ -10,7 +10,6 @@ class Page extends React.Component {
       <div className={styles.content}>
         {children}
         <div className='page-widget'>
-
         </div>
       </div>
     </div>

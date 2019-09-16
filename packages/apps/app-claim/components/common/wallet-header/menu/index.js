@@ -72,10 +72,10 @@ class Menu extends React.Component {
         href: prepareRedirectUrl({ link: '/#/send' })
       }, {
         title: text('common.walletHeader.menu.support'),
-        href: 'https://t.me/LinkdropHQ'
+        onClick: _ => window.open('https://t.me/LinkdropHQ', '_blank')
       }, {
         title: text('common.walletHeader.menu.legal'),
-        href: 'https://www.notion.so/Terms-and-Privacy-dfa7d9b85698491d9926cbfe3c9a0a58'
+        onClick: _ => window.open('https://www.notion.so/Terms-and-Privacy-dfa7d9b85698491d9926cbfe3c9a0a58', '_blank')
       }, {
         title: text('common.walletHeader.menu.logOut'),
         onClick: _ => {
@@ -97,7 +97,6 @@ class Menu extends React.Component {
         if (href) {
           return <a
             style={style}
-            traget='_blank'
             key={title}
             href={href}
             className={styles.menuItem}

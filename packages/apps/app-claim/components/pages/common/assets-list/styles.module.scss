@@ -47,15 +47,16 @@
 .button {
   color: $dbBlue;
   border: 1px solid $dbBlue;
-  max-width: 300px;
-  width: 300px;
-  min-width: 300px;
+  max-width: 100%;
+  width: 100%;
+  min-width: 270px;
   margin-bottom: 30px;
 }
 
 .note {
   color: $textGreyColor;
   text-align: center;
+  margin: 0 auto;
   width: 200px;
 }
 

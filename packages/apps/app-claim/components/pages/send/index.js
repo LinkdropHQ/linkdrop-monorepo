@@ -20,7 +20,7 @@ class Send extends React.Component {
     super(props)
     this.state = {
       sendTo: '',
-      currentAsset: (props.items[0] || {}).tokenAddress,
+      currentAsset: ((props.items || {})[0] || {}).tokenAddress,
       amount: null,
       showTx: false,
       error: null

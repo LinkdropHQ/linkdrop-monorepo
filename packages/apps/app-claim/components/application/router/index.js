@@ -1,18 +1,14 @@
 import React from 'react'
 import i18next from 'i18next'
 import { Route, Switch } from 'react-router-dom'
-import { Claim, Widget, NotFound, Wallet, Confirm, Authorization, Send, Receive } from 'components/pages'
+import { Claim, NotFound, Wallet, Confirm, Send, Receive } from 'components/pages'
 import './styles'
-import { Loading } from '@linkdrop/ui-kit'
 import { getHashVariables } from '@linkdrop/commons'
 
 import { actions } from 'decorators'
-@actions(({ user: { sdk, loading, privateKey, contractAddress, ens, loacale } }) => ({
+@actions(({ user: { sdk, loading, loacale } }) => ({
   sdk,
   loading,
-  privateKey,
-  contractAddress,
-  ens,
   loacale
 }))
 class AppRouter extends React.Component {
@@ -24,7 +20,7 @@ class AppRouter extends React.Component {
 
   componentDidMount () {
     const { sdk } = this.props
-    if (!sdk) { 
+    if (!sdk) {
       let {
         chainId
       } = getHashVariables()
@@ -34,15 +30,6 @@ class AppRouter extends React.Component {
   }
 
   render () {
-    const { sdk, privateKey, contractAddress, ens } = this.props
-    if (!sdk) {
-      return <Loading />
-    }
-    // sdk
-    if (sdk && (!ens || !privateKey || !contractAddress)) {
-      return <Authorization />
-    }
-
     return <Switch>
       <Route path='/receive' component={Claim} />
       <Route path='/confirm' component={Confirm} />

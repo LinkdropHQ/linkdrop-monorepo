@@ -1,6 +1,6 @@
 import React from 'react'
 import { Authorization } from 'components/pages'
-//import './styles'
+// import './styles'
 import { Loading } from '@linkdrop/ui-kit'
 import ConnectScreen from './../../pages/widget/dapp-connect'
 import ConfirmTransactionScreen from './../../pages/widget/dapp-confirm'
@@ -26,10 +26,10 @@ class WidgetRouter extends React.Component {
       connected: false
     }
   }
-  
+
   async componentDidMount () {
     const { sdk } = this.props
-    if (!sdk) { 
+    if (!sdk) {
       let {
         chainId
       } = getHashVariables()
@@ -67,19 +67,18 @@ class WidgetRouter extends React.Component {
     return contractAddress
   }
 
-  _awaitUserTransactionConfirmation () { 
+  _awaitUserTransactionConfirmation () {
     return new Promise(async (resolve, reject) => {
       widgetService.showWidget()
-      
+
       // wait for user input
       widgetService.eventEmitter.on('userAction', ({ action, payload }) => {
-
         widgetService.hideWidget()
-        
+
         // resolve or reject
         if (action === 'confirm') {
           resolve(payload)
-        } else { // on close click          
+        } else { // on close click
           reject(new Error('User rejected action'))
         }
 
@@ -90,12 +89,10 @@ class WidgetRouter extends React.Component {
     })
   }
 
-  _awaitUserConnectConfirmation () { 
+  _awaitUserConnectConfirmation () {
     return new Promise(async (resolve, reject) => {
-      
       // wait for user input
       widgetService.eventEmitter.on('userAction', ({ action, payload }) => {
-        
         // resolve or close modal
         if (action === 'confirm') {
           resolve(payload)
@@ -107,24 +104,24 @@ class WidgetRouter extends React.Component {
           if (window.location.hash.indexOf('/receive') === -1) {
             widgetService.hideWidget()
           }
-        } else { // on close click          
+        } else { // on close click
           widgetService.hideWidget()
         }
       })
     })
-  }  
-  
+  }
+
   render () {
     const { sdk, privateKey, contractAddress, ens } = this.props
     if (!sdk) {
       return <Loading />
     }
-    
+
     // sdk
     if (sdk && (!ens || !privateKey || !contractAddress)) {
       return <Authorization />
     }
-    
+
     if (this.state.connected && !this.state.screen) return this._renderAppRouter()
 
     if (this.state.screen === 'CONNECT_SCREEN') {
@@ -134,10 +131,10 @@ class WidgetRouter extends React.Component {
     if (this.state.screen === 'CONFIRM_TRANSACTION_SCREEN') {
       return <ConfirmTransactionScreen txParams={this.state.txParams} />
     }
-    
-    return null
+
+    return this._renderAppRouter()
   }
-  
+
   _renderAppRouter () {
     // rendering wallet router
     return <AppRouter />

@@ -127,6 +127,7 @@ class App extends React.Component {
 
         <Button
           className={styles.button}
+          inverted
           onClick={() => {
             this.widget._showWidget()
             // this._connect(this.state.ensNameInput)
