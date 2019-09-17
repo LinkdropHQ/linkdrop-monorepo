@@ -64,7 +64,7 @@ class Authorization extends React.Component {
 
   async _enableDrivePermissions () {
     try { 
-      await gapiService.enableDrivePermissions
+      await gapiService.enableDrivePermissions()
       await this._syncPrivateKeyWithDrive()
     } catch (err) {
       console.log('Error while enabling Drive permissions: ', err)
@@ -90,7 +90,7 @@ class Authorization extends React.Component {
     const isSignedIn = await gapiService.signIn()
     if (isSignedIn) {
       // if has drive permissions sync with it immediately
-      if (gapiService.hasDrivePermissions) {
+      if (gapiService.hasDrivePermissions()) {
         await this._syncPrivateKeyWithDrive()
       } else {
         // otherwise show screen to enable permissions
