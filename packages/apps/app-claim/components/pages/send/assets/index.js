@@ -33,12 +33,16 @@ class Assets extends React.Component {
       if (a.tokenAddress === currentAsset) { return -1 }
       return 0
     })
-    return <div style={style} className={classNames(styles.container, { [styles.expanded]: expanded })}>
+    return <div
+      style={style}
+      onClick={e => {
+        e.stopPropagation()
+        this.setState({ expanded: !expanded })
+      }}
+      className={classNames(styles.container, { [styles.expanded]: expanded })}
+    >
       <div
-        className={styles.arrow} onClick={e => {
-          e.stopPropagation()
-          this.setState({ expanded: !expanded })
-        }}
+        className={styles.arrow}
       >
         <Icons.ExpandArrow />
       </div>

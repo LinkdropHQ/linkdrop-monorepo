@@ -24,18 +24,18 @@ class Menu extends React.Component {
     }
   }
 
-  componentDidMount () {
-    if (!gapiObj) {
-      const script = document.createElement('script')
-      script.setAttribute('src', 'https://apis.google.com/js/api.js')
-      script.setAttribute('async', true)
-      script.onload = _ => this.handleClientLoad()
-      script.onreadystatechange = function () {
-        if (this.readyState === 'complete') this.onload()
-      }
-      document.body.appendChild(script)
-    }
-  }
+  // componentDidMount () {
+  //   if (!gapiObj) {
+  //     const script = document.createElement('script')
+  //     script.setAttribute('src', 'https://apis.google.com/js/api.js')
+  //     script.setAttribute('async', true)
+  //     script.onload = _ => this.handleClientLoad()
+  //     script.onreadystatechange = function () {
+  //       if (this.readyState === 'complete') this.onload()
+  //     }
+  //     document.body.appendChild(script)
+  //   }
+  // }
 
   handleClientLoad () {
     gapi.load('client:auth2', _ => this.initClient())

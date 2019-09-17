@@ -73,7 +73,7 @@ class WalletHeader extends React.Component {
 
   renderAvatar ({ avatar }) {
     if (!avatar || avatar === 'undefined') {
-      return <div className={styles.avatar}>
+      return <div className={classNames(styles.avatar, styles.avatarDefault)}>
         <Icons.Profile fill={variables.avatarDisabled} width={80} height={80} />
       </div>
     }

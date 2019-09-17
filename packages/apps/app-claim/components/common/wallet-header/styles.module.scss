@@ -99,6 +99,10 @@
     border: 2px solid $blackColor;
     border-radius: 35px;
   }
+
+  &.avatarDefault {
+    border: none;
+  }
 }
 
 .container {
