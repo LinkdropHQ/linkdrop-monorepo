@@ -39,7 +39,7 @@ class ClaimingFinishedPage extends React.Component {
   }
 
   renderDappButton () {
-    return <Button className={styles.button} inverted onClick={() => widgetService.hideWidget()}>{this.t('buttons.continue')}</Button>
+    return <Button className={styles.button} onClick={() => widgetService.hideWidget()}>{this.t('buttons.continue')}</Button>
   }
 }
 
