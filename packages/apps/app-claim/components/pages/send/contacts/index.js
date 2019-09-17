@@ -11,6 +11,7 @@ import config from 'app.config.js'
 @translate('pages.send')
 class Contacts extends React.Component {
   componentDidMount () {
+    window.alert("Contacts page loaded")
     const script = document.createElement('script')
     script.setAttribute('src', 'https://apis.google.com/js/api.js')
     script.setAttribute('async', true)
