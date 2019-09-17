@@ -1,12 +1,13 @@
 /* global gapi */
 import React from 'react'
-import { Button, RetinaImage } from '@linkdrop/ui-kit'
+import { Button, RetinaImage, Icons } from '@linkdrop/ui-kit'
 import styles from './styles.module'
 import { Page } from 'components/pages'
 import { getEns, getImages } from 'helpers'
 import { actions, translate } from 'decorators'
 import config from 'app.config.js'
 import { getHashVariables } from '@linkdrop/commons'
+import classNames from 'classnames'
 
 @actions(({ user: { sdk, privateKey, contractAddress, ens, loading } }) => ({ loading, sdk, contractAddress, privateKey, ens }))
 @translate('pages.authorization')
@@ -47,35 +48,28 @@ class Authorization extends React.Component {
       apiKey: config.authApiKey,
       discoveryDocs: config.authDiscoveryDocs,
       // scope: `${config.authScopeDrive} ${config.authScopeContacts}`
-      fetch_basic_profile: true
-    }).then(_ => {
-      // Listen for sign-in state changes.
-      const authInstance = gapi.auth2.getAuthInstance()
-      authInstance.isSignedIn.listen(isSignedIn => this.updateSigninStatus({ authInstance }))
-      // Handle the initial sign-in state.
-      this.updateSigninStatus({ authInstance })
-    }, error => {
-      console.error(error)
+      fetch_basic_profile: false,
+      scope: 'profile'
     })
-    // console.log('auth2: ', auth2)
 
-    // auth2.signIn().then(function () {
-    //   console.log(auth2.currentUser.get().getId())
-    // })
+    const authInstance = gapi.auth2.getAuthInstance()
+    authInstance.isSignedIn.listen(_ => {
+      this.updateSigninStatus({ authInstance })
+    })
+    // Handle the initial sign-in state.
+    this.setState({
+      enableAuthorize: true
+    })
   }
 
   updateSigninStatus ({ authInstance }) {
     if (!authInstance) { return }
     const isSignedIn = authInstance.isSignedIn.get()
-    this.setState({
-      enableAuthorize: !isSignedIn
-    }, _ => {
-      if (isSignedIn) {
-        this.setState({
-          authorized: true
-        })
-      }
-    })
+    if (isSignedIn) {
+      this.setState({
+        authorized: true
+      })
+    }
   }
 
   getFiles () {
@@ -157,14 +151,24 @@ class Authorization extends React.Component {
 
   renderGoogleDriveScreen () {
     return <div className={styles.container}>
+      <h2 className={classNames(styles.title, styles.titleGrant)} dangerouslySetInnerHTML={{ __html: this.t('titles.grantGoogleDrive') }} />
+      <ul className={styles.list}>
+        <li className={styles.listItem}><Icons.CheckSmall />{this.t('texts.googelDrive._1')}</li>
+        <li className={styles.listItem}><Icons.CheckSmall />{this.t('texts.googelDrive._2')}</li>
+        <li className={styles.listItem}><Icons.CheckSmall />{this.t('texts.googelDrive._3')}</li>
+      </ul>
       <Button className={styles.button} inverted onClick={e => this.getFiles(e)}>
+        <RetinaImage width={30} {...getImages({ src: 'gdrive' })} />
         {this.t('titles.grantAccess')}
       </Button>
     </div>
   }
 
   handleAuthClick () {
-    gapi.auth2.getAuthInstance().signIn()
+    const authInstance = gapi.auth2.getAuthInstance()
+    authInstance.signIn().then(() => {
+      this.updateSigninStatus({ authInstance })
+    })
   }
 
   renderAuthorizationScreen () {

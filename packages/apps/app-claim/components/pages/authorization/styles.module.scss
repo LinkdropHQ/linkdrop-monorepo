@@ -5,6 +5,35 @@
   margin-bottom: 50px;
 }
 
+.titleGrant {
+  margin-bottom: 14px;
+}
+
+.list {
+  max-width: 265px;
+  margin: 0 auto 19px;
+  list-style: none;
+  padding: 0;
+}
+
+.listItem {
+  margin-bottom: 6px;
+  display: flex;
+  width: 100%;
+  align-items: baseline;
+
+  svg {
+    flex: 1 0 22px;
+    margin-right: 10px;
+  }
+
+  &:last-child {
+    margin-bottom: 0px;
+  }
+}
+
+
+
 .button {
   width: 300px;
   border-color: $dbGrey;
@@ -30,4 +59,10 @@
     border-color: 2px solid $dbGrey!important;
     border-color: $dbGrey transparent transparent transparent!important;
   }
+}
+
+.container {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
 }
