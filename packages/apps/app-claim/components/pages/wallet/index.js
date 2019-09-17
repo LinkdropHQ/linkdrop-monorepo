@@ -90,9 +90,8 @@ class Wallet extends React.Component {
   render () {
     const { sendingAssets } = this.state
     const { items, loading, chainId } = this.props
-    return <Page dynamicHeader>
+    return <Page dynamicHeader note='⚠ T️his wallet is for testing only.<br>Use at your own risk'>
       <div className={styles.container}>
-        {loading && <Loading withOverlay />}
         <AccountBalance items={items} />
         {this.renderLoader({ sendingAssets })}
         <AssetsList />

@@ -14,11 +14,11 @@ class Provider {
     this.network = opts.network || 'mainnet'
     this.rpcUrl = opts.rpcUrl || `https://${this.network}.infura.io/v3/d4d1a2b933e048e28fb6fe1abe3e813a`
     this.widgetUrl = opts.widgetUrl || 'https://nostalgic-noyce-ee0d2b.netlify.com'
-    
+
     if (!opts.ensName) {
       throw new Error('ENS name should be provided')
     }
-    
+
     if (!opts.network) {
       throw new Error('network should be provided')
     }
@@ -36,14 +36,23 @@ class Provider {
 
       // hide or show widget window
       this._toggleWidget()
-      
     }, false)
   }
 
   async _toggleWidget () {
-    this.widget.iframe.style.display = (this.widget.iframe.style.display === 'block') ? 'none' : 'block'
+    const currentIsBlock = this.widget.iframe.style.display === 'block'
+    this.widget.iframe.style.display = currentIsBlock ? 'none' : 'block'
+    this.toggleOpenIconClass(!currentIsBlock)
   }
-  
+
+  toggleOpenIconClass (widgetOpened) {
+    const container = this.widget.iframe.closest('body').querySelector('.ld-widget-icon')
+    if (widgetOpened) {
+      return container.classList.add('ld-widget-icon-opened')
+    }
+    return container.classList.remove('ld-widget-icon-opened')
+  }
+
   _initWidget () {
     return new Promise((resolve, reject) => {
       const onload = async () => {
@@ -52,24 +61,23 @@ class Provider {
 
         const style = document.createElement('style')
         style.innerHTML = styles
-        
+
         const iframe = document.createElement('iframe')
 
-        let iframeSrc = this.widgetUrl 
+        let iframeSrc = this.widgetUrl
 
         // propagate claim params to iframe window
         if (window.location.hash.indexOf('#/receive') > -1) {
           iframeSrc += window.location.hash
-        }        
-        
+        }
+
         iframe.src = iframeSrc
         iframe.className = 'ld-widget-iframe'
-        
+
         container.appendChild(iframe)
         document.body.appendChild(container)
         document.head.appendChild(style)
-        
-        
+
         const connection = connectToChild({
           // The iframe to which a connection should be made
           iframe,
@@ -83,7 +91,7 @@ class Provider {
         const communication = await connection.promise
         resolve({ iframe, communication })
       }
-      
+
       if (['loaded', 'interactive', 'complete'].indexOf(document.readyState) > -1) {
         onload()
       } else {
@@ -93,29 +101,31 @@ class Provider {
   }
 
   _showWidget () {
-    if (this.widget) { 
+    if (this.widget) {
       this.widget.iframe.style.display = 'block'
+      this.toggleOpenIconClass(true)
     }
   }
 
   _hideWidget () {
-    if (this.widget) {     
+    if (this.widget) {
       this.widget.iframe.style.display = 'none'
+      this.toggleOpenIconClass(false)
     }
   }
 
   async _initWidgetFrame () {
     this.widget = await this._initWidget()
     this._addWidgetIcon()
-   }
-  
+  }
+
   _initProvider () {
     const engine = new ProviderEngine()
     let address
-    
+
     engine.enable = async () => {
       await this._initWidgetFrame()
-      
+
       // this._showWidget()
       try {
         await this.widget.communication.connect()
@@ -130,25 +140,25 @@ class Provider {
       let result = null
       try {
         switch (payload.method) {
-        case 'eth_accounts':
-          result = [address]
-          break
-        case 'eth_coinbase':
-          result = address
-          break
-        case 'eth_chainId':
-          throw new Error('eth_chainId call not implemented')
-        case 'net_version':
-          throw new Error('net_version call not implemented')
-        case 'eth_uninstallFilter':
-          engine.Async(payload, _ => _)
-          result = true
-          break
-        default:
-          var message = `Card Web3 object does not support synchronous methods like ${
+          case 'eth_accounts':
+            result = [address]
+            break
+          case 'eth_coinbase':
+            result = address
+            break
+          case 'eth_chainId':
+            throw new Error('eth_chainId call not implemented')
+          case 'net_version':
+            throw new Error('net_version call not implemented')
+          case 'eth_uninstallFilter':
+            engine.Async(payload, _ => _)
+            result = true
+            break
+          default:
+            var message = `Card Web3 object does not support synchronous methods like ${
             payload.method
           } without a callback parameter.`
-          throw new Error(message)
+            throw new Error(message)
         }
       } catch (error) {
         throw error
@@ -160,7 +170,7 @@ class Provider {
         result: result
       }
     }
-    
+
     engine.send = async (payload, callback) => {
       // Web3 1.0 beta.38 (and above) calls `send` with method and parameters
       if (typeof payload === 'string') {
@@ -188,7 +198,7 @@ class Provider {
         engine.sendAsync(payload, callback)
         return
       }
-      
+
       const res = await handleRequest(payload, callback)
       return res
     }
@@ -216,7 +226,7 @@ class Provider {
         }
         cb(error, result)
       },
-      processTransaction: async (txParams, cb) => {        
+      processTransaction: async (txParams, cb) => {
         let result, error
         try {
           const { txHash, success, errors } = await this.widget.communication.sendTransaction(txParams)
@@ -231,7 +241,7 @@ class Provider {
         cb(error, result)
       }
     })
-    
+
     /* ADD MIDDELWARE (PRESERVE ORDER) */
     engine.addProvider(fixtureSubprovider)
     engine.addProvider(cacheSubprovider)
@@ -240,7 +250,7 @@ class Provider {
     engine.addProvider(new SubscriptionsSubprovider())
     engine.addProvider(new FilterSubprovider())
     /* END OF MIDDLEWARE */
-    
+
     engine.addProvider({
       handleRequest: async (payload, next, end) => {
         try {
@@ -252,7 +262,7 @@ class Provider {
       },
       setEngine: _ => _
     })
-    
+
     engine.isConnected = () => {
       return true
     }

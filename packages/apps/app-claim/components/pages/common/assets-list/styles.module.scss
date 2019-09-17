@@ -7,6 +7,7 @@
   .assetsContent {
     position: absolute;
     left: 50%;
+    width: 100%;
     transform: translate(-50%);
     margin-bottom: 20px;
   }
@@ -58,5 +59,10 @@
   text-align: center;
   margin: 0 auto;
   width: 200px;
+}
+
+.container {
+  text-align: center;
+  width: 100%;
 }
 

@@ -1,5 +1,5 @@
 .main {
-  height: calc(100vh - 90px);
+  
   display: flex;
   align-items: center;
   justify-content: center;
@@ -16,4 +16,9 @@
       height: 100vh;
     }
   }
+}
+
+.note {
+  padding: 0px 30px;
+  transform: translateY(-10px);
 }

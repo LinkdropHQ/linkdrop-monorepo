@@ -2,9 +2,11 @@ import React from 'react'
 import { translate, actions } from 'decorators'
 import commonStyles from '../styles.module'
 import { TokensAmount, AccountBalance, Confetti } from 'components/common'
-import { Loading } from '@linkdrop/ui-kit'
+import { Loading, Button } from '@linkdrop/ui-kit'
 import { getCurrentAsset } from 'helpers'
 import { AssetsList } from 'components/pages/common'
+import styles from './styles.module'
+import widgetService from 'data/api/widget'
 
 @actions(({ assets: { items, itemsToClaim }, user: { ens } }) => ({ items, ens }))
 @translate('pages.claim')
@@ -32,7 +34,12 @@ class ClaimingFinishedPage extends React.Component {
       <AccountBalance items={items} />
       {!showAssets && <TokensAmount alreadyClaimed={alreadyClaimed} claimingFinished={claimingFinished} symbol={symbol} amount={balanceFormatted} />}
       {showAssets && <AssetsList />}
+      {this.renderDappButton()}
     </div>
+  }
+
+  renderDappButton () {
+    return <Button className={styles.button} inverted onClick={() => widgetService.hideWidget()}>{this.t('buttons.continue')}</Button>
   }
 }
 

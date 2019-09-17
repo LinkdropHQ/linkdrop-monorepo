@@ -2,9 +2,8 @@ import React from 'react'
 import { translate, actions } from 'decorators'
 import styles from './styles.module'
 import classNames from 'classnames'
-import { Icons, Button } from '@linkdrop/ui-kit'
+import { Icons } from '@linkdrop/ui-kit'
 import { AssetBalance } from 'components/common'
-import widgetService from 'data/api/widget'
 
 @actions(({ user: { ens }, assets: { items } }) => ({
   items,
@@ -17,10 +16,6 @@ class AssetsList extends React.Component {
     this.state = {
       expanded: false
     }
-  }
-
-  renderDappButton () {
-    return <Button className={styles.button} inverted onClick={() => widgetService.hideWidget()} >{this.t('buttons.continue')}</Button>
   }
 
   render () {
@@ -36,7 +31,6 @@ class AssetsList extends React.Component {
           <div className={styles.assetsContentItems}>
             {this.renderAssets({ items })}
           </div>
-          {this.renderDappButton()}
         </div>
       </div>
     </div>

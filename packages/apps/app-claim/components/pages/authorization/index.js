@@ -14,7 +14,8 @@ class Authorization extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      enableAuthorize: false
+      enableAuthorize: false,
+      authorized: false
     }
   }
 
@@ -46,7 +47,7 @@ class Authorization extends React.Component {
       apiKey: config.authApiKey,
       discoveryDocs: config.authDiscoveryDocs,
       // scope: `${config.authScopeDrive} ${config.authScopeContacts}`
-      scope: config.authScopeDrive
+      fetch_basic_profile: true
     }).then(_ => {
       // Listen for sign-in state changes.
       const authInstance = gapi.auth2.getAuthInstance()
@@ -56,106 +57,133 @@ class Authorization extends React.Component {
     }, error => {
       console.error(error)
     })
+    // console.log('auth2: ', auth2)
+
+    // auth2.signIn().then(function () {
+    //   console.log(auth2.currentUser.get().getId())
+    // })
   }
 
   updateSigninStatus ({ authInstance }) {
     if (!authInstance) { return }
     const isSignedIn = authInstance.isSignedIn.get()
-
     this.setState({
       enableAuthorize: !isSignedIn
     }, _ => {
       if (isSignedIn) {
-        const email = authInstance.currentUser.get().getBasicProfile().getEmail()
-        const avatar = authInstance.currentUser.get().getBasicProfile().getImageUrl()
         this.setState({
-          email
-        }, _ => {
-          this.getFiles({ email, avatar })
+          authorized: true
         })
       }
     })
   }
 
-  getFiles ({ email, avatar }) {
+  getFiles () {
+    const authInstance = gapi.auth2.getAuthInstance()
     const {
       chainId
     } = getHashVariables()
-    gapi.client.drive.files.list({
-      spaces: 'appDataFolder'
-    }).then(response => {
-      const files = response.result.files.filter(file => file.name === 'linkdrop-data.json')
-      if (files && files.length > 0) {
-        const id = files[0].id
-        gapi.client.drive.files
-          .get({
-            fileId: id,
-            alt: 'media'
-          })
-          .execute(response => {
-            const { privateKey, contractAddress, ens } = response
-            this.actions().user.setUserData({ privateKey, contractAddress, ens, avatar })
-          })
-      } else {
-        const ens = getEns({ email, chainId })
-        const { contractAddress, privateKey } = this.props
-        const boundary = '-------314159265358979323846'
-        const delimiter = '\r\n--' + boundary + '\r\n'
-        const closeDelim = '\r\n--' + boundary + '--'
+    const isSignedIn = authInstance.isSignedIn.get()
+    if (isSignedIn) {
+      const user = authInstance.currentUser.get()
+      const email = user.getBasicProfile().getEmail()
+      const avatar = user.getBasicProfile().getImageUrl()
+      const options = new gapi.auth2.SigninOptionsBuilder({ scope: config.authScopeDrive })
+      user.grant(options).then(
+        (success) => {
+          gapi.client.drive.files.list({
+            spaces: 'appDataFolder'
+          }).then(response => {
+            const files = response.result.files.filter(file => file.name === 'linkdrop-data.json')
+            if (files && files.length > 0) {
+              const id = files[0].id
+              gapi.client.drive.files
+                .get({
+                  fileId: id,
+                  alt: 'media'
+                })
+                .execute(response => {
+                  const { privateKey, contractAddress, ens } = response
+                  this.actions().user.setUserData({ privateKey, contractAddress, ens, avatar })
+                })
+            } else {
+              const ens = getEns({ email, chainId })
+              const { contractAddress, privateKey } = this.props
+              const boundary = '-------314159265358979323846'
+              const delimiter = '\r\n--' + boundary + '\r\n'
+              const closeDelim = '\r\n--' + boundary + '--'
 
-        const contentType = 'application/json'
+              const contentType = 'application/json'
 
-        const metadata = {
-          name: 'linkdrop-data.json',
-          mimeType: contentType,
-          parents: ['appDataFolder']
-        }
+              const metadata = {
+                name: 'linkdrop-data.json',
+                mimeType: contentType,
+                parents: ['appDataFolder']
+              }
 
-        const multipartRequestBody =
-          delimiter +
-          'Content-Type: application/json\r\n\r\n' +
-          JSON.stringify(metadata) +
-          delimiter +
-          'Content-Type: ' +
-          contentType +
-          '\r\n\r\n' +
-          JSON.stringify({ ens, contractAddress, privateKey }) +
-          closeDelim
+              const multipartRequestBody =
+                delimiter +
+                'Content-Type: application/json\r\n\r\n' +
+                JSON.stringify(metadata) +
+                delimiter +
+                'Content-Type: ' +
+                contentType +
+                '\r\n\r\n' +
+                JSON.stringify({ ens, contractAddress, privateKey }) +
+                closeDelim
 
-        gapi.client
-          .request({
-            path: '/upload/drive/v3/files',
-            method: 'POST',
-            params: { uploadType: 'multipart' },
-            headers: {
-              'Content-Type':
+              gapi.client
+                .request({
+                  path: '/upload/drive/v3/files',
+                  method: 'POST',
+                  params: { uploadType: 'multipart' },
+                  headers: {
+                    'Content-Type':
               'multipart/related; boundary="' + boundary + '"'
-            },
-            body: multipartRequestBody
+                  },
+                  body: multipartRequestBody
+                })
+                .execute(response => {
+                  this.actions().user.setUserData({ privateKey, contractAddress, ens, avatar })
+                })
+            }
           })
-          .execute(response => {
-            this.actions().user.setUserData({ privateKey, contractAddress, ens, avatar })
-          })
-      }
-    })
+        },
+        function (fail) {
+          console.log(JSON.stringify({ message: 'fail', value: fail }))
+        })
+    }
+  }
+
+  renderGoogleDriveScreen () {
+    return <div className={styles.container}>
+      <Button className={styles.button} inverted onClick={e => this.getFiles(e)}>
+        {this.t('titles.grantAccess')}
+      </Button>
+    </div>
   }
 
   handleAuthClick () {
     gapi.auth2.getAuthInstance().signIn()
   }
 
-  render () {
+  renderAuthorizationScreen () {
     const { loading } = this.props
     const { enableAuthorize } = this.state
+    return <div className={styles.container}>
+      <h2 className={styles.title} dangerouslySetInnerHTML={{ __html: this.t('titles.signIn') }} />
+      <Button loadingClassName={styles.buttonLoading} className={styles.button} inverted loading={!enableAuthorize || loading} onClick={e => this.handleAuthClick(e)}>
+        <RetinaImage width={30} {...getImages({ src: 'google' })} />
+        {this.t('titles.googleSignIn')}
+      </Button>
+      <div className={styles.note} dangerouslySetInnerHTML={{ __html: this.t('texts.backup', { href: 'https://www.notion.so/linkdrop/Help-Center-9cf549af5f614e1caee6a660a93c489b#d0a28202100d4512bbeb52445e6db95b' }) }} />
+    </div>
+  }
+
+  render () {
+    const { authorized } = this.state
     return <Page dynamicHeader disableProfile>
-      <div className={styles.container}>
-        <h2 className={styles.title} dangerouslySetInnerHTML={{ __html: this.t('titles.signIn') }} />
-        <Button loadingClassName={styles.buttonLoading} className={styles.button} inverted loading={!enableAuthorize || loading} onClick={e => this.handleAuthClick(e)}>
-          <RetinaImage width={30} {...getImages({ src: 'google' })} />
-          {this.t('titles.googleSignIn')}
-        </Button>
-        <div className={styles.note} dangerouslySetInnerHTML={{ __html: this.t('texts.backup', { href: 'https://www.notion.so/linkdrop/Help-Center-9cf549af5f614e1caee6a660a93c489b#d0a28202100d4512bbeb52445e6db95b' }) }} />
-      </div>
+      {authorized ? this.renderGoogleDriveScreen() : this.renderAuthorizationScreen()}
     </Page>
   }
 }

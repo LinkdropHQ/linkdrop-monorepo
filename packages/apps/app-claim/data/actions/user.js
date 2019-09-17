@@ -34,6 +34,10 @@ class User {
   setMoonpayShow ({ moonpayShow }) {
     this.actions.dispatch({ type: 'USER.SET_MOONPAY_SHOW', payload: { moonpayShow } })
   }
+
+  toggleNote ({ showNote }) {
+    this.actions.dispatch({ type: 'USER.TOGGLE_NOTE', payload: { showNote } })
+  }
 }
 
 export default User

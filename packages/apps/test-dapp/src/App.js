@@ -120,7 +120,6 @@ class App extends React.Component {
     return (
       <div>
         <h3 className={styles.title}> Connect<br/>your account </h3>
-
       {/*
         <input className='ens-input' placeholder='Your ENS, e.g. user.my-wallet.eth' type='text' name='ens' onChange={({ target }) => this.setState({ ensNameInput: target.value })} />
         <br/>*/}

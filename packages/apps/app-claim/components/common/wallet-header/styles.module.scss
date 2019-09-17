@@ -42,6 +42,11 @@
 
 .bodyHeader {
   height: 60px;
+  position: absolute;
+  top: 0;
+  z-index: 2;
+  left: 0;
+  width: 100%;
 }
 
 .header {
@@ -51,7 +56,7 @@
 
 
 .bodyMain {
-  height: calc(100vh - 60px);
+  height: 100vh;
 }
 
 .body {
@@ -65,7 +70,7 @@
   transition: left .3s;
 
   .bodyContent {
-    padding: 0px 55px 50px;
+    padding: 40px 20px 20px;
     text-align: center;
     display: flex;
     align-items: center;
