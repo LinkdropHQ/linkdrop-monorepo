@@ -2312,6 +2312,17 @@
     npmlog "^4.1.2"
     write-file-atomic "^2.3.0"
 
+"@linkdrop/safe-module-contracts@^0.0.2":
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/@linkdrop/safe-module-contracts/-/safe-module-contracts-0.0.2.tgz#0d783b88067d40955bb4828ca266169cb375014c"
+  integrity sha512-buwRfNMzBzdQCgyfacLk+RlsoWpauzfO506x+zBX30wx2kzuwSYNLV3V+211HROVf3o/dvlNuDUnGLxhUcpf5w==
+  dependencies:
+    "@gnosis.pm/safe-contracts" "^1.0.0"
+    ethereum-waffle "^2.0.12"
+    ethers "^4.0.30"
+    openzeppelin-solidity "^2.3.0"
+    solc "^0.5.9"
+
 "@mrmlnc/readdir-enhanced@^2.2.1":
   version "2.2.1"
   resolved "https://registry.yarnpkg.com/@mrmlnc/readdir-enhanced/-/readdir-enhanced-2.2.1.tgz#524af240d1a360527b730475ecfa1344aa540dde"
@@ -8957,7 +8968,7 @@ ethers@^4.0.0, ethers@^4.0.27, ethers@~4.0.4:
     uuid "2.0.1"
     xmlhttprequest "1.8.0"
 
-ethers@^4.0.37:
+ethers@^4.0.30, ethers@^4.0.37:
   version "4.0.37"
   resolved "https://registry.yarnpkg.com/ethers/-/ethers-4.0.37.tgz#dfa70d59498663878c5e4a977d14356660ca5b90"
   integrity sha512-B7bDdyQ45A5lPr6k2HOkEKMtYOuqlfy+nNf8glnRvWidkDQnToKw1bv7UyrwlbsIgY2mE03UxTVtouXcT6Vvcw==
@@ -14647,7 +14658,7 @@ open@^6.1.0, open@^6.3.0:
   dependencies:
     is-wsl "^1.1.0"
 
-openzeppelin-solidity@^2.0.0, openzeppelin-solidity@^2.2.0:
+openzeppelin-solidity@^2.0.0, openzeppelin-solidity@^2.2.0, openzeppelin-solidity@^2.3.0:
   version "2.3.0"
   resolved "https://registry.yarnpkg.com/openzeppelin-solidity/-/openzeppelin-solidity-2.3.0.tgz#1ab7b4cc3782a5472ed61eb740c56a8bfdd74119"
   integrity sha512-QYeiPLvB1oSbDt6lDQvvpx7k8ODczvE474hb2kLXZBPKMsxKT1WxTCHBYrCU7kS7hfAku4DcJ0jqOyL+jvjwQw==
@@ -18130,7 +18141,7 @@ solc@^0.4.20:
     semver "^5.3.0"
     yargs "^4.7.1"
 
-solc@^0.5.0, solc@^0.5.10:
+solc@^0.5.0, solc@^0.5.10, solc@^0.5.9:
   version "0.5.11"
   resolved "https://registry.yarnpkg.com/solc/-/solc-0.5.11.tgz#5905261191d01befd78ef52610a006820022ee8f"
   integrity sha512-F8avCCVDYnJzvIm/ITsU11GFNdFI4HaNsME+zw9lK5a3ojD3LZN2Op2cIfWg7w1HeRYRiMOU1dM77saX6jUIKw==

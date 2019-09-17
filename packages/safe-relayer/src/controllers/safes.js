@@ -15,7 +15,13 @@ export const create = wrapAsync(async (req, res, next) => {
     assert.string(name, 'Name is required')
     assert.integer(saltNonce, 'Salt nonce is required')
 
-    const { success, txHash, safe, errors } = await safeCreationService.create({
+    const {
+      success,
+      txHash,
+      safe,
+      linkdropModule,
+      errors
+    } = await safeCreationService.create({
       owner,
       name,
       saltNonce
@@ -25,6 +31,7 @@ export const create = wrapAsync(async (req, res, next) => {
       success,
       txHash,
       safe,
+      linkdropModule,
       errors
     })
   } catch (err) {
@@ -73,6 +80,7 @@ export const claimAndCreate = wrapAsync(async (req, res, next) => {
       success,
       txHash,
       safe,
+      linkdropModule,
       errors
     } = await safeCreationService.claimAndCreate({
       weiAmount,
@@ -94,6 +102,7 @@ export const claimAndCreate = wrapAsync(async (req, res, next) => {
       success,
       txHash,
       safe,
+      linkdropModule,
       errors
     })
   } catch (err) {

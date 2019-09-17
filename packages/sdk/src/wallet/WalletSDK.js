@@ -2,9 +2,11 @@ import { ethers } from 'ethers'
 import {
   encodeParams,
   encodeDataForMultiSend,
-  getParamFromTxEvent
+  getParamFromTxEvent,
+  getCreateAndAddModulesData
 } from './utils'
 import { computeSafeAddress } from './computeSafeAddress'
+import { computeLinkdropModuleAddress } from './computeLinkdropModuleAddress'
 import { create, claimAndCreate } from './createSafe'
 import { signTx } from './signTx'
 import { executeTx } from './executeTx'
@@ -14,12 +16,14 @@ class WalletSDK {
   constructor (
     chain = 'rinkeby',
     gnosisSafeMasterCopy = '0xb6029EA3B2c51D09a50B53CA8012FeEB05bDa35A', // from https://safe-relay.gnosis.pm/api/v1/about/
-    proxyFactory = '0x12302fE9c02ff50939BaAaaf415fc226C078613C' // from https://safe-relay.gnosis.pm/api/v1/about/
+    proxyFactory = '0x12302fE9c02ff50939BaAaaf415fc226C078613C', // from https://safe-relay.gnosis.pm/api/v1/about/
+    linkdropModuleMasterCopy = '0x19Ff4Cb4eFD0b9E04433Dde6507ADC68225757f2'
   ) {
     this.chain = chain
     this.jsonRpcUrl = `https://${chain}.infura.io`
     this.apiHost = 'http://localhost:5050'
     this.gnosisSafeMasterCopy = gnosisSafeMasterCopy
+    this.linkdropModuleMasterCopy = linkdropModuleMasterCopy
     this.proxyFactory = proxyFactory
   }
 
@@ -241,6 +245,33 @@ class WalletSDK {
       name,
       apiHost
     })
+  }
+
+  /**
+   * Function to calculate the linkdrop module address based on given params
+   * @param {String} owner Safe owner address
+   * @param {String | Number} saltNonce Random salt nonce
+   * @param {String} linkdropModuleMasterCopy Deployed linkdrop module mastercopy address
+   * @param {String} proxyFactory Deployed proxy factory address
+   */
+  computeLinkdropModuleAddress ({
+    owner,
+    saltNonce,
+    linkdropModuleMasterCopy = this.linkdropModuleMasterCopy,
+    proxyFactory = this.proxyFactory,
+    jsonRpcUrl = this.jsonRpcUrl
+  }) {
+    return computeLinkdropModuleAddress({
+      owner,
+      saltNonce,
+      linkdropModuleMasterCopy,
+      proxyFactory,
+      jsonRpcUrl
+    })
+  }
+
+  getCreateAndAddModulesData (dataArray) {
+    return getCreateAndAddModulesData(dataArray)
   }
 }
 

@@ -1,6 +1,8 @@
 import GnosisSafe from '@gnosis.pm/safe-contracts/build/contracts/GnosisSafe'
 import ProxyFactory from '@gnosis.pm/safe-contracts/build/contracts/ProxyFactory'
 import MultiSend from '@gnosis.pm/safe-contracts/build/contracts/MultiSend'
+import CreateAndAddModules from '@gnosis.pm/safe-contracts/build/contracts/CreateAndAddModules'
+import LinkdropModule from '@linkdrop/safe-module-contracts/build/LinkdropModule'
 import { ethers } from 'ethers'
 import assert from 'assert-js'
 import relayerWalletService from './relayerWalletService'
@@ -11,9 +13,11 @@ import ensService from './ensService'
 import linkdropFactoryService from './linkdropFactoryService'
 
 import {
-  GNOSIS_SAFE_MASTER_COPY_ADDRESS,
+  GNOSIS_SAFE_MASTERCOPY_ADDRESS,
   PROXY_FACTORY_ADDRESS,
-  MULTISEND_LIBRARY_ADDRESS
+  MULTISEND_LIBRARY_ADDRESS,
+  CREATE_AND_ADD_MODULES_LIBRARY_ADDRESS,
+  LINKDROP_MODULE_MASTERCOPY_ADDRESS
 } from '../../config/config.json'
 
 const ADDRESS_ZERO = ethers.constants.AddressZero
@@ -25,7 +29,7 @@ const DELEGATECALL_OP = 1
 class SafeCreationService {
   constructor () {
     this.gnosisSafeMasterCopy = new ethers.Contract(
-      GNOSIS_SAFE_MASTER_COPY_ADDRESS,
+      GNOSIS_SAFE_MASTERCOPY_ADDRESS,
       GnosisSafe.abi,
       relayerWalletService.provider
     )
@@ -39,6 +43,18 @@ class SafeCreationService {
     this.multiSend = new ethers.Contract(
       MULTISEND_LIBRARY_ADDRESS,
       MultiSend.abi,
+      relayerWalletService.provider
+    )
+
+    this.createAndAddModules = new ethers.Contract(
+      CREATE_AND_ADD_MODULES_LIBRARY_ADDRESS,
+      CreateAndAddModules.abi,
+      relayerWalletService.provider
+    )
+
+    this.linkdropModuleMasterCopy = new ethers.Contract(
+      LINKDROP_MODULE_MASTERCOPY_ADDRESS,
+      LinkdropModule.abi,
       relayerWalletService.provider
     )
   }
@@ -56,14 +72,48 @@ class SafeCreationService {
         'Provided name already has an owner'
       )
 
+      const linkdropModuleData = sdkService.walletSDK.encodeParams(
+        LinkdropModule.abi,
+        'setup',
+        [[owner]]
+      )
+      logger.debug(`linkdropModuleData: ${linkdropModuleData}`)
+
+      const linkdropModule = sdkService.walletSDK.computeLinkdropModuleAddress({
+        owner,
+        saltNonce,
+        linkdropModuleMasterCopy: LINKDROP_MODULE_MASTERCOPY_ADDRESS,
+        proxyFactory: PROXY_FACTORY_ADDRESS
+      })
+      logger.debug(`Computed linkdrop module address: ${linkdropModule}`)
+
+      const createLinkdropModuleData = sdkService.walletSDK.encodeParams(
+        ProxyFactory.abi,
+        'createProxyWithNonce',
+        [this.linkdropModuleMasterCopy.address, linkdropModuleData, saltNonce]
+      )
+      logger.debug(`createLinkdropModuleData: ${createLinkdropModuleData}`)
+
+      const modulesCreationData = sdkService.walletSDK.getCreateAndAddModulesData(
+        [createLinkdropModuleData]
+      )
+      logger.debug(`modulesCreationData: ${modulesCreationData}`)
+
+      const createAndAddModulesData = sdkService.walletSDK.encodeParams(
+        CreateAndAddModules.abi,
+        'createAndAddModules',
+        [this.proxyFactory.address, modulesCreationData]
+      )
+      logger.debug(`createAndAddModulesData: ${createAndAddModulesData}`)
+
       const gnosisSafeData = sdkService.walletSDK.encodeParams(
         GnosisSafe.abi,
         'setup',
         [
           [owner], // owners
           1, // threshold
-          ADDRESS_ZERO, // to
-          BYTES_ZERO, // data,
+          this.createAndAddModules.address, // to
+          createAndAddModulesData, // data,
           ADDRESS_ZERO, // payment token address
           0, // payment amount
           ADDRESS_ZERO // payment receiver address
@@ -74,7 +124,7 @@ class SafeCreationService {
       const safe = sdkService.walletSDK.computeSafeAddress({
         owner,
         saltNonce,
-        gnosisSafeMasterCopy: GNOSIS_SAFE_MASTER_COPY_ADDRESS,
+        gnosisSafeMasterCopy: GNOSIS_SAFE_MASTERCOPY_ADDRESS,
         proxyFactory: PROXY_FACTORY_ADDRESS
       })
       logger.debug(`Computed safe address: ${safe}`)
@@ -132,8 +182,8 @@ class SafeCreationService {
         gasLimit: 6500000
       })
 
-      logger.json({ txHash: tx.hash, safe }, 'info')
-      return { success: true, txHash: tx.hash, safe }
+      logger.json({ txHash: tx.hash, safe, linkdropModule }, 'info')
+      return { success: true, txHash: tx.hash, linkdropModule, safe }
     } catch (err) {
       logger.error(err)
       return { success: false, errors: err.message || err }
@@ -193,14 +243,48 @@ class SafeCreationService {
       )
       logger.debug(`claimMultiSendData: ${claimMultiSendData}`)
 
+      const linkdropModuleData = sdkService.walletSDK.encodeParams(
+        LinkdropModule.abi,
+        'setup',
+        [[owner]]
+      )
+      logger.debug(`linkdropModuleData: ${linkdropModuleData}`)
+
+      const linkdropModule = sdkService.walletSDK.computeLinkdropModuleAddress({
+        owner,
+        saltNonce,
+        linkdropModuleMasterCopy: LINKDROP_MODULE_MASTERCOPY_ADDRESS,
+        proxyFactory: PROXY_FACTORY_ADDRESS
+      })
+      logger.debug(`Computed linkdrop module address: ${linkdropModule}`)
+
+      const createLinkdropModuleData = sdkService.walletSDK.encodeParams(
+        ProxyFactory.abi,
+        'createProxyWithNonce',
+        [this.linkdropModuleMasterCopy.address, linkdropModuleData, saltNonce]
+      )
+      logger.debug(`createLinkdropModuleData: ${createLinkdropModuleData}`)
+
+      const modulesCreationData = sdkService.walletSDK.getCreateAndAddModulesData(
+        [createLinkdropModuleData]
+      )
+      logger.debug(`modulesCreationData: ${modulesCreationData}`)
+
+      const createAndAddModulesData = sdkService.walletSDK.encodeParams(
+        CreateAndAddModules.abi,
+        'createAndAddModules',
+        [this.proxyFactory.address, modulesCreationData]
+      )
+      logger.debug(`createAndAddModulesData: ${createAndAddModulesData}`)
+
       const gnosisSafeData = sdkService.walletSDK.encodeParams(
         GnosisSafe.abi,
         'setup',
         [
           [owner], // owners
           1, // threshold
-          ADDRESS_ZERO, // to
-          BYTES_ZERO, // data,
+          this.createAndAddModules, // to
+          createAndAddModulesData, // data,
           ADDRESS_ZERO, // payment token address
           0, // payment amount
           ADDRESS_ZERO // payment receiver address
@@ -211,7 +295,7 @@ class SafeCreationService {
       const safe = sdkService.walletSDK.computeSafeAddress({
         owner,
         saltNonce,
-        gnosisSafeMasterCopy: GNOSIS_SAFE_MASTER_COPY_ADDRESS,
+        gnosisSafeMasterCopy: GNOSIS_SAFE_MASTERCOPY_ADDRESS,
         proxyFactory: PROXY_FACTORY_ADDRESS
       })
       logger.debug(`Computed safe address: ${safe}`)
@@ -272,8 +356,8 @@ class SafeCreationService {
         gasLimit: 6500000
       })
 
-      logger.json({ txHash: tx.hash, safe }, 'info')
-      return { success: true, txHash: tx.hash }
+      logger.json({ txHash: tx.hash, safe, linkdropModule }, 'info')
+      return { success: true, txHash: tx.hash, safe, linkdropModule }
     } catch (err) {
       logger.error(err)
       return { success: false, errors: err.message || err }

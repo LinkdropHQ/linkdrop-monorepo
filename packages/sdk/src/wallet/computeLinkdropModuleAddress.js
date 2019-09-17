@@ -1,4 +1,4 @@
-import GnosisSafe from '@gnosis.pm/safe-contracts/build/contracts/GnosisSafe'
+import LinkdropModule from '@linkdrop/safe-module-contracts/build/LinkdropModule'
 import assert from 'assert-js'
 
 import { ethers } from 'ethers'
@@ -10,39 +10,33 @@ const ADDRESS_ZERO = ethers.constants.AddressZero
 const BYTES_ZERO = '0x'
 
 /**
- * Function to precompute safe address
+ * Function to precompute linkdrop module address
  * @param {String} owner Safe owner's address
  * @param {Number} saltNonce Random salt nonce
- * @param {String} gnosisSafeMasterCopy Deployed gnosis safe mastercopy address
+ * @param {String} linkdropModuleMasterCopy Deployed linkdrop module mastercopy address
  * @param {String} proxyFactory Deployed proxy factory address
  */
-export const computeSafeAddress = ({
+export const computeLinkdropModuleAddress = ({
   owner,
   saltNonce,
-  gnosisSafeMasterCopy,
+  linkdropModuleMasterCopy,
   proxyFactory
 }) => {
   assert.string(owner, 'Owner address is required')
   assert.integer(saltNonce, 'Salt nonce is required')
   assert.string(
-    gnosisSafeMasterCopy,
-    'Gnosis safe mastercopy address is required'
+    linkdropModuleMasterCopy,
+    'Linkdrop module mastercopy address is required'
   )
   assert.string(proxyFactory, 'Proxy factory address is required')
 
-  const gnosisSafeData = encodeParams(GnosisSafe.abi, 'setup', [
-    [owner], // owners
-    1, // threshold
-    ADDRESS_ZERO, // to
-    BYTES_ZERO, // data,
-    ADDRESS_ZERO, // payment token address
-    0, // payment amount
-    ADDRESS_ZERO // payment receiver address
+  const linkdropModuleData = encodeParams(LinkdropModule.abi, 'setup', [
+    [owner]
   ])
 
   const constructorData = ethers.utils.defaultAbiCoder.encode(
     ['address'],
-    [gnosisSafeMasterCopy]
+    [linkdropModuleMasterCopy]
   )
 
   const encodedNonce = ethers.utils.defaultAbiCoder.encode(
@@ -51,7 +45,7 @@ export const computeSafeAddress = ({
   )
 
   const salt = ethers.utils.keccak256(
-    ethers.utils.keccak256(gnosisSafeData) + encodedNonce.slice(2)
+    ethers.utils.keccak256(linkdropModuleData) + encodedNonce.slice(2)
   )
 
   const initcode = proxyCreationCode + constructorData.slice(2)
