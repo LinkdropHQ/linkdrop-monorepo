@@ -3,7 +3,7 @@ import {
   encodeParams,
   encodeDataForMultiSend,
   getParamFromTxEvent,
-  getCreateAndAddModulesData
+  encodeDataForCreateAndAddModules
 } from './utils'
 import { computeSafeAddress } from './computeSafeAddress'
 import { computeLinkdropModuleAddress } from './computeLinkdropModuleAddress'
@@ -11,17 +11,23 @@ import { create, claimAndCreate } from './createSafe'
 import { signTx } from './signTx'
 import { executeTx } from './executeTx'
 import { getEnsOwner } from './ensUtils'
+import { generateLink, generateLinkERC721 } from './generateLink'
+import { claim, claimERC721 } from './claim'
 
 class WalletSDK {
-  constructor (
+  constructor ({
     chain = 'rinkeby',
+    apiHost = 'http://localhost:5050',
+    claimHost = 'https://claim.linkdrop.io',
+    jsonRpcUrl,
     gnosisSafeMasterCopy = '0xb6029EA3B2c51D09a50B53CA8012FeEB05bDa35A', // from https://safe-relay.gnosis.pm/api/v1/about/
     proxyFactory = '0x12302fE9c02ff50939BaAaaf415fc226C078613C', // from https://safe-relay.gnosis.pm/api/v1/about/
     linkdropModuleMasterCopy = '0x19Ff4Cb4eFD0b9E04433Dde6507ADC68225757f2'
-  ) {
+  }) {
     this.chain = chain
-    this.jsonRpcUrl = `https://${chain}.infura.io`
-    this.apiHost = 'http://localhost:5050'
+    this.jsonRpcUrl = jsonRpcUrl || `https://${chain}.infura.io`
+    this.apiHost = apiHost
+    this.claimHost = claimHost
     this.gnosisSafeMasterCopy = gnosisSafeMasterCopy
     this.linkdropModuleMasterCopy = linkdropModuleMasterCopy
     this.proxyFactory = proxyFactory
@@ -270,8 +276,136 @@ class WalletSDK {
     })
   }
 
-  getCreateAndAddModulesData (dataArray) {
-    return getCreateAndAddModulesData(dataArray)
+  /**
+   * Function to get encoded data to use in CreateAndAddModules library
+   * @param {String} dataArray Data array concatenated
+   */
+  encodeDataForCreateAndAddModules (dataArray) {
+    return encodeDataForCreateAndAddModules(dataArray)
+  }
+
+  /**
+   * @description Function to generate link for ETH and/or ERC20
+   * @param {String | Object} signingKeyOrWallet Signing key or wallet instances
+   * @param {String} linkdropModuleAddress Address of linkdrop module
+   * @param {String} weiAmount Wei amount
+   * @param {String} tokenAddress Token address
+   * @param {Number} tokenAmount Amount of tokens
+   * @param {Number} expirationTime Link expiration timestamp
+   */
+  async generateLink ({
+    signingKeyOrWallet,
+    linkdropModuleAddress,
+    weiAmount,
+    tokenAddress,
+    tokenAmount,
+    expirationTime
+  }) {
+    return generateLink({
+      claimHost: this.claimHost,
+      linkdropModuleAddress,
+      signingKeyOrWallet,
+      weiAmount,
+      tokenAddress,
+      tokenAmount,
+      expirationTime
+    })
+  }
+
+  /**
+   * @description Function to generate link for ETH and/or ERC721
+   * @param {String | Object} signingKeyOrWallet Signing key or wallet instance
+   * @param {String} linkdropModuleAddress Address of linkdrop module
+   * @param {String} weiAmount Wei amount
+   * @param {String} nftAddress NFT address
+   * @param {Number} tokenId Token id
+   * @param {Number} expirationTime Link expiration timestamp
+   */
+  async generateLinkERC721 ({
+    signingKeyOrWallet,
+    linkdropModuleAddress,
+    weiAmount,
+    nftAddress,
+    tokenId,
+    expirationTime
+  }) {
+    return generateLinkERC721({
+      claimHost: this.claimHost,
+      signingKeyOrWallet,
+      linkdropModuleAddress,
+      weiAmount,
+      nftAddress,
+      tokenId,
+      expirationTime
+    })
+  }
+
+  /**
+   * @description Function to claim ETH and/or ERC20 tokens
+   * @param {String} weiAmount Wei amount
+   * @param {String} tokenAddress Token address
+   * @param {Number} tokenAmount Amount of tokens
+   * @param {Number} expirationTime Link expiration timestamp
+   * @param {String} linkKey Ephemeral key attached to link
+   * @param {String} linkdropModuleAddress Address of linkdrop module
+   * @param {String} linkdropSignerSignature Linkdrop signer signature
+   * @param {String} receiverAddress Receiver address
+   */
+  async claim ({
+    weiAmount,
+    tokenAddress,
+    tokenAmount,
+    expirationTime,
+    linkKey,
+    linkdropModuleAddress,
+    linkdropSignerSignature,
+    receiverAddress
+  }) {
+    return claim({
+      apiHost: this.apiHost,
+      weiAmount,
+      tokenAddress,
+      tokenAmount,
+      expirationTime,
+      linkKey,
+      linkdropModuleAddress,
+      linkdropSignerSignature,
+      receiverAddress
+    })
+  }
+
+  /**
+   * @description Function to claim ETH and/or ERC721 tokens
+   * @param {String} weiAmount Wei amount
+   * @param {String} nftAddress NFT address
+   * @param {Number} tokenId Token id
+   * @param {Number} expirationTime Link expiration timestamp
+   * @param {String} linkKey Ephemeral key attached to link
+   * @param {String} linkdropModuleAddress Address of linkdrop module
+   * @param {String} linkdropSignerSignature Linkdrop signer signature
+   * @param {String} receiverAddress Receiver address
+   */
+  async claimERC721 ({
+    weiAmount,
+    nftAddress,
+    tokenId,
+    expirationTime,
+    linkKey,
+    linkdropModuleAddress,
+    linkdropSignerSignature,
+    receiverAddress
+  }) {
+    return claimERC721({
+      apiHost: this.apiHost,
+      weiAmount,
+      nftAddress,
+      tokenId,
+      expirationTime,
+      linkKey,
+      linkdropModuleAddress,
+      linkdropSignerSignature,
+      receiverAddress
+    })
   }
 }
 

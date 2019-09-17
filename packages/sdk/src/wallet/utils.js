@@ -1,10 +1,13 @@
 import { ethers } from 'ethers'
 
-export const getCreateAndAddModulesData = dataArray => {
+/**
+ * Function to get encoded data to use in CreateAndAddModules library
+ * @param {String} dataArray Data array concatenated
+ */
+export const encodeDataForCreateAndAddModules = dataArray => {
   const moduleDataWrapper = new ethers.utils.Interface([
     'function setup(bytes data)'
   ])
-
   // Remove method id (10) and position of data in payload (64)
   return dataArray.reduce(
     (acc, data) =>
@@ -76,4 +79,175 @@ export const buildCreate2Address = (creatorAddress, saltHex, byteCode) => {
         .join('')}`
     )
     .slice(-40)}`.toLowerCase()
+}
+
+/**
+ * @description Function to create link for ETH and/or ERC20
+ * @param {String | Object} signingKeyOrWallet Signing key or wallet instance
+ * @param {String} linkdropModuleAddress Address of linkdrop module
+ * @param {String} weiAmount Wei amount
+ * @param {String} tokenAddress Token address
+ * @param {Number} tokenAmount Amount of tokens
+ * @param {Number} expirationTime Link expiration timestamp
+ * @return {Object}
+ */
+export const createLink = async ({
+  signingKeyOrWallet,
+  linkdropModuleAddress,
+  weiAmount,
+  tokenAddress,
+  tokenAmount,
+  expirationTime
+}) => {
+  const linkWallet = ethers.Wallet.createRandom()
+  const linkKey = linkWallet.privateKey
+  const linkId = linkWallet.address
+
+  const linkdropSignerSignature = await signLink({
+    signingKeyOrWallet,
+    linkdropModuleAddress,
+    weiAmount,
+    tokenAddress,
+    tokenAmount,
+    expirationTime,
+    linkId
+  })
+
+  return {
+    linkKey, // link's ephemeral private key
+    linkId, // address corresponding to link key
+    linkdropSignerSignature // signed by linkdrop signer
+  }
+}
+
+/**
+ * @description Function to sign link
+ * @param {String | Object} signingKeyOrWallet Signing key or wallet instance
+ * @param {String} linkdropModuleAddress Address of linkdrop module
+ * @param {Number} weiAmount Amount of wei
+ * @param {String} tokenAddress Address of token contract
+ * @param {Number} tokenAmount Amount of tokens
+ * @param {Number} expirationTime Link expiration timestamp
+ * @param {String} linkId Link id
+ * @return {String} signature
+ */
+const signLink = async function ({
+  signingKeyOrWallet,
+  linkdropModuleAddress,
+  weiAmount,
+  tokenAddress,
+  tokenAmount,
+  expirationTime,
+  linkId
+}) {
+  if (typeof signingKeyOrWallet === 'string') {
+    signingKeyOrWallet = new ethers.Wallet(signingKeyOrWallet)
+  }
+
+  const messageHash = ethers.utils.solidityKeccak256(
+    ['address', 'uint', 'address', 'uint', 'uint', 'address'],
+    [
+      linkdropModuleAddress,
+      weiAmount,
+      tokenAddress,
+      tokenAmount,
+      expirationTime,
+      linkId
+    ]
+  )
+  const messageHashToSign = ethers.utils.arrayify(messageHash)
+  return signingKeyOrWallet.signMessage(messageHashToSign)
+}
+
+/**
+ * @description Function to create link for ETH and/or ERC721
+ * @param {String | Object} signingKeyOrWallet Signing key or wallet instance
+ * @param {String} linkdropModuleAddress Address of linkdrop module
+ * @param {String} weiAmount Wei amount
+ * @param {String} nftAddress NFT address
+ * @param {Number} tokenId Token id
+ * @param {Number} expirationTime Link expiration timestamp
+ * @return {Object}
+ */
+export const createLinkERC721 = async ({
+  signingKeyOrWallet,
+  linkdropModuleAddress,
+  weiAmount,
+  nftAddress,
+  tokenId,
+  expirationTime
+}) => {
+  const linkWallet = ethers.Wallet.createRandom()
+  const linkKey = linkWallet.privateKey
+  const linkId = linkWallet.address
+
+  const linkdropSignerSignature = await signLinkERC721({
+    signingKeyOrWallet,
+    linkdropModuleAddress,
+    weiAmount,
+    nftAddress,
+    tokenId,
+    expirationTime,
+    linkId
+  })
+
+  return {
+    linkKey, // link's ephemeral private key
+    linkId, // address corresponding to link key
+    linkdropSignerSignature // signed by linkdrop signer
+  }
+}
+
+/**
+ * @description Function to sign link for ERC721
+ * @param {String | Object} signingKeyOrWallet Signing key or wallet instance
+ * @param {String} linkdropModuleAddress Address of linkdrop module
+ * @param {Number} weiAmount Amount of wei
+ * @param {String} nftAddresss Address of NFT
+ * @param {Number} tokenId Token id
+ * @param {Number} expirationTime Link expiration timestamp
+ * @param {String} linkId Link id
+ * @return {String} signature
+ */
+const signLinkERC721 = async function ({
+  signingKeyOrWallet,
+  linkdropModuleAddress,
+  weiAmount,
+  nftAddress,
+  tokenId,
+  expirationTime,
+  linkId
+}) {
+  if (typeof signingKeyOrWallet === 'string') {
+    signingKeyOrWallet = new ethers.Wallet(signingKeyOrWallet)
+  }
+
+  const messageHash = ethers.utils.solidityKeccak256(
+    ['address', 'uint', 'address', 'uint', 'uint', 'address'],
+    [
+      linkdropModuleAddress,
+      weiAmount,
+      nftAddress,
+      tokenId,
+      expirationTime,
+      linkId
+    ]
+  )
+  const messageHashToSign = ethers.utils.arrayify(messageHash)
+  return signingKeyOrWallet.signMessage(messageHashToSign)
+}
+
+/**
+ * @description Function to sign receiver address
+ * @param {String} linkKey Ephemeral key attached to link
+ * @param {String} receiverAddress Receiver address
+ */
+export const signReceiverAddress = async (linkKey, receiverAddress) => {
+  const wallet = new ethers.Wallet(linkKey)
+  const messageHash = ethers.utils.solidityKeccak256(
+    ['address'],
+    [receiverAddress]
+  )
+  const messageHashToSign = ethers.utils.arrayify(messageHash)
+  return wallet.signMessage(messageHashToSign)
 }
