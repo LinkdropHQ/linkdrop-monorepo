@@ -4,6 +4,7 @@
   display: flex;
   padding-top: 0px;
   padding-bottom: 0px;
+  background: #FFF;
   width: 100%;
   justify-content: center;
   text-align: center;
@@ -21,7 +22,8 @@
 
   .bodyHeaderCloseIcon, .bodyHeaderQrIcon {
     position: absolute;
-    bottom: 0%;
+    top: 50%;
+    transform: translateY(-50%);
     cursor: pointer;
   }
 
@@ -41,7 +43,7 @@
 }
 
 .bodyHeader {
-  height: 60px;
+  height: 90px;
   position: absolute;
   top: 0;
   z-index: 2;
@@ -70,7 +72,7 @@
   transition: left .3s;
 
   .bodyContent {
-    padding: 40px 20px 20px;
+    padding: 90px 20px 20px;
     text-align: center;
     display: flex;
     align-items: center;
