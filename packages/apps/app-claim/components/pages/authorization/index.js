@@ -1,13 +1,12 @@
-/* global gapi */
 import React from 'react'
 import { Button, RetinaImage, Icons } from '@linkdrop/ui-kit'
 import styles from './styles.module'
 import { Page } from 'components/pages'
 import { getEns, getImages } from 'helpers'
 import { actions, translate } from 'decorators'
-import config from 'app.config.js'
 import { getHashVariables } from '@linkdrop/commons'
 import classNames from 'classnames'
+import gapiService from 'data/api/google-api'
 
 @actions(({ user: { sdk, privateKey, contractAddress, ens, loading } }) => ({ loading, sdk, contractAddress, privateKey, ens }))
 @translate('pages.authorization')
@@ -22,133 +21,56 @@ class Authorization extends React.Component {
 
   componentDidMount () {
     this.actions().user.createWallet()
+    this._loadGoogleApi()
   }
 
   componentWillReceiveProps ({ privateKey, contractAddress }) {
     const { contractAddress: prevContractAddress, privateKey: prevPrivateKey } = this.props
     if (privateKey && contractAddress && !prevContractAddress && !prevPrivateKey) {
-      const script = document.createElement('script')
-      script.setAttribute('src', 'https://apis.google.com/js/api.js')
-      script.setAttribute('async', true)
-      script.onload = _ => this.handleClientLoad()
-      script.onreadystatechange = function () {
-        if (this.readyState === 'complete') this.onload()
-      }
-      document.body.appendChild(script)
+      // load google api
+      this._loadGoogleApi()
     }
   }
 
-  handleClientLoad () {
-    gapi.load('client:auth2', _ => this.initClient())
-  }
-
-  initClient () {
-    gapi.client.init({
-      clientId: config.authClientId,
-      apiKey: config.authApiKey,
-      discoveryDocs: config.authDiscoveryDocs,
-      // scope: `${config.authScopeDrive} ${config.authScopeContacts}`
-      fetch_basic_profile: false,
-      scope: 'profile'
-    })
-
-    const authInstance = gapi.auth2.getAuthInstance()
-    authInstance.isSignedIn.listen(_ => {
-      this.updateSigninStatus({ authInstance })
-    })
+  async _loadGoogleApi () {
+    await gapiService.load()
+    
     // Handle the initial sign-in state.
     this.setState({
       enableAuthorize: true
     })
   }
 
-  updateSigninStatus ({ authInstance }) {
-    if (!authInstance) { return }
-    const isSignedIn = authInstance.isSignedIn.get()
-    if (isSignedIn) {
-      this.setState({
-        authorized: true
-      })
-    }
-  }
-
-  getFiles () {
-    const authInstance = gapi.auth2.getAuthInstance()
+  async _syncPrivateKeyWithDrive () {
     const {
       chainId
     } = getHashVariables()
-    const isSignedIn = authInstance.isSignedIn.get()
-    if (isSignedIn) {
-      const user = authInstance.currentUser.get()
-      const email = user.getBasicProfile().getEmail()
-      const avatar = user.getBasicProfile().getImageUrl()
-      const options = new gapi.auth2.SigninOptionsBuilder({ scope: config.authScopeDrive })
-      user.grant(options).then(
-        (success) => {
-          gapi.client.drive.files.list({
-            spaces: 'appDataFolder'
-          }).then(response => {
-            const files = response.result.files.filter(file => file.name === 'linkdrop-data.json')
-            if (files && files.length > 0) {
-              const id = files[0].id
-              gapi.client.drive.files
-                .get({
-                  fileId: id,
-                  alt: 'media'
-                })
-                .execute(response => {
-                  const { privateKey, contractAddress, ens } = response
-                  this.actions().user.setUserData({ privateKey, contractAddress, ens, avatar })
-                })
-            } else {
-              const ens = getEns({ email, chainId })
-              const { contractAddress, privateKey } = this.props
-              const boundary = '-------314159265358979323846'
-              const delimiter = '\r\n--' + boundary + '\r\n'
-              const closeDelim = '\r\n--' + boundary + '--'
+    const { email, avatar } = gapiService.getEmailAndAvatar()
 
-              const contentType = 'application/json'
-
-              const metadata = {
-                name: 'linkdrop-data.json',
-                mimeType: contentType,
-                parents: ['appDataFolder']
-              }
-
-              const multipartRequestBody =
-                delimiter +
-                'Content-Type: application/json\r\n\r\n' +
-                JSON.stringify(metadata) +
-                delimiter +
-                'Content-Type: ' +
-                contentType +
-                '\r\n\r\n' +
-                JSON.stringify({ ens, contractAddress, privateKey }) +
-                closeDelim
-
-              gapi.client
-                .request({
-                  path: '/upload/drive/v3/files',
-                  method: 'POST',
-                  params: { uploadType: 'multipart' },
-                  headers: {
-                    'Content-Type':
-              'multipart/related; boundary="' + boundary + '"'
-                  },
-                  body: multipartRequestBody
-                })
-                .execute(response => {
-                  this.actions().user.setUserData({ privateKey, contractAddress, ens, avatar })
-                })
-            }
-          })
-        },
-        function (fail) {
-          console.log(JSON.stringify({ message: 'fail', value: fail }))
-        })
+    // fetching files from Drive
+    const fetchResult = await gapiService.fetchFiles()
+    let data
+    if (fetchResult.success) {
+      data = fetchResult.data
+    } else { // if no files on drive upload new ones
+      const ens = getEns({ email, chainId })
+      const { contractAddress, privateKey } = this.props
+      const uploadResult = await gapiService.uploadFiles({ ens, contractAddress, privateKey })
+      data = uploadResult.data
     }
+    const { privateKey, contractAddress, ens } = data
+    this.actions().user.setUserData({ privateKey, contractAddress, ens, avatar })
   }
 
+  async _enableDrivePermissions () {
+    try { 
+      await gapiService.enableDrivePermissions
+      await this._syncPrivateKeyWithDrive()
+    } catch (err) {
+      console.log('Error while enabling Drive permissions: ', err)
+    }      
+  }
+  
   renderGoogleDriveScreen () {
     return <div className={styles.container}>
       <h2 className={classNames(styles.title, styles.titleGrant)} dangerouslySetInnerHTML={{ __html: this.t('titles.grantGoogleDrive') }} />
@@ -157,18 +79,26 @@ class Authorization extends React.Component {
         <li className={styles.listItem}><Icons.CheckSmall />{this.t('texts.googelDrive._2')}</li>
         <li className={styles.listItem}><Icons.CheckSmall />{this.t('texts.googelDrive._3')}</li>
       </ul>
-      <Button className={styles.button} inverted onClick={e => this.getFiles(e)}>
+      <Button className={styles.button} inverted onClick={_ => this._enableDrivePermissions()}>
         <RetinaImage width={30} {...getImages({ src: 'gdrive' })} />
         {this.t('titles.grantAccess')}
       </Button>
     </div>
   }
 
-  handleAuthClick () {
-    const authInstance = gapi.auth2.getAuthInstance()
-    authInstance.signIn().then(() => {
-      this.updateSigninStatus({ authInstance })
-    })
+  async handleAuthClick () {
+    const isSignedIn = await gapiService.signIn()
+    if (isSignedIn) {
+      // if has drive permissions sync with it immediately
+      if (gapiService.hasDrivePermissions) {
+        await this._syncPrivateKeyWithDrive()
+      } else {
+        // otherwise show screen to enable permissions
+        this.setState({
+          authorized: true
+        })
+      }
+    }
   }
 
   renderAuthorizationScreen () {
