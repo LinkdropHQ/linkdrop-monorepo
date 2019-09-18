@@ -23,9 +23,12 @@ class ClaimingFinishedPage extends React.Component {
   }
 
   render () {
+    console.log("in render claim finished page")
     const { items, itemsToClaim, alreadyClaimed, loading, claimingFinished } = this.props
     const { showAssets } = this.state
-    const mainAsset = getCurrentAsset({ itemsToClaim })
+    const mainAsset = getCurrentAsset({ itemsToClaim: (itemsToClaim.length > 0 ? itemsToClaim : items) })
+
+    console.log({ props: this.props, showAssets, mainAsset })
     if (!mainAsset) { return null }
     const { balanceFormatted, symbol } = mainAsset
     return <div className={commonStyles.container}>
