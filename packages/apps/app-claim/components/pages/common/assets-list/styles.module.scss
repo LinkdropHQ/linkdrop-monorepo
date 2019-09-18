@@ -5,9 +5,10 @@
   position: relative;
   
   .assetsContent {
-    position: absolute;
-    left: 50%;
-    transform: translate(-50%);
+    /* position: absolute; */
+    /* left: 50%; */
+    width: 100%;
+    /* transform: translate(-50%); */
     margin-bottom: 20px;
   }
 
@@ -47,14 +48,21 @@
 .button {
   color: $dbBlue;
   border: 1px solid $dbBlue;
-  max-width: 300px;
-  width: 300px;
-  min-width: 300px;
+  max-width: 100%;
+  width: 100%;
+  min-width: 270px;
   margin-bottom: 30px;
 }
 
 .note {
   color: $textGreyColor;
   text-align: center;
+  margin: 0 auto;
+  width: 200px;
+}
+
+.container {
+  text-align: center;
+  width: 100%;
 }
 

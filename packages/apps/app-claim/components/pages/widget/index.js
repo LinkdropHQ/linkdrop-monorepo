@@ -9,7 +9,6 @@ const EventEmitter = require('events')
 @translate('pages.dappConnect')
 class WalletWidget extends React.Component {
   constructor (props) {
-    console.log("In constuctor")
     super(props)
     this.state = {
       screen: null,
@@ -26,7 +25,6 @@ class WalletWidget extends React.Component {
       // Methods child is exposing to parent
       methods: {
         sendTransaction: async (txParams) => {
-          console.log({ txParams })
           this.setState({
             screen: 'CONFIRM_TRANSACTION_SCREEN',
             txParams
@@ -38,7 +36,6 @@ class WalletWidget extends React.Component {
           return this._showModalAndWaitUserAction()
         },
         getAccounts () {
-          console.log('WALLET: getting accounts: ', contractAddress)
           return [contractAddress]
         }
       }

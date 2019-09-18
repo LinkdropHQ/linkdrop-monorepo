@@ -1,7 +1,7 @@
 {
   "name": "@linkdrop/wallet-provider",
-  "version": "0.1.0",
-  "main": "dist/index.js",
+  "version": "1.0.80",
+  "main": "src/index.js",
   "license": "MIT",
   "publishConfig": {
     "access": "publish"

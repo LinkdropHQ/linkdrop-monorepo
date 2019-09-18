@@ -34,6 +34,7 @@
 
 .address {
   height: 72px;
+  padding: 30px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -41,7 +42,7 @@
   border-bottom: 1px solid $greyStrokeMenuColor;
 
   .addressText {
-    max-width: 315px;
+    max-width: 270px;
     width: 100%;
     overflow: hidden;
     white-space: nowrap;
@@ -62,7 +63,7 @@
     align-items: center;
     line-height: 1;
     position: absolute;
-    right: 25px;
+    right: 30px;
     top: 50%;
     transform: translateY(-50%);
     color: $dbBlue;

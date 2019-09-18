@@ -1,0 +1,23 @@
+@import "variables";
+
+.container {
+  padding: 6px;
+  width: 100%;
+  border: 1px solid $dbBlue;
+  border-radius: 3px;
+  background: $dbBlueTransparent;
+  color: $dbBlue;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.close {
+  padding: 10px 0px;
+}
+
+.title {
+  text-align: center;
+  flex: 1;
+}

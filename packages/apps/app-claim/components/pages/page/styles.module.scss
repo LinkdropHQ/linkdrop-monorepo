@@ -1,5 +1,5 @@
 .main {
-  height: calc(100vh - 150px);
+  
   display: flex;
   align-items: center;
   justify-content: center;
@@ -13,7 +13,12 @@
   max-width: 100vw;
   &.hideHeader {
     .main {
-      height: calc(100vh - 60px);
+      height: 100vh;
     }
   }
+}
+
+.note {
+  padding: 0px 30px;
+  transform: translateY(-10px);
 }

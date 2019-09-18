@@ -6,6 +6,7 @@ import getCurrentAsset from './get-current-asset'
 import getEns from './get-ens'
 import countFinalPrice from './count-final-price'
 import prepareRedirectUrl from './prepare-redirect-url'
+import roundAmount from './round-amount'
 
 export {
   getImages,
@@ -15,5 +16,6 @@ export {
   getCurrentAsset,
   getEns,
   countFinalPrice,
-  prepareRedirectUrl
+  prepareRedirectUrl,
+  roundAmount
 }

@@ -4,6 +4,9 @@ import WalletProvider from '@linkdrop/wallet-provider'
 import Web3 from 'web3'
 import qs from 'querystring'
 import './App.css'
+import { Button } from '@linkdrop/ui-kit'
+import Page from './page'
+import styles from './app.module.scss'
 
 class App extends React.Component {
   constructor (props) {
@@ -11,22 +14,36 @@ class App extends React.Component {
     this.state = {
       address: null,
       connected: false,
-      ensNameInput: '',
       loading: true
     }
-    this.walletWindow = null    
+    this.walletWindow = null
   }
 
   async componentDidMount () {
-    const { ensName, network, widgetUrl } = this._getParamsFromUrl()
+    const { network } = this._getParamsFromUrl()
     this.network = network
-    if (ensName) {
-      this._connect(ensName, network, widgetUrl)
-    }
+    this._initProvider()
+
     this.setState({
       loading: false
     })
   }
+
+  async _initProvider () {
+    const urlParams = this._getParamsFromUrl()
+    const network = urlParams.network
+    const widgetUrl = urlParams.widgetUrl
+    
+    console.log('getting provider...')
+    this.widget = new WalletProvider({
+      ensName: 'wallet.linkdrop.io',
+      network,
+      widgetUrl
+    })
+
+    this._connect()
+  }
+  
   
   _getParamsFromUrl () {
     let ensName
@@ -45,24 +62,15 @@ class App extends React.Component {
     return { ensName, network, widgetUrl }
   }
   
-  async _connect (ensName, network, widgetUrl) {
+  async _connect () {
     try {
-      const urlParams = this._getParamsFromUrl()
-
-      ensName = ensName || urlParams.ensName
-      network = network || urlParams.network
-      widgetUrl = widgetUrl || urlParams.widgetUrl
       
-      console.log('getting provider...')
-      const card = new WalletProvider({ ensName, network, widgetUrl })
-      
-      await card.provider.enable()
+      await this.widget.provider.enable()
       
       console.log('got provider')
-      this.provider = card.provider
-      this.web3 = new Web3(card.provider)
-      // console.log('got web3 ', this.web3)
 
+      this.web3 = new Web3(this.widget.provider)
+      
       const accs = await this.web3.eth.getAccounts()
       console.log({ accs })
       const address = accs[0]
@@ -70,8 +78,7 @@ class App extends React.Component {
 
       const balance = await this.web3.eth.getBalance(address)
       this.setState({
-        connected: true,
-        ensName
+        connected: true
       })
       console.log({
         balance
@@ -103,25 +110,30 @@ class App extends React.Component {
     zeroExInstant.render(
       {
           orderSource: 'https://api.radarrelay.com/0x/v2/',
-          provider: this.provider
+          provider: this.widget.provider
         },
-      'body'
+      '.page-widget'
     )
   }
 
   _renderIfNotLoggedIn () {
     return (
       <div>
-        <h3> Connect your account </h3>
+        <h3 className={styles.title}> Connect<br/>your account </h3>
+      {/*
         <input className='ens-input' placeholder='Your ENS, e.g. user.my-wallet.eth' type='text' name='ens' onChange={({ target }) => this.setState({ ensNameInput: target.value })} />
-        <br/>
-        <button className='App-link' onClick={() => {
-          this._connect(this.state.ensNameInput)
-        }}>Connect</button>
+        <br/>*/}
 
-        <p style={{ fontSize: 10, textDecoration: 'none', marginTop: 30 }}>
-        Don't have an account?  <a style={{ color: 'blue' }} href='http://localhost:3000' target='_blank' ref='no-follow'> Create new one </a>
-        </p>
+        <Button
+          className={styles.button}
+          inverted
+          onClick={() => {
+            this.widget._showWidget()
+            // this._connect(this.state.ensNameInput)
+          }}
+        >
+          Connect
+        </Button>
       </div>
     )
   }
@@ -150,26 +162,23 @@ class App extends React.Component {
 
   _renderIfLoggedIn () {
     return (
-          <div>
+      <div>
         <p>
-        Logged in as <span style={{fontWeight: 'bold'}}> {this.state.ensName} </span>
-        <br/>
-        <small> { this.state.address } </small>
+          Logged in {/* as <span style={{fontWeight: 'bold'}}> {this.state.ensName} </span>*/ }
+          <br/>
+          <small> { this.state.address } </small>
         </p>
-        
-      { this._renderButton() }
-   
-
+        { this._renderButton() }
         <p>
-        <a style={{ fontSize: 10, color: 'blue', textDecoration: 'none' }} onClick={() => {
-          this.setState({
-            ensNameInput: null,
-            ensName: null,
-            connected: false
-          })
-        }} href='javascript:;'> Logout </a>
+          <a style={{ fontSize: 10, color: 'blue', textDecoration: 'none' }} onClick={() => {
+            this.setState({
+              ensNameInput: null,
+              ensName: null,
+              connected: false
+            })
+          }} href='javascript:;'> Logout </a>
         </p>
-        </div>
+      </div>
     )
   }
   
@@ -178,17 +187,9 @@ class App extends React.Component {
       return (<div>Loading...</div>)
     }    
     return (
-        <div className='App'>
-        <header className='App-header'>
-        <h1>
-        0x Instant Demo      
-      </h1>
-
-      {
-        this.state.connected ? this._renderIfLoggedIn() : this._renderIfNotLoggedIn()
-      }
-        </header>
-        </div>
+        <Page>
+          {this.state.connected ? this._renderIfLoggedIn() : this._renderIfNotLoggedIn()}
+        </Page>
     )
   }
 }

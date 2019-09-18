@@ -5,7 +5,6 @@ import styles from './styles.module'
 import { Loading } from '@linkdrop/ui-kit'
 import { AccountBalance, TokensAmount } from 'components/common'
 import { AssetsList } from 'components/pages/common'
-import { countFinalPrice } from 'helpers'
 
 @actions(({ tokens: { transactionData, transactionId, transactionStatus }, user: { chainId, loading, contractAddress, ens }, assets: { items } }) => ({
   transactionData,
@@ -91,11 +90,9 @@ class Wallet extends React.Component {
   render () {
     const { sendingAssets } = this.state
     const { items, loading, chainId } = this.props
-    const finalPrice = countFinalPrice({ items })
-    return <Page dynamicHeader>
+    return <Page dynamicHeader note='⚠ T️his wallet is for testing only.<br>Use at your own risk'>
       <div className={styles.container}>
-        {loading && <Loading withOverlay />}
-        <AccountBalance balance={finalPrice} />
+        <AccountBalance items={items} />
         {this.renderLoader({ sendingAssets })}
         <AssetsList />
       </div>

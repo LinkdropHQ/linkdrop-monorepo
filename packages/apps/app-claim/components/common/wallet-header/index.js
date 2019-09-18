@@ -3,6 +3,7 @@ import styles from './styles.module'
 import { translate, actions } from 'decorators'
 import { Icons } from '@linkdrop/ui-kit'
 import classNames from 'classnames'
+import { Note } from 'components/common'
 import Menu from './menu'
 import Footer from './footer'
 import Name from './name'
@@ -22,20 +23,20 @@ class WalletHeader extends React.Component {
 
   render () {
     const { opened } = this.state
-    const { avatar, ens, chainId } = this.props
+    const { avatar, ens, chainId, disableProfile } = this.props
 
     return <div className={classNames(styles.container, {
       [styles.opened]: opened
     })}
     >
       <div className={styles.header}>
-        <div
+        {!disableProfile && <div
           className={styles.headerIcon} onClick={_ => this.setState({
             opened: !opened
           })}
         >
           {this.renderProfileIcon({ avatar })}
-        </div>
+        </div>}
         <a href={prepareRedirectUrl({ link: '/#/' })}>{this.t('titles.wallet')}</a>
       </div>
       <div className={styles.body}>
@@ -53,13 +54,14 @@ class WalletHeader extends React.Component {
         </div>
         <div className={styles.bodyMain}>
           <Scrollbars style={{
-            height: 'calc(100vh - 60px)',
+            height: '100vh',
             width: '100%'
           }}
           >
             <div className={styles.bodyContent}>
               {this.renderAvatar({ avatar })}
               {this.renderName({ ens, chainId })}
+              <Note title='⚠ T️his wallet is for testing only. Use at your own risk' />
             </div>
             <Menu />
             <Footer />
@@ -71,7 +73,7 @@ class WalletHeader extends React.Component {
 
   renderAvatar ({ avatar }) {
     if (!avatar || avatar === 'undefined') {
-      return <div className={styles.avatar}>
+      return <div className={classNames(styles.avatar, styles.avatarDefault)}>
         <Icons.Profile fill={variables.avatarDisabled} width={80} height={80} />
       </div>
     }

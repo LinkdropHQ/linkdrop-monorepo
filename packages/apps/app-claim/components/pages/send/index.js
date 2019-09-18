@@ -20,7 +20,7 @@ class Send extends React.Component {
     super(props)
     this.state = {
       sendTo: '',
-      currentAsset: (props.items[0] || {}).tokenAddress,
+      currentAsset: ((props.items || {})[0] || {}).tokenAddress,
       amount: null,
       showTx: false,
       error: null
@@ -36,7 +36,7 @@ class Send extends React.Component {
         showTx: true
       }), 2000)
     }
-    if (items != null && items.length !== 0 && prevItems.length === 0) {
+    if (items != null && (items || {}).length !== 0 && (prevItems || {}).length === 0) {
       this.setState({
         currentAsset: (items[0] || {}).tokenAddress
       })

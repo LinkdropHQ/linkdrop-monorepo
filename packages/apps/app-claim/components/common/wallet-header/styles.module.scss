@@ -2,15 +2,15 @@
 
 .header, .bodyHeader {
   display: flex;
-  
   padding-top: 0px;
   padding-bottom: 0px;
+  background: #FFF;
   width: 100%;
   justify-content: center;
   text-align: center;
   font-size: 30px;
   position: relative;
-  font-family: 'Inter-Bold';
+  font-family: 'Inter-Medium';
 
   .headerIcon {
     position: absolute;
@@ -22,7 +22,8 @@
 
   .bodyHeaderCloseIcon, .bodyHeaderQrIcon {
     position: absolute;
-    bottom: 0%;
+    top: 50%;
+    transform: translateY(-50%);
     cursor: pointer;
   }
 
@@ -36,12 +37,18 @@
 
   a {
     text-decoration: none!important;
-    color: $blackColor!important;
+    color: $dbBlue!important;
+    font-size: 24px;
   }
 }
 
 .bodyHeader {
-  height: 60px;
+  height: 90px;
+  position: absolute;
+  top: 0;
+  z-index: 2;
+  left: 0;
+  width: 100%;
 }
 
 .header {
@@ -51,7 +58,7 @@
 
 
 .bodyMain {
-  height: calc(100vh - 60px);
+  height: 100vh;
 }
 
 .body {
@@ -65,7 +72,7 @@
   transition: left .3s;
 
   .bodyContent {
-    padding: 0px 55px 50px;
+    padding: 90px 20px 20px;
     text-align: center;
     display: flex;
     align-items: center;
@@ -86,12 +93,17 @@
   border-radius: 80px;
   background-repeat: no-repeat;
   background-size: contain;
+  border: 3px solid $greyStrokeMenuColor;
 
   &.avatarSmall {
-    height: 40px;
-    width: 40px;
+    height: 35px;
+    width: 35px;
     border: 2px solid $blackColor;
-    border-radius: 40px;
+    border-radius: 35px;
+  }
+
+  &.avatarDefault {
+    border: none;
   }
 }
 

@@ -5,6 +5,8 @@ import styles from './styles.module'
 import { translate, actions } from 'decorators'
 import { getHashVariables } from '@linkdrop/commons'
 import { utils } from 'ethers'
+import widgetService from 'data/api/widget'
+import classNames from 'classnames'
 
 @actions(({ user: { ens, contractAddress, sdk, privateKey }, assets: { itemsToClaim } }) => ({ contractAddress, ens, sdk, privateKey, itemsToClaim }))
 @translate('pages.dappConfirm')
@@ -17,11 +19,10 @@ class DappConfirm extends React.Component {
   componentDidMount () {
     this._getEthCost()
   }
-  
+
   _getEthCost () {
   // just pass these variables as post message data
     const amount = utils.bigNumberify(this.props.txParams.value).toString()
-    console.log({ amount })
     const {
       chainId = '1'
     } = getHashVariables()
@@ -40,46 +41,54 @@ class DappConfirm extends React.Component {
       from: contractAddress,
       data: data || '0x0',
       to: to || '0x0',
+      operationType: 0,
       value: value || '0x0'
     }
     const { txHash, success, errors } = await sdk.execute(message, privateKey)
-    
-    this.props.onConfirmClick({ txHash, success, errors })
+
+    widgetService.onConfirmClick({ txHash, success, errors })
   }
-  
+
   render () {
     // dont pay much attention to the name of variable itemsToClaim, I will change it soon
-    const { itemsToClaim, onCancelClick } = this.props
+    const { itemsToClaim } = this.props
     const currentAsset = itemsToClaim[itemsToClaim.length - 1] // hack to update values as action adds new assets in array on view update
     return <div className={styles.container}>
       <DappHeader
         title={this.t('titles.wallet')}
-        onClose={onCancelClick}
       />
-
       <div className={styles.content}>
         <div
           className={styles.title}
           dangerouslySetInnerHTML={{ __html: this.t('titles.confirmAction', { dappName: 'Swap Tokens' }) }}
         />
         {this.renderAsset({ currentAsset })}
-        <Button
-          className={styles.button}
-          onClick={this._onConfirmTx.bind(this)}
-        >
-          {this.t('buttons.confirm')}
-        </Button>
+
+        <div className={styles.controls}>
+          <Button
+            inverted
+            onClick={() => widgetService.onCloseClick()}
+            className={styles.buttonCancel}
+          >
+            {this.t('buttons.cancel')}
+          </Button>
+          <Button
+            className={styles.buttonConfirm}
+            onClick={this._onConfirmTx.bind(this)}
+          >
+            {this.t('buttons.confirm')}
+          </Button>
+        </div>
       </div>
       <div
         className={styles.footer}
-        dangerouslySetInnerHTML={{ __html: this.t('texts.dapp') }}
+        dangerouslySetInnerHTML={{ __html: this.t('texts.dapp', { href: 'https://www.notion.so/linkdrop/Help-Center-9cf549af5f614e1caee6a660a93c489b#d0a28202100d4512bbeb52445e6db95b' }) }}
       />
     </div>
   }
 
   renderAsset ({ currentAsset }) {
     if (currentAsset) {
-      console.log({ currentAsset, amount: currentAsset.balanceFormatted })
       return <div className={styles.assets}>
         <div className={styles.subtitle}>{this.t('titles.spend')}</div>
         <AssetBalance

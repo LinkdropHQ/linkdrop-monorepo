@@ -8,7 +8,7 @@ export default {
     support: 'Support',
     legal: 'Legal',
     logOut: 'Log Out',
-    addFunds: 'Add Funds',
+    buyTokens: 'Buy Tokens',
     withdraw: 'Withdraw'
   },
   texts: {

@@ -302,10 +302,10 @@ class WalletSDK {
     try {
       message = {
         ...message,
-        operationType: OPERATION_CALL,
+        operationType: 0,
         gasToken: ETHER_NATIVE_TOKEN.address,
         gasLimit: utils.bigNumberify('1000000'),
-        gasPrice: utils.bigNumberify(String(20e9))
+        gasPrice: utils.bigNumberify(String(30e9))
       }
       console.log({ message })
       const result = await this.sdk.execute(message, privateKey)
