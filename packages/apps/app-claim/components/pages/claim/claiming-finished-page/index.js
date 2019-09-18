@@ -14,7 +14,8 @@ class ClaimingFinishedPage extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      showAssets: false
+      showAssets: false,
+      showConfetti: props.claimingFinished
     }
   }
 
@@ -24,13 +25,13 @@ class ClaimingFinishedPage extends React.Component {
 
   render () {
     const { items, itemsToClaim, alreadyClaimed, loading, claimingFinished } = this.props
-    const { showAssets } = this.state
+    const { showAssets, showConfetti } = this.state
     const mainAsset = getCurrentAsset({ itemsToClaim: ((itemsToClaim.length > 0 ? itemsToClaim : items) || []) })
 
     if (!mainAsset) { return null }
     const { balanceFormatted, symbol } = mainAsset
     return <div className={commonStyles.container}>
-      {claimingFinished && <Confetti recycle={!showAssets} />}
+      {showConfetti && <Confetti recycle={!showAssets} onConfettiComplete={_ => this.setState({ showConfetti: false })} />}
       {loading && <Loading withOverlay />}
       <AccountBalance items={items} />
       {!showAssets && <TokensAmount alreadyClaimed={alreadyClaimed} claimingFinished={claimingFinished} symbol={symbol} amount={balanceFormatted} />}

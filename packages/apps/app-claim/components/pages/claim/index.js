@@ -76,7 +76,7 @@ class Claim extends React.Component {
     this.getAssetsData({ nftAddress, tokenId, weiAmount, chainId, tokenAddress, tokenAmount })
   }
 
-  async getAssetsData ({ nftAddress, tokenId, weiAmount, chainId, tokenAddress, tokenAmount }) {
+  getAssetsData ({ nftAddress, tokenId, weiAmount, chainId, tokenAddress, tokenAmount }) {
     if (nftAddress && tokenId) {
       // this.actions().assets.getTokenERC721Data({ nftAddress, tokenId, chainId })
     } else {
@@ -98,7 +98,6 @@ class Claim extends React.Component {
       linkdropMasterAddress
     } = getHashVariables()
     const commonData = { linkdropMasterAddress, chainId, itemsToClaim, loading: userLoading || loading, wallet: contractAddress }
-
     if (errors && errors.length > 0) {
       // if some errors occured and can be found in redux store, then show error page
       return <ErrorPage error={errors[0]} />
