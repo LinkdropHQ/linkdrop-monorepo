@@ -15,7 +15,8 @@ class Authorization extends React.Component {
     super(props)
     this.state = {
       enableAuthorize: false,
-      authorized: false
+      authorized: false,
+      accessingDrive: false
     }
   }
 
@@ -34,7 +35,6 @@ class Authorization extends React.Component {
 
   async _loadGoogleApi () {
     await gapiService.load()
-    
     // Handle the initial sign-in state.
     this.setState({
       enableAuthorize: true
@@ -63,15 +63,19 @@ class Authorization extends React.Component {
   }
 
   async _enableDrivePermissions () {
-    try { 
+    try {
+      this.setState({ accessingDrive: true })
       await gapiService.enableDrivePermissions()
       await this._syncPrivateKeyWithDrive()
+      this.setState({ accessingDrive: false })
     } catch (err) {
+      this.setState({ accessingDrive: false })
       console.log('Error while enabling Drive permissions: ', err)
-    }      
+    }
   }
-  
+
   renderGoogleDriveScreen () {
+    const { accessingDrive } = this.state
     return <div className={styles.container}>
       <h2 className={classNames(styles.title, styles.titleGrant)} dangerouslySetInnerHTML={{ __html: this.t('titles.grantGoogleDrive') }} />
       <ul className={styles.list}>
@@ -79,7 +83,7 @@ class Authorization extends React.Component {
         <li className={styles.listItem}><Icons.CheckSmall />{this.t('texts.googelDrive._2')}</li>
         <li className={styles.listItem}><Icons.CheckSmall />{this.t('texts.googelDrive._3')}</li>
       </ul>
-      <Button className={styles.button} inverted onClick={_ => this._enableDrivePermissions()}>
+      <Button className={styles.button} loading={accessingDrive} inverted onClick={_ => this._enableDrivePermissions()}>
         <RetinaImage width={30} {...getImages({ src: 'gdrive' })} />
         {this.t('titles.grantAccess')}
       </Button>

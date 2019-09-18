@@ -6,6 +6,7 @@ import LinkdropFactory from 'contracts/LinkdropFactory.json'
 
 const generator = function * ({ payload }) {
   try {
+    yield put({ type: 'USER.SET_READY_TO_CLAIM', payload: { readyToClaim: false } })
     yield put({ type: 'USER.SET_LOADING', payload: { loading: true } })
     const { linkdropMasterAddress, linkKey, chainId, campaignId } = payload
     const networkName = defineNetworkName({ chainId })

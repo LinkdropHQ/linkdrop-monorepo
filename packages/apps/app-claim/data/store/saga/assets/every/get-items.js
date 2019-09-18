@@ -43,6 +43,7 @@ const generator = function * ({ payload }) {
     const networkName = defineNetworkName({ chainId })
     const provider = yield ethers.getDefaultProvider(networkName)
     const ethBalance = yield provider.getBalance(contractAddress)
+
     let assetsStorage = []
     if ((total && total > 0)) {
       const assets = yield all(docs.map(({ contract: { address, symbol, decimals } }) => getTokenData({ address, symbol, decimals, chainId, provider, contractAddress })))

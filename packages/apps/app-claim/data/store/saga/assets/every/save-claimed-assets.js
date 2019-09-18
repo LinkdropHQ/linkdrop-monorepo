@@ -1,4 +1,6 @@
 import { put, select } from 'redux-saga/effects'
+import { add } from 'mathjs'
+import { utils } from 'ethers'
 
 const generator = function * ({ payload }) {
   try {
@@ -21,19 +23,24 @@ generator.selectors = {
   itemsToClaim: ({ assets: { itemsToClaim } }) => itemsToClaim
 }
 
-// function mergeAssets (arr) {
-//   return arr.reduce((res, { id: newId, count }) => {
-//     var previouslyAdded = res.find(({ id: prevId }) => prevId === newId)
-//     if (!previouslyAdded) {
-//       return res.concat({ id: newId, count })
-//     } else {
-//       return res.map(({ id, count }) => {
-//         if (id === previouslyAdded.id) {
-//           return { id, count: count + previouslyAdded.count }
-//         } else {
-//           return { id, count }
-//         }
-//       })
-//     }
-//   }, [])
-// }
+function mergeAssets (arr) {
+  return arr.reduce((res, { id: newId, balanceFormatted }) => {
+    var previouslyAdded = res.find(({ id: prevId }) => prevId === newId)
+    if (!previouslyAdded) {
+      return res.concat({ id: newId, balanceFormatted })
+    } else {
+      return res.map(item => {
+        if (item.id === previouslyAdded.id) {
+          const commonBalanceFormatted = add(Number(balanceFormatted), Number(previouslyAdded.balanceFormatted))
+          const balance = utils.parseUnits(
+            String(commonBalanceFormatted),
+            item.decimals
+          )
+          return { ...item, balance, balanceFormatted: commonBalanceFormatted }
+        } else {
+          return item
+        }
+      })
+    }
+  }, [])
+}
