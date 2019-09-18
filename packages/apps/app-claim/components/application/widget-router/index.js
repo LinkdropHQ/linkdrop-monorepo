@@ -41,7 +41,6 @@ class WidgetRouter extends React.Component {
     const component = this
     const methods = {
       sendTransaction: async (txParams) => {
-        console.log({ txParams })
         this.setState({
           screen: 'CONFIRM_TRANSACTION_SCREEN',
           txParams
@@ -54,7 +53,6 @@ class WidgetRouter extends React.Component {
       },
       getAccounts () {
         const contractAddress = component._getContractAddress()
-        console.log('WALLET: getting accounts: ', contractAddress)
         return [contractAddress]
       }
     }

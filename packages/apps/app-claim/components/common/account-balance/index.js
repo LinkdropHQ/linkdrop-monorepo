@@ -49,9 +49,9 @@ class AccountBalance extends React.Component {
   }
 }
 
-AccountBalance.propTypes = {
-  balance: PropTypes.number.isRequired,
-  loading: PropTypes.boolean
-}
+// AccountBalance.propTypes = {
+//   balance: PropTypes.number.isRequired,
+//   loading: PropTypes.boolean
+// }
 
 export default AccountBalance
