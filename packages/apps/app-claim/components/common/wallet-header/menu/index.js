@@ -17,7 +17,7 @@ class Menu extends React.Component {
     const MENU = [
       {
         title: text('common.walletHeader.menu.buyTokens'),
-        onClick: _ => this.actions().user.setMoonpayShow({ moonpayShow: true }),
+        onClick: _ => '',
         color: variables.greenColor,
         logo: '$'
       }, {

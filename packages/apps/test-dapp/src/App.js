@@ -64,7 +64,6 @@ class App extends React.Component {
   
   async _connect () {
     try {
-      
       await this.widget.provider.enable()
       
       console.log('got provider')

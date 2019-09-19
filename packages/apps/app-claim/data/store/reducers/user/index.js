@@ -14,7 +14,6 @@ const initialState = {
   contractAddress: ls && ls.getItem && ls.getItem('contractAddress'),
   ens: ls && ls.getItem && ls.getItem('ens'),
   avatar: ls && ls.getItem && ls.getItem('avatar'),
-  moonpayShow: false,
   showNote: true
 }
 
@@ -39,6 +38,5 @@ const ACTIONS = {
   'USER.SET_CONTRACT_ADDRESS': reducers.setContractAddress,
   'USER.SET_ENS': reducers.setEns,
   'USER.SET_USER_DATA': reducers.setUserData,
-  'USER.SET_MOONPAY_SHOW': reducers.setMoonpayShow,
   'USER.TOGGLE_NOTE': reducers.toggleNote
 }

@@ -6,6 +6,7 @@ const generator = function * ({ payload }) {
     yield put({ type: 'USER.SET_LOADING', payload: { loading: true } })
     const items = yield select(generator.selectors.items)
     const itemsToClaim = yield select(generator.selectors.itemsToClaim)
+    console.log(itemsToClaim, items, mergeAssets)
     const itemsUpdated = mergeAssets(items.concat(itemsToClaim))
 
     yield put({ type: 'ASSETS.SET_ITEMS', payload: { items: itemsUpdated } })
