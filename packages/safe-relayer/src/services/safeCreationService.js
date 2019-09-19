@@ -94,7 +94,7 @@ class SafeCreationService {
       )
       logger.debug(`createLinkdropModuleData: ${createLinkdropModuleData}`)
 
-      const modulesCreationData = sdkService.walletSDK.getCreateAndAddModulesData(
+      const modulesCreationData = sdkService.walletSDK.encodeDataForCreateAndAddModules(
         [createLinkdropModuleData]
       )
       logger.debug(`modulesCreationData: ${modulesCreationData}`)
@@ -265,7 +265,7 @@ class SafeCreationService {
       )
       logger.debug(`createLinkdropModuleData: ${createLinkdropModuleData}`)
 
-      const modulesCreationData = sdkService.walletSDK.getCreateAndAddModulesData(
+      const modulesCreationData = sdkService.walletSDK.encodeDataForCreateAndAddModules(
         [createLinkdropModuleData]
       )
       logger.debug(`modulesCreationData: ${modulesCreationData}`)
