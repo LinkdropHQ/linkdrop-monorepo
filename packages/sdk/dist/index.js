@@ -27,6 +27,8 @@ var deployUtils = _interopRequireWildcard(require("./deployProxy"));
 
 var topupAndApproveUtils = _interopRequireWildcard(require("./topupAndApprove"));
 
+var _subscribeForEvents = require("./subscribeForEvents");
+
 var _LinkdropFactory = _interopRequireDefault(require("@linkdrop/contracts/build/LinkdropFactory"));
 
 var _ethers = require("ethers");
@@ -58,7 +60,7 @@ function () {
       throw new Error('Please provide factory address');
     }
 
-    if (chain !== 'rinkeby' && chain !== 'mainnet' && chain !== 'goerli') {
+    if (chain !== 'mainnet' && chain !== 'ropsten' && chain !== 'rinkeby' && chain !== 'goerli' && chain !== 'kovan') {
       throw new Error('Unsupported chain');
     }
 
@@ -536,35 +538,88 @@ function () {
 
       return deployProxy;
     }()
+  }, {
+    key: "subscribeForClaimedEvents",
+    value: function () {
+      var _subscribeForClaimedEvents2 = (0, _asyncToGenerator2["default"])(
+      /*#__PURE__*/
+      _regenerator["default"].mark(function _callee10(proxyAddress, callback) {
+        return _regenerator["default"].wrap(function _callee10$(_context10) {
+          while (1) {
+            switch (_context10.prev = _context10.next) {
+              case 0:
+                return _context10.abrupt("return", (0, _subscribeForEvents.subscribeForClaimedEvents)({
+                  jsonRpcUrl: this.jsonRpcUrl,
+                  proxyAddress: proxyAddress
+                }, callback));
+
+              case 1:
+              case "end":
+                return _context10.stop();
+            }
+          }
+        }, _callee10, this);
+      }));
+
+      function subscribeForClaimedEvents(_x10, _x11) {
+        return _subscribeForClaimedEvents2.apply(this, arguments);
+      }
+
+      return subscribeForClaimedEvents;
+    }()
+  }, {
+    key: "subscribeForClaimedERC721Events",
+    value: function () {
+      var _subscribeForClaimedERC721Events2 = (0, _asyncToGenerator2["default"])(
+      /*#__PURE__*/
+      _regenerator["default"].mark(function _callee11(proxyAddress, callback) {
+        return _regenerator["default"].wrap(function _callee11$(_context11) {
+          while (1) {
+            switch (_context11.prev = _context11.next) {
+              case 0:
+                return _context11.abrupt("return", (0, _subscribeForEvents.subscribeForClaimedERC721Events)({
+                  jsonRpcUrl: this.jsonRpcUrl,
+                  proxyAddress: proxyAddress
+                }, callback));
+
+              case 1:
+              case "end":
+                return _context11.stop();
+            }
+          }
+        }, _callee11, this);
+      }));
+
+      function subscribeForClaimedERC721Events(_x12, _x13) {
+        return _subscribeForClaimedERC721Events2.apply(this, arguments);
+      }
+
+      return subscribeForClaimedERC721Events;
+    }()
   }]);
   return LinkdropSDK;
 }();
 
 function getChainId(chain) {
-  var chainId;
-
   switch (chain) {
     case 'mainnet':
-      chainId = 1;
-      break;
+      return 1;
 
     case 'ropsten':
-      chainId = 3;
-      break;
+      return 3;
 
     case 'rinkeby':
-      chainId = 4;
-      break;
+      return 4;
 
     case 'goerli':
-      chainId = 5;
-      break;
+      return 5;
+
+    case 'kovan':
+      return 42;
 
     default:
-      chainId = null;
+      return null;
   }
-
-  return chainId;
 }
 
 var _default = LinkdropSDK;

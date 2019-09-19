@@ -11,7 +11,7 @@ export default {
     allAssets: 'ERC721 / ERC20 + ETH'
   },
   texts: {
-    networkNotSupported: '<div>Simply open MetaMask and switch over to:</div><div><span>Main Ethereum Network</span></div><div>or</div><div><span>Rinkeby Test Network</span></div>',
+    networkNotSupported: '<div>Simply open MetaMask and switch over to:</div><div><span>Main Ethereum Network</span></div><div>or</div><div><span>Any Test Network</span></div>',
     listOfLinks: 'List of links with encoded tokens prepared to distribute',
     incentivizeCustomer: 'Reach out and let us know what other features you are interested in'
 

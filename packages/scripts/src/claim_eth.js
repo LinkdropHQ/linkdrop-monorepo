@@ -40,7 +40,7 @@ const claim = async () => {
       campaignId
     } = await getUrlParams('eth', linkNumber)
 
-    const linkdropSDK = LinkdropSDK({
+    const linkdropSDK = new LinkdropSDK({
       linkdropMasterAddress,
       chain: CHAIN,
       jsonRpcUrl: JSON_RPC_URL,
