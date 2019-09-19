@@ -34,8 +34,7 @@ const generator = function * ({ payload }) {
   try {
     const { chainId = '1' } = payload
     const contractAddress = yield select(generator.selectors.contractAddress)
-    console.log('here!')
-    if (chainId === '4') {
+    if (Number(chainId) !== 1) {
       yield put({ type: 'ASSETS.SET_ITEMS', payload: { items: assetsMock } })
       return yield put({ type: 'USER.SET_LOADING', payload: { loading: false } })
     }

@@ -2,8 +2,8 @@ import React from 'react'
 import { Authorization } from 'components/pages'
 // import './styles'
 import { Loading } from '@linkdrop/ui-kit'
-import ConnectScreen from './../../pages/widget/dapp-connect'
-import ConfirmTransactionScreen from './../../pages/widget/dapp-confirm'
+import ConnectScreen from 'components/pages/widget/dapp-connect'
+import ConfirmTransactionScreen from 'components/pages/widget/dapp-confirm'
 import { actions } from 'decorators'
 import AppRouter from '../router'
 import { getHashVariables } from '@linkdrop/commons'
@@ -30,10 +30,9 @@ class WidgetRouter extends React.Component {
   async componentDidMount () {
     const { sdk } = this.props
     if (!sdk) {
-      let {
-        chainId
+      const {
+        chainId = '1'
       } = getHashVariables()
-      chainId = chainId || '1'
       this.actions().user.createSdk({ chainId })
     }
 
