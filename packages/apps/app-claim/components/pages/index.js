@@ -8,6 +8,7 @@ import Send from './send'
 import Receive from './receive'
 import Common from './common'
 import Widget from './widget'
+import BuyTokens from './buy-tokens'
 
 export {
   NotFound,
@@ -19,5 +20,6 @@ export {
   Send,
   Receive,
   Common,
-  Widget
+  Widget,
+  BuyTokens
 }

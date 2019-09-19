@@ -17,7 +17,7 @@ class Menu extends React.Component {
     const MENU = [
       {
         title: text('common.walletHeader.menu.buyTokens'),
-        onClick: _ => '',
+        href: prepareRedirectUrl({ link: '/#/buy-tokens' }),
         color: variables.greenColor,
         logo: '$'
       }, {
