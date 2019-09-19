@@ -41,10 +41,10 @@ Linkdrop SDK constructor takes following params:
   - linkdropMasterAddress - Linkdrop master address
   - factoryAddress - Linkdrop factory contract address
 
-You can use the factory contract deployed on Mainnet, Rinkeby and Goerli at 0xBa051891B752ecE3670671812486fe8dd34CC1c8
+You can use the factory contract deployed on Mainnet, Ropsten, Rinkeby, Goerli and Kovan at 0xBa051891B752ecE3670671812486fe8dd34CC1c8
 
 - Optional params:
-  - chain - Chain name, Currently supported chains are 'mainnet', 'rinkeby' and 'goerli'. Will use 'mainnet' by default
+  - chain - Chain name, Currently supported chains are 'mainnet', 'ropsten', 'rinkeby', 'goerli' and 'kovan'. Will use 'mainnet' by default
   - jsonRpcUrl - JSON RPC URL to Ethereum node. Will use `${chain}.infura.io` by default
   - apiHost - Linkdrop Relayer Service API host. Will use `${chain}.linkdrop.io` by default
   - claimHost - Claiming page url host. Will use `claim.linkdrop.io` by default
@@ -182,6 +182,18 @@ const txHash = await linkdropSDK.claim({
 ```
 
 This function will claim ETH or ERC20 token by making a POST request to server endpoint. Make sure the server is up by running `yarn server`.
+
+### Subscribe for `Claimed` events
+
+```js
+await linkdropSDK.subscribeForClaimedEvents(proxyAddress, callback)
+```
+
+### Subscribe for `ClaimedERC721` events
+
+```js
+await linkdropSDK.subscribeForClaimedERC721Events(proxyAddress, callback)
+```
 
 ## Stay in Touch
 💬 Join Linkdrop Community Telegram to chat with the core team

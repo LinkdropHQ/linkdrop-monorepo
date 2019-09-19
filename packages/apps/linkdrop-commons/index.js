@@ -6,6 +6,7 @@ import capitalize from './capitalize'
 import variables from './variables/index.module.scss'
 import mocks from './mocks'
 import convertFromExponents from './convert-from-exponents'
+import defineEtherscanUrl from './define-etherscan-url'
 
 export {
   copyToClipboard,
@@ -15,5 +16,6 @@ export {
   capitalize,
   variables,
   mocks,
-  convertFromExponents
+  convertFromExponents,
+  defineEtherscanUrl
 }

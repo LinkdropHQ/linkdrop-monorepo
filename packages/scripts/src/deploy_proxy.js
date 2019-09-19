@@ -16,7 +16,7 @@ const CHAIN = getString('CHAIN')
 const LINKDROP_MASTER_PRIVATE_KEY = getString('linkdropMasterPrivateKey')
 const JSON_RPC_URL = getString('jsonRpcUrl')
 
-const linkdropSDK = LinkdropSDK({
+const linkdropSDK = new LinkdropSDK({
   linkdropMasterAddress: new ethers.Wallet(LINKDROP_MASTER_PRIVATE_KEY).address,
   chain: CHAIN,
   jsonRpcUrl: JSON_RPC_URL,

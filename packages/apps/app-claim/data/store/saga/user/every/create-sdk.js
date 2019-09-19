@@ -1,8 +1,12 @@
 import { put } from 'redux-saga/effects'
 import initializeSdk from 'data/sdk'
-import { factory, initialBlockRinkeby, initialBlockMainnet, infuraPk } from 'app.config.js'
+import {
+  factory,
+  infuraPk
+} from 'app.config.js'
 import { ethers } from 'ethers'
 import Web3 from 'web3'
+import { getInitialBlock } from 'helpers'
 import LinkdropMastercopy from 'contracts/LinkdropMastercopy.json'
 import { defineNetworkName } from '@linkdrop/commons'
 
@@ -26,8 +30,7 @@ const generator = function * ({ payload }) {
     const linkId = yield linkWallet.address
     const contractWeb3 = yield new web3.eth.Contract(LinkdropMastercopy.abi, address)
     const contractEthers = new ethers.Contract(address, LinkdropMastercopy.abi, provider)
-    const initialBlock = Number(chainId) === 4 ? initialBlockRinkeby : initialBlockMainnet
-
+    const initialBlock = getInitialBlock({ chainId })
     yield put({ type: '*CONTRACT.GET_PAST_EVENTS', payload: { networkName, linkId, contract: contractWeb3, initialBlock } })
     yield put({ type: '*CONTRACT.SUBSCRIBE_TO_CLAIM_EVENT', payload: { networkName, linkId, contract: contractEthers, initialBlock } })
   } catch (e) {

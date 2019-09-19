@@ -105,6 +105,9 @@ module.exports = {
       INFURA_PK: JSON.stringify(process.env.INFURA_PK),
       INITIAL_BLOCK_RINKEBY: JSON.stringify(process.env.INITIAL_BLOCK_RINKEBY),
       INITIAL_BLOCK_MAINNET: JSON.stringify(process.env.INITIAL_BLOCK_MAINNET),
+      INITIAL_BLOCK_GOERLI: JSON.stringify(process.env.INITIAL_BLOCK_GOERLI),
+      INITIAL_BLOCK_ROPSTEN: JSON.stringify(process.env.INITIAL_BLOCK_ROPSTEN),
+      INITIAL_BLOCK_KOVAN: JSON.stringify(process.env.INITIAL_BLOCK_KOVAN),
       'process.env': {
         NODE_ENV: JSON.stringify(process.env.NODE_ENV || 'development')
       }

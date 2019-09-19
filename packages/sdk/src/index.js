@@ -3,6 +3,10 @@ import * as generateLinkUtils from './generateLink'
 import * as claimUtils from './claim'
 import * as deployUtils from './deployProxy'
 import * as topupAndApproveUtils from './topupAndApprove'
+import {
+  subscribeForClaimedEvents,
+  subscribeForClaimedERC721Events
+} from './subscribeForEvents'
 
 import LinkdropFactory from '@linkdrop/contracts/build/LinkdropFactory'
 import { ethers } from 'ethers'
@@ -27,7 +31,13 @@ class LinkdropSDK {
       throw new Error('Please provide factory address')
     }
 
-    if (chain !== 'rinkeby' && chain !== 'mainnet' && chain !== 'goerli') {
+    if (
+      chain !== 'mainnet' &&
+      chain !== 'ropsten' &&
+      chain !== 'rinkeby' &&
+      chain !== 'goerli' &&
+      chain !== 'kovan'
+    ) {
       throw new Error('Unsupported chain')
     }
 
@@ -211,27 +221,43 @@ class LinkdropSDK {
       weiAmount
     })
   }
+
+  async subscribeForClaimedEvents (proxyAddress, callback) {
+    return subscribeForClaimedEvents(
+      {
+        jsonRpcUrl: this.jsonRpcUrl,
+        proxyAddress
+      },
+      callback
+    )
+  }
+
+  async subscribeForClaimedERC721Events (proxyAddress, callback) {
+    return subscribeForClaimedERC721Events(
+      {
+        jsonRpcUrl: this.jsonRpcUrl,
+        proxyAddress
+      },
+      callback
+    )
+  }
 }
 
 function getChainId (chain) {
-  let chainId
   switch (chain) {
     case 'mainnet':
-      chainId = 1
-      break
+      return 1
     case 'ropsten':
-      chainId = 3
-      break
+      return 3
     case 'rinkeby':
-      chainId = 4
-      break
+      return 4
     case 'goerli':
-      chainId = 5
-      break
+      return 5
+    case 'kovan':
+      return 42
     default:
-      chainId = null
+      return null
   }
-  return chainId
 }
 
 export default LinkdropSDK

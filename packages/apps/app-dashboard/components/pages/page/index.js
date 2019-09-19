@@ -7,6 +7,8 @@ import { Scrollbars } from 'react-custom-scrollbars'
 import MetamaskInjector from './metamask-injector'
 import { Loading } from '@linkdrop/ui-kit'
 import NetworkNotSupported from './network-not-supported'
+import { defineNetworkName } from '@linkdrop/commons'
+
 let web3Obj
 const ls = window.localStorage
 try {
@@ -35,7 +37,7 @@ class Page extends React.Component {
     if (!currentAddress) {
       return <MetamaskInjector />
     }
-    if (Number(chainId) !== 4 && Number(chainId) !== 1) {
+    if (!defineNetworkName({ chainId })) {
       return <NetworkNotSupported />
     }
     return this.props.children
@@ -51,7 +53,8 @@ class Page extends React.Component {
         <Scrollbars style={{
           heigth: '100%',
           width: '100%'
-        }}>
+        }}
+        >
           <div className={styles.main}>
             <Header step={step} />
             {content}
