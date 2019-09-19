@@ -148,7 +148,8 @@ class Claim extends React.Component {
         // page with wallet select component
         return <WalletChoosePage onClick={_ => {
           this.actions().user.setStep({ step: 3 })
-        }} />
+        }}
+        />
       case 3:
         // page with info about current wallet and button to claim tokens
         return <InitialPage
