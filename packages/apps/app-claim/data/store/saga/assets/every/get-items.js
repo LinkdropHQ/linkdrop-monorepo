@@ -3,7 +3,6 @@ import { getItems, getAssetPrice } from 'data/api/assets'
 import { ethers, utils } from 'ethers'
 import TokenMock from 'contracts/TokenMock.json'
 import { defineNetworkName } from '@linkdrop/commons'
-import { multiply, add, bignumber } from 'mathjs'
 import { getImages } from 'helpers'
 
 const getTokenData = function * ({ address, symbol, decimals, chainId, provider, contractAddress }) {
@@ -35,6 +34,7 @@ const generator = function * ({ payload }) {
   try {
     const { chainId = '1' } = payload
     const contractAddress = yield select(generator.selectors.contractAddress)
+    console.log('here!')
     if (chainId === '4') {
       yield put({ type: 'ASSETS.SET_ITEMS', payload: { items: assetsMock } })
       return yield put({ type: 'USER.SET_LOADING', payload: { loading: false } })
