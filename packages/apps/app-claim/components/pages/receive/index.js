@@ -5,9 +5,8 @@ import styles from './styles.module'
 import { Page } from 'components/pages'
 import classNames from 'classnames'
 import QRCode from 'qrcode.react'
-import { copyToClipboard } from '@linkdrop/commons'
+import { copyToClipboard, defineEtherscanUrl } from '@linkdrop/commons'
 import { prepareRedirectUrl } from 'helpers'
-import config from 'config-claim'
 
 @actions(({ user: { loading, contractAddress, chainId }, assets: { items } }) => ({ contractAddress, items, loading, chainId }))
 @translate('pages.receive')
@@ -27,7 +26,7 @@ class Receive extends React.Component {
           <div className={styles.address}>
             <div className={styles.addressText}>
               {contractAddress}
-              <a target='_blank' href={`${chainId === '4' ? config.etherscanRinkeby : config.etherscanMainnet}address/${contractAddress}`}>
+              <a target='_blank' href={`${defineEtherscanUrl({ chainId })}address/${contractAddress}`}>
                 <span className={styles.addressCheck}>i</span>
               </a>
             </div>

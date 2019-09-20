@@ -12,6 +12,7 @@ import { getHashVariables } from '@linkdrop/commons'
 class Page extends React.Component {
   componentDidMount () {
     const { contractAddress } = this.props
+
     const interval = window.checkAssets
     const {
       chainId = '1'
@@ -21,6 +22,7 @@ class Page extends React.Component {
     }
     if (!contractAddress) { return }
     this.actions().assets.getItems({ chainId, wallet: contractAddress })
+    console.log({ contractAddress })
     window.checkAssets = window.setInterval(_ => this.actions().assets.getItems({ chainId, wallet: contractAddress }), 30000)
   }
 

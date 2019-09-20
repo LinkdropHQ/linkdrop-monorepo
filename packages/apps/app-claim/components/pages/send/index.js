@@ -7,10 +7,9 @@ import Assets from './assets'
 import Input from './input'
 import Contacts from './contacts'
 import LinkPay from './link-pay'
-import { getHashVariables } from '@linkdrop/commons'
+import { getHashVariables, defineEtherscanUrl } from '@linkdrop/commons'
 import { Scrollbars } from 'react-custom-scrollbars'
 import { ethers } from 'ethers'
-import config from 'config-claim'
 import classNames from 'classnames'
 
 @actions(({ tokens: { transactionId, transactionStatus }, user: { chainId, loading, contractAddress, errors }, assets: { items } }) => ({ errors, transactionId, transactionStatus, items, loading, contractAddress, chainId }))
@@ -104,7 +103,7 @@ class Send extends React.Component {
             {showTx && transactionId && <div
               className={styles.note}
               dangerouslySetInnerHTML={{
-                __html: this.t('texts.details', { link: `${chainId === '4' ? config.etherscanRinkeby : config.etherscanMainnet}tx/${transactionId}` })
+                __html: this.t('texts.details', { link: `${defineEtherscanUrl({ chainId })}tx/${transactionId}` })
               }}
             />}
             {this.renderErrors({ error, errors })}

@@ -13,7 +13,7 @@ class Provider {
     this.ensName = opts.ensName
     this.network = opts.network || 'mainnet'
     this.rpcUrl = opts.rpcUrl || `https://${this.network}.infura.io/v3/d4d1a2b933e048e28fb6fe1abe3e813a`
-    this.widgetUrl = opts.widgetUrl || 'https://nostalgic-noyce-ee0d2b.netlify.com'
+    this.widgetUrl = opts.widgetUrl || 'http://localhost:9002'
 
     if (!opts.ensName) {
       throw new Error('ENS name should be provided')

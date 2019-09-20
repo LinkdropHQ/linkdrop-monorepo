@@ -17,10 +17,10 @@ class WalletWidget extends React.Component {
 
     this.eventEmitter = new EventEmitter()
   }
-  
+
   async componentDidMount () {
     const { contractAddress } = this.props
-    
+
     const connection = connectToParent({
       // Methods child is exposing to parent
       methods: {
@@ -40,17 +40,16 @@ class WalletWidget extends React.Component {
         }
       }
     })
-    this.communication = await connection.promise        
+    this.communication = await connection.promise
   }
 
-  _showModalAndWaitUserAction () { 
+  _showModalAndWaitUserAction () {
     return new Promise(async (resolve, reject) => {
       // show modal
       this.communication.showWidget()
-      
+
       // wait for user input
       this.eventEmitter.on('userAction', ({ action, payload }) => {
-
         // hide modal
         this.communication.hideWidget()
 
@@ -63,7 +62,7 @@ class WalletWidget extends React.Component {
       })
     })
   }
-  
+
   _onCancelClick () {
     this.eventEmitter.emit('userAction', { action: 'cancel', payload: null })
   }
@@ -71,22 +70,24 @@ class WalletWidget extends React.Component {
   _onConfirmClick (result) {
     this.eventEmitter.emit('userAction', { action: 'confirm', payload: result })
   }
-  
+
   render () {
     if (!this.state.screen) return null
 
     if (this.state.screen === 'CONNECT_SCREEN') {
       return <ConnectScreen
-      onConfirmClick={this._onConfirmClick.bind(this)}
-      onCancelClick={this._onCancelClick.bind(this)} />
+        onConfirmClick={this._onConfirmClick.bind(this)}
+        onCancelClick={this._onCancelClick.bind(this)}
+      />
     }
 
     if (this.state.screen === 'CONFIRM_TRANSACTION_SCREEN') {
       return <ConfirmTransactionScreen
-      txParams={this.state.txParams}
-      onConfirmClick={this._onConfirmClick.bind(this)}
-      onCancelClick={this._onCancelClick.bind(this)} />      
-    }    
+        txParams={this.state.txParams}
+        onConfirmClick={this._onConfirmClick.bind(this)}
+        onCancelClick={this._onCancelClick.bind(this)}
+      />
+    }
   }
 }
 

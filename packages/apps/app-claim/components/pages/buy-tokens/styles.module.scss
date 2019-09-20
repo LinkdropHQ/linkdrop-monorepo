@@ -1,0 +1,16 @@
+.container {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  padding-top: 4px;
+  iframe {
+    width: 320px;
+  }
+}
+
+.close {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  cursor: pointer;
+}

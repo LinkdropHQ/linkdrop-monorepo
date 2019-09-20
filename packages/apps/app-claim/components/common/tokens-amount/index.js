@@ -2,9 +2,9 @@ import React from 'react'
 import styles from './styles.module'
 import { ComponentInternalLoading, Icons } from '@linkdrop/ui-kit'
 import { translate } from 'decorators'
+import { defineEtherscanUrl } from '@linkdrop/commons'
 import classNames from 'classnames'
 import variables from 'variables'
-import config from 'config-claim'
 
 @translate('common.tokensAmount')
 class TokensAmount extends React.Component {
@@ -51,7 +51,7 @@ class TokensAmount extends React.Component {
       {showMessage && transactionId && <div
         className={styles.message}
         dangerouslySetInnerHTML={{
-          __html: this.t('titles.loadingNote', { link: `${chainId === '4' ? config.etherscanRinkeby : config.etherscanMainnet}tx/${transactionId}` })
+          __html: this.t('titles.loadingNote', { link: `${defineEtherscanUrl({ chainId })}tx/${transactionId}` })
         }}
       />}
     </div>

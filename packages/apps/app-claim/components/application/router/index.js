@@ -1,7 +1,7 @@
 import React from 'react'
 import i18next from 'i18next'
 import { Route, Switch } from 'react-router-dom'
-import { Claim, NotFound, Wallet, Confirm, Send, Receive } from 'components/pages'
+import { Claim, NotFound, Wallet, Confirm, Send, Receive, BuyTokens } from 'components/pages'
 import './styles'
 import { getHashVariables } from '@linkdrop/commons'
 
@@ -21,10 +21,9 @@ class AppRouter extends React.Component {
   componentDidMount () {
     const { sdk } = this.props
     if (!sdk) {
-      let {
-        chainId
+      const {
+        chainId = '1'
       } = getHashVariables()
-      chainId = chainId || '1'
       this.actions().user.createSdk({ chainId })
     }
   }
@@ -35,6 +34,7 @@ class AppRouter extends React.Component {
       <Route path='/confirm' component={Confirm} />
       <Route path='/get' component={Receive} />
       <Route path='/send' component={Send} />
+      <Route path='/buy-tokens' component={BuyTokens} />
       <Route path='/' component={Wallet} />
       <Route path='*' component={NotFound} />
     </Switch>

@@ -9,7 +9,6 @@ import setContractsAddress from './set-contract-address'
 import setPrivateKey from './set-private-key'
 import setEns from './set-ens'
 import setUserData from './set-user-data'
-import setMoonpayShow from './set-moonpay-show'
 import toggleNote from './toggle-note'
 
 export default {
@@ -24,6 +23,5 @@ export default {
   setPrivateKey,
   setEns,
   setUserData,
-  setMoonpayShow,
   toggleNote
 }
