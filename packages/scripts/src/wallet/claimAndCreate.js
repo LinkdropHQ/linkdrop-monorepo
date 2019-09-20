@@ -18,9 +18,9 @@ const claimAndCreate = async () => {
       linkdropSignerSignature,
       campaignId
     } = await getUrlParams('eth', linkNumber)
-    const walletSDK = new WalletSDK()
+    const walletSDK = new WalletSDK({})
     const owner = '0xd54f7E7Ddc18A8354Fe29506f609d46a662E8a76'
-    const name = 'name'
+    const name = 'randnam'
     const { errors, success, txHash } = await walletSDK.claimAndCreate({
       weiAmount,
       tokenAddress,
