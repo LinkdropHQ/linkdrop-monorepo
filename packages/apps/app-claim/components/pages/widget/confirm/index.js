@@ -5,14 +5,13 @@ import styles from './styles.module'
 import { translate, actions } from 'decorators'
 import { getHashVariables } from '@linkdrop/commons'
 import { utils } from 'ethers'
-import widgetService from 'data/api/widget'
-import classNames from 'classnames'
 
-@actions(({ user: { ens, contractAddress, sdk, privateKey }, assets: { itemsToClaim } }) => ({ contractAddress, ens, sdk, privateKey, itemsToClaim }))
+@actions(({ widget: { txParams }, assets: { itemsToClaim } }) => ({ txParams, itemsToClaim }))
 @translate('pages.dappConfirm')
 class DappConfirm extends React.Component {
   componentDidUpdate (prevProps) {
-    if (prevProps.txParams && prevProps.txParams.value === this.props.txParams.value) return null
+    const { txParams } = prevProps
+    if (txParams && txParams.value === this.props.txParams.value) return null
     this._getEthCost()
   }
 
@@ -21,8 +20,9 @@ class DappConfirm extends React.Component {
   }
 
   _getEthCost () {
-  // just pass these variables as post message data
-    const amount = utils.bigNumberify(this.props.txParams.value).toString()
+    const { txParams } = this.props
+    // just pass these variables as post message data
+    const amount = utils.bigNumberify(txParams.value).toString()
     const {
       chainId = '1'
     } = getHashVariables()
@@ -30,23 +30,7 @@ class DappConfirm extends React.Component {
   }
 
   async _onConfirmTx () {
-    const { sdk, privateKey, contractAddress } = this.props
-    const {
-      data,
-      to,
-      value
-    } = this.props.txParams
-
-    const message = {
-      from: contractAddress,
-      data: data || '0x0',
-      to: to || '0x0',
-      operationType: 0,
-      value: value || '0x0'
-    }
-    const { txHash, success, errors } = await sdk.execute(message, privateKey)
-
-    widgetService.onConfirmClick({ txHash, success, errors })
+    this.actions().widget.confirmTx()
   }
 
   render () {
@@ -67,7 +51,7 @@ class DappConfirm extends React.Component {
         <div className={styles.controls}>
           <Button
             inverted
-            onClick={() => widgetService.onCloseClick()}
+            onClick={() => this.actions().widget.close()}
             className={styles.buttonCancel}
           >
             {this.t('buttons.cancel')}
