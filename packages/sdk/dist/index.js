@@ -596,6 +596,66 @@ function () {
 
       return subscribeForClaimedERC721Events;
     }()
+  }, {
+    key: "getLinkStatus",
+    value: function () {
+      var _getLinkStatus = (0, _asyncToGenerator2["default"])(
+      /*#__PURE__*/
+      _regenerator["default"].mark(function _callee12(linkId) {
+        return _regenerator["default"].wrap(function _callee12$(_context12) {
+          while (1) {
+            switch (_context12.prev = _context12.next) {
+              case 0:
+                return _context12.abrupt("return", claimUtils.getLinkStatus({
+                  apiHost: this.apiHost,
+                  linkdropMasterAddress: this.linkdropMasterAddress,
+                  linkId: linkId
+                }));
+
+              case 1:
+              case "end":
+                return _context12.stop();
+            }
+          }
+        }, _callee12, this);
+      }));
+
+      function getLinkStatus(_x14) {
+        return _getLinkStatus.apply(this, arguments);
+      }
+
+      return getLinkStatus;
+    }()
+  }, {
+    key: "cancelLink",
+    value: function () {
+      var _cancelLink = (0, _asyncToGenerator2["default"])(
+      /*#__PURE__*/
+      _regenerator["default"].mark(function _callee13(linkId) {
+        return _regenerator["default"].wrap(function _callee13$(_context13) {
+          while (1) {
+            switch (_context13.prev = _context13.next) {
+              case 0:
+                return _context13.abrupt("return", claimUtils.cancelLink({
+                  apiHost: this.apiHost,
+                  linkdropMasterAddress: this.linkdropMasterAddress,
+                  linkId: linkId
+                }));
+
+              case 1:
+              case "end":
+                return _context13.stop();
+            }
+          }
+        }, _callee13, this);
+      }));
+
+      function cancelLink(_x15) {
+        return _cancelLink.apply(this, arguments);
+      }
+
+      return cancelLink;
+    }()
   }]);
   return LinkdropSDK;
 }();

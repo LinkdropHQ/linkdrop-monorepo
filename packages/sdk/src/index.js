@@ -241,6 +241,22 @@ class LinkdropSDK {
       callback
     )
   }
+
+  async getLinkStatus (linkId) {
+    return claimUtils.getLinkStatus({
+      apiHost: this.apiHost,
+      linkdropMasterAddress: this.linkdropMasterAddress,
+      linkId
+    })
+  }
+
+  async cancelLink (linkId) {
+    return claimUtils.cancelLink({
+      apiHost: this.apiHost,
+      linkdropMasterAddress: this.linkdropMasterAddress,
+      linkId
+    })
+  }
 }
 
 function getChainId (chain) {

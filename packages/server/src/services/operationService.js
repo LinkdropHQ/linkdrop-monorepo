@@ -24,11 +24,11 @@ class OperationService {
     return operation
   }
 
-  async create (id, type, data, tx = null) {
+  async create ({ id, type, data, status = 'created' }) {
     const operation = new Operation({
       id,
       type,
-      status: 'created',
+      status,
       data,
       transactions: []
     })
@@ -40,6 +40,30 @@ class OperationService {
 
     logger.info(
       `Operation ${operation.type} was successfully saved to database: ${
+        operation.id
+      }`
+    )
+    return operation
+  }
+
+  async update ({ id, type, data, status }) {
+    const operation = await this.findById(id)
+    if (type) {
+      operation.type = type
+    }
+    if (data) {
+      operation.data = data
+    }
+    if (status) {
+      operation.status = status
+    }
+    logger.debug('Updating existing operation in database:')
+    logger.json(operation)
+
+    await operation.save()
+
+    logger.info(
+      `Operation ${operation.type} was successfully updated in database: ${
         operation.id
       }`
     )
