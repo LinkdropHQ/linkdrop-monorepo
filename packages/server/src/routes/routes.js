@@ -11,6 +11,18 @@ const routes = {
       method: 'claimERC721'
     }
   },
+  '/linkdrops/getStatus/:linkdropMasterAddress/:linkId': {
+    get: {
+      controller: 'claimController',
+      method: 'getStatus'
+    }
+  },
+  '/linkdrops/cancel': {
+    post: {
+      controller: 'claimController',
+      method: 'cancel'
+    }
+  },
   '/linkdrops/getLastTxHash/:linkdropMasterAddress/:linkId': {
     get: {
       controller: 'lastTxHashController',
