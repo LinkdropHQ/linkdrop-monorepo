@@ -64,14 +64,14 @@ class SafeCreationService {
     try {
       logger.info('Creating new safe with ENS...')
 
-      // const ensOwner = await ensService.getOwner(
-      //   `${name}.${ensService.ensDomain}`
-      // )
+      const ensOwner = await ensService.getOwner(
+        `${name}.${ensService.ensDomain}`
+      )
 
-      // assert.true(
-      //   ensOwner === ADDRESS_ZERO,
-      //   'Provided name already has an owner'
-      // )
+      assert.true(
+        ensOwner === ADDRESS_ZERO,
+        'Provided name already has an owner'
+      )
 
       const linkdropModuleSetupData = sdkService.walletSDK.encodeParams(
         LinkdropModule.abi,
@@ -113,30 +113,10 @@ class SafeCreationService {
         `createAndAddModulesMultiSendData: ${createAndAddModulesMultiSendData}`
       )
 
-      // const registrar = await ensService.getRegistrarContract()
-
-      // const label = ethers.utils.keccak256(ethers.utils.toUtf8Bytes(name))
-      // logger.debug(`label: ${label}`)
-
-      // const registerEnsData = sdkService.walletSDK.encodeParams(
-      //   FIFSRegistrar.abi,
-      //   'register',
-      //   [label, safe]
-      // )
-      // logger.debug(`registerEnsData: ${registerEnsData}`)
-
-      // const registerEnsMultiSendData = sdkService.walletSDK.encodeDataForMultiSend(
-      //   CALL_OP,
-      //   registrar.address,
-      //   0,
-      //   registerEnsData
-      // )
-      // logger.debug(`registerEnsMultiSendData: ${registerEnsMultiSendData}`)
-
-      const nestedTxData = '0x' + createAndAddModulesMultiSendData // + registerEnsMultiSendData
+      let nestedTxData = '0x' + createAndAddModulesMultiSendData
       logger.debug(`nestedTxData: ${nestedTxData}`)
 
-      const multiSendData = sdkService.walletSDK.encodeParams(
+      let multiSendData = sdkService.walletSDK.encodeParams(
         MultiSend.abi,
         'multiSend',
         [nestedTxData]
@@ -183,27 +163,50 @@ class SafeCreationService {
       )
       logger.debug(`createSafeData: ${createSafeData}`)
 
-      // const createSafeMultiSendData = sdkService.walletSDK.encodeDataForMultiSend(
-      //   DELEGATECALL_OP,
-      //   this.proxyFactory.address,
-      //   0,
-      //   createSafeData
-      // )
-      // logger.debug(`createSafeMultiSendData: ${createSafeMultiSendData}`)
-
-      const tx = await this.proxyFactory.createProxyWithNonce(
-        this.gnosisSafeMasterCopy.address,
-        gnosisSafeData,
-        saltNonce,
-        { gasLimit: 6500000, gasPrice: ethers.utils.parseUnits('20', 'gwei') }
+      const createSafeMultiSendData = sdkService.walletSDK.encodeDataForMultiSend(
+        CALL_OP,
+        this.proxyFactory.address,
+        0,
+        createSafeData
       )
+      logger.debug(`createSafeMultiSendData: ${createSafeMultiSendData}`)
 
-      // const tx = await relayerWalletService.wallet.sendTransaction({
-      //   to: this.proxyFactory.address,
-      //   data: createSafeData,
-      //   gasPrice: ethers.utils.parseUnits('20', 'gwei'),
-      //   gasLimit: 6500000
-      // })
+      const registrar = await ensService.getRegistrarContract()
+
+      const label = ethers.utils.keccak256(ethers.utils.toUtf8Bytes(name))
+      logger.debug(`label: ${label}`)
+
+      const registerEnsData = sdkService.walletSDK.encodeParams(
+        FIFSRegistrar.abi,
+        'register',
+        [label, safe]
+      )
+      logger.debug(`registerEnsData: ${registerEnsData}`)
+
+      const registerEnsMultiSendData = sdkService.walletSDK.encodeDataForMultiSend(
+        CALL_OP,
+        registrar.address,
+        0,
+        registerEnsData
+      )
+      logger.debug(`registerEnsMultiSendData: ${registerEnsMultiSendData}`)
+
+      nestedTxData = '0x' + createSafeMultiSendData + registerEnsMultiSendData
+      logger.debug(`nestedTxData: ${nestedTxData}`)
+
+      multiSendData = sdkService.walletSDK.encodeParams(
+        MultiSend.abi,
+        'multiSend',
+        [nestedTxData]
+      )
+      logger.debug(`multiSendData: ${multiSendData}`)
+
+      const tx = await relayerWalletService.wallet.sendTransaction({
+        to: this.multiSend.address,
+        data: multiSendData,
+        gasPrice: ethers.utils.parseUnits('20', 'gwei'),
+        gasLimit: 6500000
+      })
 
       logger.json({ txHash: tx.hash, safe, linkdropModule }, 'info')
       return { success: true, txHash: tx.hash, linkdropModule, safe }
