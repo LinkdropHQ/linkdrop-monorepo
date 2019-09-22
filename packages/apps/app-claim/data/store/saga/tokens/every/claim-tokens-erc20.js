@@ -36,7 +36,6 @@ const generator = function * ({ payload }) {
       console.log('...claiming and deploy')
       result = yield sdk.claimAndDeploy(claimParams, deployParams)
     }
-    console.log({ result })
     const { success, errors, txHash } = result
     if (success) {
       yield put({ type: 'TOKENS.SET_TRANSACTION_ID', payload: { transactionId: txHash } })
