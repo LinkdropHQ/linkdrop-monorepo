@@ -22,7 +22,7 @@ class DappConfirm extends React.Component {
 
   _getEthCost () {
   // just pass these variables as post message data
-    const amount = utils.bigNumberify(this.props.txParams.value || '0').toString()
+    const amount = utils.bigNumberify(this.props.txParams.value ||  '0').toString()
     const {
       chainId = '1'
     } = getHashVariables()
