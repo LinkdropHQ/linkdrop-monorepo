@@ -1,28 +1,22 @@
 import React from 'react'
-import { Header, Footer } from '@linkdrop/ui-kit'
+import { Header } from '@linkdrop/ui-kit'
 import { WalletHeader, MoonpayWidget, Note } from 'components/common'
 import styles from './styles.module'
 import { translate, actions } from 'decorators'
-import text from 'texts'
 import classNames from 'classnames'
-import { getHashVariables } from '@linkdrop/commons'
 
-@actions(({ user: { showNote, moonpayShow, contractAddress } }) => ({ showNote, moonpayShow, contractAddress }))
+@actions(({ user: { showNote, chainId, moonpayShow, contractAddress } }) => ({ chainId, showNote, moonpayShow, contractAddress }))
 @translate('pages.page')
 class Page extends React.Component {
   componentDidMount () {
-    const { contractAddress } = this.props
+    const { contractAddress, chainId } = this.props
 
     const interval = window.checkAssets
-    const {
-      chainId = '1'
-    } = getHashVariables()
     if (interval) {
       interval && window.clearInterval(interval)
     }
     if (!contractAddress) { return }
     this.actions().assets.getItems({ chainId, wallet: contractAddress })
-    console.log({ contractAddress })
     window.checkAssets = window.setInterval(_ => this.actions().assets.getItems({ chainId, wallet: contractAddress }), 30000)
   }
 

@@ -10,6 +10,7 @@ import setPrivateKey from './set-private-key'
 import setEns from './set-ens'
 import setUserData from './set-user-data'
 import toggleNote from './toggle-note'
+import setChainId from './set-chain-id'
 
 export default {
   changeLocale,
@@ -23,5 +24,6 @@ export default {
   setPrivateKey,
   setEns,
   setUserData,
-  toggleNote
+  toggleNote,
+  setChainId
 }

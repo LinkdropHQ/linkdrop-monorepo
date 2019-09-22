@@ -12,7 +12,7 @@ import { prepareRedirectUrl } from 'helpers'
 @translate('pages.receive')
 class Receive extends React.Component {
   render () {
-    const { contractAddress, chainId = '1' } = this.props
+    const { contractAddress, chainId } = this.props
     return <Page hideHeader>
       <div className={classNames(styles.container)}>
         <div className={styles.close} onClick={_ => { window.location.href = prepareRedirectUrl({ link: '/#/' }) }}>

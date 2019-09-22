@@ -14,7 +14,8 @@ const initialState = {
   contractAddress: ls && ls.getItem && ls.getItem('contractAddress'),
   ens: ls && ls.getItem && ls.getItem('ens'),
   avatar: ls && ls.getItem && ls.getItem('avatar'),
-  showNote: true
+  showNote: true,
+  chainId: null
 }
 
 export default (state = initialState, action = {}) => {
@@ -38,5 +39,6 @@ const ACTIONS = {
   'USER.SET_CONTRACT_ADDRESS': reducers.setContractAddress,
   'USER.SET_ENS': reducers.setEns,
   'USER.SET_USER_DATA': reducers.setUserData,
-  'USER.TOGGLE_NOTE': reducers.toggleNote
+  'USER.TOGGLE_NOTE': reducers.toggleNote,
+  'USER.SET_CHAIN_ID': reducers.setChainId
 }

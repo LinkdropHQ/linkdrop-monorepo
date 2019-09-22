@@ -8,7 +8,8 @@ const generator = function * ({ payload }) {
     yield put({ type: 'USER.SET_LOADING', payload: { loading: true } })
     yield put({ type: 'USER.SET_ERRORS', payload: { errors: [] } })
 
-    const { to, amount, chainId = '1' } = payload
+    const { to, amount } = payload
+    const chainId = yield select(generator.selectors.chainId)
     let address = to
     const networkName = defineNetworkName({ chainId })
     const provider = yield ethers.getDefaultProvider(networkName)
@@ -62,5 +63,5 @@ generator.selectors = {
   sdk: ({ user: { sdk } }) => sdk,
   contractAddress: ({ user: { contractAddress } }) => contractAddress,
   privateKey: ({ user: { privateKey } }) => privateKey,
-  chainId: ({ user: { chainId = '1' } }) => chainId
+  chainId: ({ user: { chainId } }) => chainId
 }

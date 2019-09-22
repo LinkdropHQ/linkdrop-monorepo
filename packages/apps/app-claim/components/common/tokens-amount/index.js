@@ -5,6 +5,7 @@ import { translate } from 'decorators'
 import { defineEtherscanUrl } from '@linkdrop/commons'
 import classNames from 'classnames'
 import variables from 'variables'
+import config from 'app.config.js'
 
 @translate('common.tokensAmount')
 class TokensAmount extends React.Component {
@@ -31,7 +32,7 @@ class TokensAmount extends React.Component {
       alreadyClaimed,
       link,
       transactionId,
-      chainId = '1',
+      chainId = config.defaultChainId,
       claimingFinished,
       sendLoading,
       sendingFinished

@@ -6,6 +6,7 @@ import { translate, actions } from 'decorators'
 import { getHashVariables } from '@linkdrop/commons'
 import { ethers } from 'ethers'
 import classNames from 'classnames'
+import config from 'app.config.js'
 
 @actions(({ user: { ens, contractAddress }, assets: { itemsToClaim } }) => ({ contractAddress, ens, itemsToClaim }))
 @translate('pages.dappResult')
@@ -15,7 +16,7 @@ class DappResult extends React.Component {
     const amount = '2967240000000000'
     const tokenAddress = '0x0000000000000000000000000000000000000000'
     const {
-      chainId = '1'
+      chainId = config.defaultChainId
     } = getHashVariables()
     if (tokenAddress === ethers.constants.AddressZero) {
       this.actions().assets.getEthData({ chainId, weiAmount: amount })
