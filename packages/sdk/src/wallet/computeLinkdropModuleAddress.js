@@ -14,13 +14,13 @@ const BYTES_ZERO = '0x'
  * @param {String} owner Safe owner's address
  * @param {Number} saltNonce Random salt nonce
  * @param {String} linkdropModuleMasterCopy Deployed linkdrop module mastercopy address
- * @param {String} proxyFactory Deployed proxy factory address
+ * @param {String} deployer Deployer address
  */
 export const computeLinkdropModuleAddress = ({
   owner,
   saltNonce,
   linkdropModuleMasterCopy,
-  proxyFactory
+  deployer
 }) => {
   assert.string(owner, 'Owner address is required')
   assert.integer(saltNonce, 'Salt nonce is required')
@@ -28,7 +28,7 @@ export const computeLinkdropModuleAddress = ({
     linkdropModuleMasterCopy,
     'Linkdrop module mastercopy address is required'
   )
-  assert.string(proxyFactory, 'Proxy factory address is required')
+  assert.string(deployer, 'Deployer address is required')
 
   const linkdropModuleData = encodeParams(LinkdropModule.abi, 'setup', [
     [owner]
@@ -50,7 +50,7 @@ export const computeLinkdropModuleAddress = ({
 
   const initcode = proxyCreationCode + constructorData.slice(2)
 
-  return buildCreate2Address(proxyFactory, salt, initcode)
+  return buildCreate2Address(deployer, salt, initcode)
 }
 
 export const proxyCreationCode =

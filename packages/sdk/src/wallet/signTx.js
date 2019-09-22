@@ -1,9 +1,6 @@
 import sigUtil from 'eth-sig-util'
 import { Buffer } from 'buffer'
-import BigNumber from 'bignumber.js'
 import assert from 'assert-js'
-import { ethers } from 'ethers'
-import GnosisSafe from '@gnosis.pm/safe-contracts/build/contracts/GnosisSafe'
 
 /**
  * Function to sign safe transaction

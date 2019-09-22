@@ -14,6 +14,9 @@ import { getEnsOwner } from './ensUtils'
 import { generateLink, generateLinkERC721 } from './generateLink'
 import { claim, claimERC721 } from './claim'
 
+const ADDRESS_ZERO = ethers.constants.AddressZero
+const BYTES_ZERO = '0x'
+
 class WalletSDK {
   constructor ({
     chain = 'rinkeby',
@@ -62,24 +65,28 @@ class WalletSDK {
 
   /**
    * Function to calculate the safe address based on given params
-   * @param {String} owner Safe owner address
    * @param {String | Number} saltNonce Random salt nonce
-   * @param {String} gnosisSafeMasterCopy Deployed gnosis safe mastercopy address
-   * @param {String} proxyFactory Deployed proxy factory address
+   * @param {String} deployer Deployer address (optional)
+   * @param {String} gnosisSafeMasterCopy Deployed gnosis safe mastercopy address (optional)
+   * @param {String} owner Safe owner address
+   * @param {String} to To (optional)
+   * @param {String} data Data (optional)
    */
   computeSafeAddress ({
-    owner,
     saltNonce,
+    deployer = this.proxyFactory,
     gnosisSafeMasterCopy = this.gnosisSafeMasterCopy,
-    proxyFactory = this.proxyFactory,
-    jsonRpcUrl = this.jsonRpcUrl
+    owner,
+    to = ADDRESS_ZERO,
+    data = BYTES_ZERO
   }) {
     return computeSafeAddress({
       owner,
       saltNonce,
       gnosisSafeMasterCopy,
-      proxyFactory,
-      jsonRpcUrl
+      deployer,
+      to,
+      data
     })
   }
 
@@ -258,21 +265,19 @@ class WalletSDK {
    * @param {String} owner Safe owner address
    * @param {String | Number} saltNonce Random salt nonce
    * @param {String} linkdropModuleMasterCopy Deployed linkdrop module mastercopy address
-   * @param {String} proxyFactory Deployed proxy factory address
+   * @param {String} deployer Deployer address
    */
   computeLinkdropModuleAddress ({
     owner,
     saltNonce,
     linkdropModuleMasterCopy = this.linkdropModuleMasterCopy,
-    proxyFactory = this.proxyFactory,
-    jsonRpcUrl = this.jsonRpcUrl
+    deployer = this.proxyFactory
   }) {
     return computeLinkdropModuleAddress({
       owner,
       saltNonce,
       linkdropModuleMasterCopy,
-      proxyFactory,
-      jsonRpcUrl
+      deployer
     })
   }
 

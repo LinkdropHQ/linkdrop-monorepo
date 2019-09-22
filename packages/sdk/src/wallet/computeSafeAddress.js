@@ -11,33 +11,47 @@ const BYTES_ZERO = '0x'
 
 /**
  * Function to precompute safe address
- * @param {String} owner Safe owner's address
  * @param {Number} saltNonce Random salt nonce
+ * @param {String} deployer Deployer address
  * @param {String} gnosisSafeMasterCopy Deployed gnosis safe mastercopy address
- * @param {String} proxyFactory Deployed proxy factory address
+ * @param {String} owner Safe owner's address
+ * @param {String} to To
+ * @param {String} data Data
  */
 export const computeSafeAddress = ({
-  owner,
   saltNonce,
+  deployer,
   gnosisSafeMasterCopy,
-  proxyFactory
+  owner,
+  to,
+  data,
+  threshold = 1,
+  paymentToken = ADDRESS_ZERO,
+  paymentAmount = 0,
+  paymentReceiver = ADDRESS_ZERO
 }) => {
-  assert.string(owner, 'Owner address is required')
   assert.integer(saltNonce, 'Salt nonce is required')
+  assert.string(deployer, 'Deployer address is required')
   assert.string(
     gnosisSafeMasterCopy,
     'Gnosis safe mastercopy address is required'
   )
-  assert.string(proxyFactory, 'Proxy factory address is required')
+  assert.string(owner, 'Owner address is required')
+  assert.string(to, 'To is required')
+  assert.string(data, 'Data is required')
+  assert.integer(threshold, 'Threshold is required')
+  assert.string(paymentToken, 'Payment token is required')
+  assert.integer(paymentAmount, 'Payment amount is required')
+  assert.string(paymentReceiver, 'Payment receiver is required')
 
   const gnosisSafeData = encodeParams(GnosisSafe.abi, 'setup', [
     [owner], // owners
-    1, // threshold
-    ADDRESS_ZERO, // to
-    BYTES_ZERO, // data,
-    ADDRESS_ZERO, // payment token address
-    0, // payment amount
-    ADDRESS_ZERO // payment receiver address
+    threshold, // threshold
+    to, // to
+    data, // data,
+    paymentToken, // payment token address
+    paymentAmount, // payment amount
+    paymentReceiver // payment receiver address
   ])
 
   const constructorData = ethers.utils.defaultAbiCoder.encode(
@@ -56,7 +70,7 @@ export const computeSafeAddress = ({
 
   const initcode = proxyCreationCode + constructorData.slice(2)
 
-  return buildCreate2Address(proxyFactory, salt, initcode)
+  return buildCreate2Address(deployer, salt, initcode)
 }
 
 export const proxyCreationCode =
