@@ -6,9 +6,9 @@ import { translate, actions } from 'decorators'
 import { getHashVariables } from '@linkdrop/commons'
 import { utils } from 'ethers'
 import widgetService from 'data/api/widget'
-import classNames from 'classnames'
+import config from 'app.config.js'
 
-@actions(({ user: { ens, contractAddress, sdk, privateKey }, assets: { itemsToClaim } }) => ({ contractAddress, ens, sdk, privateKey, itemsToClaim }))
+@actions(({ user: { ens, contractAddress, sdk, privateKey, chainId }, assets: { itemsToClaim } }) => ({ contractAddress, ens, sdk, privateKey, itemsToClaim, chainId }))
 @translate('pages.dappConfirm')
 class DappConfirm extends React.Component {
   componentDidUpdate (prevProps) {
@@ -21,11 +21,9 @@ class DappConfirm extends React.Component {
   }
 
   _getEthCost () {
-  // just pass these variables as post message data
-    const amount = utils.bigNumberify(this.props.txParams.value ||  '0').toString()
-    const {
-      chainId = '1'
-    } = getHashVariables()
+    const { chainId } = this.props
+    // just pass these variables as post message data
+    const amount = utils.bigNumberify(this.props.txParams.value || '0').toString()
     this.actions().assets.getEthData({ chainId, weiAmount: amount })
   }
 

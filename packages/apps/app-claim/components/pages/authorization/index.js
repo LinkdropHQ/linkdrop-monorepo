@@ -8,7 +8,14 @@ import { getHashVariables } from '@linkdrop/commons'
 import classNames from 'classnames'
 import gapiService from 'data/api/google-api'
 
-@actions(({ user: { sdk, privateKey, contractAddress, ens, loading } }) => ({ loading, sdk, contractAddress, privateKey, ens }))
+@actions(({ user: { sdk, privateKey, contractAddress, ens, loading, chainId } }) => ({
+  loading,
+  sdk,
+  contractAddress,
+  privateKey,
+  ens,
+  chainId
+}))
 @translate('pages.authorization')
 class Authorization extends React.Component {
   constructor (props) {
@@ -44,7 +51,7 @@ class Authorization extends React.Component {
   async _syncPrivateKeyWithDrive () {
     const {
       chainId
-    } = getHashVariables()
+    } = this.props
     const { email, avatar } = gapiService.getEmailAndAvatar()
 
     // fetching files from Drive

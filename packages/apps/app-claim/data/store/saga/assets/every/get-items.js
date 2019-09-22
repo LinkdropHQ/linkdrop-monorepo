@@ -30,14 +30,10 @@ const getTokenData = function * ({ address, symbol, decimals, chainId, provider,
   }
 }
 
-const generator = function * ({ payload }) {
+const generator = function * () {
   try {
-    const { chainId = '1' } = payload
+    const chainId = yield select(generator.selectors.chainId)
     const contractAddress = yield select(generator.selectors.contractAddress)
-    if (Number(chainId) !== 1) {
-      yield put({ type: 'ASSETS.SET_ITEMS', payload: { items: assetsMock } })
-      return yield put({ type: 'USER.SET_LOADING', payload: { loading: false } })
-    }
     const { total = 0, docs = [] } = yield call(getItems, { wallet: contractAddress })
     const networkName = defineNetworkName({ chainId })
     const provider = yield ethers.getDefaultProvider(networkName)
@@ -75,7 +71,6 @@ const generator = function * ({ payload }) {
 export default generator
 generator.selectors = {
   contractAddress: ({ user: { contractAddress } }) => contractAddress,
-  sdk: ({ user: { sdk } }) => sdk
+  sdk: ({ user: { sdk } }) => sdk,
+  chainId: ({ user: { chainId } }) => chainId
 }
-
-const assetsMock = []

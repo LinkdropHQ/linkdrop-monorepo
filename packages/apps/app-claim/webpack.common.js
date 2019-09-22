@@ -115,6 +115,7 @@ module.exports = {
       AUTH_SCOPE_CONTACTS: JSON.stringify(process.env.AUTH_SCOPE_CONTACTS),
       API_HOST_GOERLI: JSON.stringify(process.env.API_HOST_GOERLI),
       INFURA_PK: JSON.stringify(process.env.INFURA_PK),
+      DEFAULT_CHAIN_ID: JSON.stringify(process.env.DEFAULT_CHAIN_ID),
       'process.env': {
         NODE_ENV: JSON.stringify(process.env.NODE_ENV || 'development')
       }

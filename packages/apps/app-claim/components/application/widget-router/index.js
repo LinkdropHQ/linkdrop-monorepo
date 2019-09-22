@@ -8,14 +8,15 @@ import { actions } from 'decorators'
 import AppRouter from '../router'
 import { getHashVariables } from '@linkdrop/commons'
 import widgetService from 'data/api/widget'
+import config from 'app.config.js'
 
-@actions(({ user: { sdk, loading, privateKey, contractAddress, ens, loacale } }) => ({
+@actions(({ user: { sdk, loading, privateKey, contractAddress, ens, locale } }) => ({
   sdk,
   loading,
   privateKey,
   contractAddress,
   ens,
-  loacale
+  locale
 }))
 class WidgetRouter extends React.Component {
   constructor (props) {
@@ -31,7 +32,7 @@ class WidgetRouter extends React.Component {
     const { sdk } = this.props
     if (!sdk) {
       const {
-        chainId = '1'
+        chainId = config.defaultChainId
       } = getHashVariables()
       this.actions().user.createSdk({ chainId })
     }

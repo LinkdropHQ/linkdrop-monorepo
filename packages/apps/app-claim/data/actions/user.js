@@ -34,6 +34,10 @@ class User {
   toggleNote ({ showNote }) {
     this.actions.dispatch({ type: 'USER.TOGGLE_NOTE', payload: { showNote } })
   }
+
+  setChainId ({ chainId }) {
+    this.actions.dispatch({ type: 'USER.SET_CHAIN_ID', payload: { chainId } })
+  }
 }
 
 export default User

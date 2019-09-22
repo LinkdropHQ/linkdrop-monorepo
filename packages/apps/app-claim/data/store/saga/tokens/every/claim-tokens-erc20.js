@@ -36,6 +36,7 @@ const generator = function * ({ payload }) {
       console.log('...claiming and deploy')
       result = yield sdk.claimAndDeploy(claimParams, deployParams)
     }
+    console.log({ result })
     const { success, errors, txHash } = result
     if (success) {
       yield put({ type: 'TOKENS.SET_TRANSACTION_ID', payload: { transactionId: txHash } })
@@ -47,6 +48,7 @@ const generator = function * ({ payload }) {
     }
     yield put({ type: 'USER.SET_LOADING', payload: { loading: false } })
   } catch (error) {
+    console.error(error)
     const { response: { data: { errors = [] } = {} } = {} } = error
     if (errors.length > 0) {
       const currentError = ERRORS.indexOf(errors[0])

@@ -8,7 +8,8 @@ const generator = function * ({ payload }) {
   try {
     yield put({ type: 'USER.SET_LOADING', payload: { loading: true } })
     yield put({ type: 'USER.SET_ERRORS', payload: { errors: [] } })
-    const { to, amount, tokenAddress, decimals, chainId = '1' } = payload
+    const { to, amount, tokenAddress, decimals } = payload
+    const chainId = yield select(generator.selectors.chainId)
     let address = to
     const sdk = yield select(generator.selectors.sdk)
     const networkName = defineNetworkName({ chainId })
@@ -65,5 +66,5 @@ generator.selectors = {
   sdk: ({ user: { sdk } }) => sdk,
   contractAddress: ({ user: { contractAddress } }) => contractAddress,
   privateKey: ({ user: { privateKey } }) => privateKey,
-  chainId: ({ user: { chainId = '1' } }) => chainId
+  chainId: ({ user: { chainId } }) => chainId
 }

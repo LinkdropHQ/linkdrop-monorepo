@@ -1,4 +1,4 @@
-import { put, call } from 'redux-saga/effects'
+import { put, call, select } from 'redux-saga/effects'
 import { getERC721TokenData } from 'data/api/tokens'
 import { ethers } from 'ethers'
 import NFTMock from 'contracts/NFTMock.json'
@@ -8,7 +8,8 @@ const generator = function * ({ payload }) {
   let image = +(new Date())
   try {
     yield put({ type: 'ASSETS.SET_LOADING', payload: { loading: true } })
-    const { nftAddress, chainId, tokenId } = payload
+    const { nftAddress, tokenId } = payload
+    const chainId = yield select(generator.selectors.chainId)
     const networkName = defineNetworkName({ chainId })
     const provider = yield ethers.getDefaultProvider(networkName)
     const nftContract = yield new ethers.Contract(nftAddress, NFTMock.abi, provider)
@@ -25,7 +26,8 @@ const generator = function * ({ payload }) {
     yield put({ type: 'USER.SET_STEP', payload: { step: 1 } })
   } catch (e) {
     console.error(e)
-    const { nftAddress, chainId } = payload
+    const chainId = yield select(generator.selectors.chainId)
+    const { nftAddress } = payload
     const networkName = defineNetworkName({ chainId })
     const provider = yield ethers.getDefaultProvider(networkName)
     const nftContract = yield new ethers.Contract(nftAddress, NFTMock.abi, provider)
@@ -37,3 +39,6 @@ const generator = function * ({ payload }) {
 }
 
 export default generator
+generator.selectors = {
+  chainId: ({ user: { chainId } }) => chainId
+}
