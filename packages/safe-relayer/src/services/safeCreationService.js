@@ -269,30 +269,26 @@ class SafeCreationService {
       )
       logger.debug(`claimMultiSendData: ${claimMultiSendData}`)
 
-      const linkdropModuleData = sdkService.walletSDK.encodeParams(
+      const linkdropModuleSetupData = sdkService.walletSDK.encodeParams(
         LinkdropModule.abi,
         'setup',
         [[owner]]
       )
-      logger.debug(`linkdropModuleData: ${linkdropModuleData}`)
+      logger.debug(`linkdropModuleSetupData: ${linkdropModuleSetupData}`)
 
-      const linkdropModule = sdkService.walletSDK.computeLinkdropModuleAddress({
-        owner,
-        saltNonce,
-        linkdropModuleMasterCopy: LINKDROP_MODULE_MASTERCOPY_ADDRESS,
-        deployer: PROXY_FACTORY_ADDRESS
-      })
-      logger.debug(`Computed linkdrop module address: ${linkdropModule}`)
-
-      const createLinkdropModuleData = sdkService.walletSDK.encodeParams(
+      const linkdropModuleCreationData = sdkService.walletSDK.encodeParams(
         ProxyFactory.abi,
         'createProxyWithNonce',
-        [this.linkdropModuleMasterCopy.address, linkdropModuleData, saltNonce]
+        [
+          this.linkdropModuleMasterCopy.address,
+          linkdropModuleSetupData,
+          saltNonce
+        ]
       )
-      logger.debug(`createLinkdropModuleData: ${createLinkdropModuleData}`)
+      logger.debug(`linkdropModuleCreationData: ${linkdropModuleCreationData}`)
 
       const modulesCreationData = sdkService.walletSDK.encodeDataForCreateAndAddModules(
-        [createLinkdropModuleData]
+        [linkdropModuleCreationData]
       )
       logger.debug(`modulesCreationData: ${modulesCreationData}`)
 
@@ -303,28 +299,58 @@ class SafeCreationService {
       )
       logger.debug(`createAndAddModulesData: ${createAndAddModulesData}`)
 
+      const createAndAddModulesMultiSendData = sdkService.walletSDK.encodeDataForMultiSend(
+        DELEGATECALL_OP,
+        this.createAndAddModules.address,
+        0,
+        createAndAddModulesData
+      )
+      logger.debug(
+        `createAndAddModulesMultiSendData: ${createAndAddModulesMultiSendData}`
+      )
+
+      let nestedTxData = '0x' + createAndAddModulesMultiSendData
+      logger.debug(`nestedTxData: ${nestedTxData}`)
+
+      let multiSendData = sdkService.walletSDK.encodeParams(
+        MultiSend.abi,
+        'multiSend',
+        [nestedTxData]
+      )
+      logger.debug(`multiSendData: ${multiSendData}`)
+
+      const safe = sdkService.walletSDK.computeSafeAddress({
+        owner,
+        saltNonce,
+        gnosisSafeMasterCopy: GNOSIS_SAFE_MASTERCOPY_ADDRESS,
+        deployer: PROXY_FACTORY_ADDRESS,
+        to: this.multiSend.address,
+        data: multiSendData
+      })
+      logger.debug(`Computed safe address: ${safe}`)
+
+      const linkdropModule = sdkService.walletSDK.computeLinkdropModuleAddress({
+        owner,
+        saltNonce,
+        linkdropModuleMasterCopy: LINKDROP_MODULE_MASTERCOPY_ADDRESS,
+        deployer: safe
+      })
+      logger.debug(`Computed linkdrop module address: ${linkdropModule}`)
+
       const gnosisSafeData = sdkService.walletSDK.encodeParams(
         GnosisSafe.abi,
         'setup',
         [
           [owner], // owners
           1, // threshold
-          this.createAndAddModules.address, // to
-          createAndAddModulesData, // data,
+          this.multiSend.address, // to
+          multiSendData, // data,
           ADDRESS_ZERO, // payment token address
           0, // payment amount
           ADDRESS_ZERO // payment receiver address
         ]
       )
       logger.debug(`gnosisSafeData: ${gnosisSafeData}`)
-
-      const safe = sdkService.walletSDK.computeSafeAddress({
-        owner,
-        saltNonce,
-        gnosisSafeMasterCopy: GNOSIS_SAFE_MASTERCOPY_ADDRESS,
-        deployer: PROXY_FACTORY_ADDRESS
-      })
-      logger.debug(`Computed safe address: ${safe}`)
 
       const createSafeData = sdkService.walletSDK.encodeParams(
         ProxyFactory.abi,
@@ -361,14 +387,14 @@ class SafeCreationService {
       )
       logger.debug(`registerEnsMultiSendData: ${registerEnsMultiSendData}`)
 
-      const nestedTxData =
+      nestedTxData =
         '0x' +
         claimMultiSendData +
         createSafeMultiSendData +
         registerEnsMultiSendData
       logger.debug(`nestedTxData: ${nestedTxData}`)
 
-      const multiSendData = sdkService.walletSDK.encodeParams(
+      multiSendData = sdkService.walletSDK.encodeParams(
         MultiSend.abi,
         'multiSend',
         [nestedTxData]
@@ -383,7 +409,7 @@ class SafeCreationService {
       })
 
       logger.json({ txHash: tx.hash, safe, linkdropModule }, 'info')
-      return { success: true, txHash: tx.hash, safe, linkdropModule }
+      return { success: true, txHash: tx.hash, linkdropModule, safe }
     } catch (err) {
       logger.error(err)
       return { success: false, errors: err.message || err }

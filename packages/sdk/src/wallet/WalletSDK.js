@@ -25,7 +25,9 @@ class WalletSDK {
     jsonRpcUrl,
     gnosisSafeMasterCopy = '0xb6029EA3B2c51D09a50B53CA8012FeEB05bDa35A', // from https://safe-relay.gnosis.pm/api/v1/about/
     proxyFactory = '0x12302fE9c02ff50939BaAaaf415fc226C078613C', // from https://safe-relay.gnosis.pm/api/v1/about/
-    linkdropModuleMasterCopy = '0x19Ff4Cb4eFD0b9E04433Dde6507ADC68225757f2'
+    linkdropModuleMasterCopy = '0x19Ff4Cb4eFD0b9E04433Dde6507ADC68225757f2',
+    createAndAddModules = '0x40Ba7DF971BBdE476517B7d6B908113f71583183', // from https://safe-relay.gnosis.pm/api/v1/about/
+    multiSend = '0x09a19f51D806ea937C54162AaBeD4A59BCe7dda5'
   }) {
     this.chain = chain
     this.jsonRpcUrl = jsonRpcUrl || `https://${chain}.infura.io`
@@ -34,6 +36,8 @@ class WalletSDK {
     this.gnosisSafeMasterCopy = gnosisSafeMasterCopy
     this.linkdropModuleMasterCopy = linkdropModuleMasterCopy
     this.proxyFactory = proxyFactory
+    this.createAndAddModules = createAndAddModules
+    this.multiSend = multiSend
   }
 
   /**
@@ -225,6 +229,9 @@ class WalletSDK {
    * @param {String} proxyFactory Deployed proxy factory address (optional)
    * @param {String} owner Safe owner address
    * @param {String} name ENS name to register for safe
+   * @param {String} linkdropModuleMasterCopy Deployed linkdrop module master copy address (optional)
+   * @param {String} createAndAddModules Deployed createAndAddModules library address (optional)
+   * @param {String} multiSend Deployed multiSend library address (optional)
    * @param {String} apiHost API host (optional)
    * @returns {Object} {success, txHash, safe, errors}
    */
@@ -241,6 +248,9 @@ class WalletSDK {
     proxyFactory = this.proxyFactory,
     owner,
     name,
+    linkdropModuleMasterCopy = this.linkdropModuleMasterCopy,
+    createAndAddModules = this.createAndAddModules,
+    multiSend = this.multiSend,
     apiHost = this.apiHost
   }) {
     return claimAndCreate({
@@ -256,6 +266,9 @@ class WalletSDK {
       proxyFactory,
       owner,
       name,
+      linkdropModuleMasterCopy,
+      createAndAddModules,
+      multiSend,
       apiHost
     })
   }
