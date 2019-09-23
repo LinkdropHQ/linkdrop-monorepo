@@ -2,8 +2,7 @@ import React from 'react'
 import { actions, translate } from 'decorators'
 import styles from './styles.module'
 import classNames from 'classnames'
-import { Button, PageHeader, MetamaskPopup } from 'components/common'
-import { Loading } from '@linkdrop/ui-kit'
+import { Button, PageHeader, MetamaskPopup, PageLoader, Instruction } from 'components/common'
 import config from 'config-dashboard'
 import { multiply, add, bignumber, subtract } from 'mathjs'
 import EthSummaryBlock from './eth-summary-block'
@@ -97,7 +96,7 @@ class Step3 extends React.Component {
     const ethAmountFinal = multiply(add(bignumber(ethAmount), bignumber(config.linkPrice)), linksAmount)
     const serviceFee = multiply(bignumber(config.linkPrice), bignumber(linksAmount))
     return <div className={styles.container}>
-      {(loading || stateLoading) && <Loading withOverlay />}
+      {(loading || stateLoading) && <PageLoader />}
       <PageHeader title={this.t('titles.sendEth', { ethAmount: ethAmountFinal })} />
       <div className={styles.main}>
         <div className={styles.description}>
@@ -106,11 +105,7 @@ class Step3 extends React.Component {
           </p>
         </div>
         <div className={styles.scheme}>
-          <p
-            className={classNames(styles.text, styles.centered)}
-            dangerouslySetInnerHTML={{ __html: this.t('texts._12') }}
-          />
-          <MetamaskPopup amount={ethAmountFinal} />
+          <Instruction linksAmount={linksAmount} ethAmount={ethAmount} />
         </div>
       </div>
       <EthSummaryBlock ethTotal={ethAmountFinal} ethToDistribute={subtract(bignumber(ethAmountFinal), bignumber(serviceFee))} serviceFee={serviceFee} text={this.t} />

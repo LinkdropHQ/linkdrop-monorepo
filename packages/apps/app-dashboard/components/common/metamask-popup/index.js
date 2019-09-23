@@ -9,14 +9,34 @@ import { getImages } from 'helpers'
 class MetamaskPopup extends React.Component {
   render () {
     const { amount } = this.props
+    const popup = this.definePopup({ amount })
     return <div className={styles.container}>
-      <div className={styles.amount}>
-        <Icons.Ethereum />{Number(amount)}
+      {popup}
+    </div>
+  }
+
+  definePopup ({ amount }) {
+    if (amount != null) {
+      return <div className={styles.content}>
+        <div className={styles.amount}>
+          <Icons.Ethereum />{Number(amount)}
+        </div>
+        <RetinaImage
+          className={styles.img}
+          width={245}
+          {...getImages({ src: 'popup' })}
+        />
+        <div className={styles.arrow}>
+          <Icons.Cursor />
+        </div>
       </div>
+    }
+
+    return <div className={styles.content}>
       <RetinaImage
         className={styles.img}
         width={245}
-        {...getImages({ src: 'popup' })}
+        {...getImages({ src: 'popup-approve' })}
       />
       <div className={styles.arrow}>
         <Icons.Cursor />

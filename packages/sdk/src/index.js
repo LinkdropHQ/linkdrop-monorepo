@@ -1,108 +1,129 @@
 import { computeProxyAddress } from './utils'
 import * as generateLinkUtils from './generateLink'
 import * as claimUtils from './claim'
+import * as deployUtils from './deployProxy'
+import * as topupAndApproveUtils from './topupAndApprove'
+import {
+  subscribeForClaimedEvents,
+  subscribeForClaimedERC721Events
+} from './subscribeForEvents'
 
-import LinkdropFactory from '../../contracts/build/LinkdropFactory'
+import LinkdropFactory from '@linkdrop/contracts/build/LinkdropFactory'
 import { ethers } from 'ethers'
+
 // Turn off annoying warnings
 ethers.errors.setLogLevel('error')
 
-const LinkdropSDK = ({
-  linkdropMasterAddress,
-  factoryAddress,
-  chain = 'rinkeby',
-  chainId = getChainId(chain),
-  jsonRpcUrl = `https://${chain}.infura.io`,
-  apiHost = `https://${chain}.linkdrop.io`,
-  claimHost = 'https://claim.linkdrop.io'
-}) => {
-  if (linkdropMasterAddress == null || linkdropMasterAddress === '') {
-    throw new Error('Please provide linkdrop master address')
-  }
-
-  if (factoryAddress == null || factoryAddress === '') {
-    throw new Error('Please provide factory address')
-  }
-
-  if (chainId == null) {
-    throw new Error('Please provide valid chain and/or chain id')
-  }
-
-  let version = {}
-
-  const provider = new ethers.providers.JsonRpcProvider(jsonRpcUrl)
-
-  const factoryContract = new ethers.Contract(
+class LinkdropSDK {
+  constructor ({
+    linkdropMasterAddress,
     factoryAddress,
-    LinkdropFactory.abi,
-    provider
-  )
+    chain = 'mainnet',
+    jsonRpcUrl = `https://${chain}.infura.io`,
+    apiHost = `https://${chain}.linkdrop.io`,
+    claimHost = 'https://claim.linkdrop.io'
+  }) {
+    if (linkdropMasterAddress == null || linkdropMasterAddress === '') {
+      throw new Error('Please provide linkdrop master address')
+    }
 
-  const getVersion = async campaignId => {
-    if (!version[campaignId]) {
-      version[campaignId] = await factoryContract.getProxyMasterCopyVersion(
-        linkdropMasterAddress,
+    if (factoryAddress == null || factoryAddress === '') {
+      throw new Error('Please provide factory address')
+    }
+
+    if (
+      chain !== 'mainnet' &&
+      chain !== 'ropsten' &&
+      chain !== 'rinkeby' &&
+      chain !== 'goerli' &&
+      chain !== 'kovan'
+    ) {
+      throw new Error('Unsupported chain')
+    }
+
+    this.linkdropMasterAddress = linkdropMasterAddress
+    this.factoryAddress = factoryAddress
+    this.chain = chain
+    this.chainId = getChainId(chain)
+    this.jsonRpcUrl = jsonRpcUrl
+    this.apiHost = apiHost
+    this.claimHost = claimHost
+    this.version = {}
+    this.provider = new ethers.providers.JsonRpcProvider(jsonRpcUrl)
+    this.factoryContract = new ethers.Contract(
+      factoryAddress,
+      LinkdropFactory.abi,
+      this.provider
+    )
+  }
+
+  async getVersion (campaignId) {
+    if (!this.version[campaignId]) {
+      this.version[
+        campaignId
+      ] = await this.factoryContract.getProxyMasterCopyVersion(
+        this.linkdropMasterAddress,
         campaignId
       )
     }
-    return version[campaignId]
+    return this.version[campaignId]
   }
 
-  const generateLink = async ({
+  async generateLink ({
     signingKeyOrWallet,
     weiAmount,
     tokenAddress,
     tokenAmount,
     expirationTime = 12345678910,
     campaignId
-  }) => {
+  }) {
     return generateLinkUtils.generateLink({
-      factoryAddress,
-      chainId,
-      claimHost,
-      linkdropMasterAddress,
+      factoryAddress: this.factoryAddress,
+      chainId: this.chainId,
+      claimHost: this.claimHost,
+      linkdropMasterAddress: this.linkdropMasterAddress,
       signingKeyOrWallet,
       weiAmount,
       tokenAddress,
       tokenAmount,
       expirationTime,
-      version: version[campaignId] || (await getVersion(campaignId)),
+      version: this.version[campaignId] || (await this.getVersion(campaignId)),
       campaignId
     })
   }
 
-  const generateLinkERC721 = async ({
+  async generateLinkERC721 ({
     signingKeyOrWallet,
     weiAmount,
     nftAddress,
     tokenId,
     expirationTime = 12345678910,
     campaignId
-  }) => {
+  }) {
     return generateLinkUtils.generateLinkERC721({
-      factoryAddress,
-      chainId,
-      claimHost,
-      linkdropMasterAddress,
+      factoryAddress: this.factoryAddress,
+      chainId: this.chainId,
+      claimHost: this.claimHost,
+      linkdropMasterAddress: this.linkdropMasterAddress,
       signingKeyOrWallet,
       weiAmount,
       nftAddress,
       tokenId,
       expirationTime,
-      version: version[campaignId] || (await getVersion(campaignId)),
+      version: this.version[campaignId] || (await this.getVersion(campaignId)),
       campaignId
     })
   }
 
-  const getProxyAddress = campaingId => {
+  getProxyAddress (campaingId) {
     return computeProxyAddress(
-      factoryAddress,
-      linkdropMasterAddress,
+      this.factoryAddress,
+      this.linkdropMasterAddress,
       campaingId
     )
   }
 
-  const claim = async ({
+  async claim ({
     weiAmount,
     tokenAddress,
     tokenAmount,
@@ -111,26 +132,26 @@ const LinkdropSDK = ({
     linkdropSignerSignature,
     receiverAddress,
     campaignId
-  }) => {
+  }) {
     return claimUtils.claim({
-      jsonRpcUrl,
-      apiHost,
+      jsonRpcUrl: this.json,
+      apiHost: this.apiHost,
       weiAmount,
       tokenAddress,
       tokenAmount,
       expirationTime,
-      version: version[campaignId] || (await getVersion(campaignId)),
-      chainId,
+      version: this.version[campaignId] || (await this.getVersion(campaignId)),
+      chainId: this.chainId,
       linkKey,
-      linkdropMasterAddress,
+      linkdropMasterAddress: this.linkdropMasterAddress,
       linkdropSignerSignature,
       receiverAddress,
-      factoryAddress,
+      factoryAddress: this.factoryAddress,
       campaignId
     })
   }
 
-  const claimERC721 = async ({
+  async claimERC721 ({
     weiAmount,
     nftAddress,
     tokenId,
@@ -139,51 +160,120 @@ const LinkdropSDK = ({
     linkdropSignerSignature,
     receiverAddress,
     campaignId
-  }) => {
+  }) {
     return claimUtils.claimERC721({
-      jsonRpcUrl,
-      apiHost,
+      jsonRpcUrl: this.jsonRpcUrl,
+      apiHost: this.apiHost,
       weiAmount,
       nftAddress,
       tokenId,
       expirationTime,
-      version: version[campaignId] || (await getVersion(campaignId)),
-      chainId,
+      version: this.version[campaignId] || (await this.getVersion(campaignId)),
+      chainId: this.chainId,
       linkKey,
-      linkdropMasterAddress,
+      linkdropMasterAddress: this.linkdropMasterAddress,
       linkdropSignerSignature,
       receiverAddress,
-      factoryAddress,      
+      factoryAddress: this.factoryAddress,
       campaignId
     })
   }
 
-  return {
-    getProxyAddress,
-    computeProxyAddress,
-    generateLink,
-    generateLinkERC721,
-    claim,
-    claimERC721
+  async topup ({ signingKeyOrWallet, proxyAddress, weiAmount }) {
+    return topupAndApproveUtils.topup({
+      jsonRpcUrl: this.jsonRpcUrl,
+      signingKeyOrWallet,
+      proxyAddress,
+      weiAmount
+    })
+  }
+
+  async approve ({
+    signingKeyOrWallet,
+    proxyAddress,
+    tokenAddress,
+    tokenAmount
+  }) {
+    return topupAndApproveUtils.approve({
+      jsonRpcUrl: this.jsonRpcUrl,
+      signingKeyOrWallet,
+      proxyAddress,
+      tokenAddress,
+      tokenAmount
+    })
+  }
+
+  async approveERC721 ({ signingKeyOrWallet, proxyAddress, nftAddress }) {
+    return topupAndApproveUtils.topupAndApproveERC721({
+      jsonRpcUrl: this.jsonRpcUrl,
+      signingKeyOrWallet,
+      proxyAddress,
+      nftAddress
+    })
+  }
+
+  async deployProxy ({ signingKeyOrWallet, campaignId = 0, weiAmount }) {
+    return deployUtils.deployProxy({
+      jsonRpcUrl: this.jsonRpcUrl,
+      factoryAddress: this.factoryAddress,
+      signingKeyOrWallet,
+      campaignId,
+      weiAmount
+    })
+  }
+
+  async subscribeForClaimedEvents (proxyAddress, callback) {
+    return subscribeForClaimedEvents(
+      {
+        jsonRpcUrl: this.jsonRpcUrl,
+        proxyAddress
+      },
+      callback
+    )
+  }
+
+  async subscribeForClaimedERC721Events (proxyAddress, callback) {
+    return subscribeForClaimedERC721Events(
+      {
+        jsonRpcUrl: this.jsonRpcUrl,
+        proxyAddress
+      },
+      callback
+    )
+  }
+
+  async getLinkStatus (linkId) {
+    return claimUtils.getLinkStatus({
+      apiHost: this.apiHost,
+      linkdropMasterAddress: this.linkdropMasterAddress,
+      linkId
+    })
+  }
+
+  async cancelLink (linkId) {
+    return claimUtils.cancelLink({
+      apiHost: this.apiHost,
+      linkdropMasterAddress: this.linkdropMasterAddress,
+      linkId
+    })
   }
 }
 
-const getChainId = chain => {
-  let chainId
+function getChainId (chain) {
   switch (chain) {
     case 'mainnet':
-      chainId = 1
-      break
+      return 1
     case 'ropsten':
-      chainId = 3
-      break
+      return 3
     case 'rinkeby':
-      chainId = 4
-      break
+      return 4
+    case 'goerli':
+      return 5
+    case 'kovan':
+      return 42
     default:
-      chainId = null
+      return null
   }
-  return chainId
 }
 
 export default LinkdropSDK

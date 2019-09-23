@@ -1,8 +1,7 @@
 import React from 'react'
 import { actions, translate } from 'decorators'
 import styles from './styles.module'
-import { Loading } from '@linkdrop/ui-kit'
-import { PageHeader } from 'components/common'
+import { PageHeader, PageLoader, Instruction } from 'components/common'
 import EthAmountData from './eth-amount-data'
 import LinkContents from './link-contents'
 import ApproveSummary from './approve-summary'
@@ -115,7 +114,7 @@ class Step2 extends React.Component {
     const { ethAmount, tokenType, tokenAmount, linksAmount, tokenSymbol, loading, currentAddress } = this.props
     const { loading: stateLoading } = this.state
     return <div className={styles.container}>
-      {(stateLoading || loading) && <Loading withOverlay />}
+      {(stateLoading || loading) && <PageLoader />}
       <PageHeader title={this.t('titles.summaryPay')} />
       <div className={styles.main}>
         <div className={styles.summary}>
@@ -157,24 +156,20 @@ class Step2 extends React.Component {
               <EthAmountData ethAmount={ethAmount} linksAmount={linksAmount} tokenAmount={tokenAmount} />
             </div>
           </div>
+          <div className={styles.serviceFee}>{this.t('texts._18')}</div>
+          <ApproveSummary tokenType={tokenType} linksAmount={linksAmount} serviceFee={config.linkPrice} ethAmount={ethAmount} tokenAmount={tokenAmount} tokenSymbol={tokenSymbol} />
+          <NextButton
+            tokenType={tokenType}
+            tokenAmount={tokenAmount}
+            currentAddress={currentAddress}
+            linksAmount={linksAmount}
+            ethAmount={ethAmount}
+            serviceFee={config.linkPrice}
+          />
         </div>
         <div className={styles.description}>
-          <p className={styles.text}>{this.t('texts._6')}</p>
-          <p className={styles.text}>{this.t('texts._7', { price: config.linkPrice })}</p>
-          <p className={styles.text}>{this.t('texts._13')}</p>
+          <Instruction linksAmount={linksAmount} ethAmount={ethAmount} tokenAmount={tokenAmount} tokenType={tokenType} />
         </div>
-      </div>
-
-      <div className={styles.controls}>
-        <ApproveSummary tokenType={tokenType} linksAmount={linksAmount} serviceFee={config.linkPrice} ethAmount={ethAmount} tokenAmount={tokenAmount} tokenSymbol={tokenSymbol} />
-        <NextButton
-          tokenType={tokenType}
-          tokenAmount={tokenAmount}
-          currentAddress={currentAddress}
-          linksAmount={linksAmount}
-          ethAmount={ethAmount}
-          serviceFee={config.linkPrice}
-        />
       </div>
     </div>
   }

@@ -12,6 +12,13 @@
   font-weight: normal;
   margin: 0 0 20px 0;
   font-family: 'Inter-Regular';
+  a {
+    color: $blackColor;
+    transition: color .3s;
+    &:hover {
+      color: $dbBlue;
+    }
+  }
 }
 
 .container {

@@ -1,0 +1,16 @@
+@import "variables";
+
+.text {
+  margin-bottom: 30px;
+  text-align: center;
+  span {
+    font-family: 'Inter-Bold';
+  }
+}
+
+.textExtra {
+  text-align: center;
+  max-width: 240px;
+  margin: 0 auto;
+  color: $dbGrey;
+}

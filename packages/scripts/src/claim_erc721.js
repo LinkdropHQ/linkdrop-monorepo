@@ -37,13 +37,18 @@ const claimERC721 = async () => {
       campaignId
     } = await getUrlParams('erc721', linkNumber)
 
-    const linkdropSDK = LinkdropSDK({
+    const linkdropSDK = new LinkdropSDK({
       linkdropMasterAddress,
       factoryAddress: FACTORY_ADDRESS,
       chain: CHAIN,
       jsonRpcUrl: JSON_RPC_URL,
       apiHost: API_HOST
     })
+
+    const proxyAddress = linkdropSDK.getProxyAddress(campaignId)
+    console.log('\nproxyAddress: ', proxyAddress)
+
+    linkdropSDK.subscribeForClaimedERC721Events()
 
     const { errors, success, txHash } = await linkdropSDK.claimERC721({
       jsonRpcUrl: JSON_RPC_URL,

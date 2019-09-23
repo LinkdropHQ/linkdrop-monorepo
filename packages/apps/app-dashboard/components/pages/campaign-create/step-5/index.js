@@ -4,10 +4,11 @@ import { ethers, utils } from 'ethers'
 import { actions, translate } from 'decorators'
 import styles from './styles.module'
 import classNames from 'classnames'
-import { Button, PageHeader } from 'components/common'
-import { Loading, Icons } from '@linkdrop/ui-kit'
+import { Button, PageHeader, PageLoader } from 'components/common'
+import { Icons } from '@linkdrop/ui-kit'
 import { defineNetworkName, convertFromExponents } from '@linkdrop/commons'
 import { getImages } from 'helpers'
+import { factory } from 'app.config.js'
 
 @actions(({ user: { loading, chainId }, campaigns: { items, current } }) => ({ chainId, items, current, loading }))
 @translate('pages.campaignCreate')
@@ -26,7 +27,7 @@ class Step5 extends React.Component {
     )
     return <div className={styles.container}>
       <PageHeader title={this.t('titles.getTheLinks')} />
-      {loading && <Loading withOverlay />}
+      {loading && <PageLoader />}
       <div className={styles.content}>
         <div className={styles.automatic}>
 
@@ -46,7 +47,8 @@ class Step5 extends React.Component {
               linkdropSigner: privateKey,
               weiAmount: ethAmount ? weiAmount : 0,
               tokenAddress: tokenAddress || ethers.constants.AddressZero,
-              tokenAmount: tokenAmount ? tokenAmountFormatted : 0
+              tokenAmount: tokenAmount ? tokenAmountFormatted : 0,
+              factoryAddress: factory
             })}
           </xmp>
         </div>
@@ -56,21 +58,24 @@ class Step5 extends React.Component {
           <div className={styles.buttonsContainer}>
             <Button onClick={_ => links && this.actions().campaigns.getCSV({ links, id: campaignToCheck || current })} className={styles.button}>{this.t('buttons.downloadCsv')}</Button>
           </div>
-          <p onClick={e => {
-            if (e.target.tagName === 'A') {
-              e.preventDefault()
-              const image = new Image()
-              image.src = e.target.getAttribute('href')
-              const w = window.open('')
-              w.document.write(image.outerHTML)
-            }
-          }} className={classNames(styles.text, styles.textMargin60)} dangerouslySetInnerHTML={{ __html: this.t('titles.howToClaimPreview', { href: images.image }) }} />
+          <p
+            onClick={e => {
+              if (e.target.tagName === 'A') {
+                e.preventDefault()
+                const image = new Image()
+                image.src = e.target.getAttribute('href')
+                const w = window.open('')
+                w.document.write(image.outerHTML)
+              }
+            }} className={classNames(styles.text, styles.textMargin60)} dangerouslySetInnerHTML={{ __html: this.t('titles.howToClaimPreview', { href: images.image }) }}
+          />
           <p className={classNames(styles.text, styles.textMargin20)} dangerouslySetInnerHTML={{ __html: this.t('titles.visitHelpCenter', { href: 'https://www.notion.so/Help-Center-9cf549af5f614e1caee6a660a93c489b' }) }} />
         </div>
       </div>
       <div>
         <p className={classNames(styles.text, styles.textMargin20)}>{this.t('titles.contractParams')}</p>
         <p className={classNames(styles.text, styles.textMargin10, styles.ellipsis)} dangerouslySetInnerHTML={{ __html: this.t('titles.masterAddress', { address: currentAddress }) }} />
+        <p className={classNames(styles.text, styles.textMargin10, styles.ellipsis)} dangerouslySetInnerHTML={{ __html: this.t('titles.factoryAddress', { address: factory }) }} />
         <p className={classNames(styles.text, styles.textMargin10, styles.ellipsis)} dangerouslySetInnerHTML={{ __html: this.t('titles.signingKey', { signingKey: privateKey }) }} />
         <p className={classNames(styles.text, styles.ellipsis)} dangerouslySetInnerHTML={{ __html: this.t('titles.campaignId', { campaignId }) }} />
       </div>

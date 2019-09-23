@@ -20,7 +20,9 @@ class Main extends React.Component {
         title={this.t('titles.customSolutions')}
         description={this.t('texts.incentivizeCustomer')}
         extraContent={this.t('titles.allAssets')}
-        onClick
+        onClick={_ => {
+          window.open('https://linkdrop.io/contact', '_blank')
+        }}
         buttonTitle={this.t('buttons.contactUs')}
       />
     </div>

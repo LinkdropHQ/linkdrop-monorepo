@@ -20,6 +20,13 @@
   padding-bottom: 30px;
 }
 
+.content {
+  position: relative;
+  width: 245px;
+  margin: 0 auto;
+}
+
+
 .amount {
   position: absolute;
   top: 146px;
@@ -38,5 +45,5 @@
   position: absolute;
   bottom: 0px;
   animation: cursorMove infinite 3s;
-  right: 0px;
+  right: calc(50%);
 }

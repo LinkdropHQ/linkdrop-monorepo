@@ -5,7 +5,7 @@ var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefau
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.claimERC721 = exports.claim = void 0;
+exports.cancelLink = exports.getLinkStatus = exports.claimERC721 = exports.claim = void 0;
 
 var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"));
 
@@ -377,3 +377,88 @@ function () {
 }();
 
 exports.claimERC721 = claimERC721;
+
+var getLinkStatus =
+/*#__PURE__*/
+function () {
+  var _ref6 = (0, _asyncToGenerator2["default"])(
+  /*#__PURE__*/
+  _regenerator["default"].mark(function _callee3(_ref5) {
+    var apiHost, linkdropMasterAddress, linkId, response, _response$data3, error, errors, success, status;
+
+    return _regenerator["default"].wrap(function _callee3$(_context3) {
+      while (1) {
+        switch (_context3.prev = _context3.next) {
+          case 0:
+            apiHost = _ref5.apiHost, linkdropMasterAddress = _ref5.linkdropMasterAddress, linkId = _ref5.linkId;
+            _context3.next = 3;
+            return axios.get("".concat(apiHost, "/api/v1/linkdrops/getStatus/").concat(linkdropMasterAddress, "/").concat(linkId));
+
+          case 3:
+            response = _context3.sent;
+            _response$data3 = response.data, error = _response$data3.error, errors = _response$data3.errors, success = _response$data3.success, status = _response$data3.status;
+            return _context3.abrupt("return", {
+              error: error,
+              errors: errors,
+              success: success,
+              status: status
+            });
+
+          case 6:
+          case "end":
+            return _context3.stop();
+        }
+      }
+    }, _callee3);
+  }));
+
+  return function getLinkStatus(_x3) {
+    return _ref6.apply(this, arguments);
+  };
+}();
+
+exports.getLinkStatus = getLinkStatus;
+
+var cancelLink =
+/*#__PURE__*/
+function () {
+  var _ref8 = (0, _asyncToGenerator2["default"])(
+  /*#__PURE__*/
+  _regenerator["default"].mark(function _callee4(_ref7) {
+    var apiHost, linkdropMasterAddress, linkId, response, _response$data4, error, errors, success, claimOperation;
+
+    return _regenerator["default"].wrap(function _callee4$(_context4) {
+      while (1) {
+        switch (_context4.prev = _context4.next) {
+          case 0:
+            apiHost = _ref7.apiHost, linkdropMasterAddress = _ref7.linkdropMasterAddress, linkId = _ref7.linkId;
+            _context4.next = 3;
+            return axios.post("".concat(apiHost, "/api/v1/linkdrops/cancel"), {
+              linkdropMasterAddress: linkdropMasterAddress,
+              linkId: linkId
+            });
+
+          case 3:
+            response = _context4.sent;
+            _response$data4 = response.data, error = _response$data4.error, errors = _response$data4.errors, success = _response$data4.success, claimOperation = _response$data4.claimOperation;
+            return _context4.abrupt("return", {
+              error: error,
+              errors: errors,
+              success: success,
+              claimOperation: claimOperation
+            });
+
+          case 6:
+          case "end":
+            return _context4.stop();
+        }
+      }
+    }, _callee4);
+  }));
+
+  return function cancelLink(_x4) {
+    return _ref8.apply(this, arguments);
+  };
+}();
+
+exports.cancelLink = cancelLink;

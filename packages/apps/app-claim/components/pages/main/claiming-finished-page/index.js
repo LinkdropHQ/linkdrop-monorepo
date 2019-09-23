@@ -3,8 +3,7 @@ import { Alert, Icons } from '@linkdrop/ui-kit'
 import { translate, actions } from 'decorators'
 import styles from './styles.module'
 import commonStyles from '../styles.module'
-import { getHashVariables } from '@linkdrop/commons'
-import config from 'config-claim'
+import { getHashVariables, defineEtherscanUrl } from '@linkdrop/commons'
 import classNames from 'classnames'
 
 @actions(({ tokens: { transactionId } }) => ({ transactionId }))
@@ -22,7 +21,7 @@ class ClaimingFinishedPage extends React.Component {
         })}
         dangerouslySetInnerHTML={{
           __html: this.t('titles.seeDetails', {
-            transactionLink: `${Number(chainId) === 4 ? config.etherscanRinkeby : config.etherscanMainnet}${transactionId}`
+            transactionLink: `${defineEtherscanUrl({ chainId })}tx/${transactionId}`
           })
         }}
       />

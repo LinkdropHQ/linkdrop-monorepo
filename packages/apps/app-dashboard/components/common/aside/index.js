@@ -15,7 +15,7 @@ class Aside extends React.Component {
     return <aside className={styles.container}>
       <div className={styles.mainBlock}>
         <div className={styles.logo}>
-          <a href='/#/'><RetinaImage alwaysHighRes width={118} {...getImages({ src: 'hole' })} /></a>
+          <a href='/#/'><RetinaImage alwaysHighRes width={181} {...getImages({ src: 'logo' })} /></a>
         </div>
         {this.renderDashboardButton()}
         {this.renderCampaignsButton({ currentAddress, items, chainId })}
@@ -26,7 +26,7 @@ class Aside extends React.Component {
       <div className={styles.footer}>
         <div className={styles.footerMenu}>
           <a target='_blank' href='https://www.notion.so/Terms-and-Privacy-dfa7d9b85698491d9926cbfe3c9a0a58' className={styles.link}>{this.t('legal')}</a>
-          <a target='_blank' href='mailto:hi@linkdrop.io' className={styles.link}>{this.t('contactUs')}</a>
+          <a target='_blank' href='https://linkdrop.io/contact' className={styles.link}>{this.t('contactUs')}</a>
         </div>
         <div className={styles.copyright}>
           {this.t('copyright')}
