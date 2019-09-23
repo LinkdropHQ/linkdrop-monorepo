@@ -3,6 +3,9 @@
 .wrapper {
   min-height: 68px;
   margin-bottom: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .message {
