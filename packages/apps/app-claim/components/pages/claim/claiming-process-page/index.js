@@ -4,6 +4,7 @@ import commonStyles from '../styles.module'
 import { getHashVariables } from '@linkdrop/commons'
 import { TokensAmount, AssetBalance, AccountBalance } from 'components/common'
 import { getCurrentAsset } from 'helpers'
+import styles from './styles.module'
 
 @actions(({ user: { chainId }, tokens: { transactionId, transactionStatus } }) => ({ transactionId, chainId, transactionStatus }))
 @translate('pages.claim')
@@ -50,7 +51,7 @@ class ClaimingProcessPage extends React.Component {
         this.setState({
           loading: false
         }, _ => this.actions().assets.saveClaimedAssets())
-      }, 3000)
+      }, 1000)
     }
   }
 
@@ -63,20 +64,22 @@ class ClaimingProcessPage extends React.Component {
     return <div className={commonStyles.container}>
       <AccountBalance items={itemsToClaim} loading={loading} />
       <TokensAmount chainId={chainId} transactionId={transactionId} loading={loading} symbol={symbol} amount={balanceFormatted} />
-      {itemsToClaim.map(({
-        icon,
-        symbol,
-        balanceFormatted,
-        tokenAddress,
-        price
-      }) => <AssetBalance
-        key={tokenAddress}
-        loading={loading}
-        symbol={symbol}
-        amount={balanceFormatted}
-        price={price}
-        icon={icon}
-      />)}
+      <div className={styles.content}>
+        {itemsToClaim.map(({
+          icon,
+          symbol,
+          balanceFormatted,
+          tokenAddress,
+          price
+        }) => <AssetBalance
+          key={tokenAddress}
+          loading={loading}
+          symbol={symbol}
+          amount={balanceFormatted}
+          price={price}
+          icon={icon}
+        />)}
+      </div>
     </div>
   }
 }
