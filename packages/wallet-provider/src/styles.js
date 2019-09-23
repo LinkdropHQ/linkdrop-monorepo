@@ -25,7 +25,7 @@ export const styles = `
 }
 
 .ld-widget-iframe {
-  position: absolute;
+  position: fixed;
   height: 450px;
   display: none;
   bottom: 85px;

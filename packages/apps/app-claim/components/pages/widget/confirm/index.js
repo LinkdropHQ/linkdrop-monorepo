@@ -3,16 +3,14 @@ import { DappHeader, AssetBalance } from 'components/common'
 import { Button } from '@linkdrop/ui-kit'
 import styles from './styles.module'
 import { translate, actions } from 'decorators'
-import { getHashVariables } from '@linkdrop/commons'
 import { utils } from 'ethers'
-import widgetService from 'data/api/widget'
-import config from 'app.config.js'
 
-@actions(({ user: { ens, contractAddress, sdk, privateKey, chainId }, assets: { itemsToClaim } }) => ({ contractAddress, ens, sdk, privateKey, itemsToClaim, chainId }))
+@actions(({ widget: { txParams }, user: { chainId }, assets: { itemsToClaim } }) => ({ txParams, itemsToClaim, chainId }))
 @translate('pages.dappConfirm')
 class DappConfirm extends React.Component {
   componentDidUpdate (prevProps) {
-    if (prevProps.txParams && prevProps.txParams.value === this.props.txParams.value) return null
+    const { txParams } = prevProps
+    if (txParams && txParams.value === this.props.txParams.value) return null
     this._getEthCost()
   }
 
@@ -21,30 +19,14 @@ class DappConfirm extends React.Component {
   }
 
   _getEthCost () {
-    const { chainId } = this.props
+    const { chainId, txParams } = this.props
     // just pass these variables as post message data
-    const amount = utils.bigNumberify(this.props.txParams.value || '0').toString()
+    const amount = utils.bigNumberify(txParams.value || '0').toString()
     this.actions().assets.getEthData({ chainId, weiAmount: amount })
   }
 
   async _onConfirmTx () {
-    const { sdk, privateKey, contractAddress } = this.props
-    const {
-      data,
-      to,
-      value
-    } = this.props.txParams
-
-    const message = {
-      from: contractAddress,
-      data: data || '0x0',
-      to: to || '0x0',
-      operationType: 0,
-      value: value || '0x0'
-    }
-    const { txHash, success, errors } = await sdk.execute(message, privateKey)
-
-    widgetService.onConfirmClick({ txHash, success, errors })
+    this.actions().widget.confirmTx()
   }
 
   render () {
@@ -65,7 +47,7 @@ class DappConfirm extends React.Component {
         <div className={styles.controls}>
           <Button
             inverted
-            onClick={() => widgetService.onCloseClick()}
+            onClick={() => this.actions().widget.close()}
             className={styles.buttonCancel}
           >
             {this.t('buttons.cancel')}

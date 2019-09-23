@@ -4,6 +4,7 @@ import { translate } from 'decorators'
 import classNames from 'classnames'
 import { roundAmount } from 'helpers'
 import { multiply, bignumber } from 'mathjs'
+import { Icons } from '@linkdrop/ui-kit'
 
 @translate('common.assetBalance')
 class AssetBalance extends React.Component {
@@ -17,7 +18,9 @@ class AssetBalance extends React.Component {
   render () {
     const { iconType } = this.state
     const { loading, symbol, amount, onClick, icon, tokenAddress, price, className } = this.props
-    const finalIcon = iconType === 'default' ? <img onError={_ => this.setState({ iconType: 'blank' })} className={styles.iconImg} src={icon} /> : <span />
+    const finalIcon = iconType === 'default'
+      ? <img onError={_ => this.setState({ iconType: 'blank' })} className={styles.iconImg} src={icon} />
+      : <Icons.Star width={30} height={30} />
     const finalPrice = String(multiply(bignumber(price), bignumber(amount)))
     return <div
       onClick={_ => onClick && onClick()} className={classNames(styles.container, className, {
@@ -25,7 +28,10 @@ class AssetBalance extends React.Component {
         [styles.eth]: symbol === 'ETH'
       })}
     >
-      <div className={styles.icon}>
+      <div className={classNames(styles.icon, {
+        [styles.iconBlank]: iconType === 'blank'
+      })}
+      >
         {finalIcon}
       </div>
       <div className={styles.symbol}>{symbol}</div>

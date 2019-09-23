@@ -1,14 +1,13 @@
 @import "variables";
 
 .assets {
-  min-height: 68px;
+  min-height: 78px;
   position: relative;
+  max-width: 300px;
+  margin: 0 auto;
   
   .assetsContent {
-    /* position: absolute; */
-    /* left: 50%; */
     width: 100%;
-    /* transform: translate(-50%); */
     margin-bottom: 20px;
   }
 

@@ -6,7 +6,6 @@ import { Loading, Button } from '@linkdrop/ui-kit'
 import { getCurrentAsset } from 'helpers'
 import { AssetsList } from 'components/pages/common'
 import styles from './styles.module'
-import widgetService from 'data/api/widget'
 
 @actions(({ assets: { items, itemsToClaim }, user: { ens } }) => ({ items, ens }))
 @translate('pages.claim')
@@ -41,7 +40,7 @@ class ClaimingFinishedPage extends React.Component {
   }
 
   renderDappButton () {
-    return <Button className={styles.button} onClick={() => widgetService.hideWidget()}>{this.t('buttons.continue')}</Button>
+    return <Button className={styles.button} onClick={() => this.actions().widget.hide()}>{this.t('buttons.continue')}</Button>
   }
 }
 

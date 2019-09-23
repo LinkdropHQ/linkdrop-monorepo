@@ -1,9 +1,11 @@
 import fetch from '../fetch'
 import { prepareGetParams } from 'data/api/helpers'
 
-export default ({ wallet }) => {
+export default ({ address, networkName }) => {
   const getParams = prepareGetParams({
-    address: wallet
+    address,
+    action: 'tokenlist',
+    module: 'account'
   })
-  return fetch(`https://ethereum-ray.trustwalletapp.com/tokens${getParams}`)
+  return fetch(`https://blockscout.com/eth/${networkName}/api${getParams}`)
 }

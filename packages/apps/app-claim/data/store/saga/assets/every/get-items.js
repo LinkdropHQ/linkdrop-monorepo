@@ -34,15 +34,16 @@ const generator = function * () {
   try {
     const chainId = yield select(generator.selectors.chainId)
     const contractAddress = yield select(generator.selectors.contractAddress)
-    const { total = 0, docs = [] } = yield call(getItems, { wallet: contractAddress })
     const networkName = defineNetworkName({ chainId })
+    const { status = 0, result = [], message } = yield call(getItems, { address: contractAddress, networkName })
     const provider = yield ethers.getDefaultProvider(networkName)
     const ethBalance = yield provider.getBalance(contractAddress)
 
     let assetsStorage = []
-    if ((total && total > 0)) {
-      const assets = yield all(docs.map(({ contract: { address, symbol, decimals } }) => getTokenData({ address, symbol, decimals, chainId, provider, contractAddress })))
-      assetsStorage = assetsStorage.concat(assets)
+    if (status && status === '1' && message === 'OK') {
+      const erc20Assets = result.filter(asset => asset.type === 'ERC-20')
+      const erc20AssetsFormatted = yield all(erc20Assets.map(({ contractAddress: address, symbol, decimals }) => getTokenData({ address, symbol, decimals, chainId, provider, contractAddress })))
+      assetsStorage = assetsStorage.concat(erc20AssetsFormatted)
     }
 
     if (ethBalance && ethBalance > 0) {
