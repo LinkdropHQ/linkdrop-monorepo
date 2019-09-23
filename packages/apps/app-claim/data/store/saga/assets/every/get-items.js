@@ -1,5 +1,5 @@
 import { put, call, all, select } from 'redux-saga/effects'
-import { getItemsNew, getAssetPrice } from 'data/api/assets'
+import { getItems, getAssetPrice } from 'data/api/assets'
 import { ethers, utils } from 'ethers'
 import TokenMock from 'contracts/TokenMock.json'
 import { defineNetworkName } from '@linkdrop/commons'
@@ -35,7 +35,7 @@ const generator = function * () {
     const chainId = yield select(generator.selectors.chainId)
     const contractAddress = yield select(generator.selectors.contractAddress)
     const networkName = defineNetworkName({ chainId })
-    const { status = 0, result = [], message } = yield call(getItemsNew, { address: contractAddress, networkName })
+    const { status = 0, result = [], message } = yield call(getItems, { address: contractAddress, networkName })
     const provider = yield ethers.getDefaultProvider(networkName)
     const ethBalance = yield provider.getBalance(contractAddress)
 
