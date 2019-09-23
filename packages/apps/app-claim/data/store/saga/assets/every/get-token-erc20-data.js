@@ -7,7 +7,8 @@ import { getAssetPrice } from 'data/api/assets'
 const generator = function * ({ payload }) {
   try {
     yield put({ type: 'ASSETS.SET_LOADING', payload: { loading: true } })
-    const { tokenAmount, tokenAddress, chainId } = payload
+    const { tokenAmount, tokenAddress } = payload
+    const chainId = yield select(generator.selectors.chainId)
     const networkName = defineNetworkName({ chainId })
     const provider = yield ethers.getDefaultProvider(networkName)
     let decimals
@@ -49,5 +50,6 @@ const generator = function * ({ payload }) {
 
 export default generator
 generator.selectors = {
-  itemsToClaim: ({ assets: { itemsToClaim } }) => itemsToClaim
+  itemsToClaim: ({ assets: { itemsToClaim } }) => itemsToClaim,
+  chainId: ({ user: { chainId } }) => chainId
 }

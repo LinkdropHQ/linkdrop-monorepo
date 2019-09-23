@@ -47,6 +47,7 @@ const generator = function * ({ payload }) {
     }
     yield put({ type: 'USER.SET_LOADING', payload: { loading: false } })
   } catch (error) {
+    console.error(error)
     const { response: { data: { errors = [] } = {} } = {} } = error
     if (errors.length > 0) {
       const currentError = ERRORS.indexOf(errors[0])

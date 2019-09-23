@@ -1,5 +1,5 @@
 import { put, call, all, select } from 'redux-saga/effects'
-import { getItems, getAssetPrice } from 'data/api/assets'
+import { getItemsNew, getAssetPrice } from 'data/api/assets'
 import { ethers, utils } from 'ethers'
 import TokenMock from 'contracts/TokenMock.json'
 import { defineNetworkName } from '@linkdrop/commons'
@@ -30,23 +30,20 @@ const getTokenData = function * ({ address, symbol, decimals, chainId, provider,
   }
 }
 
-const generator = function * ({ payload }) {
+const generator = function * () {
   try {
-    const { chainId = '1' } = payload
+    const chainId = yield select(generator.selectors.chainId)
     const contractAddress = yield select(generator.selectors.contractAddress)
-    if (Number(chainId) !== 1) {
-      yield put({ type: 'ASSETS.SET_ITEMS', payload: { items: assetsMock } })
-      return yield put({ type: 'USER.SET_LOADING', payload: { loading: false } })
-    }
-    const { total = 0, docs = [] } = yield call(getItems, { wallet: contractAddress })
     const networkName = defineNetworkName({ chainId })
+    const { status = 0, result = [], message } = yield call(getItemsNew, { address: contractAddress, networkName })
     const provider = yield ethers.getDefaultProvider(networkName)
     const ethBalance = yield provider.getBalance(contractAddress)
 
     let assetsStorage = []
-    if ((total && total > 0)) {
-      const assets = yield all(docs.map(({ contract: { address, symbol, decimals } }) => getTokenData({ address, symbol, decimals, chainId, provider, contractAddress })))
-      assetsStorage = assetsStorage.concat(assets)
+    if (status && status === '1' && message === 'OK') {
+      const erc20Assets = result.filter(asset => asset.type === 'ERC-20')
+      const erc20AssetsFormatted = yield all(erc20Assets.map(({ contractAddress: address, symbol, decimals }) => getTokenData({ address, symbol, decimals, chainId, provider, contractAddress })))
+      assetsStorage = assetsStorage.concat(erc20AssetsFormatted)
     }
 
     if (ethBalance && ethBalance > 0) {
@@ -75,7 +72,6 @@ const generator = function * ({ payload }) {
 export default generator
 generator.selectors = {
   contractAddress: ({ user: { contractAddress } }) => contractAddress,
-  sdk: ({ user: { sdk } }) => sdk
+  sdk: ({ user: { sdk } }) => sdk,
+  chainId: ({ user: { chainId } }) => chainId
 }
-
-const assetsMock = []

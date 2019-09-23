@@ -5,6 +5,7 @@ import { Loading } from '@linkdrop/ui-kit'
 import { actions } from 'decorators'
 import AppRouter from '../router'
 import { getHashVariables } from '@linkdrop/commons'
+import config from 'app.config.js'
 
 @actions(({ widget: { page, txParams, connected, eventEmitter }, user: { sdk, loading, privateKey, contractAddress, ens, locale } }) => ({
   sdk,
@@ -13,7 +14,6 @@ import { getHashVariables } from '@linkdrop/commons'
   contractAddress,
   ens,
   locale,
-
   // widget
   page,
   txParams,
@@ -24,7 +24,9 @@ class WidgetRouter extends React.Component {
   componentDidMount () {
     const { sdk, contractAddress } = this.props
     if (!sdk) {
-      const { chainId = '1' } = getHashVariables()
+      const {
+        chainId = config.defaultChainId
+      } = getHashVariables()
       this.actions().user.createSdk({ chainId })
     }
 

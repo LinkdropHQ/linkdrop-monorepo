@@ -4,7 +4,8 @@ import { defineNetworkName } from '@linkdrop/commons'
 
 const generator = function * ({ payload }) {
   try {
-    const { transactionId, chainId = '1', statusToAdd } = payload
+    const chainId = yield select(generator.selectors.chainId)
+    const { transactionId, statusToAdd } = payload
     const networkName = defineNetworkName({ chainId })
     const provider = yield ethers.getDefaultProvider(networkName)
     const receipt = yield provider.getTransactionReceipt(transactionId)
@@ -32,5 +33,6 @@ const generator = function * ({ payload }) {
 
 export default generator
 generator.selectors = {
-  transactionData: ({ tokens: { transactionData } }) => transactionData
+  transactionData: ({ tokens: { transactionData } }) => transactionData,
+  chainId: ({ user: { chainId } }) => chainId
 }

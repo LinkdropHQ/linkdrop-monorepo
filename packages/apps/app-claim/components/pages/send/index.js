@@ -7,7 +7,7 @@ import Assets from './assets'
 import Input from './input'
 import Contacts from './contacts'
 import LinkPay from './link-pay'
-import { getHashVariables, defineEtherscanUrl } from '@linkdrop/commons'
+import { defineEtherscanUrl } from '@linkdrop/commons'
 import { Scrollbars } from 'react-custom-scrollbars'
 import { ethers } from 'ethers'
 import classNames from 'classnames'
@@ -29,7 +29,6 @@ class Send extends React.Component {
   componentWillReceiveProps ({ chainId, items, transactionId: id, transactionStatus: status }) {
     const { contractAddress, items: prevItems, transactionId: prevId, transactionStatus: prevStatus } = this.props
     if (id != null && prevId === null) {
-      const { chainId } = getHashVariables()
       this.statusCheck = window.setInterval(_ => this.actions().tokens.checkTransactionStatus({ transactionId: id, chainId, statusToAdd: 'sent' }), 3000)
       this.showTxHash = window.setTimeout(_ => this.setState({
         showTx: true
@@ -146,10 +145,7 @@ class Send extends React.Component {
   }
 
   onSend () {
-    const { items } = this.props
-    const {
-      chainId = '1'
-    } = getHashVariables()
+    const { items, chainId } = this.props
     const { sendTo, currentAsset, amount } = this.state
     const { decimals } = items.find(item => item.tokenAddress === currentAsset)
     if (currentAsset === ethers.constants.AddressZero) {

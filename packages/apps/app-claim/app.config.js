@@ -13,7 +13,8 @@
   AUTH_DISCOVERY_DOCS,
   AUTH_SCOPE_CONTACTS,
   AUTH_SCOPE_DRIVE,
-  INFURA_PK
+  INFURA_PK,
+  DEFAULT_CHAIN_ID
 */
 
 let config
@@ -48,6 +49,7 @@ const authApiKey = AUTH_API_KEY || authConfig.apiKey
 const authDiscoveryDocs = (AUTH_DISCOVERY_DOCS !== undefined && JSON.parse(AUTH_DISCOVERY_DOCS)) || authConfig.discoveryDocs
 const authScopeContacts = AUTH_SCOPE_CONTACTS || authConfig.scopes.contacts
 const authScopeDrive = AUTH_SCOPE_DRIVE || authConfig.scopes.drive
+const defaultChainId = DEFAULT_CHAIN_ID || config.defaultChainId
 
 module.exports = {
   claimHost,
@@ -64,5 +66,6 @@ module.exports = {
   authDiscoveryDocs,
   authScopeContacts,
   authScopeDrive,
-  infuraPk
+  infuraPk,
+  defaultChainId
 }

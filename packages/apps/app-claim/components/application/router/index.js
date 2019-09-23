@@ -4,6 +4,7 @@ import { Route, Switch } from 'react-router-dom'
 import { Claim, NotFound, Wallet, Confirm, Send, Receive, BuyTokens } from 'components/pages'
 import './styles'
 import { getHashVariables } from '@linkdrop/commons'
+import config from 'app.config.js'
 
 import { actions } from 'decorators'
 @actions(({ user: { sdk, loading, loacale } }) => ({
@@ -22,7 +23,7 @@ class AppRouter extends React.Component {
     const { sdk } = this.props
     if (!sdk) {
       const {
-        chainId = '1'
+        chainId = config.defaultChainId
       } = getHashVariables()
       this.actions().user.createSdk({ chainId })
     }

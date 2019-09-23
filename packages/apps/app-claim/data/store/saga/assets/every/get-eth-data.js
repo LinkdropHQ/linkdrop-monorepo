@@ -6,7 +6,8 @@ import { getAssetPrice } from 'data/api/assets'
 const generator = function * ({ payload }) {
   try {
     yield put({ type: 'ASSETS.SET_LOADING', payload: { loading: true } })
-    const { weiAmount, chainId } = payload
+    const { weiAmount } = payload
+    const chainId = yield select(generator.selectors.chainId)
     const decimals = 18
     const symbol = 'ETH'
     const amountBigNumber = utils.formatUnits(weiAmount, decimals)
@@ -36,5 +37,6 @@ const generator = function * ({ payload }) {
 
 export default generator
 generator.selectors = {
-  itemsToClaim: ({ assets: { itemsToClaim } }) => itemsToClaim
+  itemsToClaim: ({ assets: { itemsToClaim } }) => itemsToClaim,
+  chainId: ({ user: { chainId } }) => chainId
 }

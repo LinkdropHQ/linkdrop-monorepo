@@ -5,7 +5,7 @@ import { getHashVariables } from '@linkdrop/commons'
 import { TokensAmount, AssetBalance, AccountBalance } from 'components/common'
 import { getCurrentAsset } from 'helpers'
 
-@actions(({ tokens: { transactionId, transactionStatus } }) => ({ transactionId, transactionStatus }))
+@actions(({ user: { chainId }, tokens: { transactionId, transactionStatus } }) => ({ transactionId, chainId, transactionStatus }))
 @translate('pages.claim')
 class ClaimingProcessPage extends React.Component {
   constructor (props) {
@@ -38,10 +38,9 @@ class ClaimingProcessPage extends React.Component {
     // this.actions().tokens.claimTokensERC20({ campaignId, wallet, tokenAddress, tokenAmount, weiAmount, expirationTime, linkKey, linkdropMasterAddress, linkdropSignerSignature })
   }
 
-  componentWillReceiveProps ({ transactionId: id, transactionStatus: status }) {
+  componentWillReceiveProps ({ transactionId: id, transactionStatus: status, chainId }) {
     const { transactionId: prevId, transactionStatus: prevStatus } = this.props
     if (id != null && prevId === null) {
-      const { chainId } = getHashVariables()
       this.statusCheck = window.setInterval(_ => this.actions().tokens.checkTransactionStatus({ transactionId: id, chainId, statusToAdd: 'claimed' }), 3000)
     }
     if (status != null && status === 'claimed' && prevStatus === null) {
@@ -56,11 +55,8 @@ class ClaimingProcessPage extends React.Component {
   }
 
   render () {
-    const { itemsToClaim, transactionId } = this.props
+    const { itemsToClaim, transactionId, chainId } = this.props
     const { loading } = this.state
-    const {
-      chainId
-    } = getHashVariables()
     const mainAsset = getCurrentAsset({ itemsToClaim })
     if (!mainAsset) { return null }
     const { balanceFormatted, symbol } = mainAsset

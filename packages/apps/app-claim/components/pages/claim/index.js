@@ -8,7 +8,7 @@ import ErrorPage from './error-page'
 import ClaimingFinishedPage from './claiming-finished-page'
 import { getHashVariables } from '@linkdrop/commons'
 
-@actions(({ user: { errors, step, loading: userLoading, readyToClaim, alreadyClaimed, contractAddress }, tokens: { transactionId }, assets: { loading, itemsToClaim } }) => ({
+@actions(({ user: { chainId, errors, step, loading: userLoading, readyToClaim, alreadyClaimed, contractAddress }, tokens: { transactionId }, assets: { loading, itemsToClaim } }) => ({
   userLoading,
   loading,
   itemsToClaim,
@@ -17,16 +17,16 @@ import { getHashVariables } from '@linkdrop/commons'
   errors,
   alreadyClaimed,
   readyToClaim,
+  chainId,
   contractAddress
 }))
 @platform()
 @translate('pages.claim')
 class Claim extends React.Component {
   componentDidMount () {
-    const { contractAddress } = this.props
+    const { contractAddress, chainId } = this.props
     const {
       linkKey,
-      chainId,
       linkdropMasterAddress,
       campaignId
     } = getHashVariables()
@@ -34,7 +34,7 @@ class Claim extends React.Component {
     this.actions().assets.getItems({ wallet: contractAddress, chainId })
   }
 
-  componentWillReceiveProps ({ readyToClaim, alreadyClaimed }) {
+  componentWillReceiveProps ({ readyToClaim, alreadyClaimed, chainId }) {
     const { readyToClaim: prevReadyToClaim } = this.props
     if (
       (readyToClaim === true && prevReadyToClaim === true) ||
@@ -47,7 +47,6 @@ class Claim extends React.Component {
       weiAmount,
       tokenAmount,
       expirationTime,
-      chainId,
       nftAddress,
       tokenId
     } = getHashVariables()
@@ -92,9 +91,8 @@ class Claim extends React.Component {
   }
 
   renderCurrentPage () {
-    const { step, itemsToClaim, userLoading, errors, alreadyClaimed, contractAddress, loading } = this.props
+    const { step, chainId, itemsToClaim, userLoading, errors, alreadyClaimed, contractAddress, loading } = this.props
     const {
-      chainId,
       linkdropMasterAddress
     } = getHashVariables()
     const commonData = { linkdropMasterAddress, chainId, itemsToClaim, loading: userLoading || loading, wallet: contractAddress }

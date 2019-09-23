@@ -3,10 +3,9 @@ import { DappHeader, AssetBalance } from 'components/common'
 import { Button } from '@linkdrop/ui-kit'
 import styles from './styles.module'
 import { translate, actions } from 'decorators'
-import { getHashVariables } from '@linkdrop/commons'
 import { utils } from 'ethers'
 
-@actions(({ widget: { txParams }, assets: { itemsToClaim } }) => ({ txParams, itemsToClaim }))
+@actions(({ widget: { txParams }, user: { chainId }, assets: { itemsToClaim } }) => ({ txParams, itemsToClaim, chainId }))
 @translate('pages.dappConfirm')
 class DappConfirm extends React.Component {
   componentDidUpdate (prevProps) {
@@ -20,12 +19,9 @@ class DappConfirm extends React.Component {
   }
 
   _getEthCost () {
-    const { txParams } = this.props
+    const { chainId, txParams } = this.props
     // just pass these variables as post message data
-    const amount = utils.bigNumberify(txParams.value).toString()
-    const {
-      chainId = '1'
-    } = getHashVariables()
+    const amount = utils.bigNumberify(txParams.value || '0').toString()
     this.actions().assets.getEthData({ chainId, weiAmount: amount })
   }
 
