@@ -132,12 +132,12 @@ export const claimAndCreate = async ({
   const createAndAddModulesData = encodeParams(
     CreateAndAddModules.abi,
     'createAndAddModules',
-    [proxyFactory.address, modulesCreationData]
+    [proxyFactory, modulesCreationData]
   )
 
   const createAndAddModulesMultiSendData = encodeDataForMultiSend(
     DELEGATECALL_OP,
-    createAndAddModules.address,
+    createAndAddModules,
     0,
     createAndAddModulesData
   )

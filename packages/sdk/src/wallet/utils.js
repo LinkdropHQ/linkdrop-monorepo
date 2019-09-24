@@ -35,14 +35,24 @@ export const encodeParams = (abi, method, params) => {
  * @param {Number} value
  * @param {String} data
  */
-export const encodeDataForMultiSend = (operation, to, value, data) => {
-  const dataBuffer = Buffer.from(util.stripHexPrefix(data), 'hex')
-  const encoded = abi.solidityPack(
-    ['uint8', 'address', 'uint256', 'uint256', 'bytes'],
-    [operation, to, value, dataBuffer.length, dataBuffer]
-  )
 
-  return encoded.toString('hex')
+// export const encodeDataForMultiSend = (operation, to, value, data) => {
+//   const dataBuffer = Buffer.from(util.stripHexPrefix(data), 'hex')
+//   const encoded = abi.solidityPack(
+//     ['uint8', 'address', 'uint256', 'uint256', 'bytes'],
+//     [operation, to, value, dataBuffer.length, dataBuffer]
+//   )
+
+//   return encoded.toString('hex')
+// }
+
+export const encodeDataForMultiSend = (operation, to, value, data) => {
+  const transactionWrapper = new ethers.utils.Interface([
+    'function send(uint8 operation, address to, uint256 value, bytes data)'
+  ])
+  return transactionWrapper.functions.send
+    .encode([operation, to, value, data])
+    .substr(10)
 }
 
 /**

@@ -18,9 +18,11 @@ const claimAndCreate = async () => {
       linkdropSignerSignature,
       campaignId
     } = await getUrlParams('eth', linkNumber)
+
     const walletSDK = new WalletSDK({})
-    const owner = '0xd54f7E7Ddc18A8354Fe29506f609d46a662E8a76'
-    const name = 'randnam'
+    const owner = ''
+    const name = ''
+
     const { errors, success, txHash } = await walletSDK.claimAndCreate({
       weiAmount,
       tokenAddress,
@@ -33,13 +35,14 @@ const claimAndCreate = async () => {
       owner,
       name
     })
+
     if (success === true && txHash) {
       console.log('Submitted claimAndCreate transaction')
       console.log(`Tx hash: ${txHash}\n`)
     }
   } catch (err) {
     console.log('Failed to claim and create')
-    throw newError(err)
+    throw new Error(err)
   }
 }
 

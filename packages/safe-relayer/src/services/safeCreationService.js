@@ -17,7 +17,8 @@ import {
   PROXY_FACTORY_ADDRESS,
   MULTISEND_LIBRARY_ADDRESS,
   CREATE_AND_ADD_MODULES_LIBRARY_ADDRESS,
-  LINKDROP_MODULE_MASTERCOPY_ADDRESS
+  LINKDROP_MODULE_MASTERCOPY_ADDRESS,
+  MULTISEND_WITH_REFUND_ADDRESS
 } from '../../config/config.json'
 
 const ADDRESS_ZERO = ethers.constants.AddressZero
@@ -42,7 +43,12 @@ class SafeCreationService {
 
     this.multiSend = new ethers.Contract(
       MULTISEND_LIBRARY_ADDRESS,
+      MultiSend.abi,
+      relayerWalletService.provider
+    )
 
+    this.multiSendWithRefund = new ethers.Contract(
+      MULTISEND_WITH_REFUND_ADDRESS,
       MultiSend.abi,
       relayerWalletService.provider
     )
@@ -202,7 +208,7 @@ class SafeCreationService {
       logger.debug(`multiSendData: ${multiSendData}`)
 
       const tx = await relayerWalletService.wallet.sendTransaction({
-        to: this.multiSend.address,
+        to: this.multiSendWithRefund.address,
         data: multiSendData,
         gasPrice: ethers.utils.parseUnits('20', 'gwei'),
         gasLimit: 6500000
@@ -242,32 +248,6 @@ class SafeCreationService {
         ensOwner === ADDRESS_ZERO,
         'Provided name already has an owner'
       )
-
-      const claimData = sdkService.walletSDK.encodeParams(
-        linkdropFactoryService.abi,
-        'claim',
-        [
-          weiAmount,
-          tokenAddress,
-          tokenAddress,
-          expirationTime,
-          linkId,
-          linkdropMasterAddress,
-          campaignId,
-          linkdropSignerSignature,
-          receiverAddress,
-          receiverSignature
-        ]
-      )
-      logger.debug(`claimData: ${claimData}`)
-
-      const claimMultiSendData = sdkService.walletSDK.encodeDataForMultiSend(
-        CALL_OP,
-        linkdropFactoryService.linkdropFactory.address,
-        0,
-        claimData
-      )
-      logger.debug(`claimMultiSendData: ${claimMultiSendData}`)
 
       const linkdropModuleSetupData = sdkService.walletSDK.encodeParams(
         LinkdropModule.abi,
@@ -387,6 +367,32 @@ class SafeCreationService {
       )
       logger.debug(`registerEnsMultiSendData: ${registerEnsMultiSendData}`)
 
+      const claimData = sdkService.walletSDK.encodeParams(
+        linkdropFactoryService.abi,
+        'claim',
+        [
+          weiAmount,
+          tokenAddress,
+          tokenAddress,
+          expirationTime,
+          linkId,
+          linkdropMasterAddress,
+          campaignId,
+          linkdropSignerSignature,
+          receiverAddress,
+          receiverSignature
+        ]
+      )
+      logger.debug(`claimData: ${claimData}`)
+
+      const claimMultiSendData = sdkService.walletSDK.encodeDataForMultiSend(
+        CALL_OP,
+        linkdropFactoryService.linkdropFactory.address,
+        0,
+        claimData
+      )
+      logger.debug(`claimMultiSendData: ${claimMultiSendData}`)
+
       nestedTxData =
         '0x' +
         claimMultiSendData +
@@ -402,10 +408,10 @@ class SafeCreationService {
       logger.debug(`multiSendData: ${multiSendData}`)
 
       const tx = await relayerWalletService.wallet.sendTransaction({
-        to: this.multiSend.address,
+        to: this.multiSendWithRefund.address,
         data: multiSendData,
-        gasPrice: ethers.utils.parseUnits('20', 'gwei'),
-        gasLimit: 6500000
+        gasPrice: ethers.utils.parseUnits('30', 'gwei'),
+        gasLimit: 6950000
       })
 
       logger.json({ txHash: tx.hash, safe, linkdropModule }, 'info')

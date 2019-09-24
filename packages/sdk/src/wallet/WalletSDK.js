@@ -27,15 +27,15 @@ class WalletSDK {
     proxyFactory = '0x12302fE9c02ff50939BaAaaf415fc226C078613C', // from https://safe-relay.gnosis.pm/api/v1/about/
     linkdropModuleMasterCopy = '0x19Ff4Cb4eFD0b9E04433Dde6507ADC68225757f2',
     createAndAddModules = '0x40Ba7DF971BBdE476517B7d6B908113f71583183', // from https://safe-relay.gnosis.pm/api/v1/about/
-    multiSend = '0x09a19f51D806ea937C54162AaBeD4A59BCe7dda5'
+    multiSend = '0x0CE1BBc1BbbF65C3953A3f1f80344b42C084FA0c'
   }) {
     this.chain = chain
     this.jsonRpcUrl = jsonRpcUrl || `https://${chain}.infura.io`
     this.apiHost = apiHost
     this.claimHost = claimHost
     this.gnosisSafeMasterCopy = gnosisSafeMasterCopy
-    this.linkdropModuleMasterCopy = linkdropModuleMasterCopy
     this.proxyFactory = proxyFactory
+    this.linkdropModuleMasterCopy = linkdropModuleMasterCopy
     this.createAndAddModules = createAndAddModules
     this.multiSend = multiSend
   }
@@ -245,9 +245,9 @@ class WalletSDK {
     linkdropSignerSignature,
     campaignId,
     gnosisSafeMasterCopy = this.gnosisSafeMasterCopy,
-    proxyFactory = this.proxyFactory,
     owner,
     name,
+    proxyFactory = this.proxyFactory,
     linkdropModuleMasterCopy = this.linkdropModuleMasterCopy,
     createAndAddModules = this.createAndAddModules,
     multiSend = this.multiSend,
