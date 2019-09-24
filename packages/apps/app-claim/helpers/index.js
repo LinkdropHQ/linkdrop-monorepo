@@ -8,6 +8,9 @@ import countFinalPrice from './count-final-price'
 import prepareRedirectUrl from './prepare-redirect-url'
 import roundAmount from './round-amount'
 import mergeAssets from './merge-assets'
+import defineInitialData from './define-initial-data'
+import saveUserData from './save-user-data'
+import removeUserData from './remove-user-data'
 
 export {
   getImages,
@@ -19,5 +22,8 @@ export {
   countFinalPrice,
   prepareRedirectUrl,
   roundAmount,
-  mergeAssets
+  mergeAssets,
+  defineInitialData,
+  saveUserData,
+  removeUserData
 }

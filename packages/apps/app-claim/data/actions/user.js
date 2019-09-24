@@ -23,8 +23,8 @@ class User {
     this.actions.dispatch({ type: '*USER.CREATE_SDK', payload: { chainId } })
   }
 
-  setUserData ({ privateKey, contractAddress, ens, avatar }) {
-    this.actions.dispatch({ type: '*USER.SET_USER_DATA', payload: { privateKey, contractAddress, ens, avatar } })
+  setUserData ({ privateKey, contractAddress, ens, avatar, chainId }) {
+    this.actions.dispatch({ type: '*USER.SET_USER_DATA', payload: { privateKey, contractAddress, ens, avatar, chainId } })
   }
 
   createWallet () {

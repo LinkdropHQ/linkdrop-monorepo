@@ -1,6 +1,8 @@
 /* global gapi */
 import config from 'app.config.js'
-const EventEmitter = require('events')
+import { removeUserData } from 'helpers'
+import { getHashVariables } from '@linkdrop/commons'
+import EventEmitter from 'events'
 
 class GoogleApiService {
   constructor () {
@@ -8,7 +10,7 @@ class GoogleApiService {
     this.auth2 = null
     this.loaded = false
   }
-  
+
   load () {
     return new Promise((resolve, reject) => {
       if (this.loaded) {
@@ -28,7 +30,7 @@ class GoogleApiService {
     const isSignedIn = authInstance.isSignedIn.get()
     if (!isSignedIn) {
       throw new Error('User not signed in')
-    } 
+    }
     const user = authInstance.currentUser.get()
     const scopes = user.getGrantedScopes()
     const hasPermission = scopes.indexOf('https://www.googleapis.com/auth/drive.appdata') > -1
@@ -50,15 +52,15 @@ class GoogleApiService {
       console.log('Error while asking for Google Drive persmissions: ', err)
     }
   }
-  
+
   fetchFiles () {
     return new Promise(async (resolve, reject) => {
-      try {        
+      try {
         // ask for google drive permissions
         const response = await gapi.client.drive.files.list({
           spaces: 'appDataFolder'
         })
-        
+
         const files = response.result.files.filter(file => file.name === 'linkdrop-data.json')
         if (files && files.length > 0) {
           const id = files[0].id
@@ -68,8 +70,7 @@ class GoogleApiService {
               alt: 'media'
             })
             .execute(response => {
-              const { privateKey, contractAddress, ens } = response
-              resolve({ success: true, data: { privateKey, contractAddress, ens } })
+              resolve({ success: true, data: { ...response } })
             })
         } else {
           resolve({ success: false, data: {} })
@@ -86,55 +87,56 @@ class GoogleApiService {
     const isSignedIn = authInstance.isSignedIn.get()
     if (!isSignedIn) {
       throw new Error('User not signed in')
-    } 
+    }
     const user = authInstance.currentUser.get()
     const email = user.getBasicProfile().getEmail()
     const avatar = user.getBasicProfile().getImageUrl()
     return { email, avatar }
   }
-  
-  uploadFiles ({ ens, contractAddress, privateKey }) {
+
+  uploadFiles ({ ens, contractAddress, privateKey, chainId }) {
     return new Promise((resolve, reject) => {
       const boundary = '-------314159265358979323846'
       const delimiter = '\r\n--' + boundary + '\r\n'
       const closeDelim = '\r\n--' + boundary + '--'
       const contentType = 'application/json'
-    
-      const metadata = {
-        name: 'linkdrop-data.json',
-        mimeType: contentType,
-        parents: ['appDataFolder']
-      }
-      
-      const multipartRequestBody =
-            delimiter +
-            'Content-Type: application/json\r\n\r\n' +
-            JSON.stringify(metadata) +
-            delimiter +
-            'Content-Type: ' +
-            contentType +
-            '\r\n\r\n' +
-            JSON.stringify({ ens, contractAddress, privateKey }) +
-            closeDelim
+      this.fetchFiles({ chainId }).then(data => {
+        const metadata = {
+          name: 'linkdrop-data.json',
+          mimeType: contentType,
+          parents: ['appDataFolder']
+        }
+        const updatedData = JSON.stringify({ ...data.data, result: undefined, [`_${chainId}`]: { ens, contractAddress, privateKey } })
+        const multipartRequestBody =
+              delimiter +
+              'Content-Type: application/json\r\n\r\n' +
+              JSON.stringify(metadata) +
+              delimiter +
+              'Content-Type: ' +
+              contentType +
+              '\r\n\r\n' +
+              updatedData +
+              closeDelim
 
-      try { 
-        gapi.client
-          .request({
-            path: '/upload/drive/v3/files',
-            method: 'POST',
-            params: { uploadType: 'multipart' },
-            headers: {
-              'Content-Type':
-              'multipart/related; boundary="' + boundary + '"'
-            },
-            body: multipartRequestBody
-          })
-          .execute(response => {
-            resolve({ success: true, data: { privateKey, contractAddress, ens } })
-          })
-      } catch (err) {
-        reject(err)
-      }
+        try {
+          gapi.client
+            .request({
+              path: '/upload/drive/v3/files',
+              method: 'POST',
+              params: { uploadType: 'multipart' },
+              headers: {
+                'Content-Type':
+                'multipart/related; boundary="' + boundary + '"'
+              },
+              body: multipartRequestBody
+            })
+            .execute(response => {
+              resolve({ success: true, data: { privateKey, contractAddress, ens } })
+            })
+        } catch (err) {
+          reject(err)
+        }
+      })
     })
   }
 
@@ -144,7 +146,7 @@ class GoogleApiService {
       return true
     }
   }
-  
+
   _loadScriptToDom () {
     if (!this.loaded) {
       this.loaded = true
@@ -169,18 +171,21 @@ class GoogleApiService {
         apiKey: config.authApiKey,
         discoveryDocs: config.authDiscoveryDocs,
         scope: config.authScopeDrive
-      })      
-      console.log("gapi client inited")
+      })
+      console.log('gapi client inited')
 
-      this.eventEmitter.emit('google-api-inited')      
+      this.eventEmitter.emit('google-api-inited')
     })
   }
 
   signOut () {
     var auth2 = gapi.auth2.getAuthInstance()
+    const {
+      chainId = config.defaultChainId
+    } = getHashVariables()
     auth2.signOut().then(function () {
       auth2.disconnect()
-      window.localStorage.clear()
+      removeUserData({ chainId })
       window.location.reload(true)
     })
   }

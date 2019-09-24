@@ -55,18 +55,18 @@ class Authorization extends React.Component {
     const { email, avatar } = gapiService.getEmailAndAvatar()
 
     // fetching files from Drive
-    const fetchResult = await gapiService.fetchFiles()
+    const fetchResult = await gapiService.fetchFiles({ chainId })
     let data
-    if (fetchResult.success) {
-      data = fetchResult.data
+    if (fetchResult.success && fetchResult.data[`_${chainId}`]) {
+      data = fetchResult.data[`_${chainId}`]
     } else { // if no files on drive upload new ones
       const ens = getEns({ email, chainId })
       const { contractAddress, privateKey } = this.props
-      const uploadResult = await gapiService.uploadFiles({ ens, contractAddress, privateKey })
+      const uploadResult = await gapiService.uploadFiles({ chainId, ens, contractAddress, privateKey })
       data = uploadResult.data
     }
     const { privateKey, contractAddress, ens } = data
-    this.actions().user.setUserData({ privateKey, contractAddress, ens, avatar })
+    this.actions().user.setUserData({ privateKey, contractAddress, ens, avatar, chainId })
   }
 
   async _enableDrivePermissions () {

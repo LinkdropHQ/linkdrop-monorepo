@@ -1,5 +1,12 @@
 import reducers from './reducers'
+import config from 'app.config.js'
+import { getHashVariables } from '@linkdrop/commons'
+import { defineInitialData } from 'helpers'
 const ls = (typeof window === 'undefined' ? {} : window).localStorage
+const {
+  chainId = config.defaultChainId
+} = getHashVariables()
+const { privateKey, contractAddress, ens } = defineInitialData({ chainId })
 
 const initialState = {
   id: undefined,
@@ -10,9 +17,9 @@ const initialState = {
   readyToClaim: false,
   alreadyClaimed: false,
   sdk: null,
-  privateKey: ls && ls.getItem && ls.getItem('privateKey'),
-  contractAddress: ls && ls.getItem && ls.getItem('contractAddress'),
-  ens: ls && ls.getItem && ls.getItem('ens'),
+  privateKey,
+  contractAddress,
+  ens,
   avatar: ls && ls.getItem && ls.getItem('avatar'),
   showNote: true,
   chainId: null
