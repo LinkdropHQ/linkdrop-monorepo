@@ -22,7 +22,7 @@ import config from 'app.config.js'
 }))
 class WidgetRouter extends React.Component {
   componentDidMount () {
-    const { sdk, contractAddress } = this.props
+    const { sdk } = this.props
     if (!sdk) {
       const {
         chainId = config.defaultChainId
@@ -41,7 +41,9 @@ class WidgetRouter extends React.Component {
         this.actions().widget.setPage({ page: 'CONNECT_SCREEN' })
         return this._awaitUserConnectConfirmation()
       },
-      getAccounts () {
+      getAccounts: () => {
+        const { contractAddress, ens } = this.props
+        if (!ens) return []
         return [contractAddress]
       }
     }

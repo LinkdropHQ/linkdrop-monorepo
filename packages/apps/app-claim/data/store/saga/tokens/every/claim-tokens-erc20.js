@@ -1,7 +1,6 @@
 import { put, select } from 'redux-saga/effects'
 import { ERRORS } from './data'
 import { factory } from 'app.config.js'
-const ls = (typeof window === 'undefined' ? {} : window).localStorage
 
 const generator = function * ({ payload }) {
   try {
@@ -9,6 +8,7 @@ const generator = function * ({ payload }) {
     yield put({ type: 'USER.SET_LOADING', payload: { loading: true } })
     const sdk = yield select(generator.selectors.sdk)
     const ens = yield select(generator.selectors.ens)
+    const contractAddress = yield select(generator.selectors.contractAddress)
     const privateKey = yield select(generator.selectors.privateKey)
     const walletContractExist = yield sdk.walletContractExist(ens)
     let result = {}
@@ -20,7 +20,7 @@ const generator = function * ({ payload }) {
       linkKey,
       linkdropMasterAddress,
       linkdropSignerSignature,
-      receiverAddress: ls && ls.getItem('contractAddress'),
+      receiverAddress: contractAddress,
       campaignId,
       factoryAddress: factory
     }
@@ -60,5 +60,6 @@ export default generator
 generator.selectors = {
   sdk: ({ user: { sdk } }) => sdk,
   ens: ({ user: { ens } }) => ens,
-  privateKey: ({ user: { privateKey } }) => privateKey
+  privateKey: ({ user: { privateKey } }) => privateKey,
+  contractAddress: ({ user: { contractAddress } }) => contractAddress
 }
