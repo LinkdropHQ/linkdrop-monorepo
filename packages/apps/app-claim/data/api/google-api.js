@@ -53,7 +53,7 @@ class GoogleApiService {
     }
   }
 
-  fetchFiles ({ chainId }) {
+  fetchFiles () {
     return new Promise(async (resolve, reject) => {
       try {
         // ask for google drive permissions
