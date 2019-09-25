@@ -26,6 +26,7 @@
     "@babel/preset-env": "^7.4.2",
     "@babel/preset-react": "^7.0.0",
     "@babel/register": "^7.4.0",
+    "@linkdrop/commons": "^1.0.83",
     "@linkdrop/sdk": "^1.0.83",
     "@storybook/addon-info": "^5.0.10",
     "autoprefixer": "^9.5.1",
