@@ -1,6 +1,6 @@
 {
   "name": "@linkdrop/app-claim",
-  "version": "1.0.83",
+  "version": "1.0.84",
   "description": "Front end part for linkdrop app to claim tokens",
   "main": "index.js",
   "private": true,
@@ -26,7 +26,7 @@
     "@babel/register": "^7.4.4",
     "@linkdrop/commons": "^1.0.83",
     "@linkdrop/sdk": "^1.0.83",
-    "@linkdrop/ui-kit": "^1.0.83",
+    "@linkdrop/ui-kit": "^1.0.84",
     "babel-eslint": "^10.0.2",
     "babel-loader": "^8.0.5",
     "babel-plugin-react-css-modules": "^5.2.4",
