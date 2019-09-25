@@ -1,6 +1,6 @@
 {
   "name": "@linkdrop/sdk",
-  "version": "1.0.81",
+  "version": "1.0.82",
   "main": "dist/index.js",
   "license": "MIT",
   "publishConfig": {
@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "@ensdomains/ens": "^0.3.11",
-    "@linkdrop/contracts": "^1.0.81",
+    "@linkdrop/contracts": "^1.0.82",
     "@universal-login/commons": "0.3.18",
     "@universal-login/contracts": "0.3.18",
     "@universal-login/sdk": "0.3.18",
