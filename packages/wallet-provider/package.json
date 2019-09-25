@@ -12,5 +12,6 @@
   "dependencies": {
     "ethers": "^4.0.27",
     "web3-provider-engine": "^15.0.0"
-  }
+  },
+  "gitHead": "968f09c83c79fd1ea95c1e0f272de7370c23739c"
 }

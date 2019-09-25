@@ -1,5 +1,5 @@
 {
-  "name": "test-dapp",
+  "name": "@linkdrop/test-dapp",
   "version": "1.0.81",
   "private": true,
   "dependencies": {

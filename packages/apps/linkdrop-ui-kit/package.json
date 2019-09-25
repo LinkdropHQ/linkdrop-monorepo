@@ -94,5 +94,6 @@
   },
   "babel": {
     "extends": "../../../babel.config.js"
-  }
+  },
+  "gitHead": "968f09c83c79fd1ea95c1e0f272de7370c23739c"
 }
