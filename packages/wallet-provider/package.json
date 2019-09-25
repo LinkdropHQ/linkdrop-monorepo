@@ -3,9 +3,7 @@
   "version": "1.0.82",
   "main": "src/index.js",
   "license": "MIT",
-  "publishConfig": {
-    "access": "publish"
-  },
+  "private": true,
   "babel": {
     "extends": "../babel.config.js"
   },
@@ -13,5 +11,5 @@
     "ethers": "^4.0.27",
     "web3-provider-engine": "^15.0.0"
   },
-  "gitHead": "968f09c83c79fd1ea95c1e0f272de7370c23739c"
+  "gitHead": "6c4e548e132a4cda7e9dcb94db206b3f0b47cc5d"
 }

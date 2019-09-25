@@ -95,5 +95,5 @@
   "babel": {
     "extends": "../../../babel.config.js"
   },
-  "gitHead": "968f09c83c79fd1ea95c1e0f272de7370c23739c"
+  "gitHead": "6c4e548e132a4cda7e9dcb94db206b3f0b47cc5d"
 }
