@@ -24,11 +24,11 @@ export default {
     dappStoreUrl: 'https://wallet.portis.io/',
     mobile: {
       android: {
-        support: true,
+        support: false,
         deepLink: () => {}
       },
       ios: {
-        support: true,
+        support: false,
         deepLink: () => {}
       }
     }
@@ -44,8 +44,9 @@ export default {
         deepLink: (url) => `intent://${_withoutProtocol(url)}/#Intent;scheme=http;package=com.opera.browser;end`
       },
       ios: {
-        support: false,
-        deepLink: () => null
+        support: true,
+        deepLink: (url) => `https://operacrypto.page.link/?link=${encodeURIComponent(url)}&ibi=com.opera.OperaTouch&isi=411869974`
+
       }
     }
   },
@@ -77,7 +78,7 @@ export default {
       },
       ios: {
         support: true,
-        deepLink: (url) => `https://tokenpocket.github.io/applink?dappUrl=${encodeURIComponent(url)}`
+        deepLink: url => `https://tokenpocket.github.io/applink?dappUrl=${encodeURIComponent(url)}`
       }
     }
   },
@@ -115,34 +116,34 @@ export default {
       }
     }
   },
-  'gowallet': {
+  gowallet: {
     id: 'gowallet',
     name: 'GoWallet',
     walletURL: null,
     dappStoreUrl: null,
     mobile: {
       android: {
-        support: true,
+        support: false,
         deepLink: (url) => null
       },
       ios: {
-        support: true,
+        support: false,
         deepLink: (url) => null
       }
     }
   },
-  'buntoy': {
+  buntoy: {
     id: 'buntoy',
     name: 'Buntoy',
     walletURL: 'https://www.buntoy.com/buntoy.html',
     dappStoreUrl: null,
     mobile: {
       android: {
-        support: true,
+        support: false,
         deepLink: (url) => null
       },
       ios: {
-        support: true,
+        support: false,
         deepLink: (url) => null
       }
     }
