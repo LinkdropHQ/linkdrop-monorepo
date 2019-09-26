@@ -33,25 +33,25 @@ class Step1 extends React.Component {
     if (!proxyAddress) {
       this.actions().campaigns.createProxyAddress({ campaignId: items.length })
     }
-    this.actions().tokens.getAssets({ currentAddress })
+    this.actions().tokens.getAssetsERC721({ currentAddress })
   }
 
-  componentWillReceiveProps ({ assets }) {
-    const { assets: prevAssets } = this.props
+  // componentWillReceiveProps ({ assets }) {
+  //   const { assets: prevAssets } = this.props
 
-    if (assets != null && assets.length > 0 && !Immutable.fromJS(assets).equals(Immutable.fromJS(prevAssets))) {
-      const assetsPrepared = assets.map(item => ({
-        label: `${item.symbol} — ${(item.address)}...`,
-        value: item.symbol
-      }))
+  //   if (assets != null && assets.length > 0 && !Immutable.fromJS(assets).equals(Immutable.fromJS(prevAssets))) {
+  //     const assetsPrepared = assets.map(({ contract }) => ({
+  //       label: `${contract.symbol} — ${(contract.address)}...`,
+  //       value: contract.symbol
+  //     }))
 
-      const newOptions = [TOKENS[0]].concat(assetsPrepared).concat([TOKENS[1]])
-      this.setState({
-        options: newOptions,
-        tokenSymbol: newOptions[0].value
-      })
-    }
-  }
+  //     const newOptions = [TOKENS[0]].concat(assetsPrepared).concat([TOKENS[1]])
+  //     this.setState({
+  //       options: newOptions,
+  //       tokenSymbol: newOptions[0].value
+  //     })
+  //   }
+  // }
 
   render () {
     const { tokenSymbol, ethAmount, linksAmount, tokenAmount, addEth, tokenAddress, options } = this.state
@@ -224,10 +224,7 @@ export default Step1
 
 const TOKENS = [
   {
-    label: `ETH — ${(ethers.constants.AddressZero).slice(0, 35)}...`,
-    value: 'ETH'
-  }, {
-    label: 'ERC20 Token Address',
-    value: 'ERC20'
+    label: 'ERC721 Token Address',
+    value: 'ERC721'
   }
 ]

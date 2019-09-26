@@ -1,5 +1,5 @@
-import getTokensTrustwallet from './get-tokens-trustwallet.js'
+import getItems from './get-items.js'
 
 export {
-  getTokensTrustwallet
+  getItems
 }
