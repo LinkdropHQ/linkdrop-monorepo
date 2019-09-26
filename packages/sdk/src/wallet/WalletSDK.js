@@ -129,9 +129,6 @@ class WalletSDK {
     value,
     data = '0x',
     operation = 0,
-    safeTxGas = 0,
-    baseGas = 0,
-    gasPrice = 0,
     gasToken = '0x0000000000000000000000000000000000000000',
     refundReceiver = '0x0000000000000000000000000000000000000000',
     apiHost = this.apiHost,
@@ -146,9 +143,6 @@ class WalletSDK {
       value,
       data,
       operation,
-      safeTxGas,
-      baseGas,
-      gasPrice,
       gasToken,
       refundReceiver
     })

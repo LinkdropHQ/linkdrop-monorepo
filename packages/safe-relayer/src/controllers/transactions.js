@@ -16,24 +16,18 @@ export const executeTx = wrapAsync(async (req, res, next) => {
       value,
       data,
       operation,
-      safeTxGas,
-      baseGas,
-      gasPrice,
       gasToken,
       refundReceiver,
-      signature
+      gasSpectrum
     } = req.body
 
     assert.string(safe, 'Safe address is required')
     assert.string(to, 'To is required')
     assert.number(value, 'Value is required')
     assert.string(data, 'Data is required')
-    assert.integer(safeTxGas, 'Safe tx gas is required')
-    assert.integer(baseGas, 'Base gas is required')
-    assert.integer(gasPrice, 'Gas price is required')
     assert.string(gasToken, 'Gas token is required')
     assert.string(refundReceiver, 'Refund receiver address is required')
-    assert.string(signature, 'Signature is required')
+    assert.object(gasSpectrum, 'Gas spectrum is required')
 
     const { success, txHash, errors } = await transactionRelayService.executeTx(
       {
@@ -42,12 +36,9 @@ export const executeTx = wrapAsync(async (req, res, next) => {
         value,
         data,
         operation,
-        safeTxGas,
-        baseGas,
-        gasPrice,
         gasToken,
         refundReceiver,
-        signature
+        gasSpectrum
       }
     )
 

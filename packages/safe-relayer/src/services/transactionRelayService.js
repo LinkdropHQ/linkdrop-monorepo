@@ -1,6 +1,6 @@
 import GnosisSafe from '@gnosis.pm/safe-contracts/build/contracts/GnosisSafe'
 import { ethers } from 'ethers'
-import assert from 'assert'
+import assert from 'assert-js'
 import relayerWalletService from './relayerWalletService'
 import logger from '../utils/logger'
 
@@ -11,14 +11,13 @@ class TransactionRelayService {
     value,
     data,
     operation,
-    safeTxGas,
-    baseGas,
-    gasPrice,
     gasToken,
     refundReceiver,
-    signature
+    gasSpectrum
   }) {
     try {
+      const i = 1
+
       const gnosisSafe = new ethers.Contract(
         safe,
         GnosisSafe.abi,
@@ -31,13 +30,13 @@ class TransactionRelayService {
         value,
         data,
         operation,
-        safeTxGas,
-        baseGas,
-        gasPrice,
+        gasSpectrum[i].safeTxGas,
+        gasSpectrum[i].baseGas,
+        gasSpectrum[i].gasPrice,
         gasToken,
         refundReceiver,
-        signature,
-        { gasPrice: ethers.utils.parseUnits('20', 'gwei') }
+        gasSpectrum[i].signature,
+        { gasPrice: gasSpectrum[i].gasPrice, gasLimit: gasSpectrum[i].gasLimit }
       )
       logger.info(`Tx hash: ${tx.hash}`)
       return { success: true, txHash: tx.hash }
