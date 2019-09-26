@@ -192,6 +192,7 @@ class Step1 extends React.Component {
         [field]: value
       })
     }
+
     this.setState({
       [field]: value
     }, _ => {
@@ -200,7 +201,7 @@ class Step1 extends React.Component {
           ethAmount: 0,
           addEth: false
         }, _ => {
-          if (Number(chainId) === 1 && value !== 'ERC20' && value !== 'ETH') {
+          if (value !== 'ERC20' && value !== 'ETH') {
             this.actions().tokens.setTokenERC20Data({ tokenSymbol: value })
           } else if (value === 'ERC20' || value === 'ETH') {
             this.actions().tokens.emptyTokenERC20Data()
@@ -208,14 +209,14 @@ class Step1 extends React.Component {
         })
       }
 
-      if (field === 'tokenAddress' && tokenSymbol === 'ERC20') {
-        const tokenType = this.defineTokenType({ tokenSymbol })
-        if (value.length === 42) {
-          if (tokenType === 'erc20') {
-            this.actions().tokens.getTokenERC20Data({ tokenAddress: value, chainId })
-          }
-        }
-      }
+      // if (field === 'tokenAddress' && tokenSymbol === 'ERC20') {
+      //   const tokenType = this.defineTokenType({ tokenSymbol })
+      //   if (value.length === 42) {
+      //     if (tokenType === 'erc20') {
+      //       this.actions().tokens.getTokenERC20Data({ tokenAddress: value, chainId })
+      //     }
+      //   }
+      // }
     })
   }
 }

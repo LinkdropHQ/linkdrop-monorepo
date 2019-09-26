@@ -10,7 +10,6 @@ const generator = function * ({ payload }) {
     const { status = 0, result = [], message } = yield call(getItems, { address: currentAddress, networkName })
     if (status && status === '1' && message === 'OK') {
       const erc20Assets = result.filter(asset => asset.type === 'ERC-20').map(item => ({ ...item, address: item.contractAddress }))
-      console.log({ erc20Assets })
       yield put({ type: 'TOKENS.SET_ASSETS', payload: { assets: erc20Assets } })
     }
   } catch (e) {
