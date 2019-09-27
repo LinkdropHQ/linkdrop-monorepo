@@ -3,6 +3,7 @@ import styles from '../styles.module'
 import classNames from 'classnames'
 import { Slider, RetinaImage } from '@linkdrop/ui-kit'
 import { getImages } from 'helpers'
+import { getHashVariables } from '@linkdrop/commons'
 
 export default ({ t, walletType, selectWallet, showSlider, platform }) => {
   return <div className={styles.content}>
@@ -14,8 +15,9 @@ export default ({ t, walletType, selectWallet, showSlider, platform }) => {
 }
 
 const renderImage = ({ id, walletType, selectWallet }) => {
+  const { w = 'trust' } = getHashVariables()
   if (walletType === id) { return null }
-  if (walletType == null && id === 'trust') { return null }
+  if (walletType == null && id === w) { return null }
   return <div
     className={classNames(styles.wallet, styles.withBorder)}
     onClick={_ => selectWallet && selectWallet({ id })}

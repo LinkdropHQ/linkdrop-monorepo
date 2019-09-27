@@ -2,12 +2,11 @@ import React from 'react'
 import { Button, Alert, Icons, RetinaImage } from '@linkdrop/ui-kit'
 import { translate, actions, platform } from 'decorators'
 import { getImages, getWalletLink, getWalletData } from 'helpers'
-import { copyToClipboard } from '@linkdrop/commons'
+import { copyToClipboard, getHashVariables } from '@linkdrop/commons'
 import classNames from 'classnames'
 import styles from './styles.module'
 import commonStyles from '../styles.module'
 import Slider from './slider'
-
 import CommonInstruction from './common-instruction'
 import DeepLinkInstruction from './deep-link-instruction'
 
@@ -26,11 +25,13 @@ class WalletChoosePage extends React.Component {
     const { showSlider } = this.state
     const { walletType } = this.props
     const { platform } = this
+    const { w = 'trust' } = getHashVariables()
+    console.log({ walletType })
     if (walletType && walletType != null) {
       return this.renderWalletInstruction({ walletType })
     } else {
-      const buttonLink = platform !== 'desktop' && getWalletLink({ platform, wallet: 'trust', currentUrl: window.location.href })
-      const buttonTitle = getWalletData({ wallet: 'trust' }).name
+      const buttonLink = platform !== 'desktop' && getWalletLink({ platform, wallet: w, currentUrl: window.location.href })
+      const buttonTitle = getWalletData({ wallet: w }).name
       return <div className={classNames(commonStyles.container, styles.container, {
         [styles.sliderShow]: showSlider,
         [styles.sliderHide]: showSlider === false
