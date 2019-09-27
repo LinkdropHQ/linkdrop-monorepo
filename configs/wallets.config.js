@@ -45,7 +45,7 @@ export default {
       },
       ios: {
         support: true,
-        deepLink: (url) => `https://operacrypto.page.link/?link=${encodeURIComponent(url)}&ibi=com.opera.OperaTouch&isi=411869974`
+        deepLink: (url) => `https://operacrypto.page.link/?link=${encodeURIComponent(url)}&ibi=com.opera.OperaTouch&isi=1411869974`
       }
     }
   },
