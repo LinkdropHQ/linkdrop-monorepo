@@ -1,4 +1,5 @@
 import setAssets from './set-assets'
+import setERC721Assets from './set-erc721-assets'
 import setTokenSymbol from './set-token-symbol'
 import setTokenDecimals from './set-token-decimals'
 import setTokenType from './set-token-type'
@@ -8,6 +9,7 @@ import setERC20Balance from './set-erc20-balance'
 
 export default {
   setAssets,
+  setERC721Assets,
   setTokenSymbol,
   setTokenDecimals,
   setTokenAddress,

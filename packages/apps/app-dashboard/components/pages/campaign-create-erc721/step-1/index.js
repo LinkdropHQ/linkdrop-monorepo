@@ -1,30 +1,22 @@
 import React from 'react'
 import { actions, translate } from 'decorators'
 import styles from './styles.module'
-import { ethers } from 'ethers'
 import classNames from 'classnames'
-import { Select, Input, PageHeader, PageLoader } from 'components/common'
-import TokenAddressInput from './token-address-input'
-import LinksContent from './links-content'
-import NextButton from './next-button'
-import AddEthField from './add-eth-field'
-import EthTexts from './eth-texts'
+import { Select, Input, PageHeader, PageLoader, NFTToken } from 'components/common'
+import { TokenAddressInput, LinksContent, NextButton, AddEthField, EthTexts } from 'components/pages/common'
 import config from 'config-dashboard'
 import Immutable from 'immutable'
 
-@actions(({ user: { chainId, currentAddress, loading }, campaigns: { items, proxyAddress, links }, tokens: { assets, symbol } }) => ({ assets, chainId, symbol, loading, proxyAddress, currentAddress, items, links }))
+@actions(({ user: { chainId, currentAddress, loading }, campaigns: { items, proxyAddress, links }, tokens: { assetsERC721, symbol } }) => ({ assetsERC721, chainId, symbol, loading, proxyAddress, currentAddress, items, links }))
 @translate('pages.campaignCreate')
 class Step1 extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
       options: TOKENS,
-      tokenSymbol: TOKENS[0].value,
-      tokenAmount: '0',
       ethAmount: '0',
-      linksAmount: '0',
-      addEth: false,
-      tokenAddress: null
+      tokenAddress: null,
+      currentIds: []
     }
   }
 
@@ -33,30 +25,31 @@ class Step1 extends React.Component {
     if (!proxyAddress) {
       this.actions().campaigns.createProxyAddress({ campaignId: items.length })
     }
-    this.actions().tokens.getAssetsERC721({ currentAddress })
+    this.actions().tokens.getERC721Assets({ currentAddress })
   }
 
-  // componentWillReceiveProps ({ assets }) {
-  //   const { assets: prevAssets } = this.props
-
-  //   if (assets != null && assets.length > 0 && !Immutable.fromJS(assets).equals(Immutable.fromJS(prevAssets))) {
-  //     const assetsPrepared = assets.map(({ contract }) => ({
-  //       label: `${contract.symbol} — ${(contract.address)}...`,
-  //       value: contract.symbol
-  //     }))
-
-  //     const newOptions = [TOKENS[0]].concat(assetsPrepared).concat([TOKENS[1]])
-  //     this.setState({
-  //       options: newOptions,
-  //       tokenSymbol: newOptions[0].value
-  //     })
-  //   }
-  // }
+  componentWillReceiveProps ({ assetsERC721: assets }) {
+    const { assetsERC721: prevAssets } = this.props
+    if (assets != null && assets.length > 0 && !Immutable.fromJS(assets).equals(Immutable.fromJS(prevAssets))) {
+      const assetsPrepared = assets.map(({ address, symbol, name, ids }) => ({
+        label: `${name} — ${address}...`,
+        value: address
+      }))
+      const newOptions = assetsPrepared.concat([TOKENS[0]])
+      const currentIds = assets[0].ids
+      this.setState({
+        options: newOptions,
+        tokenAddress: newOptions[0].value,
+        currentIds
+      }, _ => {
+        this.actions().tokens.setTokenERC721Data({ address: newOptions[0].value })
+      })
+    }
+  }
 
   render () {
-    const { tokenSymbol, ethAmount, linksAmount, tokenAmount, addEth, tokenAddress, options } = this.state
-    const { symbol, loading } = this.props
-    const tokenType = this.defineTokenType({ tokenSymbol })
+    const { tokenSymbol, currentIds, ethAmount, tokenAmount, addEth, tokenAddress, options } = this.state
+    const { symbol, assetsERC721, loading } = this.props
     return <div className={classNames(styles.container, { [styles.customTokenEnabled]: tokenSymbol === 'ERC20' })}>
       {loading && <PageLoader />}
       <PageHeader title={this.t('titles.setupCampaign')} />
@@ -65,31 +58,15 @@ class Step1 extends React.Component {
           <div className={styles.chooseTokens}>
             <h3 className={styles.subtitle}>{this.t('titles.chooseToken')}</h3>
             <Select
-              options={options} value={tokenSymbol} onChange={({ value }) => {
-                if (value !== 'ETH' && value !== 'ERC20') {
-                  const currentAddress = options.find(option => option.value === value).address
-                  this.setState({
-                    tokenAddress: currentAddress
-                  }, _ => {
-                    this.setField({ field: 'tokenSymbol', value })
-                  })
-                } else {
-                  this.setState({
-                    tokenAddress: null
-                  }, _ => {
-                    this.setField({ field: 'tokenSymbol', value })
-                  })
-                }
+              options={options} value={tokenAddress} onChange={({ value }) => {
+                this.setField({
+                  value,
+                  field: 'tokenAddress'
+                })
               }}
             />
           </div>
-          {this.renderTokenInputs({ ethAmount, tokenType, tokenAddress, symbol, tokenSymbol, tokenAmount, addEth })}
-          <div className={styles.linksAmount}>
-            <h3 className={styles.subtitle}>{this.t('titles.totalLinks')}</h3>
-            <div className={styles.linksAmountContainer}>
-              <Input numberInput decimalSeparator={false} className={styles.input} value={linksAmount} onChange={({ value }) => this.setField({ field: 'linksAmount', value: parseFloat(value) })} />
-            </div>
-          </div>
+          {this.renderTokenInputs({ ethAmount })}
         </div>
 
         <div className={styles.summary}>
@@ -97,125 +74,98 @@ class Step1 extends React.Component {
           {this.renderTexts({
             tokenAddress,
             ethAmount,
-            tokenType,
-            linksAmount,
+            tokenType: 'erc721',
+            linksAmount: currentIds.length,
             tokenAmount,
             tokenSymbol: symbol || tokenSymbol,
             addEth
           })}
         </div>
       </div>
+      <div>{currentIds.join(',')}</div>
+      {this.renderNFTTokens({ assetsERC721, tokenAddress, currentIds })}
       <NextButton
         tokenAmount={tokenAmount}
         ethAmount={ethAmount}
-        linksAmount={linksAmount}
+        linksAmount={currentIds.length}
         tokenSymbol={symbol}
-        tokenType={tokenType}
+        tokenType='erc721'
       />
     </div>
   }
 
-  renderTokenInputs ({ tokenType, tokenAddress, symbol, tokenSymbol, tokenAmount, ethAmount, addEth }) {
-    const value = tokenType === 'erc20' ? tokenAmount : ethAmount
-    const fieldToChange = tokenType === 'erc20' ? 'tokenAmount' : 'ethAmount'
-    const amountInput = <div className={styles.tokensAmount}>
+  renderNFTTokens ({ assetsERC721, tokenAddress, currentIds }) {
+    const currentAsset = assetsERC721.find(item => item.address === tokenAddress)
+    if (!currentAsset) { return }
+    return <div className={styles.tokens}>
+      {currentAsset.ids.map(id => <NFTToken
+        key={`${currentAsset.address}_${id}`}
+        {...currentAsset}
+        id={id}
+        onSelect={({ selected }) => this.onSelect({ selected, id })}
+        selected={currentIds.indexOf(id) > -1}
+      />)}
+    </div>
+  }
+
+  onSelect ({ selected, id }) {
+    const { currentIds } = this.state
+    const currentIdsUpdated = selected ? currentIds.concat(id) : currentIds.filter(item => item !== id)
+    this.setState({
+      currentIds: currentIdsUpdated
+    })
+  }
+
+  renderTokenInputs ({ ethAmount }) {
+    return <div className={styles.tokensAmount}>
       <h3 className={styles.subtitle}>{this.t('titles.amountPerLink')}</h3>
       <div className={styles.tokensAmountContainer}>
-        <Input
-          disabled={tokenType === 'erc20' && !symbol}
-          numberInput
-          suffix={tokenType === 'erc20' ? symbol : tokenSymbol}
-          className={styles.input}
-          value={value}
-          onChange={({ value }) => this.setField({ field: fieldToChange, value: parseFloat(value) })}
-        />
         <AddEthField
-          tokenType={tokenType}
-          addEth={addEth}
+          addEth
+          showAlways
           ethAmount={ethAmount}
           setField={({ value, field }) => this.setField({ value, field })}
         />
       </div>
     </div>
-    switch (tokenSymbol) {
-      case 'ERC20':
-        return <div>
-          <TokenAddressInput tokenAddress={tokenAddress} tokenType={tokenType} setField={({ value, field }) => this.setField({ value, field })} />
-          {amountInput}
-        </div>
-      case 'ETH':
-      default:
-        return <div>
-          {amountInput}
-        </div>
-    }
   }
 
-  defineTokenType ({ tokenSymbol }) {
-    if (tokenSymbol === 'ETH') { return 'eth' }
-    return 'erc20'
-  }
-
-  renderTexts ({ ethAmount, tokenAddress, linksAmount, tokenAmount, tokenSymbol, addEth, tokenType }) {
-    const value = tokenType === 'erc20' ? tokenAmount : ethAmount
-    if (tokenType === 'erc20') {
-      if (tokenSymbol === 'ERC20') {
-        if (!linksAmount || !value || !tokenAddress) {
-          return <p className={classNames(styles.text, styles.textGrey)}>{this.t('titles.fillTheField')}</p>
-        }
-      } else {
-        if (!linksAmount || !value) {
-          return <p className={classNames(styles.text, styles.textGrey)}>{this.t('titles.fillTheField')}</p>
-        }
-      }
-    }
-    if (tokenType === 'eth') {
-      if (!linksAmount || Number(linksAmount) === 0 || !value || Number(value) === 0) {
-        return <p className={classNames(styles.text, styles.textGrey)}>{this.t('titles.fillTheField')}</p>
-      }
-    }
+  renderTexts ({ ethAmount, linksAmount, tokenAmount, tokenSymbol }) {
     return <div>
-      {tokenType === 'erc20' && <p className={classNames(styles.text, styles.textMargin15)}>{value * linksAmount} {tokenSymbol}</p>}
-      <EthTexts ethAmount={ethAmount} linksAmount={linksAmount} />
-      <LinksContent tokenAmount={tokenAmount} tokenSymbol={tokenSymbol} ethAmount={ethAmount} tokenType={tokenType} />
+      <p className={classNames(styles.text, styles.textMargin15)}>{linksAmount} {tokenSymbol}</p>
+      {/* <EthTexts ethAmount={ethAmount} linksAmount={linksAmount} /> */}
+      {/* <LinksContent tokenAmount={tokenAmount} tokenSymbol={tokenSymbol} ethAmount={ethAmount} tokenType={tokenType} /> */}
       <p className={styles.text} dangerouslySetInnerHTML={{ __html: this.t('titles.serviceFee', { price: config.linkPrice * linksAmount }) }} />
       <p className={classNames(styles.text, styles.textGrey)} dangerouslySetInnerHTML={{ __html: this.t('titles.serviceFeePerLink', { price: config.linkPrice }) }} />
     </div>
   }
 
   setField ({ value, field }) {
-    const { tokenSymbol } = this.state
-    const { chainId } = this.props
-    if (field === 'tokenAddress' && value.length > 42) { return }
-    if (field === 'ethAmount' || field === 'tokenAmount') {
+    const { assetsERC721 } = this.props
+    if (field === 'ethAmount') {
       return this.setState({
         [field]: value
       })
     }
+
     this.setState({
       [field]: value
     }, _ => {
-      if (field === 'tokenSymbol') {
+      if (field === 'tokenAddress') {
+        const currentIds = assetsERC721.find(asset => asset.address === value).ids
         this.setState({
-          ethAmount: 0,
-          addEth: false
-        }, _ => {
-          if (Number(chainId) === 1 && value !== 'ERC20' && value !== 'ETH') {
-            this.actions().tokens.setTokenERC20Data({ tokenSymbol: value })
-          } else if (value === 'ERC20' || value === 'ETH') {
-            this.actions().tokens.emptyTokenERC20Data()
-          }
-        })
+          currentIds
+        }, _ => this.actions().tokens.setTokenERC721Data({ address: value }))
       }
 
-      if (field === 'tokenAddress' && tokenSymbol === 'ERC20') {
-        const tokenType = this.defineTokenType({ tokenSymbol })
-        if (value.length === 42) {
-          if (tokenType === 'erc20') {
-            this.actions().tokens.getTokenERC20Data({ tokenAddress: value, chainId })
-          }
-        }
-      }
+      // if (field === 'tokenAddress' && tokenSymbol === 'ERC20') {
+      //   const tokenType = this.defineTokenType({ tokenSymbol })
+      //   if (value.length === 42) {
+      //     if (tokenType === 'erc20') {
+      //       this.actions().tokens.getTokenERC20Data({ tokenAddress: value, chainId })
+      //     }
+      //   }
+      // }
     })
   }
 }

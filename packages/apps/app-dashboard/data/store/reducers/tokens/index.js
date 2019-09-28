@@ -2,6 +2,7 @@ import reducers from './reducers'
 
 const initialState = {
   assets: [],
+  assetsERC721: [],
   symbol: null,
   decimals: null,
   tokenType: null,
@@ -22,6 +23,7 @@ export default (state = initialState, action = {}) => {
 
 const ACTIONS = {
   'TOKENS.SET_ASSETS': reducers.setAssets,
+  'TOKENS.SET_ERC721_ASSETS': reducers.setERC721Assets,
   'TOKENS.SET_TOKEN_SYMBOL': reducers.setTokenSymbol,
   'TOKENS.SET_TOKEN_ADDRESS': reducers.setTokenAddress,
   'TOKENS.SET_TOKEN_TYPE': reducers.setTokenType,

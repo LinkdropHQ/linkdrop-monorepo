@@ -15,7 +15,9 @@ class Aside extends React.Component {
     return <aside className={styles.container}>
       <div className={styles.mainBlock}>
         <div className={styles.logo}>
-          <a href='/#/'><RetinaImage alwaysHighRes width={181} {...getImages({ src: 'logo' })} /></a>
+          <a href='/#/'>
+            <RetinaImage alwaysHighRes width={115} {...getImages({ src: 'logo' })} />
+          </a>
         </div>
         {this.renderDashboardButton()}
         {this.renderCampaignsButton({ currentAddress, items, chainId })}
@@ -41,13 +43,7 @@ class Aside extends React.Component {
         className={classNames(styles.button, { [styles.buttonDisabled]: !currentAddress })}
         onClick={_ => {
           if (!currentAddress) { return }
-          const { privateKey } = this.props
-          if (privateKey) {
-            this.actions().user.setStep({ step: 2 })
-          } else {
-            this.actions().user.setStep({ step: 1 })
-          }
-          window.location.href = '/#/campaigns/create'
+          window.location.href = '/#/'
         }}
         disabled={!currentAddress}
       >
@@ -67,10 +63,14 @@ class Aside extends React.Component {
     return <div className={classNames(styles.menuItem, {
       [styles.disabled]: !currentAddress || !itemsForCurrentChainId || itemsForCurrentChainId.length === 0,
       [styles.active]: this.defineCurrentPage() === 'campaigns'
-    })}>
-      <a onClick={e => {
-        if (!currentAddress || itemsForCurrentChainId.length === 0) { e.preventDefault() }
-      }} href='/#/campaigns'>{this.t('campaigns')}</a>
+    })}
+    >
+      <a
+        onClick={e => {
+          if (!currentAddress || itemsForCurrentChainId.length === 0) { e.preventDefault() }
+        }} href='/#/campaigns'
+      >{this.t('campaigns')}
+      </a>
     </div>
   }
 

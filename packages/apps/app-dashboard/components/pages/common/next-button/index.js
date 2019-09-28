@@ -1,6 +1,6 @@
 import React from 'react'
 import { actions, translate } from 'decorators'
-import styles from '../styles.module'
+import styles from './styles.module'
 import { Button } from 'components/common'
 
 @actions(_ => ({}))

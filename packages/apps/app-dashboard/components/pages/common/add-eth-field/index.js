@@ -1,14 +1,15 @@
 import React from 'react'
 import { actions, translate } from 'decorators'
-import styles from '../styles.module'
+import styles from './styles.module'
 import { Button, Input } from 'components/common'
 import { Icons } from '@linkdrop/ui-kit'
+import classNames from 'classnames'
 
 @actions(_ => ({}))
 @translate('pages.campaignCreate')
 class AddEthField extends React.Component {
   render () {
-    const { addEth, ethAmount, tokenType, setField } = this.props
+    const { addEth, ethAmount, tokenType, setField, showAlways } = this.props
     if (tokenType === 'eth') return null
     if (!addEth) {
       return <div className={styles.ethAddButton}>
@@ -21,8 +22,11 @@ class AddEthField extends React.Component {
         </Button>
       </div>
     }
-    return <div className={styles.ethAddInput}>
-      <span>+</span>
+    return <div className={classNames(styles.ethAddInput, {
+      [styles.showAlways]: showAlways
+    })}
+    >
+      {!showAlways && <span>+</span>}
       <Input
         numberInput
         suffix='ETH'
