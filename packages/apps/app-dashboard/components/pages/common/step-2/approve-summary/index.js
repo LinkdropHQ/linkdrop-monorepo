@@ -18,6 +18,12 @@ class ApproveSummary extends React.Component {
         <div dangerouslySetInnerHTML={{ __html: this.t('titles.approveTokens', { tokenAmount: convertFromExponents(multiply(bignumber(tokenAmount), bignumber(linksAmount))), tokenSymbol }) }} />
       </div>
     }
+
+    if (tokenType === 'erc721') {
+      return <div className={classNames(styles.container, styles.tokens)}>
+        <div dangerouslySetInnerHTML={{ __html: this.t('titles.approveTokens', { tokenAmount: linksAmount, tokenSymbol }) }} />
+      </div>
+    }
     return <div className={classNames(styles.container, styles.eth)}>
       <div dangerouslySetInnerHTML={{ __html: this.t('titles.sendEthToGenerate', { ethAmount: convertFromExponents(ethAmountFinal) }) }} />
       <div className={styles.contents}>
