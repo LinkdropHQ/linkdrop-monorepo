@@ -204,7 +204,7 @@ class LinkdropSDK {
   }
 
   async approveERC721 ({ signingKeyOrWallet, proxyAddress, nftAddress }) {
-    return topupAndApproveUtils.topupAndApproveERC721({
+    return topupAndApproveUtils.approveERC721({
       jsonRpcUrl: this.jsonRpcUrl,
       signingKeyOrWallet,
       proxyAddress,
