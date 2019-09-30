@@ -4,9 +4,9 @@ import styles from './styles.module'
 import { ethers } from 'ethers'
 import classNames from 'classnames'
 import { Select, Input, PageHeader, PageLoader } from 'components/common'
-import { TokenAddressInput, LinksContent, NextButton, AddEthField, EthTexts } from 'components/pages/common'
 import config from 'config-dashboard'
 import Immutable from 'immutable'
+import { TokenAddressInput, LinksContent, NextButton, AddEthField, EthTexts } from 'components/pages/common'
 
 @actions(({ user: { chainId, currentAddress, loading }, campaigns: { items, proxyAddress, links }, tokens: { assets, symbol } }) => ({ assets, chainId, symbol, loading, proxyAddress, currentAddress, items, links }))
 @translate('pages.campaignCreate')
@@ -29,16 +29,18 @@ class Step1 extends React.Component {
     if (!proxyAddress) {
       this.actions().campaigns.createProxyAddress({ campaignId: items.length })
     }
-    this.actions().tokens.getAssets({ currentAddress })
+    if (Number(chainId) === 1) {
+      this.actions().tokens.getAssets({ currentAddress })
+    }
   }
 
   componentWillReceiveProps ({ assets }) {
     const { assets: prevAssets } = this.props
 
     if (assets != null && assets.length > 0 && !Immutable.fromJS(assets).equals(Immutable.fromJS(prevAssets))) {
-      const assetsPrepared = assets.map(item => ({
-        label: `${item.symbol} — ${(item.address)}...`,
-        value: item.symbol
+      const assetsPrepared = assets.map(({ contract }) => ({
+        label: `${contract.symbol} — ${(contract.address)}...`,
+        value: contract.symbol
       }))
 
       const newOptions = [TOKENS[0]].concat(assetsPrepared).concat([TOKENS[1]])
@@ -188,7 +190,6 @@ class Step1 extends React.Component {
         [field]: value
       })
     }
-
     this.setState({
       [field]: value
     }, _ => {
@@ -197,7 +198,7 @@ class Step1 extends React.Component {
           ethAmount: 0,
           addEth: false
         }, _ => {
-          if (value !== 'ERC20' && value !== 'ETH') {
+          if (Number(chainId) === 1 && value !== 'ERC20' && value !== 'ETH') {
             this.actions().tokens.setTokenERC20Data({ tokenSymbol: value })
           } else if (value === 'ERC20' || value === 'ETH') {
             this.actions().tokens.emptyTokenERC20Data()
@@ -205,14 +206,14 @@ class Step1 extends React.Component {
         })
       }
 
-      // if (field === 'tokenAddress' && tokenSymbol === 'ERC20') {
-      //   const tokenType = this.defineTokenType({ tokenSymbol })
-      //   if (value.length === 42) {
-      //     if (tokenType === 'erc20') {
-      //       this.actions().tokens.getTokenERC20Data({ tokenAddress: value, chainId })
-      //     }
-      //   }
-      // }
+      if (field === 'tokenAddress' && tokenSymbol === 'ERC20') {
+        const tokenType = this.defineTokenType({ tokenSymbol })
+        if (value.length === 42) {
+          if (tokenType === 'erc20') {
+            this.actions().tokens.getTokenERC20Data({ tokenAddress: value, chainId })
+          }
+        }
+      }
     })
   }
 }

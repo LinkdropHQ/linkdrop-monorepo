@@ -8,7 +8,31 @@ import config from 'config-dashboard'
 import AllTokensControl from './all-tokens-control'
 import Immutable from 'immutable'
 
-@actions(({ user: { chainId, currentAddress, loading }, campaigns: { items, proxyAddress, links }, tokens: { assetsERC721, symbol } }) => ({ assetsERC721, chainId, symbol, loading, proxyAddress, currentAddress, items, links }))
+@actions(({
+  user: {
+    chainId,
+    currentAddress,
+    loading
+  },
+  campaigns: {
+    items,
+    proxyAddress,
+    links
+  },
+  tokens: {
+    assetsERC721,
+    symbol
+  }
+}) => ({
+  assetsERC721,
+  chainId,
+  symbol,
+  loading,
+  proxyAddress,
+  currentAddress,
+  items,
+  links
+}))
 @translate('pages.campaignCreate')
 class Step1 extends React.Component {
   constructor (props) {
@@ -16,8 +40,9 @@ class Step1 extends React.Component {
     this.state = {
       options: TOKENS,
       ethAmount: 0,
-      tokenAddress: TOKENS[0].value,
-      currentIds: []
+      tokenAddress: null,
+      currentIds: [],
+      customTokenAddress: ''
     }
   }
 
@@ -33,19 +58,26 @@ class Step1 extends React.Component {
     const { assetsERC721: prevAssets } = this.props
     if (assets != null && assets.length > 0 && !Immutable.fromJS(assets).equals(Immutable.fromJS(prevAssets))) {
       const assetsPrepared = assets.map(({ address, symbol, name, ids }) => ({
-        label: `${name} — ${address}...`,
+        label: `${symbol} — ${address}...`,
         value: address
       }))
-      const newOptions = TOKENS.concat(assetsPrepared)
+      const newOptions = assetsPrepared.concat(TOKENS)
+      const currentAsset = assets.find(asset => asset.address === newOptions[0].value)
+
       this.setState({
-        options: newOptions
+        options: newOptions,
+        tokenAddress: currentAsset.address,
+        currentIds: currentAsset.ids
+      }, _ => {
+        this.actions().tokens.setTokenERC721Data({ address: currentAsset.address })
       })
     }
   }
 
   render () {
-    const { tokenSymbol, currentIds, ethAmount, addEth, tokenAddress, options } = this.state
+    const { currentIds, ethAmount, addEth, tokenAddress, customTokenAddress, options } = this.state
     const { proxyAddress, symbol, assetsERC721, loading } = this.props
+    const tokenSymbol = (assetsERC721.find(item => item.address === tokenAddress) || {}).symbol
     return <div className={classNames(styles.container, { [styles.customTokenEnabled]: tokenSymbol === 'ERC20' })}>
       {loading && <PageLoader />}
       <PageHeader title={this.t('titles.setupCampaign')} />
@@ -64,12 +96,11 @@ class Step1 extends React.Component {
               }}
             />
           </div>
-          {this.renderTokenInputs({ ethAmount })}
+          {this.renderTokenInputs({ ethAmount, tokenAddress, customTokenAddress })}
         </div>
 
         <div className={styles.summary}>
           <h3 className={styles.subtitle}>{this.t('titles.total')}</h3>
-          {console.log(currentIds.length)}
           {this.renderTexts({
             tokenAddress,
             ethAmount,
@@ -87,7 +118,7 @@ class Step1 extends React.Component {
         tokenAmount={1}
         ethAmount={ethAmount}
         linksAmount={currentIds.length}
-        tokenSymbol={symbol}
+        tokenSymbol={symbol || tokenSymbol}
         tokenType='erc721'
         tokenIds={currentIds}
       />
@@ -133,8 +164,8 @@ class Step1 extends React.Component {
     })
   }
 
-  renderTokenInputs ({ ethAmount }) {
-    return <div className={styles.tokensAmount}>
+  renderTokenInputs ({ ethAmount, tokenAddress, customTokenAddress }) {
+    const ethInput = <div className={styles.tokensAmount}>
       <h3 className={styles.subtitle}>{this.t('titles.amountPerLink')}</h3>
       <div className={styles.tokensAmountContainer}>
         <AddEthField
@@ -145,6 +176,17 @@ class Step1 extends React.Component {
         />
       </div>
     </div>
+    switch (tokenAddress) {
+      case 'ERC721':
+        return <div>
+          <TokenAddressInput tokenAddress={customTokenAddress} tokenType='erc721' setField={({ value, field }) => this.setField({ value, field: 'customTokenAddress' })} />
+          {ethInput}
+        </div>
+      default:
+        return <div>
+          {ethInput}
+        </div>
+    }
   }
 
   renderTexts ({ ethAmount, linksAmount, tokenAddress, tokenAmount, tokenSymbol }) {
@@ -178,11 +220,11 @@ class Step1 extends React.Component {
         }, _ => this.actions().tokens.setTokenERC721Data({ address: value }))
       }
 
-      if (field === 'tokenAddress' && value === 'ERC721') {
-        if (value.length === 42) {
-          this.actions().tokens.getTokenERC721Data({ tokenAddress: value, chainId })
-        }
-      }
+      // if (field === 'customTokenAddress') {
+      //   if (value.length === 42) {
+      //     this.actions().tokens.getTokenERC721Data({ tokenAddress: value, chainId })
+      //   }
+      // }
     })
   }
 }
@@ -190,8 +232,8 @@ class Step1 extends React.Component {
 export default Step1
 
 const TOKENS = [
-  {
-    label: 'ERC721 Token Address',
-    value: 'ERC721'
-  }
+  // {
+  //   label: 'ERC721 Token Address',
+  //   value: 'ERC721'
+  // }
 ]

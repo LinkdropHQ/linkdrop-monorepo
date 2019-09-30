@@ -173,7 +173,6 @@ class Step2 extends React.Component {
           </div>
           <div className={styles.serviceFee}>{this.t('texts._18')}</div>
           <ApproveSummary tokenType={tokenType} linksAmount={linksAmount} serviceFee={config.linkPrice} ethAmount={ethAmount} tokenAmount={tokenAmount} tokenSymbol={tokenSymbol} />
-          <button onClick={_ => console.log({ tokenType })}>check</button>
           <NextButton
             tokenType={tokenType}
             tokenAmount={tokenAmount}
