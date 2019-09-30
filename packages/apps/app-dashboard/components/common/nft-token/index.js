@@ -1,6 +1,7 @@
 import React from 'react'
 import styles from './styles.module'
 import classNames from 'classnames'
+import { Checkbox } from '@linkdrop/ui-kit'
 
 class NFTToken extends React.Component {
   constructor (props) {
@@ -38,13 +39,12 @@ class NFTToken extends React.Component {
       <div className={styles.title}>
         {name}
       </div>
-      <input type='checkbox' checked={selected} onChange={e => this.onSelect(e)} />
+      <Checkbox className={styles.checkbox} onChange={({ value }) => this.onSelect({ value })} checked={selected} />
     </div>
   }
 
-  onSelect (e) {
+  onSelect ({ value }) {
     const { onSelect } = this.props
-    const value = e.target.checked
     this.setState({
       selected: value
     }, _ => onSelect && onSelect({ selected: value }))

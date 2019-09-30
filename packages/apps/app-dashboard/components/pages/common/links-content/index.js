@@ -14,11 +14,18 @@ class LinksContent extends React.Component {
         {`${this.t('titles.oneLinkContains')} ${this.t('titles.oneLinkContents', { tokenAmount: convertFromExponents(ethAmount), tokenSymbol: 'ETH' })}`}
       </p>
     }
-    if (tokenType === 'erc20' && ethAmount) {
+    if ((tokenType === 'erc20' || tokenType === 'erc721') && ethAmount) {
       return <p className={classNames(styles.text, styles.textMargin30)}>
         {`${this.t('titles.oneLinkContains')} ${this.t('titles.oneLinkContentsWithEth', { tokenAmount: convertFromExponents(tokenAmount), tokenSymbol, ethAmount: convertFromExponents(ethAmount) })}`}
       </p>
     }
+
+    if (tokenType === 'erc721') {
+      return <p className={classNames(styles.text, styles.textMargin30)}>
+        {`${this.t('titles.oneLinkContains')} ${this.t('titles.oneLinkContents', { tokenAmount, tokenSymbol })}`}
+      </p>
+    }
+
     return <p className={classNames(styles.text, styles.textMargin30)}>
       {`${this.t('titles.oneLinkContains')} ${this.t('titles.oneLinkContents', { tokenAmount: convertFromExponents(tokenAmount), tokenSymbol })}`}
     </p>

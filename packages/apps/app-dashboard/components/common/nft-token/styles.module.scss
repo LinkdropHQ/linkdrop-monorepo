@@ -32,4 +32,15 @@
 
 .title {
   font-size: 16px;
+  margin-bottom: 16px;
+}
+
+.checkbox {
+  & > div {
+    border-color: $dbGrey;
+  }
+
+  path {
+    fill: $dbBlue;
+  } 
 }

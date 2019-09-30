@@ -20,7 +20,7 @@ class Main extends React.Component {
         title={this.t('titles.erc721Campaign')}
         description={this.t('texts.listOfLinks')}
         extraContent={this.t('titles.erc721Eth')}
-        href='/#/campaigns/create'
+        href='/#/campaigns/create-erc-721'
         buttonTitle={this.t('buttons.create')}
       />
 

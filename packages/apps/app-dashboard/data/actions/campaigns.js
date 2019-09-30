@@ -28,6 +28,19 @@ class Campaign {
     })
   }
 
+  prepareNewERC721Data ({ tokenAmount, ethAmount, tokenIds, tokenSymbol, tokenType }) {
+    this.actions.dispatch({
+      type: '*CAMPAIGNS.PREPARE_NEW_ERC721_DATA',
+      payload: {
+        tokenAmount,
+        tokenType,
+        ethAmount,
+        tokenIds,
+        tokenSymbol
+      }
+    })
+  }
+
   createProxyAddress ({ campaignId }) {
     this.actions.dispatch({ type: '*CAMPAIGNS.CREATE_PROXY_ADDRESS', payload: { campaignId } })
   }

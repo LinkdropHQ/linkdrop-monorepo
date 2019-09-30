@@ -18,7 +18,8 @@ import config from 'config-dashboard'
   tokens: {
     ethBalanceFormatted,
     erc20BalanceFormatted,
-    address
+    address,
+    erc721IsApproved
   },
   metamask: {
     status: metamaskStatus
@@ -30,7 +31,8 @@ import config from 'config-dashboard'
     proxyAddress,
     tokenType,
     tokenSymbol
-  } }) => ({
+  }
+}) => ({
   ethAmount,
   tokenAmount,
   linksAmount,
@@ -44,7 +46,8 @@ import config from 'config-dashboard'
   ethBalanceFormatted,
   proxyAddress,
   tokenType,
-  erc20BalanceFormatted
+  erc20BalanceFormatted,
+  erc721IsApproved
 }))
 @translate('pages.campaignCreate')
 class Step2 extends React.Component {
@@ -55,7 +58,7 @@ class Step2 extends React.Component {
     }
   }
 
-  componentWillReceiveProps ({ metamaskStatus, errors, ethBalanceFormatted, erc20BalanceFormatted }) {
+  componentWillReceiveProps ({ erc721IsApproved, metamaskStatus, errors, ethBalanceFormatted, erc20BalanceFormatted }) {
     const {
       metamaskStatus: prevMetamaskStatus,
       errors: prevErrors,
@@ -65,6 +68,7 @@ class Step2 extends React.Component {
       address: tokenAddress,
       currentAddress,
       tokenType,
+      erc721IsApproved: prevErc721IsApproved,
       ethBalanceFormatted: prevEthBalanceFormatted
     } = this.props
 
@@ -76,6 +80,8 @@ class Step2 extends React.Component {
           this.intervalCheck = window.setInterval(_ => this.actions().tokens.getEthBalance({ account: proxyAddress, chainId }), config.balanceCheckInterval)
         } else if (tokenType === 'erc20') {
           this.intervalCheck = window.setInterval(_ => this.actions().tokens.getERC20Balance({ chainId, tokenAddress, account: proxyAddress, currentAddress }), config.balanceCheckInterval)
+        } else {
+          this.intervalCheck = window.setInterval(_ => this.actions().tokens.getERC721Approved({ chainId, tokenAddress, account: proxyAddress, currentAddress }), config.balanceCheckInterval)
         }
       })
     }
@@ -100,6 +106,15 @@ class Step2 extends React.Component {
       }
     } else if (tokenType === 'erc20') {
       if (erc20BalanceFormatted && Number(erc20BalanceFormatted) > 0 && erc20BalanceFormatted !== prevErc20BalanceFormatted) {
+        this.setState({
+          loading: false
+        }, _ => {
+          this.intervalCheck && window.clearInterval(this.intervalCheck)
+          window.setTimeout(_ => this.actions().user.setStep({ step: 3 }), config.nextStepTimeout)
+        })
+      }
+    } else {
+      if (erc721IsApproved && !prevErc721IsApproved) {
         this.setState({
           loading: false
         }, _ => {
@@ -158,6 +173,7 @@ class Step2 extends React.Component {
           </div>
           <div className={styles.serviceFee}>{this.t('texts._18')}</div>
           <ApproveSummary tokenType={tokenType} linksAmount={linksAmount} serviceFee={config.linkPrice} ethAmount={ethAmount} tokenAmount={tokenAmount} tokenSymbol={tokenSymbol} />
+          <button onClick={_ => console.log({ tokenType })}>check</button>
           <NextButton
             tokenType={tokenType}
             tokenAmount={tokenAmount}

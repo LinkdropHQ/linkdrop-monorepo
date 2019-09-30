@@ -10,7 +10,7 @@ class ActionBlock extends React.Component {
       {title && <h3 className={styles.title}>{title}</h3>}
       {description && <div className={styles.description}>{description}</div>}
       {extraContent && <div className={styles.extraContent}>{extraContent}</div>}
-      {(onClick || href) && <Button transparent={transparent} href={href} className={styles.button} onClick={_ => onClick && onClick()}>{buttonTitle}</Button>}
+      {(onClick || href) && <Button href={href} className={styles.button} onClick={_ => onClick && onClick()}>{buttonTitle}</Button>}
     </div>
   }
 }

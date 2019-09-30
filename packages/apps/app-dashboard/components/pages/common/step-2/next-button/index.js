@@ -16,13 +16,19 @@ class NextButton extends React.Component {
           account: currentAddress,
           chainId
         })
-      } else {
+      } else if (tokenType === 'erc20') {
         this.actions().metamask.sendErc20({
           tokenAmount: multiply(bignumber(tokenAmount), bignumber(linksAmount)),
           account: currentAddress
         })
+      } else {
+        this.actions().metamask.sendErc721({
+          tokenAmount: linksAmount,
+          account: currentAddress
+        })
       }
-    }}>
+    }}
+    >
       {this.t(`buttons.${tokenType === 'eth' ? 'sendAndContinue' : 'approve'}`)}
     </Button>
   }

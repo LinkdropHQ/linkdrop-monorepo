@@ -6,6 +6,7 @@ import setTokenType from './set-token-type'
 import setTokenAddress from './set-token-address'
 import setEthBalance from './set-eth-balance'
 import setERC20Balance from './set-erc20-balance'
+import setERC721IsApproved from './set-erc721-is-approved'
 
 export default {
   setAssets,
@@ -15,5 +16,6 @@ export default {
   setTokenAddress,
   setTokenType,
   setEthBalance,
-  setERC20Balance
+  setERC20Balance,
+  setERC721IsApproved
 }

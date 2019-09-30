@@ -31,8 +31,16 @@ class Tokens {
     this.actions.dispatch({ type: '*TOKENS.GET_ERC20_BALANCE', payload: { chainId, tokenAddress, account, currentAddress } })
   }
 
+  getERC721Approved ({ chainId, tokenAddress, account, currentAddress }) {
+    this.actions.dispatch({ type: '*TOKENS.GET_ERC721_APPROVED', payload: { chainId, tokenAddress, account, currentAddress } })
+  }
+
   generateERC20Link ({ chainId, currentAddress }) {
     this.actions.dispatch({ type: '*TOKENS.GENERATE_ERC20_LINK', payload: { chainId, currentAddress } })
+  }
+
+  generateERC721Link ({ tokenId }) {
+    this.actions.dispatch({ type: '*TOKENS.GENERATE_ERC721_LINK', payload: { tokenId } })
   }
 
   generateETHLink ({ chainId, currentAddress }) {

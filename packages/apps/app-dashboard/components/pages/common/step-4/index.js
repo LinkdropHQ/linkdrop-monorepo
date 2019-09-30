@@ -14,7 +14,8 @@ import { ProgressBar } from 'components/common'
     linksAmount,
     tokenSymbol,
     tokenType,
-    links
+    links,
+    tokenIds
   }
 }) => ({
   ethAmount,
@@ -24,16 +25,19 @@ import { ProgressBar } from 'components/common'
   links,
   tokenSymbol,
   chainId,
-  tokenType
+  tokenType,
+  tokenIds
 }))
 @translate('pages.campaignCreate')
 class Step4 extends React.Component {
   componentDidMount () {
-    const { chainId, currentAddress, tokenType } = this.props
+    const { chainId, currentAddress, tokenType, tokenIds } = this.props
     if (tokenType === 'eth') {
       this.actions().tokens.generateETHLink({ chainId, currentAddress })
     } else if (tokenType === 'erc20') {
       this.actions().tokens.generateERC20Link({ chainId, currentAddress })
+    } else {
+      this.actions().tokens.generateERC721Link({ chainId, currentAddress, tokenId: chainId[0] })
     }
   }
 
@@ -43,17 +47,29 @@ class Step4 extends React.Component {
       links: prevLinks,
       chainId,
       currentAddress,
-      tokenType
+      tokenType,
+      tokenIds
     } = this.props
     // save campaign when links ready
-    if (links.length === linksAmount) {
-      return this.actions().campaigns.save({ links })
+    if (tokenType === 'eth' || tokenType === 'erc20') {
+      if (links.length === linksAmount) {
+        return this.actions().campaigns.save({ links })
+      }
+      if (links && links.length > 0 && links.length > prevLinks.length && links.length < linksAmount) {
+        if (tokenType === 'eth') {
+          this.actions().tokens.generateETHLink({ chainId, currentAddress })
+        } else if (tokenType === 'erc20') {
+          this.actions().tokens.generateERC20Link({ chainId, currentAddress })
+        }
+      }
     }
-    if (links && links.length > 0 && links.length > prevLinks.length && links.length < linksAmount) {
-      if (tokenType === 'eth') {
-        this.actions().tokens.generateETHLink({ chainId, currentAddress })
-      } else if (tokenType === 'erc20') {
-        this.actions().tokens.generateERC20Link({ chainId, currentAddress })
+
+    if (tokenType === 'erc721') {
+      if (links.length === tokenIds.length) {
+        return this.actions().campaigns.save({ links })
+      }
+      if (links && links.length > 0 && links.length > prevLinks.length && links.length < linksAmount) {
+        this.actions().tokens.generateERC721Link({ chainId, currentAddress, tokenId: tokenIds[links.length] })
       }
     }
   }

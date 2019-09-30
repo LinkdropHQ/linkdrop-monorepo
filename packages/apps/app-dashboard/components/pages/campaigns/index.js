@@ -20,7 +20,7 @@ class Campaigns extends React.Component {
         title={this.t('createCampaign')}
         description={this.t('createCampaignDescription')}
         extraContent={this.t('ercAndEth')}
-        href='/#/campaigns/create'
+        href='/#/'
         buttonTitle={this.t('create')}
       />
     </div>

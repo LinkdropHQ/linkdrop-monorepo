@@ -7,20 +7,33 @@ import NFTMock from 'contracts/NFTMock.json'
 const getTokenData = function * ({ tokenId, address, name, provider }) {
   const tokenContract = yield new ethers.Contract(address, NFTMock.abi, provider)
   const symbol = yield tokenContract.symbol()
-  const metadataURL = yield tokenContract.tokenURI(tokenId)
-  let image
-  if (metadataURL !== '') {
-    const data = yield call(getERC721TokenData, { erc721URL: metadataURL })
-    if (data) {
-      image = data.image
+  let metadataURL = ''
+  let image = ''
+  try {
+    if (tokenContract.tokenURI) {
+      metadataURL = yield tokenContract.tokenURI(tokenId)
     }
-  }
-  return {
-    tokenId,
-    address,
-    symbol,
-    name,
-    image
+    if (metadataURL !== '') {
+      const data = yield call(getERC721TokenData, { erc721URL: metadataURL })
+      if (data) {
+        image = data.image
+      }
+    }
+    return {
+      tokenId,
+      address,
+      symbol,
+      name,
+      image
+    }
+  } catch (e) {
+    return {
+      tokenId,
+      address,
+      symbol,
+      name,
+      image
+    }
   }
 }
 

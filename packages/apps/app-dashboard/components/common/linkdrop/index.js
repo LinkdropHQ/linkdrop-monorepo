@@ -75,6 +75,15 @@ class Linkdrop extends React.Component {
     if (tokenType === 'erc20' && ethAmount) {
       return <div className={styles.title}>{convertFromExponents(multiply(bignumber(tokenAmount), bignumber(linksAmount)))} {tokenSymbol} + {this.t('eth')}</div>
     }
+
+    if (tokenType === 'erc721' && !ethAmount) {
+      return <div className={styles.title}>{linksAmount} {tokenSymbol}</div>
+    }
+
+    if (tokenType === 'erc721' && ethAmount) {
+      return <div className={styles.title}>{linksAmount} {tokenSymbol} + {this.t('eth')}</div>
+    }
+
     if (tokenType === 'eth' && ethAmount) {
       return <div className={styles.title}>{convertFromExponents(multiply(bignumber(ethAmount), bignumber(linksAmount)))} ETH</div>
     }

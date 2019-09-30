@@ -5,6 +5,7 @@ import classNames from 'classnames'
 import { Select, Input, PageHeader, PageLoader, NFTToken } from 'components/common'
 import { TokenAddressInput, LinksContent, NextButton, AddEthField, EthTexts } from 'components/pages/common'
 import config from 'config-dashboard'
+import AllTokensControl from './all-tokens-control'
 import Immutable from 'immutable'
 
 @actions(({ user: { chainId, currentAddress, loading }, campaigns: { items, proxyAddress, links }, tokens: { assetsERC721, symbol } }) => ({ assetsERC721, chainId, symbol, loading, proxyAddress, currentAddress, items, links }))
@@ -14,8 +15,8 @@ class Step1 extends React.Component {
     super(props)
     this.state = {
       options: TOKENS,
-      ethAmount: '0',
-      tokenAddress: null,
+      ethAmount: 0,
+      tokenAddress: TOKENS[0].value,
       currentIds: []
     }
   }
@@ -35,21 +36,16 @@ class Step1 extends React.Component {
         label: `${name} — ${address}...`,
         value: address
       }))
-      const newOptions = assetsPrepared.concat([TOKENS[0]])
-      const currentIds = assets[0].ids
+      const newOptions = TOKENS.concat(assetsPrepared)
       this.setState({
-        options: newOptions,
-        tokenAddress: newOptions[0].value,
-        currentIds
-      }, _ => {
-        this.actions().tokens.setTokenERC721Data({ address: newOptions[0].value })
+        options: newOptions
       })
     }
   }
 
   render () {
-    const { tokenSymbol, currentIds, ethAmount, tokenAmount, addEth, tokenAddress, options } = this.state
-    const { symbol, assetsERC721, loading } = this.props
+    const { tokenSymbol, currentIds, ethAmount, addEth, tokenAddress, options } = this.state
+    const { proxyAddress, symbol, assetsERC721, loading } = this.props
     return <div className={classNames(styles.container, { [styles.customTokenEnabled]: tokenSymbol === 'ERC20' })}>
       {loading && <PageLoader />}
       <PageHeader title={this.t('titles.setupCampaign')} />
@@ -58,7 +54,9 @@ class Step1 extends React.Component {
           <div className={styles.chooseTokens}>
             <h3 className={styles.subtitle}>{this.t('titles.chooseToken')}</h3>
             <Select
-              options={options} value={tokenAddress} onChange={({ value }) => {
+              options={options}
+              value={tokenAddress}
+              onChange={({ value }) => {
                 this.setField({
                   value,
                   field: 'tokenAddress'
@@ -71,25 +69,44 @@ class Step1 extends React.Component {
 
         <div className={styles.summary}>
           <h3 className={styles.subtitle}>{this.t('titles.total')}</h3>
+          {console.log(currentIds.length)}
           {this.renderTexts({
             tokenAddress,
             ethAmount,
             tokenType: 'erc721',
             linksAmount: currentIds.length,
-            tokenAmount,
+            tokenAmount: currentIds.length ? 1 : null,
             tokenSymbol: symbol || tokenSymbol,
             addEth
           })}
         </div>
       </div>
-      <div>{currentIds.join(',')}</div>
+      {this.renderAllTokensControls({ tokenAddress, assetsERC721, currentIds })}
       {this.renderNFTTokens({ assetsERC721, tokenAddress, currentIds })}
       <NextButton
-        tokenAmount={tokenAmount}
+        tokenAmount={1}
         ethAmount={ethAmount}
         linksAmount={currentIds.length}
         tokenSymbol={symbol}
         tokenType='erc721'
+        tokenIds={currentIds}
+      />
+    </div>
+  }
+
+  renderAllTokensControls ({ tokenAddress, assetsERC721, currentIds }) {
+    if (!tokenAddress || !currentIds) { return null }
+    const currentAsset = assetsERC721.find(item => item.address === tokenAddress)
+    if (!currentAsset) { return }
+    const currentAssetIds = currentAsset.ids
+    return <div>
+      <AllTokensControl
+        title={this.t(`buttons.${currentIds.length === currentAssetIds.length ? 'deselectAll' : 'selectAll'}`)}
+        onClick={_ => {
+          this.setState({
+            currentIds: currentIds.length !== currentAssetIds.length ? currentAssetIds : []
+          })
+        }}
       />
     </div>
   }
@@ -130,18 +147,21 @@ class Step1 extends React.Component {
     </div>
   }
 
-  renderTexts ({ ethAmount, linksAmount, tokenAmount, tokenSymbol }) {
+  renderTexts ({ ethAmount, linksAmount, tokenAddress, tokenAmount, tokenSymbol }) {
+    if (!linksAmount || !tokenAddress) {
+      return <p className={classNames(styles.text, styles.textGrey)}>{this.t('titles.fillTheField')}</p>
+    }
     return <div>
       <p className={classNames(styles.text, styles.textMargin15)}>{linksAmount} {tokenSymbol}</p>
-      {/* <EthTexts ethAmount={ethAmount} linksAmount={linksAmount} /> */}
-      {/* <LinksContent tokenAmount={tokenAmount} tokenSymbol={tokenSymbol} ethAmount={ethAmount} tokenType={tokenType} /> */}
+      <EthTexts ethAmount={ethAmount} linksAmount={linksAmount} />
+      <LinksContent tokenAmount={tokenAmount} tokenSymbol={tokenSymbol} ethAmount={ethAmount} tokenType='erc721' />
       <p className={styles.text} dangerouslySetInnerHTML={{ __html: this.t('titles.serviceFee', { price: config.linkPrice * linksAmount }) }} />
       <p className={classNames(styles.text, styles.textGrey)} dangerouslySetInnerHTML={{ __html: this.t('titles.serviceFeePerLink', { price: config.linkPrice }) }} />
     </div>
   }
 
   setField ({ value, field }) {
-    const { assetsERC721 } = this.props
+    const { assetsERC721, chainId } = this.props
     if (field === 'ethAmount') {
       return this.setState({
         [field]: value
@@ -151,21 +171,18 @@ class Step1 extends React.Component {
     this.setState({
       [field]: value
     }, _ => {
-      if (field === 'tokenAddress') {
+      if (field === 'tokenAddress' && value !== 'ERC721') {
         const currentIds = assetsERC721.find(asset => asset.address === value).ids
         this.setState({
           currentIds
         }, _ => this.actions().tokens.setTokenERC721Data({ address: value }))
       }
 
-      // if (field === 'tokenAddress' && tokenSymbol === 'ERC20') {
-      //   const tokenType = this.defineTokenType({ tokenSymbol })
-      //   if (value.length === 42) {
-      //     if (tokenType === 'erc20') {
-      //       this.actions().tokens.getTokenERC20Data({ tokenAddress: value, chainId })
-      //     }
-      //   }
-      // }
+      if (field === 'tokenAddress' && value === 'ERC721') {
+        if (value.length === 42) {
+          this.actions().tokens.getTokenERC721Data({ tokenAddress: value, chainId })
+        }
+      }
     })
   }
 }

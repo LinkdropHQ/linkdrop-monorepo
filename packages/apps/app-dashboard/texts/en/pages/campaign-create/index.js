@@ -128,6 +128,8 @@ const {
     downloadCsv: 'Download CSV',
     qr: 'QR-Codes',
     approve: 'Approve',
-    sendAndContinue: 'Send & Continue'
+    sendAndContinue: 'Send & Continue',
+    selectAll: 'Select all',
+    deselectAll: 'Deselect all'
   }
 }
