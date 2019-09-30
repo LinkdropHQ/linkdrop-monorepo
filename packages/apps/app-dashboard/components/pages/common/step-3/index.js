@@ -29,7 +29,8 @@ import EthSummaryBlock from './eth-summary-block'
     linksAmount,
     tokenType,
     tokenSymbol
-  } }) => ({
+  }
+}) => ({
   ethAmount,
   tokenAmount,
   metamaskStatus,
@@ -100,9 +101,7 @@ class Step3 extends React.Component {
       <PageHeader title={this.t('titles.sendEth', { ethAmount: ethAmountFinal })} />
       <div className={styles.main}>
         <div className={styles.description}>
-          <p className={styles.text}>
-            {this.t('texts._10')}
-          </p>
+          <p className={styles.text} dangerouslySetInnerHTML={{ __html: this.t('texts._10') }} />
         </div>
         <div className={styles.scheme}>
           <Instruction linksAmount={linksAmount} ethAmount={ethAmount} />
@@ -112,6 +111,7 @@ class Step3 extends React.Component {
       <div className={styles.controls}>
         <Button
           disabled={loading || stateLoading}
+          className={styles.button}
           onClick={_ => {
             this.actions().metamask.sendEth({ ethAmount: ethAmountFinal, account: currentAddress, chainId })
           }}

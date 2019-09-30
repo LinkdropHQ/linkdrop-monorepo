@@ -5,6 +5,7 @@ const initialState = {
   assetsERC721: [],
   symbol: null,
   decimals: null,
+  loading: false,
   tokenType: null,
   address: null,
   ethBalanceFormatted: null,
@@ -31,5 +32,6 @@ const ACTIONS = {
   'TOKENS.SET_TOKEN_DECIMALS': reducers.setTokenDecimals,
   'TOKENS.SET_ETH_BALANCE': reducers.setEthBalance,
   'TOKENS.SET_ERC20_BALANCE': reducers.setERC20Balance,
-  'TOKENS.SET_ERC721_IS_APPROVED': reducers.setERC721IsApproved
+  'TOKENS.SET_ERC721_IS_APPROVED': reducers.setERC721IsApproved,
+  'TOKENS.SET_LOADING': reducers.setLoading
 }

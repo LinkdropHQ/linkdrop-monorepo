@@ -2,7 +2,7 @@ import React from 'react'
 import { actions, translate } from 'decorators'
 import styles from './styles.module'
 import classNames from 'classnames'
-import { Select, Input, PageHeader, PageLoader, NFTToken } from 'components/common'
+import { Select, PageHeader, PageLoader, NFTToken } from 'components/common'
 import { TokenAddressInput, LinksContent, NextButton, AddEthField, EthTexts } from 'components/pages/common'
 import config from 'config-dashboard'
 import AllTokensControl from './all-tokens-control'
@@ -12,7 +12,8 @@ import Immutable from 'immutable'
   user: {
     chainId,
     currentAddress,
-    loading
+    loading,
+    privateKey
   },
   campaigns: {
     items,
@@ -21,7 +22,8 @@ import Immutable from 'immutable'
   },
   tokens: {
     assetsERC721,
-    symbol
+    symbol,
+    loading: tokensLoading
   }
 }) => ({
   assetsERC721,
@@ -31,18 +33,23 @@ import Immutable from 'immutable'
   proxyAddress,
   currentAddress,
   items,
-  links
+  links,
+  tokensLoading,
+  privateKey
 }))
 @translate('pages.campaignCreate')
 class Step1 extends React.Component {
   constructor (props) {
     super(props)
+    const assetsPrepared = this.prepareAssets({ assets: props.assetsERC721 })
+    const currentAsset = props.assetsERC721.find(asset => asset.address === assetsPrepared[0].value)
     this.state = {
-      options: TOKENS,
+      options: assetsPrepared,
       ethAmount: 0,
-      tokenAddress: null,
-      currentIds: [],
-      customTokenAddress: ''
+      tokenAddress: currentAsset && currentAsset.address,
+      currentIds: currentAsset ? currentAsset.ids : [],
+      customTokenAddress: '',
+      addEth: false
     }
   }
 
@@ -57,15 +64,10 @@ class Step1 extends React.Component {
   componentWillReceiveProps ({ assetsERC721: assets }) {
     const { assetsERC721: prevAssets } = this.props
     if (assets != null && assets.length > 0 && !Immutable.fromJS(assets).equals(Immutable.fromJS(prevAssets))) {
-      const assetsPrepared = assets.map(({ address, symbol, name, ids }) => ({
-        label: `${symbol} — ${address}...`,
-        value: address
-      }))
-      const newOptions = assetsPrepared.concat(TOKENS)
-      const currentAsset = assets.find(asset => asset.address === newOptions[0].value)
-
+      const assetsPrepared = this.prepareAssets({ assets })
+      const currentAsset = assets.find(asset => asset.address === assetsPrepared[0].value)
       this.setState({
-        options: newOptions,
+        options: assetsPrepared,
         tokenAddress: currentAsset.address,
         currentIds: currentAsset.ids
       }, _ => {
@@ -76,10 +78,10 @@ class Step1 extends React.Component {
 
   render () {
     const { currentIds, ethAmount, addEth, tokenAddress, customTokenAddress, options } = this.state
-    const { proxyAddress, symbol, assetsERC721, loading } = this.props
+    const { privateKey, proxyAddress, symbol, assetsERC721, loading, tokensLoading } = this.props
     const tokenSymbol = (assetsERC721.find(item => item.address === tokenAddress) || {}).symbol
     return <div className={classNames(styles.container, { [styles.customTokenEnabled]: tokenSymbol === 'ERC20' })}>
-      {loading && <PageLoader />}
+      {(tokensLoading || loading) && <PageLoader />}
       <PageHeader title={this.t('titles.setupCampaign')} />
       <div className={styles.main}>
         <div className={styles.form}>
@@ -96,7 +98,7 @@ class Step1 extends React.Component {
               }}
             />
           </div>
-          {this.renderTokenInputs({ ethAmount, tokenAddress, customTokenAddress })}
+          {this.renderTokenInputs({ addEth, ethAmount, tokenAddress, customTokenAddress })}
         </div>
 
         <div className={styles.summary}>
@@ -112,8 +114,11 @@ class Step1 extends React.Component {
           })}
         </div>
       </div>
-      {this.renderAllTokensControls({ tokenAddress, assetsERC721, currentIds })}
-      {this.renderNFTTokens({ assetsERC721, tokenAddress, currentIds })}
+      <div>
+        <h3 className={styles.subtitle}>{this.t('titles.selectNft')}</h3>
+        {this.renderAllTokensControls({ tokenAddress, assetsERC721, currentIds })}
+        {this.renderNFTTokens({ assetsERC721, tokenAddress, currentIds })}
+      </div>
       <NextButton
         tokenAmount={1}
         ethAmount={ethAmount}
@@ -123,6 +128,13 @@ class Step1 extends React.Component {
         tokenIds={currentIds}
       />
     </div>
+  }
+
+  prepareAssets ({ assets }) {
+    return assets.map(({ address, symbol, name, ids }) => ({
+      label: `${symbol} — ${address}...`,
+      value: address
+    }))
   }
 
   renderAllTokensControls ({ tokenAddress, assetsERC721, currentIds }) {
@@ -164,13 +176,13 @@ class Step1 extends React.Component {
     })
   }
 
-  renderTokenInputs ({ ethAmount, tokenAddress, customTokenAddress }) {
+  renderTokenInputs ({ addEth, ethAmount, tokenAddress, customTokenAddress }) {
     const ethInput = <div className={styles.tokensAmount}>
-      <h3 className={styles.subtitle}>{this.t('titles.amountPerLink')}</h3>
+      <h3 className={styles.subtitle}>{this.t('titles.ethInLink')}</h3>
       <div className={styles.tokensAmountContainer}>
         <AddEthField
-          addEth
-          showAlways
+          addEth={addEth}
+          noMargin
           ethAmount={ethAmount}
           setField={({ value, field }) => this.setField({ value, field })}
         />
@@ -230,10 +242,3 @@ class Step1 extends React.Component {
 }
 
 export default Step1
-
-const TOKENS = [
-  // {
-  //   label: 'ERC721 Token Address',
-  //   value: 'ERC721'
-  // }
-]

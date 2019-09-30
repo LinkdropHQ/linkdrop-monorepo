@@ -11,6 +11,10 @@
   position: relative;
 }
 
+.button {
+  background: $dbBlue;
+}
+
 .title {
   font-size: 24px;
   margin: 0 0 40px;
@@ -27,7 +31,7 @@
 
 .description {
   flex: 1 0 550px;
-  padding-right: 110px;
+  padding-right: 30px;
   border-right: 1px solid $greyStrokeColor;
 }
 

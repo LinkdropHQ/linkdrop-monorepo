@@ -39,6 +39,7 @@ const getTokenData = function * ({ tokenId, address, name, provider }) {
 
 const generator = function * ({ payload }) {
   try {
+    yield put({ type: 'TOKENS.SET_LOADING', payload: { loading: true } })
     const { currentAddress } = payload
     const chainId = yield select(generator.selectors.chainId)
     const networkName = defineNetworkName({ chainId })
@@ -57,9 +58,11 @@ const generator = function * ({ payload }) {
       }, {})
       const finalAssets = Object.keys(assetsMerged).map(address => assetsMerged[address])
       yield put({ type: 'TOKENS.SET_ERC721_ASSETS', payload: { assetsERC721: finalAssets } })
+      yield put({ type: 'TOKENS.SET_LOADING', payload: { loading: false } })
     }
   } catch (e) {
     console.error(e)
+    yield put({ type: 'TOKENS.SET_LOADING', payload: { loading: false } })
   }
 }
 

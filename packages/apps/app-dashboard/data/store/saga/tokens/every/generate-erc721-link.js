@@ -14,7 +14,6 @@ const generator = function * ({ payload }) {
     const campaignId = yield select(generator.selectors.campaignId)
     const privateKey = yield select(generator.selectors.privateKey)
     const tokenAddress = yield select(generator.selectors.tokenAddress)
-
     const link = yield sdk.generateLinkERC721({
       weiAmount: ethBalance ? weiAmount : 0,
       nftAddress: tokenAddress,
@@ -23,7 +22,6 @@ const generator = function * ({ payload }) {
       expirationTime: configs.expirationTime,
       campaignId
     })
-    console.log({ link })
 
     yield delay(10)
     const links = yield select(generator.selectors.links)
@@ -41,8 +39,6 @@ generator.selectors = {
   ethAmount: ({ campaigns: { ethAmount } }) => ethAmount,
   privateKey: ({ user: { privateKey } }) => privateKey,
   links: ({ campaigns: { links } }) => links,
-  decimals: ({ tokens: { decimals } }) => decimals,
-  version: ({ user: { version } }) => version,
   tokenAddress: ({ tokens: { address } }) => address,
   sdk: ({ user: { sdk } }) => sdk,
   campaignId: ({ campaigns: { id } }) => id

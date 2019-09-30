@@ -19,7 +19,6 @@ const generator = function * ({ payload }) {
     )
     const privateKey = yield select(generator.selectors.privateKey)
     const tokenAddress = yield select(generator.selectors.tokenAddress)
-
     const link = yield sdk.generateLink({
       signingKeyOrWallet: privateKey,
       weiAmount: weiAmount || 0,

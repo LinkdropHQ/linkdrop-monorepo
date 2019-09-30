@@ -8,7 +8,7 @@ import config from 'config-dashboard'
 import Immutable from 'immutable'
 import { TokenAddressInput, LinksContent, NextButton, AddEthField, EthTexts } from 'components/pages/common'
 
-@actions(({ user: { chainId, currentAddress, loading }, campaigns: { items, proxyAddress, links }, tokens: { assets, symbol } }) => ({ assets, chainId, symbol, loading, proxyAddress, currentAddress, items, links }))
+@actions(({ user: { chainId, currentAddress, loading, privateKey }, campaigns: { items, proxyAddress, links }, tokens: { assets, symbol } }) => ({ assets, privateKey, chainId, symbol, loading, proxyAddress, currentAddress, items, links }))
 @translate('pages.campaignCreate')
 class Step1 extends React.Component {
   constructor (props) {
@@ -53,8 +53,9 @@ class Step1 extends React.Component {
 
   render () {
     const { tokenSymbol, ethAmount, linksAmount, tokenAmount, addEth, tokenAddress, options } = this.state
-    const { symbol, loading } = this.props
+    const { symbol, loading, privateKey, proxyAddress } = this.props
     const tokenType = this.defineTokenType({ tokenSymbol })
+
     return <div className={classNames(styles.container, { [styles.customTokenEnabled]: tokenSymbol === 'ERC20' })}>
       {loading && <PageLoader />}
       <PageHeader title={this.t('titles.setupCampaign')} />

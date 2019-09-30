@@ -37,7 +37,7 @@ class Step4 extends React.Component {
     } else if (tokenType === 'erc20') {
       this.actions().tokens.generateERC20Link({ chainId, currentAddress })
     } else {
-      this.actions().tokens.generateERC721Link({ chainId, currentAddress, tokenId: chainId[0] })
+      this.actions().tokens.generateERC721Link({ chainId, currentAddress, tokenId: tokenIds[0] })
     }
   }
 
