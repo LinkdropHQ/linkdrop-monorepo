@@ -482,7 +482,7 @@ function () {
             switch (_context8.prev = _context8.next) {
               case 0:
                 signingKeyOrWallet = _ref8.signingKeyOrWallet, proxyAddress = _ref8.proxyAddress, nftAddress = _ref8.nftAddress;
-                return _context8.abrupt("return", topupAndApproveUtils.topupAndApproveERC721({
+                return _context8.abrupt("return", topupAndApproveUtils.approveERC721({
                   jsonRpcUrl: this.jsonRpcUrl,
                   signingKeyOrWallet: signingKeyOrWallet,
                   proxyAddress: proxyAddress,
