@@ -4,15 +4,11 @@ import styles from './styles.module'
 import { ethers } from 'ethers'
 import classNames from 'classnames'
 import { Select, Input, PageHeader, PageLoader } from 'components/common'
-import TokenAddressInput from './token-address-input'
-import LinksContent from './links-content'
-import NextButton from './next-button'
-import AddEthField from './add-eth-field'
-import EthTexts from './eth-texts'
 import config from 'config-dashboard'
 import Immutable from 'immutable'
+import { TokenAddressInput, LinksContent, NextButton, AddEthField, EthTexts } from 'components/pages/common'
 
-@actions(({ user: { chainId, currentAddress, loading }, campaigns: { items, proxyAddress, links }, tokens: { assets, symbol } }) => ({ assets, chainId, symbol, loading, proxyAddress, currentAddress, items, links }))
+@actions(({ user: { chainId, currentAddress, loading, privateKey }, campaigns: { items, proxyAddress, links }, tokens: { assets, symbol } }) => ({ assets, privateKey, chainId, symbol, loading, proxyAddress, currentAddress, items, links }))
 @translate('pages.campaignCreate')
 class Step1 extends React.Component {
   constructor (props) {
@@ -57,8 +53,9 @@ class Step1 extends React.Component {
 
   render () {
     const { tokenSymbol, ethAmount, linksAmount, tokenAmount, addEth, tokenAddress, options } = this.state
-    const { symbol, loading } = this.props
+    const { symbol, loading, privateKey, proxyAddress } = this.props
     const tokenType = this.defineTokenType({ tokenSymbol })
+
     return <div className={classNames(styles.container, { [styles.customTokenEnabled]: tokenSymbol === 'ERC20' })}>
       {loading && <PageLoader />}
       <PageHeader title={this.t('titles.setupCampaign')} />
@@ -66,22 +63,24 @@ class Step1 extends React.Component {
         <div className={styles.form}>
           <div className={styles.chooseTokens}>
             <h3 className={styles.subtitle}>{this.t('titles.chooseToken')}</h3>
-            <Select options={options} value={tokenSymbol} onChange={({ value }) => {
-              if (value !== 'ETH' && value !== 'ERC20') {
-                const currentAddress = options.find(option => option.value === value).address
-                this.setState({
-                  tokenAddress: currentAddress
-                }, _ => {
-                  this.setField({ field: 'tokenSymbol', value })
-                })
-              } else {
-                this.setState({
-                  tokenAddress: null
-                }, _ => {
-                  this.setField({ field: 'tokenSymbol', value })
-                })
-              }
-            }} />
+            <Select
+              options={options} value={tokenSymbol} onChange={({ value }) => {
+                if (value !== 'ETH' && value !== 'ERC20') {
+                  const currentAddress = options.find(option => option.value === value).address
+                  this.setState({
+                    tokenAddress: currentAddress
+                  }, _ => {
+                    this.setField({ field: 'tokenSymbol', value })
+                  })
+                } else {
+                  this.setState({
+                    tokenAddress: null
+                  }, _ => {
+                    this.setField({ field: 'tokenSymbol', value })
+                  })
+                }
+              }}
+            />
           </div>
           {this.renderTokenInputs({ ethAmount, tokenType, tokenAddress, symbol, tokenSymbol, tokenAmount, addEth })}
           <div className={styles.linksAmount}>

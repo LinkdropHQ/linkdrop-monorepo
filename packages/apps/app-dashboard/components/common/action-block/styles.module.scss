@@ -13,7 +13,6 @@
 
 .transparent {
   background: transparent;
-  border: 1px solid $blackColor;
 }
 
 .title {
@@ -37,4 +36,5 @@
 .button {
   max-width: 158px;
   padding: 4px 30px;
+  background: $dbBlue;
 }

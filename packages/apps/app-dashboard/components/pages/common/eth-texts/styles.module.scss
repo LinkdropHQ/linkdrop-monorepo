@@ -1,0 +1,18 @@
+@import "variables";
+
+.text {
+  font-size: 16px;
+  margin: 0px;
+
+  &.textMargin15 {
+    margin-bottom: 15px;
+  }
+
+  &.textMargin30 {
+    margin-bottom: 30px;
+  }
+
+  &.textGrey {
+    color: $dbGrey;
+  }
+}

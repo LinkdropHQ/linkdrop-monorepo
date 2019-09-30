@@ -10,6 +10,10 @@ class Metamask {
   sendErc20 ({ tokenAmount, account }) {
     this.actions.dispatch({ type: '*METAMASK.SEND_ERC20', payload: { account, tokenAmount } })
   }
+
+  sendErc721 ({ tokenAmount, account }) {
+    this.actions.dispatch({ type: '*METAMASK.SEND_ERC721', payload: { account, tokenAmount } })
+  }
 }
 
 export default Metamask

@@ -55,7 +55,7 @@
   width: 100%;
 }
 
-.chooseTokens, .tokensAmount, , .tokenAddress {
+.chooseTokens, .tokensAmount {
   margin-bottom: 40px;
 }
 
@@ -89,7 +89,7 @@
   }
 }
 
-.ethAddButton, .ethAddInput, .iconInfoButton, .iconInfoText {
+.iconInfoButton, .iconInfoText {
   padding-left: 40px;
   position: relative;
 }
@@ -108,18 +108,3 @@
   }
 }
 
-.ethAddInput {
-  & > svg {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    right: 10px;
-    cursor: pointer;
-  }
-  span {
-    position: absolute;
-    left: 15px;
-    top: 50%;
-    transform: translateY(-50%);
-  }
-}

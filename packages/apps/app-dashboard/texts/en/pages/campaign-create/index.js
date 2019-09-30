@@ -19,6 +19,8 @@ export default {
 
     tokenAddress: 'Token Address',
     tokenAddressPlaceholder: '0x Address',
+    selectNft: 'Select tokens to distribute',
+    ethInLink: 'ETH in link',
 
     // step2
     summaryPay: 'Summary',
@@ -35,7 +37,7 @@ export default {
     serviceFeeToDistribute: '<span>{{ethAmount}} ETH</span> — Service fee',
 
     // step3
-    sendEth: 'Send {{ethAmount}} ETH to Linkdrop Contract',
+    sendEth: 'Secure {{ethAmount}} ETH into Linkdrop Contract',
     serviceFee: '<span>{{price}} ETH</span> in service fees',
     serviceFeePerLink: '<span>{{price}} ETH</span> per link, for covering gas fees and our service costs',
 
@@ -74,7 +76,7 @@ export default {
     _8: 'We use Stripe to process payments so we don’t know and don’t store your bank card details.',
 
     // step3
-    _10: 'Ether will be stored in Linkdrop Contract. You can stop campaign anytime and get back your Ether.',
+    _10: 'Ether will be stored in Linkdrop Contract to distribute into links.<br>You can stop the campaign anytime and get back your Ether.',
     _12: 'MetaMask will show you <span>Transaction<br/>pop-up that you need to confirm',
     _13: 'For Enterprise customers, we offer custom solutions. Contact us for more details.',
     _14: 'Approve permission to spend {{amount}} {{tokenSymbol}} for generating links',
@@ -128,6 +130,8 @@ const {
     downloadCsv: 'Download CSV',
     qr: 'QR-Codes',
     approve: 'Approve',
-    sendAndContinue: 'Send & Continue'
+    sendAndContinue: 'Send & Continue',
+    selectAll: 'Select all',
+    deselectAll: 'Deselect all'
   }
 }

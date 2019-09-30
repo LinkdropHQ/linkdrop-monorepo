@@ -5,6 +5,9 @@ import initializeSdk from 'data/sdk'
 import { factory, claimHost, infuraPk } from 'app.config.js'
 import { defineNetworkName } from '@linkdrop/commons'
 
+import { ethers } from 'ethers'
+import NFTMock from 'contracts/NFTMock.json'
+
 const generator = function * ({ payload }) {
   try {
     yield put({ type: 'USER.SET_LOADING', payload: { loading: true } })
