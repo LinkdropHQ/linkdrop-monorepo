@@ -39,7 +39,7 @@ class Step1 extends React.Component {
 
     if (assets != null && assets.length > 0 && !Immutable.fromJS(assets).equals(Immutable.fromJS(prevAssets))) {
       const assetsPrepared = assets.map(({ contract }) => ({
-        label: `${contract.symbol} — ${(contract.address)}...`,
+        label: `${contract.symbol} — ${(contract.address)}`,
         value: contract.symbol
       }))
 
