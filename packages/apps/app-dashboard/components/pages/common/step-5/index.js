@@ -20,7 +20,6 @@ class Step5 extends React.Component {
     const images = getImages({ src: 'claim-page' })
     if (!currentCampaign) { return null }
     const { currentAddress, campaignId, privateKey, tokenAmount, ethAmount, tokenAddress, tokenDecimals, tokenType } = currentCampaign
-    console.log({ currentCampaign })
     const weiAmount = utils.parseEther(convertFromExponents(ethAmount || 0))
     const tokenAmountFormatted = utils.parseUnits(
       String(tokenAmount || 0),
