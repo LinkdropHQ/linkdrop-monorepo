@@ -4,10 +4,8 @@
   max-width: none;
   outline: none;
   box-shadow: none;
-  &:hover {
-    & > div {
-      border-color: $dbBlue;
-    }
+  & > div {
+    border-color: $dbBlue!important;
   }
 
   > div:first-child, > div:nth-child(2) {
@@ -15,7 +13,7 @@
   }
 
   > * {
-    color: $blackColor!important;
+    color: $dbBlue!important;
   }
 
   > [class*="-menu"] {
@@ -27,7 +25,7 @@
     > div {
       > div {
         background: transparent!important;
-        color: $blackColor!important;
+        color: $dbBlue!important;
         &:hover {
           background: transparent!important;
           color: $dbBlue!important;

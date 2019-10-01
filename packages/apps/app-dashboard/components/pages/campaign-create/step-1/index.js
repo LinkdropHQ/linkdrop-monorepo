@@ -29,18 +29,17 @@ class Step1 extends React.Component {
     if (!proxyAddress) {
       this.actions().campaigns.createProxyAddress({ campaignId: items.length })
     }
-    if (Number(chainId) === 1) {
-      this.actions().tokens.getAssets({ currentAddress })
-    }
+    this.actions().tokens.getAssets({ currentAddress })
   }
 
   componentWillReceiveProps ({ assets }) {
     const { assets: prevAssets } = this.props
 
     if (assets != null && assets.length > 0 && !Immutable.fromJS(assets).equals(Immutable.fromJS(prevAssets))) {
-      const assetsPrepared = assets.map(({ contract }) => ({
-        label: `${contract.symbol} — ${(contract.address)}...`,
-        value: contract.symbol
+      const assetsPrepared = assets.map(({ address, symbol }) => ({
+        label: `${symbol} — ${(address)}`,
+        value: symbol,
+        address
       }))
 
       const newOptions = [TOKENS[0]].concat(assetsPrepared).concat([TOKENS[1]])
@@ -108,7 +107,7 @@ class Step1 extends React.Component {
         tokenAmount={tokenAmount}
         ethAmount={ethAmount}
         linksAmount={linksAmount}
-        tokenSymbol={symbol}
+        tokenSymbol={symbol || tokenSymbol}
         tokenType={tokenType}
       />
     </div>
@@ -121,7 +120,7 @@ class Step1 extends React.Component {
       <h3 className={styles.subtitle}>{this.t('titles.amountPerLink')}</h3>
       <div className={styles.tokensAmountContainer}>
         <Input
-          disabled={tokenType === 'erc20' && !symbol}
+          disabled={tokenType === 'erc20' && !symbol && !tokenSymbol}
           numberInput
           suffix={tokenType === 'erc20' ? symbol : tokenSymbol}
           className={styles.input}
@@ -199,7 +198,7 @@ class Step1 extends React.Component {
           ethAmount: 0,
           addEth: false
         }, _ => {
-          if (Number(chainId) === 1 && value !== 'ERC20' && value !== 'ETH') {
+          if (value !== 'ERC20' && value !== 'ETH') {
             this.actions().tokens.setTokenERC20Data({ tokenSymbol: value })
           } else if (value === 'ERC20' || value === 'ETH') {
             this.actions().tokens.emptyTokenERC20Data()
