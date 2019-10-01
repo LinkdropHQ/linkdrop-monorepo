@@ -4,9 +4,18 @@ import { defineNetworkName } from '@linkdrop/commons'
 import { ethers } from 'ethers'
 import NFTMock from 'contracts/NFTMock.json'
 
+const defineSymbol = function * ({ tokenContract, address }) {
+  try {
+    const symbol = yield tokenContract.symbol()
+    return symbol
+  } catch (e) {
+    return `NFT-${address.slice(0, 3)}`
+  }
+}
+
 const getTokenData = function * ({ tokenId, address, name, provider }) {
   const tokenContract = yield new ethers.Contract(address, NFTMock.abi, provider)
-  const symbol = yield tokenContract.symbol()
+  const symbol = yield defineSymbol({ tokenContract, address })
   let metadataURL = ''
   let image = ''
   try {

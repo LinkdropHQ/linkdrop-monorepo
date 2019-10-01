@@ -11,17 +11,9 @@ import config from 'config-dashboard'
 class Instruction extends React.Component {
   render () {
     const { ethAmount, tokenAmount, tokenSymbol, linksAmount } = this.props
-    if (tokenAmount) {
-      return <div className={styles.container}>
-        <p className={styles.text} dangerouslySetInnerHTML={{ __html: this.t('texts._1') }} />
-        <MetamaskPopup />
-        <p className={styles.textExtra} dangerouslySetInnerHTML={{ __html: this.t('texts._2') }} />
-      </div>
-    }
-
     return <div className={styles.container}>
       <p className={styles.text} dangerouslySetInnerHTML={{ __html: this.t('texts._3') }} />
-      <MetamaskPopup amount={convertFromExponents(multiply(add(bignumber(ethAmount), config.linkPrice), bignumber(linksAmount)))} />
+      <MetamaskPopup amount={tokenAmount ? 0 : convertFromExponents(multiply(add(bignumber(ethAmount), config.linkPrice), bignumber(linksAmount)))} />
       <p className={styles.textExtra} dangerouslySetInnerHTML={{ __html: this.t('texts._2') }} />
     </div>
   }

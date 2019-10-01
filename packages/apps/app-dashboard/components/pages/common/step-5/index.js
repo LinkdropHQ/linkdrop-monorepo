@@ -19,7 +19,7 @@ class Step5 extends React.Component {
     const links = (currentCampaign || {}).links
     const images = getImages({ src: 'claim-page' })
     if (!currentCampaign) { return null }
-    const { currentAddress, campaignId, privateKey, tokenAmount, ethAmount, tokenAddress, tokenDecimals } = currentCampaign
+    const { currentAddress, campaignId, privateKey, tokenAmount, ethAmount, tokenAddress, tokenDecimals, tokenType } = currentCampaign
     const weiAmount = utils.parseEther(convertFromExponents(ethAmount || 0))
     const tokenAmountFormatted = utils.parseUnits(
       String(tokenAmount || 0),
@@ -40,7 +40,7 @@ class Step5 extends React.Component {
           <p className={classNames(styles.text, styles.textMargin80)}>{this.t('titles.nodeJsSupport')}</p>
           <p className={classNames(styles.text, styles.textMargin20)}>{this.t('titles.codeDetails')}</p>
           <xmp className={styles.codeBlock}>
-            {this.t('texts.codeBlock', {
+            {this.t(`texts.${tokenType === 'erc20' || tokenType === 'eth' ? 'codeBlockErc20' : 'codeBlockErc721'}`, {
               chain: defineNetworkName({ chainId }),
               masterAddress: currentAddress,
               campaignId: campaignId,

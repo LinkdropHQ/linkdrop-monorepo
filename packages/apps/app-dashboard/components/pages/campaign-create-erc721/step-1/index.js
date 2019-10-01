@@ -132,7 +132,7 @@ class Step1 extends React.Component {
 
   prepareAssets ({ assets }) {
     return assets.map(({ address, symbol, name, ids }) => ({
-      label: `${symbol} — ${address}...`,
+      label: `${symbol} — ${address}`,
       value: address
     }))
   }
