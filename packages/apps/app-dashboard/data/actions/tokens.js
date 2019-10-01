@@ -7,6 +7,10 @@ class Tokens {
     this.actions.dispatch({ type: '*TOKENS.GET_ASSETS', payload: { currentAddress } })
   }
 
+  getERC721Assets ({ currentAddress }) {
+    this.actions.dispatch({ type: '*TOKENS.GET_ERC721_ASSETS', payload: { currentAddress } })
+  }
+
   getTokenERC20Data ({ tokenAddress, chainId }) {
     this.actions.dispatch({ type: '*TOKENS.GET_ERC20_DATA', payload: { tokenAddress, chainId } })
   }
@@ -27,8 +31,16 @@ class Tokens {
     this.actions.dispatch({ type: '*TOKENS.GET_ERC20_BALANCE', payload: { chainId, tokenAddress, account, currentAddress } })
   }
 
+  getERC721Approved ({ chainId, tokenAddress, account, currentAddress }) {
+    this.actions.dispatch({ type: '*TOKENS.GET_ERC721_APPROVED', payload: { chainId, tokenAddress, account, currentAddress } })
+  }
+
   generateERC20Link ({ chainId, currentAddress }) {
     this.actions.dispatch({ type: '*TOKENS.GENERATE_ERC20_LINK', payload: { chainId, currentAddress } })
+  }
+
+  generateERC721Link ({ tokenId }) {
+    this.actions.dispatch({ type: '*TOKENS.GENERATE_ERC721_LINK', payload: { tokenId } })
   }
 
   generateETHLink ({ chainId, currentAddress }) {
@@ -37,6 +49,10 @@ class Tokens {
 
   setTokenERC20Data ({ tokenSymbol }) {
     this.actions.dispatch({ type: '*TOKENS.SET_ERC20_DATA', payload: { tokenSymbol } })
+  }
+
+  setTokenERC721Data ({ address }) {
+    this.actions.dispatch({ type: '*TOKENS.SET_ERC721_DATA', payload: { address } })
   }
 
   emptyTokenERC20Data () {

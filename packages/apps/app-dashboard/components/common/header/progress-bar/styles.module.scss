@@ -14,28 +14,30 @@
   width: 16px;
   height: 16px;
   border-radius: 16px;
-  border: 1px solid $blackColor;
+  border: 1px solid $dbGrey;
   transition: background-color .5s;
 }
 
 .line {
   height: 1px;
-  border-top: 1px dashed $blackColor;
+  border-top: 1px dashed $dbGrey;
   width: 50px;
 }
 
 .active {
   .circle {
-    background-color: $blackColor;
+    background-color: $dbBlue;
+    border: 1px solid $dbBlue;
   }
 }
 
 .finished {
   .circle {
-    background: $blackColor;
+    background: $dbBlue;
+    border: 1px solid $dbBlue;
   }
   .line {
     height: 1px;
-    border-top: 1px solid $blackColor;
+    border-top: 1px solid $dbBlue;
   }
 }
