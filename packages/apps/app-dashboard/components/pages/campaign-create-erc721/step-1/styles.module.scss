@@ -1,0 +1,132 @@
+@import "variables";
+
+.container {
+  border: 1px solid $greyStrokeColor;
+  background: $whiteColor;
+  color: $blackColor;
+  padding: 40px;
+  border-radius: 5px;
+  position: relative;
+  margin-bottom: 40px;
+  width: 100%;
+}
+
+.tokens {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+}
+
+.customTokenEnabled {
+  .chooseTokens {
+    margin-bottom: 20px!important;
+  }
+}
+
+.title {
+  font-size: 24px;
+  margin: 0 0 40px;
+}
+
+.main {
+  display: flex;
+}
+
+.form {
+  flex: 1 0 550px;
+  padding-right: 50px;
+  border-right: 1px solid $greyStrokeColor;
+}
+
+.summary {
+  padding-left: 50px;
+  width: 100%;
+}
+
+.subtitle {
+  margin: 0 0 20px;
+  font-size: 16px;
+  font-family: 'Inter-Medium';
+}
+
+.input {
+  max-width: 150px;
+}
+
+.button {
+  margin-top: 80px;
+}
+
+.inputFullSize {
+  max-width: none;
+  width: 100%;
+}
+
+.chooseTokens, .tokensAmount, , .tokenAddress {
+  margin-bottom: 40px;
+}
+
+.tokensAmountContainer {
+  display: flex;
+  align-items: center;
+}
+
+.extraButton {
+  padding: 0px 25px;
+}
+
+.ethInput {
+  width: 150px;
+}
+
+.text {
+  font-size: 16px;
+  margin: 0px;
+
+  &.textMargin15 {
+    margin-bottom: 15px;
+  }
+
+  &.textMargin30 {
+    margin-bottom: 30px;
+  }
+
+  &.textGrey {
+    color: $dbGrey;
+  }
+}
+
+.ethAddButton, .ethAddInput, .iconInfoButton, .iconInfoText {
+  padding-left: 40px;
+  position: relative;
+}
+
+.iconInfoText {
+  display: flex;
+  align-items: center;
+}
+
+.linksAmountContainer {
+  display: flex;
+  align-items: center;
+
+  span {
+    margin-right: 15px;
+  }
+}
+
+.ethAddInput {
+  & > svg {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 10px;
+    cursor: pointer;
+  }
+  span {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+}

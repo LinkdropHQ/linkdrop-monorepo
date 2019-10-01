@@ -13,6 +13,9 @@ const generator = function * ({ payload }) {
     yield put({ type: 'CAMPAIGNS.SET_LINKS_AMOUNT', payload: { linksAmount: null } })
     yield put({ type: 'CAMPAIGNS.SET_ID', payload: { id: null } })
     yield put({ type: 'CAMPAIGNS.SET_PROXY_ADDRESS', payload: { proxyAddress: null } })
+    yield put({ type: 'TOKENS.SET_ERC20_BALANCE', payload: { erc20BalanceFormatted: null, erc20Balance: null } })
+    yield put({ type: 'TOKENS.SET_ETH_BALANCE', payload: { ethBalanceFormatted: null, ethBalance: null } })
+    yield put({ type: 'TOKENS.SET_ERC721_IS_APPROVED', payload: { erc721IsApproved: null } })
   } catch (e) {
     console.error(e)
   }

@@ -4,15 +4,11 @@ import styles from './styles.module'
 import { ethers } from 'ethers'
 import classNames from 'classnames'
 import { Select, Input, PageHeader, PageLoader } from 'components/common'
-import TokenAddressInput from './token-address-input'
-import LinksContent from './links-content'
-import NextButton from './next-button'
-import AddEthField from './add-eth-field'
-import EthTexts from './eth-texts'
 import config from 'config-dashboard'
 import Immutable from 'immutable'
+import { TokenAddressInput, LinksContent, NextButton, AddEthField, EthTexts } from 'components/pages/common'
 
-@actions(({ user: { chainId, currentAddress, loading }, campaigns: { items, proxyAddress, links }, tokens: { assets, symbol } }) => ({ assets, chainId, symbol, loading, proxyAddress, currentAddress, items, links }))
+@actions(({ user: { chainId, currentAddress, loading, privateKey }, campaigns: { items, proxyAddress, links }, tokens: { assets, symbol } }) => ({ assets, privateKey, chainId, symbol, loading, proxyAddress, currentAddress, items, links }))
 @translate('pages.campaignCreate')
 class Step1 extends React.Component {
   constructor (props) {
@@ -33,18 +29,17 @@ class Step1 extends React.Component {
     if (!proxyAddress) {
       this.actions().campaigns.createProxyAddress({ campaignId: items.length })
     }
-    if (Number(chainId) === 1) {
-      this.actions().tokens.getAssets({ currentAddress })
-    }
+    this.actions().tokens.getAssets({ currentAddress })
   }
 
   componentWillReceiveProps ({ assets }) {
     const { assets: prevAssets } = this.props
 
     if (assets != null && assets.length > 0 && !Immutable.fromJS(assets).equals(Immutable.fromJS(prevAssets))) {
-      const assetsPrepared = assets.map(({ contract }) => ({
-        label: `${contract.symbol} — ${(contract.address)}...`,
-        value: contract.symbol
+      const assetsPrepared = assets.map(({ address, symbol }) => ({
+        label: `${symbol} — ${(address)}`,
+        value: symbol,
+        address
       }))
 
       const newOptions = [TOKENS[0]].concat(assetsPrepared).concat([TOKENS[1]])
@@ -57,8 +52,9 @@ class Step1 extends React.Component {
 
   render () {
     const { tokenSymbol, ethAmount, linksAmount, tokenAmount, addEth, tokenAddress, options } = this.state
-    const { symbol, loading } = this.props
+    const { symbol, loading, privateKey, proxyAddress } = this.props
     const tokenType = this.defineTokenType({ tokenSymbol })
+
     return <div className={classNames(styles.container, { [styles.customTokenEnabled]: tokenSymbol === 'ERC20' })}>
       {loading && <PageLoader />}
       <PageHeader title={this.t('titles.setupCampaign')} />
@@ -66,22 +62,24 @@ class Step1 extends React.Component {
         <div className={styles.form}>
           <div className={styles.chooseTokens}>
             <h3 className={styles.subtitle}>{this.t('titles.chooseToken')}</h3>
-            <Select options={options} value={tokenSymbol} onChange={({ value }) => {
-              if (value !== 'ETH' && value !== 'ERC20') {
-                const currentAddress = options.find(option => option.value === value).address
-                this.setState({
-                  tokenAddress: currentAddress
-                }, _ => {
-                  this.setField({ field: 'tokenSymbol', value })
-                })
-              } else {
-                this.setState({
-                  tokenAddress: null
-                }, _ => {
-                  this.setField({ field: 'tokenSymbol', value })
-                })
-              }
-            }} />
+            <Select
+              options={options} value={tokenSymbol} onChange={({ value }) => {
+                if (value !== 'ETH' && value !== 'ERC20') {
+                  const currentAddress = options.find(option => option.value === value).address
+                  this.setState({
+                    tokenAddress: currentAddress
+                  }, _ => {
+                    this.setField({ field: 'tokenSymbol', value })
+                  })
+                } else {
+                  this.setState({
+                    tokenAddress: null
+                  }, _ => {
+                    this.setField({ field: 'tokenSymbol', value })
+                  })
+                }
+              }}
+            />
           </div>
           {this.renderTokenInputs({ ethAmount, tokenType, tokenAddress, symbol, tokenSymbol, tokenAmount, addEth })}
           <div className={styles.linksAmount}>
@@ -109,7 +107,7 @@ class Step1 extends React.Component {
         tokenAmount={tokenAmount}
         ethAmount={ethAmount}
         linksAmount={linksAmount}
-        tokenSymbol={symbol}
+        tokenSymbol={symbol || tokenSymbol}
         tokenType={tokenType}
       />
     </div>
@@ -122,7 +120,7 @@ class Step1 extends React.Component {
       <h3 className={styles.subtitle}>{this.t('titles.amountPerLink')}</h3>
       <div className={styles.tokensAmountContainer}>
         <Input
-          disabled={tokenType === 'erc20' && !symbol}
+          disabled={tokenType === 'erc20' && !symbol && !tokenSymbol}
           numberInput
           suffix={tokenType === 'erc20' ? symbol : tokenSymbol}
           className={styles.input}
@@ -200,7 +198,7 @@ class Step1 extends React.Component {
           ethAmount: 0,
           addEth: false
         }, _ => {
-          if (Number(chainId) === 1 && value !== 'ERC20' && value !== 'ETH') {
+          if (value !== 'ERC20' && value !== 'ETH') {
             this.actions().tokens.setTokenERC20Data({ tokenSymbol: value })
           } else if (value === 'ERC20' || value === 'ETH') {
             this.actions().tokens.emptyTokenERC20Data()

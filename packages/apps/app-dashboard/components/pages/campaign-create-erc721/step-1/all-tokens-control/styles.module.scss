@@ -1,0 +1,15 @@
+@import "variables";
+
+.container {
+  margin-bottom: 50px;
+}
+
+.button {
+  padding: 10px 15px;
+  font-size: 16px;
+  color: $dbBlue;
+  min-width: auto;
+  width: auto;
+  border-color: $dbBlue;
+  height: 40px;
+}

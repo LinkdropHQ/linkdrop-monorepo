@@ -5,13 +5,15 @@ export default {
     metamaskSupports: 'MetaMask supports:',
     howToConnectWallets: 'How to connect Trezor or Ledger?',
     networkNotSupported: 'Network is not supported',
-    createALinkdrop: 'Create a Campaign',
+    erc20Campaign: 'ERC20 Campaign',
+    erc721Campaign: 'ERC721 Campaign',
     erc20Eth: 'ERC20 + ETH',
+    erc721Eth: 'ERC721 + ETH',
     customSolutions: 'Need other features?',
     allAssets: 'ERC721 / ERC20 + ETH'
   },
   texts: {
-    networkNotSupported: '<div>Simply open MetaMask and switch over to:</div><div><span>Main Ethereum Network</span></div><div>or</div><div><span>Any Test Network</span></div>',
+    networkNotSupported: '<div>Simply open MetaMask and switch over to:</div><div><span>Main Ethereum Network</span> or <span>Test Networks:</span></div><div><span>Ropsten, Rinkeby, Kovan, Görli</span></div>',
     listOfLinks: 'List of links with encoded tokens prepared to distribute',
     incentivizeCustomer: 'Reach out and let us know what other features you are interested in'
 

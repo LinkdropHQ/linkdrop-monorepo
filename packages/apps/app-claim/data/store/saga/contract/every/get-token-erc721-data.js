@@ -4,6 +4,15 @@ import { ethers } from 'ethers'
 import NFTMock from 'contracts/NFTMock.json'
 import { defineNetworkName } from '@linkdrop/commons'
 
+const getImage = function * ({ metadataURL }) {
+  try {
+    const data = yield call(getERC721TokenData, { erc721URL: metadataURL })
+    return data.image
+  } catch (error) {
+    return ''
+  }
+}
+
 const generator = function * ({ payload }) {
   let image = +(new Date())
   try {
@@ -15,10 +24,7 @@ const generator = function * ({ payload }) {
     const metadataURL = yield nftContract.tokenURI(tokenId)
     const name = yield nftContract.symbol()
     if (metadataURL !== '') {
-      const data = yield call(getERC721TokenData, { erc721URL: metadataURL })
-      if (data) {
-        image = data.image
-      }
+      image = yield getImage({ metadataURL })
     }
     yield put({ type: 'CONTRACT.SET_SYMBOL', payload: { symbol: name } })
 
