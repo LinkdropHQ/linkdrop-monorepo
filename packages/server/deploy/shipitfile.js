@@ -8,10 +8,11 @@ module.exports = shipit => {
   if (network === 'mainnet') CUSTOM_PORT = 10001
   else if (network === 'rinkeby') CUSTOM_PORT = 10004
   else if (network === 'ropsten') CUSTOM_PORT = 10003
+  else if (network === 'xdai') CUSTOM_PORT = 10100
 
   shipit.initConfig({
     default: {
-      repositoryUrl: 'git@github.com:LinkdropProtocol/linkdrop-monorepo.git',
+      repositoryUrl: 'git@github.com:LinkdropHQ/linkdrop-monorepo.git',
       keepReleases: 3
     },
     rinkeby: {
@@ -26,6 +27,11 @@ module.exports = shipit => {
     },
     mainnet: {
       deployTo: 'linkdrop/mainnet',
+      servers: 'root@rinkeby.linkdrop.io',
+      branch: 'dev'
+    },
+    xdai: {
+      deployTo: 'linkdrop/xdai',
       servers: 'root@rinkeby.linkdrop.io',
       branch: 'dev'
     }
