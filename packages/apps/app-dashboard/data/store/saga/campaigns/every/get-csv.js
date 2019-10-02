@@ -10,7 +10,9 @@ const generator = function * ({ payload }) {
     hiddenElement.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv)
     hiddenElement.target = '_blank'
     hiddenElement.download = `links-${id}.csv`
+    document.body.appendChild(hiddenElement)
     hiddenElement.click()
+    hiddenElement.closest('body').removeChild(hiddenElement)
     yield put({ type: 'USER.SET_LOADING', payload: { loading: false } })
   } catch (e) {
     console.error(e)
