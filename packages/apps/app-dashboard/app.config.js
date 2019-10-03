@@ -1,4 +1,4 @@
-/* global MASTER_COPY, INFURA_PK, FACTORY, CLAIM_HOST */
+/* global MASTER_COPY, JSON_RPC_URL, INFURA_PK, FACTORY, CLAIM_HOST */
 let config
 
 try {
@@ -11,10 +11,12 @@ const masterCopy = MASTER_COPY || String(config.masterCopy)
 const factory = FACTORY || String(config.factory)
 const claimHost = CLAIM_HOST || String(config.claimHost)
 const infuraPk = INFURA_PK || String(config.infuraPk)
+const jsonRpcUrl = JSON_RPC_URL || String(config.jsonRpcUrl)
 
 module.exports = {
   claimHost,
   masterCopy,
   factory,
-  infuraPk
+  infuraPk,
+  jsonRpcUrl
 }

@@ -2,7 +2,7 @@
 import { put } from 'redux-saga/effects'
 import { delay } from 'redux-saga'
 import initializeSdk from 'data/sdk'
-import { factory, claimHost, infuraPk } from 'app.config.js'
+import { factory, claimHost, jsonRpcUrl } from 'app.config.js'
 import { defineNetworkName } from '@linkdrop/commons'
 
 import { ethers } from 'ethers'
@@ -27,7 +27,7 @@ const generator = function * ({ payload }) {
       factoryAddress: factory,
       chainId: networkName,
       linkdropMasterAddress: selectedAddress,
-      jsonRpcUrl: `https://${networkName}.infura.io/v3/${infuraPk}`,
+      jsonRpcUrl,
       apiHost: `https://${networkName}.linkdrop.io`
     })
     yield put({ type: 'USER.SET_SDK', payload: { sdk } })
