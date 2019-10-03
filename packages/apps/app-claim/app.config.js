@@ -1,4 +1,4 @@
-/* global MASTER_COPY, INFURA_PK, FACTORY, INITIAL_BLOCK_GOERLI, INITIAL_BLOCK_KOVAN, INITIAL_BLOCK_ROPSTEN, INITIAL_BLOCK_MAINNET, INITIAL_BLOCK_RINKEBY */
+/* global MASTER_COPY, JSON_RPC_URL, INFURA_PK, FACTORY, INITIAL_BLOCK_GOERLI, INITIAL_BLOCK_KOVAN, INITIAL_BLOCK_ROPSTEN, INITIAL_BLOCK_MAINNET, INITIAL_BLOCK_RINKEBY */
 
 let config
 
@@ -16,9 +16,11 @@ const initialBlockGoerli = INITIAL_BLOCK_GOERLI || config.initialBlockGoerli || 
 const initialBlockRopsten = INITIAL_BLOCK_ROPSTEN || config.initialBlockRopsten || 0
 const initialBlockKovan = INITIAL_BLOCK_KOVAN || config.initialBlockKovan || 0
 const infuraPk = INFURA_PK || String(config.infuraPk)
+const jsonRpcUrl = JSON_RPC_URL || String(config.jsonRpcUrl)
 
 module.exports = {
   masterCopy,
+  jsonRpcUrl,
   factory,
   initialBlockMainnet,
   initialBlockRinkeby,
