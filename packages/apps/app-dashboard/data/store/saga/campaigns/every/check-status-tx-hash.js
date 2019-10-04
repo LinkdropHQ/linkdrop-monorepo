@@ -1,15 +1,14 @@
 import { put, select } from 'redux-saga/effects'
 import { ethers } from 'ethers'
-import { defineNetworkName } from '@linkdrop/commons'
+import { jsonRpcUrl } from 'app.config.js'
 const ls = (typeof window === 'undefined' ? {} : window).localStorage
 
 const generator = function * ({ payload }) {
   try {
     yield put({ type: 'USER.SET_LOADING', payload: { loading: true } })
     const campaigns = yield select(generator.selectors.campaigns)
-    const { txHash, chainId, id: proxyAddress } = payload
-    const networkName = defineNetworkName({ chainId })
-    const provider = yield ethers.getDefaultProvider(networkName)
+    const { txHash, id: proxyAddress } = payload
+    const provider = yield new ethers.providers.JsonRpcProvider(jsonRpcUrl)
     const receipt = yield provider.getTransactionReceipt(txHash)
     if (receipt && receipt.status === 0) {
       yield put({ type: 'USER.SET_LOADING', payload: { loading: false } })

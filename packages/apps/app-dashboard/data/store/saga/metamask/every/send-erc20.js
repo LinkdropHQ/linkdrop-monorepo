@@ -1,7 +1,8 @@
 /* global web3 */
 import { put, select } from 'redux-saga/effects'
-import { mocks, defineNetworkName } from '@linkdrop/commons'
+import { mocks } from '@linkdrop/commons'
 import { utils, ethers } from 'ethers'
+import { jsonRpcUrl } from 'app.config.js'
 import TokenMock from 'contracts/TokenMock.json'
 
 let web3Obj
@@ -14,12 +15,10 @@ const generator = function * ({ payload }) {
   try {
     yield put({ type: 'METAMASK.SET_STATUS', payload: { status: 'initial' } })
     const { tokenAmount, account: fromWallet } = payload
-    const chainId = yield select(generator.selectors.chainId)
     const decimals = yield select(generator.selectors.decimals)
     const tokenAddress = yield select(generator.selectors.address)
-    const networkName = defineNetworkName({ chainId })
 
-    const provider = yield ethers.getDefaultProvider(networkName)
+    const provider = yield new ethers.providers.JsonRpcProvider(jsonRpcUrl)
     const gasPrice = yield provider.getGasPrice()
     const oneGwei = ethers.utils.parseUnits('1', 'gwei')
     const tokenContract = yield web3Obj.eth.contract(TokenMock.abi).at(tokenAddress)
@@ -42,6 +41,5 @@ export default generator
 generator.selectors = {
   proxyAddress: ({ campaigns: { proxyAddress } }) => proxyAddress,
   address: ({ tokens: { address } }) => address,
-  decimals: ({ tokens: { decimals } }) => decimals,
-  chainId: ({ user: { chainId } }) => chainId
+  decimals: ({ tokens: { decimals } }) => decimals
 }
