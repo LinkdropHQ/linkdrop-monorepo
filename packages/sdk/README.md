@@ -196,7 +196,7 @@ await linkdropSDK.subscribeForClaimedERC721Events(proxyAddress, callback)
 ```
 
 ## Stay in Touch
-💬 Join Linkdrop Community Telegram to chat with the core team
-📈 Try out Linkdrop Dashboard to generate onboarding links
-🙌 Want to contribute to the project—just ping us
-💌 Reach us at hi@linkdop.io
+- 💬 Join [Linkdrop Community](https://t.me/linkdrophq) in Telegram to chat with the core team
+- 🕹 Try out [Linkdrop Dashboard](https://dashboard.linkdrop.io) to generate onboarding links
+- 🙌 Want to contribute to the project — just ping us
+- 💌 Reach us at hi@linkdop.io
