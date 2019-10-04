@@ -30,16 +30,20 @@ class InitialPage extends React.Component {
     const { iconType } = this.state
     const finalIcon = iconType === 'default' ? <img onError={_ => this.setState({ iconType: 'blank' })} className={styles.icon} src={icon} /> : <Icons.Star />
     return <div className={commonStyles.container}>
-      <Alert noBorder={iconType === 'default' && symbol !== 'ETH'} className={styles.tokenIcon} icon={finalIcon} />
+      <Alert noBorder={iconType === 'default' && symbol !== 'ETH' && symbol !== 'xDAI'} className={styles.tokenIcon} icon={finalIcon} />
       <div className={styles.title}>
         <span>{amount}</span> {symbol}
       </div>
       <Button loading={loading} className={styles.button} onClick={_ => onClick && onClick()}>
         {text('common.buttons.claim')}
       </Button>
-      <div className={styles.terms} dangerouslySetInnerHTML={{ __html: this.t('titles.agreeWithTerms', {
-        href: 'https://www.notion.so/Terms-and-Privacy-dfa7d9b85698491d9926cbfe3c9a0a58'
-      }) }} />
+      <div
+        className={styles.terms} dangerouslySetInnerHTML={{
+          __html: this.t('titles.agreeWithTerms', {
+            href: 'https://www.notion.so/Terms-and-Privacy-dfa7d9b85698491d9926cbfe3c9a0a58'
+          })
+        }}
+      />
       {wallet && <div className={styles.wallet} dangerouslySetInnerHTML={{ __html: this.t('titles.claimTo', { wallet: shortenString({ wallet }) }) }} />}
     </div>
   }

@@ -17,7 +17,7 @@ const generator = function * ({ payload }) {
     let icon
     if (ethWalletContract === tokenAddress) {
       decimals = 18
-      symbol = 'ETH'
+      symbol = Number(chainId) === 100 ? 'xDAI' : 'ETH'
       icon = getImages({ src: 'ether' }).imageRetina
     } else if (tokenAddress.toLowerCase() === '0x89d24a6b4ccb1b6faa2625fe562bdd9a23260359') {
       // DAI token has problem with fetching decimals
