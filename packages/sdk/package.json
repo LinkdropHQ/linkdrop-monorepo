@@ -10,6 +10,7 @@
     "extends": "../babel.config.js"
   },
   "dependencies": {
+    "@linkdrop/contracts": "^1.0.86",
     "axios": "^0.18.1",
     "ethers": "^4.0.27"
   },
