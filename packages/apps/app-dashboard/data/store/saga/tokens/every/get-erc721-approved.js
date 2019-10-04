@@ -1,15 +1,16 @@
 import { put } from 'redux-saga/effects'
 import { ethers } from 'ethers'
 import NFTMock from 'contracts/NFTMock.json'
-import { defineNetworkName } from '@linkdrop/commons'
+import { infuraPk, jsonRpcUrlXdai } from 'app.config.js'
+import { defineJsonRpcUrl } from '@linkdrop/commons'
 
 const generator = function * ({ payload }) {
   try {
     yield put({ type: 'USER.SET_ERRORS', payload: { errors: [] } })
-    const { chainId, tokenAddress, account, currentAddress } = payload
+    const { tokenAddress, chainId, account, currentAddress } = payload
     yield put({ type: 'USER.SET_LOADING', payload: { loading: true } })
-    const networkName = defineNetworkName({ chainId })
-    const provider = yield ethers.getDefaultProvider(networkName)
+    const actualJsonRpcUrl = defineJsonRpcUrl({ chainId, infuraPk, jsonRpcUrlXdai })
+    const provider = yield new ethers.providers.JsonRpcProvider(actualJsonRpcUrl)
     const tokenContract = yield new ethers.Contract(tokenAddress, NFTMock.abi, provider)
     /* account - proxy, currentAddress - metamask address */
     const erc721IsApproved = yield tokenContract.isApprovedForAll(currentAddress, account)

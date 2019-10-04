@@ -1,20 +1,20 @@
 /* global web3 */
 import { put, select } from 'redux-saga/effects'
 import { ethers, utils } from 'ethers'
-import { factory } from 'app.config.js'
-import { defineNetworkName } from '@linkdrop/commons'
+import { factory, infuraPk, jsonRpcUrlXdai } from 'app.config.js'
 import LinkdropFactory from 'contracts/LinkdropFactory.json'
 import LinkdropMastercopy from 'contracts/LinkdropMastercopy.json'
+import { defineJsonRpcUrl } from '@linkdrop/commons'
 
 const generator = function * ({ payload }) {
   try {
     yield put({ type: 'METAMASK.SET_STATUS', payload: { status: 'initial' } })
     yield put({ type: 'USER.SET_LOADING', payload: { loading: true } })
-    const { chainId, ethAmount, account: fromWallet } = payload
+    const { ethAmount, account: fromWallet, chainId } = payload
     const newWallet = ethers.Wallet.createRandom()
     const { address: wallet, privateKey } = newWallet
-    const networkName = defineNetworkName({ chainId })
-    const provider = yield ethers.getDefaultProvider(networkName)
+    const actualJsonRpcUrl = defineJsonRpcUrl({ chainId, infuraPk, jsonRpcUrlXdai })
+    const provider = yield new ethers.providers.JsonRpcProvider(actualJsonRpcUrl)
     const gasPrice = yield provider.getGasPrice()
     const oneGwei = ethers.utils.parseUnits('1', 'gwei')
     const ethValueWei = utils.parseEther(String(ethAmount))

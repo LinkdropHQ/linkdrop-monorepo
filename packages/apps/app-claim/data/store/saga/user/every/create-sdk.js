@@ -2,13 +2,14 @@ import { put } from 'redux-saga/effects'
 import initializeSdk from 'data/sdk'
 import {
   factory,
-  jsonRpcUrl
+  jsonRpcUrlXdai,
+  infuraPk
 } from 'app.config.js'
 import { ethers } from 'ethers'
 import Web3 from 'web3'
 import { getInitialBlock } from 'helpers'
 import LinkdropMastercopy from 'contracts/LinkdropMastercopy.json'
-import { defineNetworkName } from '@linkdrop/commons'
+import { defineNetworkName, defineJsonRpcUrl } from '@linkdrop/commons'
 
 const web3 = new Web3(Web3.givenProvider)
 
@@ -16,16 +17,17 @@ const generator = function * ({ payload }) {
   try {
     const { linkdropMasterAddress, chainId, linkKey, campaignId } = payload
     const networkName = defineNetworkName({ chainId })
+    const actualJsonRpcUrl = defineJsonRpcUrl({ chainId, infuraPk, jsonRpcUrlXdai })
+    const provider = yield new ethers.providers.JsonRpcProvider(actualJsonRpcUrl)
     const sdk = initializeSdk({
       factoryAddress: factory,
       chain: networkName,
       linkdropMasterAddress,
-      jsonRpcUrl,
+      jsonRpcUrl: actualJsonRpcUrl,
       apiHost: `https://${networkName}.linkdrop.io`
     })
     yield put({ type: 'USER.SET_SDK', payload: { sdk } })
     const address = sdk.getProxyAddress(campaignId)
-    const provider = yield ethers.getDefaultProvider(networkName)
     const linkWallet = yield new ethers.Wallet(linkKey, provider)
     const linkId = yield linkWallet.address
     const contractWeb3 = yield new web3.eth.Contract(LinkdropMastercopy.abi, address)

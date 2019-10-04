@@ -1,16 +1,17 @@
 /* global web3 */
 import { put, select } from 'redux-saga/effects'
 import LinkdropMastercopy from 'contracts/LinkdropMastercopy.json'
-import { defineNetworkName } from '@linkdrop/commons'
 import { ethers } from 'ethers'
+import { defineJsonRpcUrl } from '@linkdrop/commons'
+import { infuraPk, jsonRpcUrlXdai } from 'app.config.js'
 const ls = (typeof window === 'undefined' ? {} : window).localStorage
 
 const generator = function * ({ payload }) {
   try {
-    const { id: proxyAddress, chainId, account, action } = payload
+    const { id: proxyAddress, account, action, chainId } = payload
     const campaigns = yield select(generator.selectors.campaigns)
-    const networkName = defineNetworkName({ chainId })
-    const provider = yield ethers.getDefaultProvider(networkName)
+    const actualJsonRpcUrl = defineJsonRpcUrl({ chainId, infuraPk, jsonRpcUrlXdai })
+    const provider = yield new ethers.providers.JsonRpcProvider(actualJsonRpcUrl)
     const proxyContract = yield new ethers.Contract(proxyAddress, LinkdropMastercopy.abi, provider)
     const gasPrice = yield provider.getGasPrice()
     const oneGwei = ethers.utils.parseUnits('1', 'gwei')

@@ -2,11 +2,8 @@
 import { put } from 'redux-saga/effects'
 import { delay } from 'redux-saga'
 import initializeSdk from 'data/sdk'
-import { factory, claimHost, jsonRpcUrl } from 'app.config.js'
-import { defineNetworkName } from '@linkdrop/commons'
-
-import { ethers } from 'ethers'
-import NFTMock from 'contracts/NFTMock.json'
+import { factory, claimHost, jsonRpcUrlXdai, infuraPk } from 'app.config.js'
+import { defineNetworkName, defineJsonRpcUrl } from '@linkdrop/commons'
 
 const generator = function * ({ payload }) {
   try {
@@ -22,6 +19,7 @@ const generator = function * ({ payload }) {
     }
     window.addressChangeInterval && window.clearInterval(window.addressChangeInterval)
     const networkName = defineNetworkName({ chainId: networkVersion })
+    const jsonRpcUrl = defineJsonRpcUrl({ chainId: networkVersion, infuraPk, jsonRpcUrlXdai })
     const sdk = initializeSdk({
       claimHost,
       factoryAddress: factory,
