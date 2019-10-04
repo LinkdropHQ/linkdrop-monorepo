@@ -3,6 +3,7 @@ import { getERC721Items, getERC721TokenData } from 'data/api/tokens'
 import { defineNetworkName } from '@linkdrop/commons'
 import { ethers } from 'ethers'
 import NFTMock from 'contracts/NFTMock.json'
+import { jsonRpcUrl } from 'app.config.js'
 
 const defineSymbol = function * ({ tokenContract, address }) {
   try {
@@ -54,8 +55,7 @@ const generator = function * ({ payload }) {
     const networkName = defineNetworkName({ chainId })
     const { assets } = yield call(getERC721Items, { address: currentAddress, networkName })
     if (assets) {
-      const networkName = defineNetworkName({ chainId })
-      const provider = yield ethers.getDefaultProvider(networkName)
+      const provider = yield new ethers.providers.JsonRpcProvider(jsonRpcUrl)
       const assetsFormatted = yield all(assets.map(({ token_id: tokenId, asset_contract: { address, symbol }, name }) => getTokenData({ provider, tokenId, address, name })))
       const assetsMerged = assetsFormatted.reduce((sum, { tokenId, address, symbol, name, image }) => {
         if (sum[address]) {

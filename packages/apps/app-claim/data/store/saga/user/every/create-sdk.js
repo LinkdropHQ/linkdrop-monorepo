@@ -25,7 +25,7 @@ const generator = function * ({ payload }) {
     })
     yield put({ type: 'USER.SET_SDK', payload: { sdk } })
     const address = sdk.getProxyAddress(campaignId)
-    const provider = yield ethers.getDefaultProvider(networkName)
+    const provider = yield new ethers.providers.JsonRpcProvider(jsonRpcUrl)
     const linkWallet = yield new ethers.Wallet(linkKey, provider)
     const linkId = yield linkWallet.address
     const contractWeb3 = yield new web3.eth.Contract(LinkdropMastercopy.abi, address)

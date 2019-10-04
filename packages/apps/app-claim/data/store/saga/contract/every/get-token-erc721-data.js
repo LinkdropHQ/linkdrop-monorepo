@@ -3,6 +3,7 @@ import { getERC721TokenData } from 'data/api/tokens'
 import { ethers } from 'ethers'
 import NFTMock from 'contracts/NFTMock.json'
 import { defineNetworkName } from '@linkdrop/commons'
+import { jsonRpcUrl } from 'app.config.js'
 
 const getImage = function * ({ metadataURL }) {
   try {
@@ -17,9 +18,8 @@ const generator = function * ({ payload }) {
   let image = +(new Date())
   try {
     yield put({ type: 'CONTRACT.SET_LOADING', payload: { loading: true } })
-    const { nftAddress, chainId, tokenId } = payload
-    const networkName = defineNetworkName({ chainId })
-    const provider = yield ethers.getDefaultProvider(networkName)
+    const { nftAddress, tokenId } = payload
+    const provider = yield new ethers.providers.JsonRpcProvider(jsonRpcUrl)
     const nftContract = yield new ethers.Contract(nftAddress, NFTMock.abi, provider)
     const metadataURL = yield nftContract.tokenURI(tokenId)
     const name = yield nftContract.symbol()
@@ -35,9 +35,8 @@ const generator = function * ({ payload }) {
     yield put({ type: 'USER.SET_STEP', payload: { step: 1 } })
   } catch (e) {
     console.error(e)
-    const { nftAddress, chainId } = payload
-    const networkName = defineNetworkName({ chainId })
-    const provider = yield ethers.getDefaultProvider(networkName)
+    const { nftAddress } = payload
+    const provider = yield new ethers.providers.JsonRpcProvider(jsonRpcUrl)
     const nftContract = yield new ethers.Contract(nftAddress, NFTMock.abi, provider)
     const name = yield nftContract.symbol()
     yield put({ type: 'CONTRACT.SET_SYMBOL', payload: { symbol: name } })

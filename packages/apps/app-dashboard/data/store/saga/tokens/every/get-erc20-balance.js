@@ -1,15 +1,14 @@
 import { put, select } from 'redux-saga/effects'
 import { ethers, utils } from 'ethers'
 import TokenMock from 'contracts/TokenMock.json'
-import { defineNetworkName } from '@linkdrop/commons'
+import { jsonRpcUrl } from 'app.config.js'
 
 const generator = function * ({ payload }) {
   try {
     yield put({ type: 'USER.SET_ERRORS', payload: { errors: [] } })
-    const { chainId, tokenAddress, account, currentAddress } = payload
+    const { tokenAddress, account, currentAddress } = payload
     yield put({ type: 'USER.SET_LOADING', payload: { loading: true } })
-    const networkName = defineNetworkName({ chainId })
-    const provider = yield ethers.getDefaultProvider(networkName)
+    const provider = yield new ethers.providers.JsonRpcProvider(jsonRpcUrl)
 
     // checking balance of ERC-20 from blockchain by tokenAddress
     const tokenContract = yield new ethers.Contract(tokenAddress, TokenMock.abi, provider)
