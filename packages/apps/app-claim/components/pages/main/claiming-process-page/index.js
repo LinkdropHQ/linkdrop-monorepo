@@ -59,7 +59,7 @@ class ClaimingProcessPage extends React.Component {
           [styles.descriptionHidden]: !transactionId
         })}
         dangerouslySetInnerHTML={{
-          __html: this.t('titles.seeDetails', {
+          __html: this.t(`titles.${Number(chainId) === 100 ? 'seeDetailsBlockscout' : 'seeDetails'}`, {
             transactionLink: `${defineEtherscanUrl({ chainId })}tx/${transactionId}`
           })
         }}
