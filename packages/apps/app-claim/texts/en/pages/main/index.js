@@ -7,6 +7,7 @@ export default {
     claiming: 'Claiming...',
     instructions: 'It may take a few minutes. You can come back later.',
     seeDetails: 'See details on <a target="_blank" href={{transactionLink}}>Etherscan</a>',
+    seeDetailsBlockscout: 'See details on <a target="_blank" href={{transactionLink}}>Blockscout</a>',
     tokensClaimed: '<span>{{tokens}}</span> claimed',
     howToClaim: 'How to claim tokens to {{wallet}}',
     agreeWithTerms: 'By claiming you agree to the <a target="_blank" href={{href}}>Terms & Privacy</a>'
