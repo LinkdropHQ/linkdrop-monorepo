@@ -2,14 +2,16 @@ import { put } from 'redux-saga/effects'
 import { ethers, utils } from 'ethers'
 import { getImages } from 'helpers'
 import TokenMock from 'contracts/TokenMock.json'
-import { jsonRpcUrl } from 'app.config.js'
+import { jsonRpcUrlXdai, infuraPk } from 'app.config.js'
+import { defineJsonRpcUrl } from '@linkdrop/commons'
 
 const generator = function * ({ payload }) {
   try {
     const ethWalletContract = ethers.constants.AddressZero
     yield put({ type: 'CONTRACT.SET_LOADING', payload: { loading: true } })
-    const { tokenAmount, weiAmount, tokenAddress } = payload
-    const provider = yield new ethers.providers.JsonRpcProvider(jsonRpcUrl)
+    const { tokenAmount, weiAmount, tokenAddress, chainId } = payload
+    const actualJsonRpcUrl = defineJsonRpcUrl({ chainId, infuraPk, jsonRpcUrlXdai })
+    const provider = yield new ethers.providers.JsonRpcProvider(actualJsonRpcUrl)
     let decimals
     let symbol
     let icon
