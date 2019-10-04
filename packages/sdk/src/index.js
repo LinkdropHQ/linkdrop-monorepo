@@ -19,7 +19,7 @@ class LinkdropSDK {
     linkdropMasterAddress,
     factoryAddress,
     chain = 'mainnet',
-    jsonRpcUrl = `https://${chain}.infura.io`,
+    jsonRpcUrl = getJsonRpcUrl(chain),
     apiHost = `https://${chain}.linkdrop.io`,
     claimHost = 'https://claim.linkdrop.io'
   }) {
@@ -36,7 +36,8 @@ class LinkdropSDK {
       chain !== 'ropsten' &&
       chain !== 'rinkeby' &&
       chain !== 'goerli' &&
-      chain !== 'kovan'
+      chain !== 'kovan' &&
+      chain !== 'xdai'
     ) {
       throw new Error('Unsupported chain')
     }
@@ -259,6 +260,15 @@ class LinkdropSDK {
   }
 }
 
+function getJsonRpcUrl (chain) {
+  switch (chain) {
+    case 'xdai':
+      return 'https://dai.poa.network'
+    default:
+      return `https://${chain}.infura.io`
+  }
+}
+
 function getChainId (chain) {
   switch (chain) {
     case 'mainnet':
@@ -271,6 +281,8 @@ function getChainId (chain) {
       return 5
     case 'kovan':
       return 42
+    case 'xdai':
+      return 100
     default:
       return null
   }

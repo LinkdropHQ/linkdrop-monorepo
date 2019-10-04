@@ -45,7 +45,7 @@ function () {
         _ref$chain = _ref.chain,
         chain = _ref$chain === void 0 ? 'mainnet' : _ref$chain,
         _ref$jsonRpcUrl = _ref.jsonRpcUrl,
-        jsonRpcUrl = _ref$jsonRpcUrl === void 0 ? "https://".concat(chain, ".infura.io") : _ref$jsonRpcUrl,
+        jsonRpcUrl = _ref$jsonRpcUrl === void 0 ? getJsonRpcUrl(chain) : _ref$jsonRpcUrl,
         _ref$apiHost = _ref.apiHost,
         apiHost = _ref$apiHost === void 0 ? "https://".concat(chain, ".linkdrop.io") : _ref$apiHost,
         _ref$claimHost = _ref.claimHost,
@@ -60,7 +60,7 @@ function () {
       throw new Error('Please provide factory address');
     }
 
-    if (chain !== 'mainnet' && chain !== 'ropsten' && chain !== 'rinkeby' && chain !== 'goerli' && chain !== 'kovan') {
+    if (chain !== 'mainnet' && chain !== 'ropsten' && chain !== 'rinkeby' && chain !== 'goerli' && chain !== 'kovan' && chain !== 'xdai') {
       throw new Error('Unsupported chain');
     }
 
@@ -660,6 +660,16 @@ function () {
   return LinkdropSDK;
 }();
 
+function getJsonRpcUrl(chain) {
+  switch (chain) {
+    case 'xdai':
+      return 'https://dai.poa.network';
+
+    default:
+      return "https://".concat(chain, ".infura.io");
+  }
+}
+
 function getChainId(chain) {
   switch (chain) {
     case 'mainnet':
@@ -676,6 +686,9 @@ function getChainId(chain) {
 
     case 'kovan':
       return 42;
+
+    case 'xdai':
+      return 100;
 
     default:
       return null;
