@@ -102,6 +102,7 @@ module.exports = {
     new webpack.DefinePlugin({
       MASTER_COPY: JSON.stringify(process.env.MASTER_COPY),
       FACTORY: JSON.stringify(process.env.FACTORY),
+      JSON_RPC_URL_XDAI: JSON.stringify(process.env.JSON_RPC_URL_XDAI),
       INFURA_PK: JSON.stringify(process.env.INFURA_PK),
       CLAIM_HOST: JSON.stringify(process.env.CLAIM_HOST),
       'process.env': {

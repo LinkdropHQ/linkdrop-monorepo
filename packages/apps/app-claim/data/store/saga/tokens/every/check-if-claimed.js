@@ -1,15 +1,15 @@
 import { put } from 'redux-saga/effects'
 import { ethers } from 'ethers'
-import { factory } from 'app.config.js'
-import { defineNetworkName } from '@linkdrop/commons'
+import { factory, jsonRpcUrlXdai, infuraPk } from 'app.config.js'
 import LinkdropFactory from 'contracts/LinkdropFactory.json'
+import { defineJsonRpcUrl } from '@linkdrop/commons'
 
 const generator = function * ({ payload }) {
   try {
     yield put({ type: 'USER.SET_LOADING', payload: { loading: true } })
-    const { linkdropMasterAddress, linkKey, chainId, campaignId } = payload
-    const networkName = defineNetworkName({ chainId })
-    const provider = yield ethers.getDefaultProvider(networkName)
+    const { linkdropMasterAddress, linkKey, campaignId, chainId } = payload
+    const actualJsonRpcUrl = defineJsonRpcUrl({ chainId, infuraPk, jsonRpcUrlXdai })
+    const provider = yield new ethers.providers.JsonRpcProvider(actualJsonRpcUrl)
     const linkWallet = yield new ethers.Wallet(linkKey, provider)
     const linkId = yield linkWallet.address
     const factoryContract = yield new ethers.Contract(factory, LinkdropFactory.abi, provider)

@@ -7,6 +7,7 @@ import variables from './variables/index.module.scss'
 import mocks from './mocks'
 import convertFromExponents from './convert-from-exponents'
 import defineEtherscanUrl from './define-etherscan-url'
+import defineJsonRpcUrl from './define-json-rpc-url'
 
 export {
   copyToClipboard,
@@ -17,5 +18,6 @@ export {
   variables,
   mocks,
   convertFromExponents,
-  defineEtherscanUrl
+  defineEtherscanUrl,
+  defineJsonRpcUrl
 }
