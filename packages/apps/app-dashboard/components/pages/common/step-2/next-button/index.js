@@ -21,12 +21,14 @@ class NextButton extends React.Component {
         } else if (tokenType === 'erc20') {
           this.actions().metamask.sendErc20({
             tokenAmount: multiply(bignumber(tokenAmount), bignumber(linksAmount)),
-            account: currentAddress
+            account: currentAddress,
+            chainId
           })
         } else {
           this.actions().metamask.sendErc721({
             tokenAmount: linksAmount,
-            account: currentAddress
+            account: currentAddress,
+            chainId
           })
         }
       }}
