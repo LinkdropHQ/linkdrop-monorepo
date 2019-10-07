@@ -229,9 +229,7 @@ export const getLinkStatus = async ({
   const response = await axios.get(
     `${apiHost}/api/v1/linkdrops/getStatus/${linkdropMasterAddress}/${linkId}`
   )
-
-  const { error, errors, success, status } = response.data
-  return { error, errors, success, status }
+  return response.data
 }
 
 export const cancelLink = async ({
