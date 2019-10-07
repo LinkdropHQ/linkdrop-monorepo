@@ -1,6 +1,6 @@
 {
   "name": "@linkdrop/sdk",
-  "version": "1.0.87",
+  "version": "1.0.88",
   "main": "dist/index.js",
   "license": "MIT",
   "publishConfig": {
@@ -10,7 +10,7 @@
     "extends": "../babel.config.js"
   },
   "dependencies": {
-    "@linkdrop/contracts": "^1.0.87",
+    "@linkdrop/contracts": "^1.0.88",
     "axios": "^0.18.1",
     "ethers": "^4.0.27"
   },

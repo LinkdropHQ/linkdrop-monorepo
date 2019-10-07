@@ -1,6 +1,6 @@
 {
   "name": "@linkdrop/commons",
-  "version": "1.0.87",
+  "version": "1.0.88",
   "private": true,
   "description": "Linkdrop common helpers",
   "main": "index.js",
@@ -9,6 +9,6 @@
     "extends": "../../../babel.config.js"
   },
   "dependencies": {
-    "@linkdrop/sdk": "^1.0.87"
+    "@linkdrop/sdk": "^1.0.88"
   }
 }
