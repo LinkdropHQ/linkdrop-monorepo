@@ -1,7 +1,7 @@
 import React from 'react'
 import i18next from 'i18next'
 import { Route, Switch } from 'react-router-dom'
-import { Main, Page, NotFound, CampaignCreate, CampaignInfo, Campaigns } from 'components/pages'
+import { Main, Page, NotFound, CampaignCreateERC721, CampaignCreate, CampaignInfo, Campaigns } from 'components/pages'
 import './styles'
 
 import { actions } from 'decorators'
@@ -18,6 +18,7 @@ class AppRouter extends React.Component {
   render () {
     return <Page>
       <Switch>
+        <Route path='/campaigns/create-erc-721' exact component={CampaignCreateERC721} />
         <Route path='/campaigns/create' exact component={CampaignCreate} />
         <Route path='/campaigns/:id' exact component={CampaignInfo} />
         <Route path='/campaigns' exact component={Campaigns} />

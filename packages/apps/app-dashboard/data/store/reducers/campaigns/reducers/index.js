@@ -9,6 +9,7 @@ import setItems from './set-items'
 import setCurrent from './set-current'
 import setProxyAddress from './set-proxy-address'
 import setId from './set-id'
+import setTokenIds from './set-token-ids'
 
 export default {
   setTokenAmount,
@@ -21,5 +22,6 @@ export default {
   setItems,
   setCurrent,
   setId,
-  setProxyAddress
+  setProxyAddress,
+  setTokenIds
 }

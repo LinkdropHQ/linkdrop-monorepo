@@ -2,8 +2,8 @@
 import { put } from 'redux-saga/effects'
 import { delay } from 'redux-saga'
 import initializeSdk from 'data/sdk'
-import { jsonRpcUrl, apiHost, factory, claimHost } from 'app.config.js'
-import { defineNetworkName } from '@linkdrop/commons'
+import { factory, claimHost, jsonRpcUrlXdai, infuraPk } from 'app.config.js'
+import { defineNetworkName, defineJsonRpcUrl } from '@linkdrop/commons'
 
 const generator = function * ({ payload }) {
   try {
@@ -19,7 +19,15 @@ const generator = function * ({ payload }) {
     }
     window.addressChangeInterval && window.clearInterval(window.addressChangeInterval)
     const networkName = defineNetworkName({ chainId: networkVersion })
-    const sdk = initializeSdk({ claimHost, factoryAddress: factory, chainId: networkName, linkdropMasterAddress: selectedAddress, jsonRpcUrl, apiHost })
+    const jsonRpcUrl = defineJsonRpcUrl({ chainId: networkVersion, infuraPk, jsonRpcUrlXdai })
+    const sdk = initializeSdk({
+      claimHost,
+      factoryAddress: factory,
+      chainId: networkName,
+      linkdropMasterAddress: selectedAddress,
+      jsonRpcUrl,
+      apiHost: `https://${networkName}.linkdrop.io`
+    })
     yield put({ type: 'USER.SET_SDK', payload: { sdk } })
     yield put({ type: 'USER.SET_CURRENT_ADDRESS', payload: { currentAddress: selectedAddress } })
     yield put({ type: 'USER.SET_CHAIN_ID', payload: { chainId: networkVersion } })

@@ -11,6 +11,18 @@ const routes = {
       method: 'claimERC721'
     }
   },
+  '/linkdrops/getStatus/:linkdropMasterAddress/:linkId': {
+    get: {
+      controller: 'claimController',
+      method: 'getStatus'
+    }
+  },
+  '/linkdrops/cancel': {
+    post: {
+      controller: 'claimController',
+      method: 'cancel'
+    }
+  },
   '/linkdrops/getLastTxHash/:linkdropMasterAddress/:linkId': {
     get: {
       controller: 'lastTxHashController',
@@ -27,6 +39,12 @@ const routes = {
     post: {
       controller: 'claimController',
       method: 'claimAndDeploy'
+    }
+  },
+  '/utils/get-coinbase-deeplink': {
+    post: {
+      controller: 'utilsController',
+      method: 'getCoinbaseDeepLink'
     }
   }
 }

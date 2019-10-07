@@ -1,0 +1,44 @@
+@import "variables";
+
+.ethAddButton {
+  padding-left: 40px;
+  position: relative;
+
+  &.noMargin {
+    padding-left: 0px;
+  }
+}
+
+.extraButton {
+  padding: 0px 25px;
+  border-color: $dbBlue;
+  color: $dbBlue;
+}
+
+.ethAddInput {
+  padding-left: 40px;
+  position: relative;
+  width: 150px;
+
+  input {
+    max-width: 100%;
+    width: 100%;
+  }
+
+  &.noMargin {
+    padding-left: 0px;
+  }
+  & > svg {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 10px;
+    cursor: pointer;
+  }
+  span {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+}

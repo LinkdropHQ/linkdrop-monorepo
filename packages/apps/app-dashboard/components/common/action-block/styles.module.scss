@@ -13,7 +13,10 @@
 
 .transparent {
   background: transparent;
-  border: 1px solid $blackColor;
+}
+
+.buttonTransparent {
+
 }
 
 .title {
@@ -32,9 +35,19 @@
 
 .extraContent {
   margin-bottom: 30px;
+  min-height: 20px;
 }
 
 .button {
   max-width: 158px;
-  padding: 4px 36px;
+  padding: 4px 30px;
+}
+
+.button:not(.buttonTransparent) {
+  background: $dbBlue;
+}
+
+.buttonTransparent {
+  border-color: $dbBlue;
+  color: $dbBlue;
 }

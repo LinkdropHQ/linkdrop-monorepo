@@ -4,9 +4,21 @@
   max-width: none;
   outline: none;
   box-shadow: none;
-  &:hover {
-    & > div {
-      border-color: $dbBlue;
+  & > div {
+    border-color: $dbBlue!important;
+
+    > div {
+      &:last-child {
+        span {
+          display: none!important;
+        }
+      }
+
+      &:first-child {
+        div:first-child {
+          color: $dbBlue!important;
+        }
+      }
     }
   }
 
@@ -15,7 +27,13 @@
   }
 
   > * {
-    color: $blackColor!important;
+    color: $dbBlue!important;
+  }
+
+  svg {
+    path {
+      fill: $dbBlue!important;
+    }
   }
 
   > [class*="-menu"] {
@@ -27,7 +45,8 @@
     > div {
       > div {
         background: transparent!important;
-        color: $blackColor!important;
+        color: $dbBlue!important;
+
         &:hover {
           background: transparent!important;
           color: $dbBlue!important;

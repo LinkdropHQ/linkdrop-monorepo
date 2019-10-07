@@ -3,8 +3,7 @@ import { Loading } from '@linkdrop/ui-kit'
 import { translate, actions } from 'decorators'
 import styles from './styles.module'
 import commonStyles from '../styles.module'
-import { getHashVariables } from '@linkdrop/commons'
-import config from 'config-claim'
+import { getHashVariables, defineEtherscanUrl } from '@linkdrop/commons'
 import classNames from 'classnames'
 
 @actions(({ tokens: { transactionId, transactionStatus } }) => ({ transactionId, transactionStatus }))
@@ -60,8 +59,8 @@ class ClaimingProcessPage extends React.Component {
           [styles.descriptionHidden]: !transactionId
         })}
         dangerouslySetInnerHTML={{
-          __html: this.t('titles.seeDetails', {
-            transactionLink: `${Number(chainId) === 4 ? config.etherscanRinkeby : config.etherscanMainnet}${transactionId}`
+          __html: this.t(`titles.${Number(chainId) === 100 ? 'seeDetailsBlockscout' : 'seeDetails'}`, {
+            transactionLink: `${defineEtherscanUrl({ chainId })}tx/${transactionId}`
           })
         }}
       />

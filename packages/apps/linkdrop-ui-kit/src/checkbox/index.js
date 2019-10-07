@@ -22,19 +22,18 @@ class Checkbox extends React.Component {
   }
 
   render () {
-    const { title, onChange, disabled } = this.props
+    const { title, onChange, disabled, className } = this.props
     const { checked } = this.state
     return <div
-      className={classNames(styles.container, {
-        [styles.checked]: checked,
+      className={classNames(styles.container, className, {
         [styles.disabled]: disabled
       })}
       onClick={_ => !disabled && this.setState({ checked: !checked }, _ => onChange && onChange({ value: !checked }))}
     >
       <div className={styles.checkIcon}>
-        {checked && <Icons.CheckSmall />}
+        {checked && <Icons.CheckboxCheck />}
       </div>
-      <div className={styles.title}>{title}</div>
+      {title && <div className={styles.title}>{title}</div>}
     </div>
   }
 }

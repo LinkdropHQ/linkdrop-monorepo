@@ -1,7 +1,7 @@
 import React from 'react'
 import { actions, translate } from 'decorators'
 import styles from './styles.module'
-import Info from '../campaign-create/step-5'
+import { Step5 } from 'components/pages/common'
 
 @actions(({ campaigns: { items } }) => ({ items }))
 @translate('pages.campaignInfo')
@@ -19,7 +19,7 @@ class CampaignInfo extends React.Component {
   render () {
     const campaignToCheck = ((this.props.match || {}).params || {}).id
     return <div className={styles.container}>
-      <Info campaignToCheck={campaignToCheck} />
+      <Step5 campaignToCheck={campaignToCheck} />
     </div>
   }
 }

@@ -1,3 +1,11 @@
 .container {
   display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  padding-bottom: 20px;
+}
+
+
+.container > div {
+  margin-bottom: 50px;
 }

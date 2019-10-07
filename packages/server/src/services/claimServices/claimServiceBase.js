@@ -8,6 +8,27 @@ class ClaimService {
     return `claim-${linkdropMasterAddress.toLowerCase()}-${linkId.toLowerCase()}`
   }
 
+  async cancel (linkdropMasterAddress, linkId) {
+    const claimId = this._computeId({ linkdropMasterAddress, linkId })
+    let operation = await operationService.findById(claimId)
+    if (!operation) {
+      operation = await operationService.create({
+        id: claimId,
+        type: 'claim'
+      })
+    }
+    return operationService.update({ id: claimId, status: 'canceled' })
+  }
+
+  async getStatus (linkdropMasterAddress, linkId) {
+    const claimId = this._computeId({ linkdropMasterAddress, linkId })
+    const operation = await operationService.findById(claimId)
+    if (!operation) {
+      return 'not_claimed'
+    }
+    return operation.status
+  }
+
   // Check whether a claim tx exists in database
   findClaimInDB ({ linkId, linkdropMasterAddress }) {
     const id = this._computeId({ linkId, linkdropMasterAddress })
@@ -109,7 +130,7 @@ class ClaimService {
     // save claim operation to database
     const claimId = this._computeId(params)
     logger.debug('Saving claim operation to database...')
-    await operationService.create(claimId, 'claim', params, null)
+    await operationService.create({ id: claimId, type: 'claim', data: params })
 
     // send claim transaction to blockchain
     const tx = await this._sendClaimTx(params)

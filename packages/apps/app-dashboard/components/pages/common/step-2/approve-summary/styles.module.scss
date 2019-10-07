@@ -1,0 +1,31 @@
+@import "variables";
+
+.contents {
+  padding: 4px 20px 10px;
+  margin-top: 10px;
+  border-left: 1px solid $greyStrokeColor;
+  color: $textGreyColor;
+}
+
+.container {
+  margin-bottom: 40px;
+  span {
+    font-family: 'Inter-Bold';
+  }
+
+  &.tokens {
+    margin-top: 100px;
+  }
+
+  &.eth {
+    margin-top: 38px;
+  }
+}
+
+.contentsItem {
+  margin-bottom: 10px;
+
+  &:last-child {
+    margin-bottom: 0px;
+  }
+}
