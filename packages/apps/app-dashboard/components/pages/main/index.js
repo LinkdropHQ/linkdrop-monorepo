@@ -26,9 +26,9 @@ class Main extends React.Component {
 
       <ActionBlock
         transparent
+        transparentButton
         title={this.t('titles.customSolutions')}
         description={this.t('texts.incentivizeCustomer')}
-        extraContent={this.t('titles.allAssets')}
         onClick={_ => {
           window.open('https://linkdrop.io/contact', '_blank')
         }}

@@ -8,6 +8,7 @@
 
   &.selected {
     .imageContainer {
+      border-color: $dbBlue;
       background: rgba(0, 37, 255, .2);
     }
   }
@@ -20,7 +21,7 @@
   box-sizing: border-box;
   border-radius: 5px;
   margin-bottom: 16px;
-
+  overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;

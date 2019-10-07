@@ -6,6 +6,20 @@
   box-shadow: none;
   & > div {
     border-color: $dbBlue!important;
+
+    > div {
+      &:last-child {
+        span {
+          display: none!important;
+        }
+      }
+
+      &:first-child {
+        div:first-child {
+          color: $dbBlue!important;
+        }
+      }
+    }
   }
 
   > div:first-child, > div:nth-child(2) {
@@ -14,6 +28,12 @@
 
   > * {
     color: $dbBlue!important;
+  }
+
+  svg {
+    path {
+      fill: $dbBlue!important;
+    }
   }
 
   > [class*="-menu"] {
@@ -26,6 +46,7 @@
       > div {
         background: transparent!important;
         color: $dbBlue!important;
+
         &:hover {
           background: transparent!important;
           color: $dbBlue!important;

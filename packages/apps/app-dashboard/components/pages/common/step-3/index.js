@@ -97,7 +97,7 @@ class Step3 extends React.Component {
     const ethAmountFinal = multiply(add(bignumber(ethAmount), bignumber(config.linkPrice)), linksAmount)
     const serviceFee = multiply(bignumber(config.linkPrice), bignumber(linksAmount))
     return <div className={styles.container}>
-      {(loading || stateLoading) && <PageLoader />}
+      {(loading || stateLoading) && <PageLoader transaction={stateLoading} />}
       <PageHeader title={this.t('titles.sendEth', { ethAmount: ethAmountFinal })} />
       <div className={styles.main}>
         <div className={styles.description}>
