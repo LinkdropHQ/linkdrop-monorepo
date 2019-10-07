@@ -26,9 +26,10 @@ class AddEthField extends React.Component {
         </Button>
       </div>
     }
-    return <div className={classNames(styles.ethAddInput, {
-      [styles.noMargin]: noMargin
-    })}
+    return <div
+      ref={node => { this.container = node }} className={classNames(styles.ethAddInput, {
+        [styles.noMargin]: noMargin
+      })}
     >
       {!noMargin && <span>+</span>}
       <Input
@@ -36,7 +37,13 @@ class AddEthField extends React.Component {
         suffix='ETH'
         className={styles.ethInput}
         value={ethAmount || 0}
-        onChange={({ value }) => setField({ field: 'ethAmount', value: parseFloat(value) })}
+        onChange={({ value }) => {
+          const limit = noMargin ? 8 : 6
+          this.container
+            .style
+            .width = `${value.length > limit ? (150 + (value.length * 6)) : 150}px`
+          setField({ field: 'ethAmount', value: parseFloat(value) })
+        }}
       />
       <Icons.CloseButton
         fill={variables.dbBlue}

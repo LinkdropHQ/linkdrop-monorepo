@@ -13,9 +13,11 @@ import { TokenAddressInput, LinksContent, NextButton, AddEthField, EthTexts } fr
 class Step1 extends React.Component {
   constructor (props) {
     super(props)
+    const { assets } = this.props
+    const assetsPrepared = this.prepareAssets({ assets })
     this.state = {
-      options: TOKENS,
-      tokenSymbol: TOKENS[0].value,
+      options: assetsPrepared,
+      tokenSymbol: assetsPrepared[0].value,
       tokenAmount: '0',
       ethAmount: '0',
       linksAmount: '0',
@@ -34,18 +36,11 @@ class Step1 extends React.Component {
 
   componentWillReceiveProps ({ assets }) {
     const { assets: prevAssets } = this.props
-
     if (assets != null && assets.length > 0 && !Immutable.fromJS(assets).equals(Immutable.fromJS(prevAssets))) {
-      const assetsPrepared = assets.map(({ address, symbol }) => ({
-        label: `${symbol} — ${(address)}`,
-        value: symbol,
-        address
-      }))
-
-      const newOptions = [TOKENS[0]].concat(assetsPrepared).concat([TOKENS[1]])
+      const assetsPrepared = this.prepareAssets({ assets })
       this.setState({
-        options: newOptions,
-        tokenSymbol: newOptions[0].value
+        options: assetsPrepared,
+        tokenSymbol: assetsPrepared[0].value
       })
     }
   }
@@ -147,6 +142,15 @@ class Step1 extends React.Component {
           {amountInput}
         </div>
     }
+  }
+
+  prepareAssets ({ assets }) {
+    const formattedAssets = assets.map(({ address, symbol }) => ({
+      label: `${symbol} — ${(address)}`,
+      value: symbol,
+      address
+    }))
+    return [TOKENS[0]].concat(formattedAssets).concat([TOKENS[1]])
   }
 
   defineTokenType ({ tokenSymbol }) {

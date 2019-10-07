@@ -1,8 +1,9 @@
 import React from 'react'
 import { Alert, Icons, Button } from '@linkdrop/ui-kit'
 import { translate } from 'decorators'
-import { shortenString } from '@linkdrop/commons'
+import { shortenString, getHashVariables } from '@linkdrop/commons'
 import text from 'texts'
+import classNames from 'classnames'
 
 import styles from './styles.module'
 import commonStyles from '../styles.module'
@@ -28,11 +29,16 @@ class InitialPage extends React.Component {
   render () {
     const { onClick, amount, symbol, loading, icon, wallet } = this.props
     const { iconType } = this.state
+    const { nftAddress } = getHashVariables()
     const finalIcon = iconType === 'default' ? <img onError={_ => this.setState({ iconType: 'blank' })} className={styles.icon} src={icon} /> : <Icons.Star />
     return <div className={commonStyles.container}>
-      <Alert noBorder={iconType === 'default' && symbol !== 'ETH' && symbol !== 'xDAI'} className={styles.tokenIcon} icon={finalIcon} />
+      <Alert
+        noBorder={iconType === 'default' && symbol !== 'ETH' && symbol !== 'xDAI'} className={classNames(styles.tokenIcon, {
+          [styles.tokenIconNft]: nftAddress
+        })} icon={finalIcon}
+      />
       <div className={styles.title}>
-        <span>{amount}</span> {symbol}
+        <span>{amount && parseFloat(amount)}</span> {symbol}
       </div>
       <Button loading={loading} className={styles.button} onClick={_ => onClick && onClick()}>
         {text('common.buttons.claim')}

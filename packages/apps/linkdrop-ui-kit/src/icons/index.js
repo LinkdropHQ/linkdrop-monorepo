@@ -19,6 +19,7 @@ import InformationIcon from './information-icon'
 import Cursor from './cursor'
 import Ethereum from './ethereum'
 import Done from './done'
+import CheckboxCheck from './checkbox-check'
 
 export default {
   LinkdropLogo,
@@ -41,5 +42,6 @@ export default {
   InformationIcon,
   Cursor,
   Ethereum,
-  Done
+  Done,
+  CheckboxCheck
 }

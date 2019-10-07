@@ -157,19 +157,20 @@ class Linkdrop extends React.Component {
   }
 
   renderLinksData ({ linksAmount, tokenAmount, tokenSymbol, ethAmount, tokenType }) {
+    const linksTitle = linksAmount > 1 ? this.t('linksCount') : this.t('link')
     if (tokenType === 'eth' && ethAmount) {
       return <div className={styles.links}>
-        {linksAmount} {this.t('linksCount')} / {convertFromExponents(ethAmount)} ETH
+        {linksAmount} {linksTitle} / {convertFromExponents(ethAmount)} ETH
       </div>
     }
     if (tokenType === 'erc20' && linksAmount && tokenAmount && tokenSymbol && ethAmount) {
       return <div className={styles.links}>
-        {linksAmount} {this.t('linksCount')} / {convertFromExponents(tokenAmount)} {tokenSymbol} + {ethAmount} ETH
+        {linksAmount} {linksTitle} / {convertFromExponents(tokenAmount)} {tokenSymbol} + {ethAmount} ETH
       </div>
     }
 
     return <div className={styles.links}>
-      {linksAmount} {this.t('linksCount')} / {convertFromExponents(tokenAmount)} {tokenSymbol}
+      {linksAmount} {linksTitle} / {convertFromExponents(tokenAmount)} {tokenSymbol}
     </div>
   }
 }

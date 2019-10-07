@@ -31,7 +31,7 @@ class Checkbox extends React.Component {
       onClick={_ => !disabled && this.setState({ checked: !checked }, _ => onChange && onChange({ value: !checked }))}
     >
       <div className={styles.checkIcon}>
-        {checked && <Icons.CheckSmall />}
+        {checked && <Icons.CheckboxCheck />}
       </div>
       {title && <div className={styles.title}>{title}</div>}
     </div>

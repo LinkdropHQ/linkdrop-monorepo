@@ -23,7 +23,7 @@ const generator = function * ({ payload }) {
       // DAI token has problem with fetching decimals
       decimals = 18
       symbol = 'DAI'
-      icon = `https://trustwalletapp.com/images/tokens/${tokenAddress.toLowerCase()}.png`
+      icon = getImages({ src: 'dai' }).imageRetina
     } else if (tokenAddress.toLowerCase() === '0xeb269732ab75a6fd61ea60b06fe994cd32a83549') {
       decimals = 18
       symbol = 'USDx'

@@ -16,7 +16,10 @@
   width: 20px;
   position: relative;
   height: 20px;
-  border: 1px solid $blackColor;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid $dbGrey;
 }
 
 .title {
