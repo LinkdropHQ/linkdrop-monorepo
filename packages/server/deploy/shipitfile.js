@@ -5,8 +5,8 @@ module.exports = shipit => {
   const PM2_APP_NAME = `linkdrop-${network}`
   let CUSTOM_PORT
 
-  if (network === 'mainnet') CUSTOM_PORT = 10001
-  else if (network === 'rinkeby') CUSTOM_PORT = 10004
+  if (network === 'mainnet-with-ul') CUSTOM_PORT = 10001
+  else if (network === 'rinkeby-with-ul') CUSTOM_PORT = 10004
   else if (network === 'ropsten') CUSTOM_PORT = 10003
   else if (network === 'xdai') CUSTOM_PORT = 10100
 
@@ -15,20 +15,20 @@ module.exports = shipit => {
       repositoryUrl: 'git@github.com:LinkdropHQ/linkdrop-monorepo.git',
       keepReleases: 3
     },
-    rinkeby: {
-      deployTo: 'linkdrop/rinkeby',
+    'rinkeby-with-ul': {
+      deployTo: 'linkdrop/rinkeby-with-ul',
       servers: 'root@rinkeby.linkdrop.io',
-      branch: 'dev'
+      branch: 'dev-wallet-uni2'
     },
     ropsten: {
       deployTo: 'linkdrop/ropsten',
       servers: 'root@rinkeby.linkdrop.io',
       branch: 'dev'
     },
-    mainnet: {
-      deployTo: 'linkdrop/mainnet',
+    'mainnet-with-ul': {
+      deployTo: 'linkdrop/mainnet-with-ul',
       servers: 'root@rinkeby.linkdrop.io',
-      branch: 'dev'
+      branch: 'dev-wallet-uni2'
     },
     xdai: {
       deployTo: 'linkdrop/xdai',

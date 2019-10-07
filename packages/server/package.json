@@ -8,9 +8,9 @@
   "scripts": {
     "start": "npx babel-node server.js",
     "dev": "nodemon --exec npx babel-node server.js",
-    "deploy-rinkeby": "cd deploy && npx shipit rinkeby deploy",
+    "deploy-rinkeby-with-ul": "cd deploy && npx shipit rinkeby-with-ul deploy",
     "deploy-ropsten": "cd deploy && npx shipit ropsten deploy",
-    "deploy-mainnet": "cd deploy && npx shipit mainnet deploy",
+    "deploy-mainnet-with-ul": "cd deploy && npx shipit mainnet-with-ul deploy",
     "deploy-xdai": "cd deploy && npx shipit xdai deploy"
   },
   "devDependencies": {
