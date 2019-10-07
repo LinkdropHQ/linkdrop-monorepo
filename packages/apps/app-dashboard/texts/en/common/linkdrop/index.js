@@ -5,6 +5,7 @@ export default {
   paused: 'Paused',
   created: 'Created',
   links: 'Links',
+  link: 'link',
   viewContract: 'View Contract',
   eth: 'ETH',
   linksCount: 'links',

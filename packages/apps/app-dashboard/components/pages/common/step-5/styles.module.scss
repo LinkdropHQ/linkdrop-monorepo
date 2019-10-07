@@ -13,6 +13,7 @@
   a {
     color: $dbBlue;
     transition: color .3s;
+    text-decoration: none;
     &:hover {
       color: $dbBlue;
     }

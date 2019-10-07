@@ -1,7 +1,8 @@
 import reducers from './reducers'
 
 const initialState = {
-  status: null
+  status: null,
+  loading: false
 }
 
 export default (state = initialState, action = {}) => {
@@ -14,5 +15,6 @@ export default (state = initialState, action = {}) => {
 }
 
 const ACTIONS = {
-  'METAMASK.SET_STATUS': reducers.setStatus
+  'METAMASK.SET_STATUS': reducers.setStatus,
+  'METAMASK.SET_LOADING': reducers.setLoading
 }
