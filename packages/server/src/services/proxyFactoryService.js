@@ -55,8 +55,6 @@ class ProxyFactoryService {
     receiverSignature
   }) {
     const gasPrice = await relayerWalletService.getGasPrice()
-    const gasLimit = (await relayerWalletService.provider.getBlock('latest'))
-      .gasLimit
 
     return this.contract.claim(
       weiAmount,
@@ -69,7 +67,7 @@ class ProxyFactoryService {
       linkdropSignerSignature,
       receiverAddress,
       receiverSignature,
-      { gasPrice, gasLimit }
+      { gasPrice }
     )
   }
 
@@ -113,8 +111,6 @@ class ProxyFactoryService {
     receiverSignature
   }) {
     const gasPrice = await relayerWalletService.getGasPrice()
-    const gasLimit = (await relayerWalletService.provider.getBlock('latest'))
-      .gasLimit
 
     return this.contract.claimERC721(
       weiAmount,
@@ -127,7 +123,7 @@ class ProxyFactoryService {
       linkdropSignerSignature,
       receiverAddress,
       receiverSignature,
-      { gasPrice, gasLimit }
+      { gasPrice }
     )
   }
 }
