@@ -84,7 +84,8 @@ export const generate = async () => {
     tx = await LINKDROP_MASTER_WALLET.sendTransaction({
       to: proxyAddress,
       value: FEE_COSTS,
-      gasLimit: 23000
+      gasLimit: 23000,
+      gasPrice: ethers.utils.parseUnits('2', 'gwei')
     })
 
     term.bold(`Tx Hash: ^g${tx.hash}\n`)

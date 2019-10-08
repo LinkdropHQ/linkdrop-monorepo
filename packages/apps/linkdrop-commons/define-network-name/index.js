@@ -5,5 +5,6 @@ const NETWORK_IDS = {
   _3: 'ropsten',
   _4: 'rinkeby',
   _5: 'goerli',
-  _42: 'kovan'
+  _42: 'kovan',
+  _100: 'xdai'
 }

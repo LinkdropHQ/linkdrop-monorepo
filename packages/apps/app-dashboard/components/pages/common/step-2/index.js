@@ -129,7 +129,7 @@ class Step2 extends React.Component {
     const { ethAmount, tokenType, tokenAmount, linksAmount, tokenSymbol, loading, currentAddress } = this.props
     const { loading: stateLoading } = this.state
     return <div className={styles.container}>
-      {(stateLoading || loading) && <PageLoader />}
+      {(stateLoading || loading) && <PageLoader transaction={stateLoading} />}
       <PageHeader title={this.t('titles.summaryPay')} />
       <div className={styles.main}>
         <div className={styles.summary}>

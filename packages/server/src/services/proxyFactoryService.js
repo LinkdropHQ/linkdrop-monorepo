@@ -55,6 +55,7 @@ class ProxyFactoryService {
     receiverSignature
   }) {
     const gasPrice = await relayerWalletService.getGasPrice()
+
     return this.contract.claim(
       weiAmount,
       tokenAddress,
@@ -110,6 +111,7 @@ class ProxyFactoryService {
     receiverSignature
   }) {
     const gasPrice = await relayerWalletService.getGasPrice()
+
     return this.contract.claimERC721(
       weiAmount,
       nftAddress,

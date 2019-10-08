@@ -1,28 +1,29 @@
 import { put } from 'redux-saga/effects'
 import { ethers, utils } from 'ethers'
-import { defineNetworkName } from '@linkdrop/commons'
 import { getImages } from 'helpers'
 import TokenMock from 'contracts/TokenMock.json'
+import { jsonRpcUrlXdai, infuraPk } from 'app.config.js'
+import { defineJsonRpcUrl } from '@linkdrop/commons'
 
 const generator = function * ({ payload }) {
   try {
     const ethWalletContract = ethers.constants.AddressZero
     yield put({ type: 'CONTRACT.SET_LOADING', payload: { loading: true } })
     const { tokenAmount, weiAmount, tokenAddress, chainId } = payload
-    const networkName = defineNetworkName({ chainId })
-    const provider = yield ethers.getDefaultProvider(networkName)
+    const actualJsonRpcUrl = defineJsonRpcUrl({ chainId, infuraPk, jsonRpcUrlXdai })
+    const provider = yield new ethers.providers.JsonRpcProvider(actualJsonRpcUrl)
     let decimals
     let symbol
     let icon
     if (ethWalletContract === tokenAddress) {
       decimals = 18
-      symbol = 'ETH'
+      symbol = Number(chainId) === 100 ? 'xDAI' : 'ETH'
       icon = getImages({ src: 'ether' }).imageRetina
     } else if (tokenAddress.toLowerCase() === '0x89d24a6b4ccb1b6faa2625fe562bdd9a23260359') {
       // DAI token has problem with fetching decimals
       decimals = 18
       symbol = 'DAI'
-      icon = `https://trustwalletapp.com/images/tokens/${tokenAddress.toLowerCase()}.png`
+      icon = getImages({ src: 'dai' }).imageRetina
     } else if (tokenAddress.toLowerCase() === '0xeb269732ab75a6fd61ea60b06fe994cd32a83549') {
       decimals = 18
       symbol = 'USDx'

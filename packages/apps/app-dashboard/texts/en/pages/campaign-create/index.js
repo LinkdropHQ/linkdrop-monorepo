@@ -164,7 +164,7 @@ const {
     qr: 'QR-Codes',
     approve: 'Approve',
     sendAndContinue: 'Send & Continue',
-    selectAll: 'Select all',
-    deselectAll: 'Deselect all'
+    selectAll: 'Select All',
+    deselectAll: 'Deselect All'
   }
 }
