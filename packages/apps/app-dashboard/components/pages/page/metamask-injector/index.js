@@ -22,8 +22,7 @@ class MetamaskInjector extends React.Component {
   }
 
   async applyProvider (provider) {
-
-    // temp hack for Nifty wallet 
+    // temp hack for Nifty wallet
     if (!provider.selectedAddress && web3 && web3.eth && web3.eth.accounts && web3.eth.accounts[0]) {
       provider.selectedAddress = web3.eth.accounts[0]
       provider.networkVersion = web3.version.network
@@ -45,14 +44,13 @@ class MetamaskInjector extends React.Component {
         className={styles.subtitle}
         dangerouslySetInnerHTML={{ __html: this.t('titles.metamaksInstruction') }}
       />
-      <div className={styles.button}>
-        <Button
-          disabled={disabled}
-          onClick={_ => this.web3Connect.toggleModal()}
-        >
-          {this.t('buttons.signIn')}
-        </Button>
-      </div>
+      <Button
+        disabled={disabled}
+        className={styles.button}
+        onClick={_ => this.web3Connect.toggleModal()}
+      >
+        {this.t('buttons.signIn')}
+      </Button>
     </div>
   }
 }

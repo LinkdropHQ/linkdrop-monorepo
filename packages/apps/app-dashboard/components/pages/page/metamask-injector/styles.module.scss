@@ -15,6 +15,7 @@
   a {
     color: $blackColor;
     transition: color .3s;
+    text-decoration: none;
     &:hover {
       color: $dbBlue;
     }
@@ -36,15 +37,5 @@
 }
 
 .button {
-  button {
-    background: $blackColor;
-    border-radius: 5px;
-    font-size: 16px;
-    height: 40px;
-    width: auto;
-    min-width: auto;
-    padding: 4px 50px;
-    border: 1px solid #fff;
-    font-family: 'Inter-Regular';
-  }
+  background: $dbBlue;
 }
