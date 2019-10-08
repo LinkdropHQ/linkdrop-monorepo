@@ -34,7 +34,7 @@ class InitialPage extends React.Component {
     return <div className={commonStyles.container}>
       <Alert
         noBorder={iconType === 'default' && symbol !== 'ETH' && symbol !== 'xDAI'} className={classNames(styles.tokenIcon, {
-          [styles.tokenIconNft]: nftAddress
+          [styles.tokenIconNft]: nftAddress && iconType === 'default'
         })} icon={finalIcon}
       />
       <div className={styles.title}>
