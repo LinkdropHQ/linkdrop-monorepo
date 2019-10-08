@@ -384,8 +384,7 @@ function () {
   var _ref6 = (0, _asyncToGenerator2["default"])(
   /*#__PURE__*/
   _regenerator["default"].mark(function _callee3(_ref5) {
-    var apiHost, linkdropMasterAddress, linkId, response, _response$data3, error, errors, success, status;
-
+    var apiHost, linkdropMasterAddress, linkId, response;
     return _regenerator["default"].wrap(function _callee3$(_context3) {
       while (1) {
         switch (_context3.prev = _context3.next) {
@@ -396,15 +395,9 @@ function () {
 
           case 3:
             response = _context3.sent;
-            _response$data3 = response.data, error = _response$data3.error, errors = _response$data3.errors, success = _response$data3.success, status = _response$data3.status;
-            return _context3.abrupt("return", {
-              error: error,
-              errors: errors,
-              success: success,
-              status: status
-            });
+            return _context3.abrupt("return", response.data);
 
-          case 6:
+          case 5:
           case "end":
             return _context3.stop();
         }
@@ -425,7 +418,7 @@ function () {
   var _ref8 = (0, _asyncToGenerator2["default"])(
   /*#__PURE__*/
   _regenerator["default"].mark(function _callee4(_ref7) {
-    var apiHost, linkdropMasterAddress, linkId, response, _response$data4, error, errors, success, claimOperation;
+    var apiHost, linkdropMasterAddress, linkId, response, _response$data3, error, errors, success, claimOperation;
 
     return _regenerator["default"].wrap(function _callee4$(_context4) {
       while (1) {
@@ -440,7 +433,7 @@ function () {
 
           case 3:
             response = _context4.sent;
-            _response$data4 = response.data, error = _response$data4.error, errors = _response$data4.errors, success = _response$data4.success, claimOperation = _response$data4.claimOperation;
+            _response$data3 = response.data, error = _response$data3.error, errors = _response$data3.errors, success = _response$data3.success, claimOperation = _response$data3.claimOperation;
             return _context4.abrupt("return", {
               error: error,
               errors: errors,

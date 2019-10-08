@@ -26,11 +26,11 @@ class NFTToken extends React.Component {
 
   render () {
     const {
-      tokenId,
+      id,
       address,
       symbol,
       name,
-      image
+      images
     } = this.props
     const { selected, imageErrored } = this.state
     return <div className={classNames(styles.container, {
@@ -38,17 +38,23 @@ class NFTToken extends React.Component {
     })}
     >
       <div className={styles.imageContainer}>
-        {this.renderImage({ image, imageErrored })}
+        {this.renderImage({ image: images[id], imageErrored })}
       </div>
       <div className={styles.title}>
-        {name}
+        {name} {this.renderId({ id })}
       </div>
       <Checkbox className={styles.checkbox} onChange={({ value }) => this.onSelect({ value })} checked={selected} />
     </div>
   }
 
+  renderId ({ id }) {
+    if (!id) { return }
+    if (id.length > 14) { return <span>#{id.slice(0, 14)}...</span> }
+    return <span>#{id}</span>
+  }
+
   renderImage ({ image, imageErrored }) {
-    if (imageErrored) {
+    if (imageErrored || !image) {
       return <div className={styles.defaultImage}>
         <Icons.Star fill='transparent' stroke={variables.dbBlue} strokeWidth={1} />
         <div className={styles.subtitle}>{this.t('titles.cantDisplayImage')}</div>

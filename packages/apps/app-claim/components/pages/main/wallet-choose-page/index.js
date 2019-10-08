@@ -26,7 +26,6 @@ class WalletChoosePage extends React.Component {
     const { walletType } = this.props
     const { platform } = this
     const { w = 'trust' } = getHashVariables()
-    console.log({ walletType })
     if (walletType && walletType != null) {
       return this.renderWalletInstruction({ walletType })
     } else {
