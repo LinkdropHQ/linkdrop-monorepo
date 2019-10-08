@@ -94,7 +94,10 @@ module.exports = {
       ]
     }, {
       test: /\.(png|woff|woff2|eot|ttf|svg|otf|gif)$/,
-      loader: 'url-loader?limit=100000'
+      loader: 'url-loader?limit=100000',
+      options: {
+        name: 'fonts/[name].[ext]'
+      }
     }]
   },
   plugins: [

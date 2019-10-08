@@ -2,7 +2,7 @@ export default {
   titles: {
     needWallet: 'You need a wallet to claim tokens',
     haveAnother: 'Have another wallet?',
-    claimTo: 'Claim to: <span>{{wallet}}</span>',
+    claimTo: 'Claiming to: <span>{{wallet}}</span>',
     transactionInProcess: 'Transaction is processing',
     claiming: 'Claiming...',
     instructions: 'It may take a few minutes. You can come back later.',

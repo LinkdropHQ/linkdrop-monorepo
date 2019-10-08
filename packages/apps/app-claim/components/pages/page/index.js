@@ -1,8 +1,10 @@
 import React from 'react'
-import { Header, Footer } from '@linkdrop/ui-kit'
+import { Footer } from '@linkdrop/ui-kit'
 import styles from './styles.module'
 import { translate } from 'decorators'
 import text from 'texts'
+import { Header } from 'components/common'
+
 @translate('pages.page')
 class Page extends React.Component {
   render () {

@@ -1,5 +1,6 @@
 import React from 'react'
-import { Button, Alert, Icons, RetinaImage } from '@linkdrop/ui-kit'
+import { Alert, Icons, RetinaImage } from '@linkdrop/ui-kit'
+import { Button } from 'components/common'
 import { translate, actions, platform } from 'decorators'
 import { getImages, getWalletLink, getWalletData } from 'helpers'
 import { copyToClipboard, getHashVariables } from '@linkdrop/commons'
@@ -26,7 +27,6 @@ class WalletChoosePage extends React.Component {
     const { walletType } = this.props
     const { platform } = this
     const { w = 'trust' } = getHashVariables()
-    console.log({ walletType })
     if (walletType && walletType != null) {
       return this.renderWalletInstruction({ walletType })
     } else {
@@ -42,7 +42,6 @@ class WalletChoosePage extends React.Component {
         {platform !== 'desktop' && <Button href={buttonLink} target='_blank' className={styles.button}>
           {this.t('buttons.useWallet', { wallet: buttonTitle })}
         </Button>}
-        {this.renderSlider({ walletType })}
       </div>
     }
   }
@@ -73,7 +72,6 @@ class WalletChoosePage extends React.Component {
       <div className={classNames(styles.title, styles.instructionTitle)}>{this.t('titles.howToClaim', { wallet: walletTitle })}</div>
       {instruction}
       {this.renderInstructionButton({ walletType })}
-      {this.renderSlider({ walletType })}
     </div>
   }
 

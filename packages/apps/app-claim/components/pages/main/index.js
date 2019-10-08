@@ -136,10 +136,10 @@ class Claim extends React.Component {
         return <InitialPage
           {...commonData}
           onClick={_ => {
-            if (account) {
-              // if wallet account was found in web3 context, then go to step 4 and claim data
-              return this.actions().user.setStep({ step: 4 })
-            }
+            // if (account) {
+            //   // if wallet account was found in web3 context, then go to step 4 and claim data
+            //   return this.actions().user.setStep({ step: 4 })
+            // }
             // if wallet was not found in web3 context, then go to step 2 with wallet select page and instructions
             this.actions().user.setStep({ step: 2 })
           }}
