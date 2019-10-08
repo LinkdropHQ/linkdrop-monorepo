@@ -10,6 +10,7 @@ const generator = function * ({ payload }) {
       })
     })
     const { event } = yield eventPromise
+    console.log({ event })
     if (event && event.transactionHash) {
       yield put({ type: 'TOKENS.SET_TRANSACTION_ID', payload: { transactionId: event.transactionHash } })
       return yield put({ type: 'TOKENS.SET_TRANSACTION_STATUS', payload: { transactionStatus: 'claimed' } })

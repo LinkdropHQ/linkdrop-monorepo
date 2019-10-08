@@ -5,7 +5,8 @@ const initialState = {
   decimals: 0,
   amount: 0,
   icon: undefined,
-  symbol: null
+  symbol: null,
+  name: null
 }
 
 export default (state = initialState, action = {}) => {
@@ -22,5 +23,6 @@ const ACTIONS = {
   'CONTRACT.SET_DECIMALS': reducers.setDecimals,
   'CONTRACT.SET_AMOUNT': reducers.setAmount,
   'CONTRACT.SET_SYMBOL': reducers.setSymbol,
-  'CONTRACT.SET_ICON': reducers.setIcon
+  'CONTRACT.SET_ICON': reducers.setIcon,
+  'CONTRACT.SET_NAME': reducers.setName
 }

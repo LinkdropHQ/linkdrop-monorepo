@@ -5,10 +5,10 @@ export default {
     claimTo: 'Claiming to: <span>{{wallet}}</span>',
     transactionInProcess: 'Transaction is processing',
     claiming: 'Claiming...',
-    instructions: 'It may take a few minutes. You can come back later.',
-    seeDetails: 'See details on <a target="_blank" href={{transactionLink}}>Etherscan</a>',
+    instructions: 'It may take a few minutes.',
+    seeDetails: 'Details on <a target="_blank" href={{transactionLink}}>Etherscan</a>',
     seeDetailsBlockscout: 'See details on <a target="_blank" href={{transactionLink}}>Blockscout</a>',
-    tokensClaimed: '<span>{{tokens}}</span> claimed',
+    tokensClaimed: 'You claimed <span>{{tokens}}</span>',
     howToClaim: 'How to claim tokens to {{wallet}}',
     agreeWithTerms: 'By claiming you agree to the <a target="_blank" href={{href}}>Terms & Privacy</a>'
   },

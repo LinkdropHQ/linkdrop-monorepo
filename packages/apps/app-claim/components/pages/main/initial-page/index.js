@@ -28,7 +28,7 @@ class InitialPage extends React.Component {
   }
 
   render () {
-    const { onClick, amount, symbol, loading, icon, wallet, tokenName = 'Sometimes a Thousand Twangling Instruments' } = this.props
+    const { onClick, amount, name, symbol, loading, icon, wallet } = this.props
     const { iconType } = this.state
     const { nftAddress, tokenId } = getHashVariables()
     const finalIcon = iconType === 'default' ? <img onError={_ => this.setState({ iconType: 'blank' })} className={styles.icon} src={icon} /> : <Icons.Star />
@@ -39,10 +39,10 @@ class InitialPage extends React.Component {
         })} icon={finalIcon}
       />
       <div className={styles.title}>
-        {symbol} {tokenId}
+        {name}
       </div>
       <div className={styles.subtitle}>
-        {tokenName}
+        {symbol}
       </div>
       <Button loading={loading} className={styles.button} onClick={_ => onClick && onClick()}>
         {text('common.buttons.claim')}

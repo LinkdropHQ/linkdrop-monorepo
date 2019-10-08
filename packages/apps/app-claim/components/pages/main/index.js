@@ -9,9 +9,10 @@ import ClaimingFinishedPage from './claiming-finished-page'
 import { getHashVariables, defineNetworkName, capitalize } from '@linkdrop/commons'
 import { Web3Consumer } from 'web3-react'
 
-@actions(({ user: { errors, step, loading: userLoading, readyToClaim, alreadyClaimed }, tokens: { transactionId }, contract: { loading, decimals, amount, symbol, icon } }) => ({
+@actions(({ user: { errors, step, loading: userLoading, readyToClaim, alreadyClaimed }, tokens: { transactionId }, contract: { name, loading, decimals, amount, symbol, icon } }) => ({
   userLoading,
   loading,
+  name,
   decimals,
   symbol,
   amount,
@@ -89,7 +90,7 @@ class Claim extends React.Component {
   }
 
   renderCurrentPage ({ context }) {
-    const { decimals, amount, symbol, icon, step, userLoading, errors, alreadyClaimed } = this.props
+    const { decimals, name, amount, symbol, icon, step, userLoading, errors, alreadyClaimed } = this.props
     // in context we can find:
     // active,
     // connectorName,
@@ -106,7 +107,7 @@ class Claim extends React.Component {
       chainId,
       linkdropMasterAddress
     } = getHashVariables()
-    const commonData = { linkdropMasterAddress, chainId, decimals, amount, symbol, icon, wallet: account, loading: userLoading }
+    const commonData = { name, linkdropMasterAddress, chainId, decimals, amount, symbol, icon, wallet: account, loading: userLoading }
     if (this.platform === 'desktop' && !account) {
       return <div>
         <ErrorPage
@@ -136,10 +137,10 @@ class Claim extends React.Component {
         return <InitialPage
           {...commonData}
           onClick={_ => {
-            // if (account) {
-            //   // if wallet account was found in web3 context, then go to step 4 and claim data
-            //   return this.actions().user.setStep({ step: 4 })
-            // }
+            if (account) {
+              // if wallet account was found in web3 context, then go to step 4 and claim data
+              return this.actions().user.setStep({ step: 4 })
+            }
             // if wallet was not found in web3 context, then go to step 2 with wallet select page and instructions
             this.actions().user.setStep({ step: 2 })
           }}

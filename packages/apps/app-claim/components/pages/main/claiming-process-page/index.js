@@ -30,8 +30,6 @@ class ClaimingProcessPage extends React.Component {
     if (nftAddress && tokenId) {
       return this.actions().tokens.claimTokensERC721({ wallet, campaignId, nftAddress, tokenId, weiAmount, expirationTime, linkKey, linkdropSignerSignature })
     }
-
-    this.actions().tokens.claimTokensERC20({ campaignId, wallet, tokenAddress, tokenAmount, weiAmount, expirationTime, linkKey, linkdropMasterAddress, linkdropSignerSignature })
   }
 
   componentWillReceiveProps ({ transactionId: id, transactionStatus: status }) {
