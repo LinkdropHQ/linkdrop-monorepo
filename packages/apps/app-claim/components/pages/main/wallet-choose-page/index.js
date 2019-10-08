@@ -38,7 +38,7 @@ class WalletChoosePage extends React.Component {
       })}
       >
         <Alert className={styles.alert} icon={<Icons.Exclamation />} />
-        <div className={styles.title}>{this.t('titles.needWallet')}</div>
+        <div className={styles.title} dangerouslySetInnerHTML={{ __html: this.t('titles.needWallet') }} />
         {platform !== 'desktop' && <Button href={buttonLink} target='_blank' className={styles.button}>
           {this.t('buttons.useWallet', { wallet: buttonTitle })}
         </Button>}

@@ -12,7 +12,7 @@ class ErrorPage extends React.Component {
     const description = this.t(`errors.${error}.description`, { network })
     return <div className={commonStyles.container}>
       <Alert className={styles.alert} icon={this.defineIcon({ error })} />
-      <div className={styles.title}>{this.t(`errors.${error}.title`)}</div>
+      <div className={styles.title} dangerouslySetInnerHTML={{ __html: this.t(`errors.${error}.title`) }} />
       {description.length > 0 && <div className={styles.description}>{description}</div>}
       {Object.keys(instructions).length > 0 && <div className={styles.instructions}>
         {Object.keys(instructions).map(item => <div dangerouslySetInnerHTML={{ __html: instructions[item] }} />)}
