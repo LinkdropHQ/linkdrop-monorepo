@@ -130,6 +130,7 @@ class Claim extends React.Component {
       // if tokens we already claimed (if wallet is totally empty).
       return <ClaimingFinishedPage
         {...commonData}
+        alreadyClaimed
       />
     }
     switch (step) {

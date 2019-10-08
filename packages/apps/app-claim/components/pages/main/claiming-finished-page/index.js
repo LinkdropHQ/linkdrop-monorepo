@@ -11,10 +11,10 @@ import classNames from 'classnames'
 class ClaimingFinishedPage extends React.Component {
   render () {
     const { chainId } = getHashVariables()
-    const { transactionId, amount, symbol } = this.props
+    const { transactionId, amount, symbol, alreadyClaimed } = this.props
     return <div className={commonStyles.container}>
       <Alert icon={<Icons.Check />} className={styles.alert} />
-      <div className={styles.title} dangerouslySetInnerHTML={{ __html: this.t('titles.tokensClaimed', { tokens: `${amount || ''} ${symbol || ''}` }) }} />
+      {this.renderTitle({ symbol, alreadyClaimed })}
       <div
         className={classNames(styles.description, {
           [styles.descriptionHidden]: !transactionId
@@ -26,6 +26,11 @@ class ClaimingFinishedPage extends React.Component {
         }}
       />
     </div>
+  }
+
+  renderTitle ({ alreadyClaimed, symbol }) {
+    if (alreadyClaimed) { return <div className={styles.title} dangerouslySetInnerHTML={{ __html: this.t('titles.tokensAlreadyClaimed') }} /> }
+    return <div className={styles.title} dangerouslySetInnerHTML={{ __html: this.t('titles.tokensClaimed', { tokens: symbol || '' }) }} />
   }
 }
 

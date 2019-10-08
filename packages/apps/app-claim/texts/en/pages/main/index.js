@@ -1,6 +1,6 @@
 export default {
   titles: {
-    needWallet: 'You need wallet to<br>claim tokens',
+    needWallet: 'You need wallet to<br>claim token',
     haveAnother: 'Have another wallet?',
     claimTo: 'Claiming to: <span>{{wallet}}</span>',
     transactionInProcess: 'Transaction is processing',
@@ -9,6 +9,7 @@ export default {
     seeDetails: 'Details on <a target="_blank" href={{transactionLink}}>Etherscan</a>',
     seeDetailsBlockscout: 'See details on <a target="_blank" href={{transactionLink}}>Blockscout</a>',
     tokensClaimed: 'You claimed <span>{{tokens}}</span>',
+    tokensAlreadyClaimed: 'Token has been already claimed',
     howToClaim: 'How to claim tokens to {{wallet}}',
     agreeWithTerms: 'By claiming you agree to the <a target="_blank" href={{href}}>Terms & Privacy</a>'
   },
