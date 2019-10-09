@@ -9,7 +9,7 @@ import ClaimingFinishedPage from './claiming-finished-page'
 import { getHashVariables, defineNetworkName, capitalize } from '@linkdrop/commons'
 import { Web3Consumer } from 'web3-react'
 
-@actions(({ deeplinks: { coinbaseLink }, user: { errors, step, loading: userLoading, readyToClaim, alreadyClaimed }, tokens: { transactionId }, contract: { loading, decimals, amount, symbol, icon } }) => ({
+@actions(({ user: { errors, step, loading: userLoading, readyToClaim, alreadyClaimed }, tokens: { transactionId }, contract: { loading, decimals, amount, symbol, icon } }) => ({
   userLoading,
   loading,
   decimals,
@@ -20,8 +20,7 @@ import { Web3Consumer } from 'web3-react'
   transactionId,
   errors,
   alreadyClaimed,
-  readyToClaim,
-  coinbaseLink
+  readyToClaim
 }))
 @platform()
 @translate('pages.claim')
@@ -90,7 +89,7 @@ class Claim extends React.Component {
   }
 
   renderCurrentPage ({ context }) {
-    const { coinbaseLink, decimals, amount, symbol, icon, step, userLoading, errors, alreadyClaimed } = this.props
+    const { decimals, amount, symbol, icon, step, userLoading, errors, alreadyClaimed } = this.props
     // in context we can find:
     // active,
     // connectorName,
