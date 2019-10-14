@@ -15,7 +15,6 @@ class LinkContents extends React.Component {
 
   render () {
     const { ethAmount, tokenAmount, tokenSymbol } = this.props
-    console.log({ tokenSymbol, defaultSymbol: this.defaultSymbol })
     if (ethAmount && !tokenAmount && tokenSymbol === this.defaultSymbol) {
       return <p className={styles.dataContent}>
         {this.t('titles.oneLinkContents', { tokenAmount: convertFromExponents(ethAmount), tokenSymbol })}
