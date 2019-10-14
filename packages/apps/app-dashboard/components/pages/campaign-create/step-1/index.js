@@ -1,6 +1,7 @@
 import React from 'react'
 import { actions, translate } from 'decorators'
 import styles from './styles.module'
+import { defineDefaultSymbol } from 'helpers'
 import { ethers } from 'ethers'
 import classNames from 'classnames'
 import { Select, Input, PageHeader, PageLoader } from 'components/common'
@@ -13,8 +14,18 @@ import { TokenAddressInput, LinksContent, NextButton, AddEthField, EthTexts } fr
 class Step1 extends React.Component {
   constructor (props) {
     super(props)
-    const { assets } = this.props
-    const assetsPrepared = this.prepareAssets({ assets })
+    const { assets, chainId } = this.props
+    this.defaultSymbol = defineDefaultSymbol({ chainId })
+    this.TOKENS = [
+      {
+        label: `${this.defaultSymbol} — ${(ethers.constants.AddressZero).slice(0, 35)}...`,
+        value: this.defaultSymbol
+      }, {
+        label: 'ERC20 Token Address',
+        value: 'ERC20'
+      }
+    ]
+    const assetsPrepared = this.prepareAssets({ assets, chainId })
     this.state = {
       options: assetsPrepared,
       tokenSymbol: assetsPrepared[0].value,
@@ -47,7 +58,7 @@ class Step1 extends React.Component {
 
   render () {
     const { tokenSymbol, ethAmount, linksAmount, tokenAmount, addEth, tokenAddress, options } = this.state
-    const { symbol, loading, privateKey, proxyAddress } = this.props
+    const { symbol, loading, chainId, privateKey, proxyAddress } = this.props
     const tokenType = this.defineTokenType({ tokenSymbol })
 
     return <div className={classNames(styles.container, { [styles.customTokenEnabled]: tokenSymbol === 'ERC20' })}>
@@ -59,7 +70,7 @@ class Step1 extends React.Component {
             <h3 className={styles.subtitle}>{this.t('titles.chooseToken')}</h3>
             <Select
               options={options} value={tokenSymbol} onChange={({ value }) => {
-                if (value !== 'ETH' && value !== 'ERC20') {
+                if (value !== this.defaultSymbol && value !== 'ERC20') {
                   const currentAddress = options.find(option => option.value === value).address
                   this.setState({
                     tokenAddress: currentAddress
@@ -136,7 +147,7 @@ class Step1 extends React.Component {
           <TokenAddressInput tokenAddress={tokenAddress} tokenType={tokenType} setField={({ value, field }) => this.setField({ value, field })} />
           {amountInput}
         </div>
-      case 'ETH':
+      case this.defaultSymbol:
       default:
         return <div>
           {amountInput}
@@ -144,17 +155,19 @@ class Step1 extends React.Component {
     }
   }
 
-  prepareAssets ({ assets }) {
+  prepareAssets ({ assets, chainId }) {
     const formattedAssets = assets.map(({ address, symbol }) => ({
       label: `${symbol} — ${(address)}`,
       value: symbol,
       address
     }))
-    return [TOKENS[0]].concat(formattedAssets).concat([TOKENS[1]])
+    return [this.TOKENS[0]].concat(formattedAssets).concat([this.TOKENS[1]])
   }
 
-  defineTokenType ({ tokenSymbol }) {
-    if (tokenSymbol === 'ETH') { return 'eth' }
+  defineTokenType ({ tokenSymbol, chainId }) {
+    if (tokenSymbol === this.defaultSymbol) {
+      return 'eth'
+    }
     return 'erc20'
   }
 
@@ -180,8 +193,8 @@ class Step1 extends React.Component {
       {tokenType === 'erc20' && <p className={classNames(styles.text, styles.textMargin15)}>{value * linksAmount} {tokenSymbol}</p>}
       <EthTexts ethAmount={ethAmount} linksAmount={linksAmount} />
       <LinksContent tokenAmount={tokenAmount} tokenSymbol={tokenSymbol} ethAmount={ethAmount} tokenType={tokenType} />
-      <p className={styles.text} dangerouslySetInnerHTML={{ __html: this.t('titles.serviceFee', { price: config.linkPrice * linksAmount }) }} />
-      <p className={classNames(styles.text, styles.textGrey)} dangerouslySetInnerHTML={{ __html: this.t('titles.serviceFeePerLink', { price: config.linkPrice }) }} />
+      <p className={styles.text} dangerouslySetInnerHTML={{ __html: this.t('titles.serviceFee', { symbol: this.defaultSymbol, price: config.linkPrice * linksAmount }) }} />
+      <p className={classNames(styles.text, styles.textGrey)} dangerouslySetInnerHTML={{ __html: this.t('titles.serviceFeePerLink', { symbol: this.defaultSymbol, price: config.linkPrice }) }} />
     </div>
   }
 
@@ -202,16 +215,16 @@ class Step1 extends React.Component {
           ethAmount: 0,
           addEth: false
         }, _ => {
-          if (value !== 'ERC20' && value !== 'ETH') {
+          if (value !== 'ERC20' && value !== this.defaultSymbol) {
             this.actions().tokens.setTokenERC20Data({ tokenSymbol: value })
-          } else if (value === 'ERC20' || value === 'ETH') {
+          } else if (value === 'ERC20' || value === this.defaultSymbol) {
             this.actions().tokens.emptyTokenERC20Data()
           }
         })
       }
 
       if (field === 'tokenAddress' && tokenSymbol === 'ERC20') {
-        const tokenType = this.defineTokenType({ tokenSymbol })
+        const tokenType = this.defineTokenType({ tokenSymbol, chainId })
         if (value.length === 42) {
           if (tokenType === 'erc20') {
             this.actions().tokens.getTokenERC20Data({ tokenAddress: value, chainId })
@@ -223,13 +236,3 @@ class Step1 extends React.Component {
 }
 
 export default Step1
-
-const TOKENS = [
-  {
-    label: `ETH — ${(ethers.constants.AddressZero).slice(0, 35)}...`,
-    value: 'ETH'
-  }, {
-    label: 'ERC20 Token Address',
-    value: 'ERC20'
-  }
-]

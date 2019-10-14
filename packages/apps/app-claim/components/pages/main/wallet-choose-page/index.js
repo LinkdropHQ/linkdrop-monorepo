@@ -10,7 +10,7 @@ import Slider from './slider'
 import CommonInstruction from './common-instruction'
 import DeepLinkInstruction from './deep-link-instruction'
 
-@actions(({ user: { walletType } }) => ({ walletType }))
+@actions(({ user: { walletType }, deeplinks: { coinbaseLink } }) => ({ walletType, coinbaseLink }))
 @translate('pages.main')
 @platform()
 class WalletChoosePage extends React.Component {
@@ -23,13 +23,13 @@ class WalletChoosePage extends React.Component {
 
   render () {
     const { showSlider } = this.state
-    const { walletType } = this.props
+    const { walletType, coinbaseLink } = this.props
     const { platform } = this
     const { w = 'trust' } = getHashVariables()
     if (walletType && walletType != null) {
       return this.renderWalletInstruction({ walletType })
     } else {
-      const buttonLink = platform !== 'desktop' && getWalletLink({ platform, wallet: w, currentUrl: window.location.href })
+      const buttonLink = platform !== 'desktop' && getWalletLink({ coinbaseLink, platform, wallet: w, currentUrl: window.location.href })
       const buttonTitle = getWalletData({ wallet: w }).name
       return <div className={classNames(commonStyles.container, styles.container, {
         [styles.sliderShow]: showSlider,
@@ -52,6 +52,7 @@ class WalletChoosePage extends React.Component {
     let instruction = ''
     switch (walletType) {
       case 'trust':
+      case 'coinbase':
         break
       case 'status':
       case 'imtoken':
@@ -77,14 +78,16 @@ class WalletChoosePage extends React.Component {
   }
 
   renderInstructionButton ({ walletType }) {
+    const { coinbaseLink } = this.props
     const { platform } = this
     switch (walletType) {
       case 'trust':
       case 'imtoken':
+      case 'coinbase':
       case 'status':
       case 'opera': {
         const buttonTitle = getWalletData({ wallet: walletType }).name
-        const buttonLink = getWalletLink({ platform, wallet: walletType, currentUrl: window.location.href })
+        const buttonLink = getWalletLink({ platform, wallet: walletType, currentUrl: window.location.href, coinbaseLink })
         return <Button href={platform !== 'desktop' && buttonLink} className={styles.button}>
           {buttonTitle}
         </Button>

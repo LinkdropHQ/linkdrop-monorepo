@@ -7,6 +7,7 @@ import LinkContents from './link-contents'
 import ApproveSummary from './approve-summary'
 import NextButton from './next-button'
 import config from 'config-dashboard'
+import { defineDefaultSymbol } from 'helpers'
 
 @actions(({
   user: {
@@ -53,6 +54,8 @@ import config from 'config-dashboard'
 class Step2 extends React.Component {
   constructor (props) {
     super(props)
+    const { chainId } = props
+    this.defaultSymbol = defineDefaultSymbol({ chainId })
     this.state = {
       loading: false
     }
@@ -149,10 +152,10 @@ class Step2 extends React.Component {
                   {this.t('titles.serviceFeeTitle')}
                 </h3>
                 <div className={styles.dataContent}>
-                  {`${linksAmount * config.linkPrice} ETH`}
+                  {`${linksAmount * config.linkPrice} ${this.defaultSymbol}`}
                 </div>
                 <div className={styles.extraDataContent}>
-                  {this.t('titles.ethPerLink', { eth: config.linkPrice })}
+                  {this.t('titles.ethPerLink', { symbol: this.defaultSymbol, eth: config.linkPrice })}
                 </div>
 
               </div>

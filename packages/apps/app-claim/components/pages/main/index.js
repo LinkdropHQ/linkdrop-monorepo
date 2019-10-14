@@ -107,6 +107,10 @@ class Claim extends React.Component {
       linkdropMasterAddress
     } = getHashVariables()
     const commonData = { linkdropMasterAddress, chainId, decimals, amount, symbol, icon, wallet: account, loading: userLoading }
+    if (this.platform === 'desktop' && chainId && !account) {
+      return <ErrorPage error='NETWORK_NOT_SUPPORTED' network={capitalize({ string: defineNetworkName({ chainId }) })} />
+    }
+
     if (this.platform === 'desktop' && !account) {
       return <div>
         <ErrorPage
