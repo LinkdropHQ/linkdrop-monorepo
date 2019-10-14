@@ -5,12 +5,19 @@ import { Button, Input } from 'components/common'
 import { Icons } from '@linkdrop/ui-kit'
 import classNames from 'classnames'
 import variables from 'variables'
+import { defineDefaultSymbol } from 'helpers'
 
-@actions(_ => ({}))
+@actions(({ user: { chainId } }) => ({ chainId }))
 @translate('pages.campaignCreate')
 class AddEthField extends React.Component {
+  constructor (props) {
+    super(props)
+    const { chainId } = props
+    this.defaultSymbol = defineDefaultSymbol({ chainId })
+  }
+
   render () {
-    const { addEth, ethAmount, tokenType, setField, noMargin } = this.props
+    const { addEth, ethAmount, tokenType, setField, noMargin, chainId } = this.props
     if (tokenType === 'eth') return null
     if (!addEth) {
       return <div className={classNames(styles.ethAddButton, {
@@ -22,7 +29,7 @@ class AddEthField extends React.Component {
           className={styles.extraButton}
           onClick={_ => setField({ field: 'addEth', value: true })}
         >
-          {this.t('buttons.addEth')}
+          {this.t('buttons.addEth', { symbol: this.defaultSymbol })}
         </Button>
       </div>
     }
@@ -34,7 +41,7 @@ class AddEthField extends React.Component {
       {!noMargin && <span>+</span>}
       <Input
         numberInput
-        suffix='ETH'
+        suffix={this.defaultSymbol}
         className={styles.ethInput}
         value={ethAmount || 0}
         onChange={({ value }) => {

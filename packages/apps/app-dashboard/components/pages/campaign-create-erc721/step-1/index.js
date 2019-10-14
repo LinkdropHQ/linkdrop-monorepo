@@ -7,6 +7,7 @@ import { TokenAddressInput, LinksContent, NextButton, AddEthField, EthTexts } fr
 import config from 'config-dashboard'
 import AllTokensControl from './all-tokens-control'
 import Immutable from 'immutable'
+import { defineDefaultSymbol } from 'helpers'
 
 @actions(({
   user: {
@@ -41,8 +42,10 @@ import Immutable from 'immutable'
 class Step1 extends React.Component {
   constructor (props) {
     super(props)
+    const { chainId } = this.props
     const assetsPrepared = this.prepareAssets({ assets: props.assetsERC721 })
     const currentAsset = props.assetsERC721.find(asset => asset.address === assetsPrepared[0].value)
+    this.defaultSymbol = defineDefaultSymbol({ chainId })
     this.state = {
       options: assetsPrepared,
       ethAmount: 0,
@@ -178,7 +181,7 @@ class Step1 extends React.Component {
 
   renderTokenInputs ({ addEth, ethAmount, tokenAddress, customTokenAddress }) {
     const ethInput = <div className={styles.tokensAmount}>
-      <h3 className={styles.subtitle}>{this.t('titles.ethInLink')}</h3>
+      <h3 className={styles.subtitle}>{this.t('titles.ethInLink', { symbol: this.defaultSymbol })}</h3>
       <div className={styles.tokensAmountContainer}>
         <AddEthField
           addEth={addEth}
@@ -209,8 +212,8 @@ class Step1 extends React.Component {
       <p className={classNames(styles.text, styles.textMargin15)}>{linksAmount} {tokenSymbol}</p>
       <EthTexts ethAmount={ethAmount} linksAmount={linksAmount} />
       <LinksContent tokenAmount={tokenAmount} tokenSymbol={tokenSymbol} ethAmount={ethAmount} tokenType='erc721' />
-      <p className={styles.text} dangerouslySetInnerHTML={{ __html: this.t('titles.serviceFee', { price: config.linkPrice * linksAmount }) }} />
-      <p className={classNames(styles.text, styles.textGrey)} dangerouslySetInnerHTML={{ __html: this.t('titles.serviceFeePerLink', { price: config.linkPrice }) }} />
+      <p className={styles.text} dangerouslySetInnerHTML={{ __html: this.t('titles.serviceFee', { symbol: this.defaultSymbol, price: config.linkPrice * linksAmount }) }} />
+      <p className={classNames(styles.text, styles.textGrey)} dangerouslySetInnerHTML={{ __html: this.t('titles.serviceFeePerLink', { symbol: this.defaultSymbol, price: config.linkPrice }) }} />
     </div>
   }
 
@@ -231,12 +234,6 @@ class Step1 extends React.Component {
           currentIds
         }, _ => this.actions().tokens.setTokenERC721Data({ address: value }))
       }
-
-      // if (field === 'customTokenAddress') {
-      //   if (value.length === 42) {
-      //     this.actions().tokens.getTokenERC721Data({ tokenAddress: value, chainId })
-      //   }
-      // }
     })
   }
 }

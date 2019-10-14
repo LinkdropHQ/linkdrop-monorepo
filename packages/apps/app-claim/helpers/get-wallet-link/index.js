@@ -1,6 +1,7 @@
 import wallets from 'wallets'
 
-export default ({ platform, wallet, currentUrl }) => {
+export default ({ coinbaseLink, platform, wallet, currentUrl }) => {
+  if (wallet === 'coinbase') { return coinbaseLink }
   const walletObj = wallets[wallet]
   if (!walletObj) { return {} }
   if (!walletObj.mobile[platform].support) { return {} }
