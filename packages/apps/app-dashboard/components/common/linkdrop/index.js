@@ -4,6 +4,7 @@ import { Button } from 'components/common'
 import classNames from 'classnames'
 import { translate, actions } from 'decorators'
 import moment from 'moment'
+import { defineDefaultSymbol } from 'helpers'
 import { Icons, Loading } from '@linkdrop/ui-kit'
 import config from 'config-dashboard'
 import { multiply, bignumber } from 'mathjs'
@@ -20,6 +21,12 @@ moment.locale('en-gb')
 }) => ({ currentAddress, chainId }))
 @translate('common.linkdrop')
 class Linkdrop extends React.Component {
+  constructor (props) {
+    super(props)
+    const { chainId } = this.props
+    this.defaultSymbol = defineDefaultSymbol({ chainId })
+  }
+
   componentDidMount () {
     const { status, awaitingStatus, awaitingTxHash, id, chainId } = this.props
     if (status && awaitingStatus && status !== awaitingStatus) {
@@ -57,10 +64,10 @@ class Linkdrop extends React.Component {
     return <div className={classNames(styles.container, { [styles.containerDisabled]: status === 'canceled' })}>
       {loading && <Loading withOverlay />}
       {this.renderTokenTypeLabel({ tokenType })}
-      {this.renderTitle({ tokenAmount, tokenSymbol, ethAmount, tokenType, linksAmount })}
+      {this.renderTitle({ tokenAmount, tokenSymbol, ethAmount, chainId, tokenType, linksAmount })}
       {this.renderStatus({ status, id, chainId, currentAddress })}
       {this.renderDate({ created })}
-      {this.renderLinksData({ linksAmount, tokenAmount, tokenSymbol, ethAmount, tokenType })}
+      {this.renderLinksData({ chainId, linksAmount, tokenAmount, tokenSymbol, ethAmount, tokenType })}
       <div className={styles.buttons}>
         <Button disabled={status === 'canceled'} href={status !== 'canceled' && `/#/campaigns/${id}`} transparent className={styles.button}>{this.t('links')}</Button>
         <Button href={checkAddressUrl} target='_blank' transparent className={classNames(styles.button, styles.buttonWithIcon)}>{this.t('viewContract')}<Icons.ExternalLink fill={variables.dbBlue} /></Button>
@@ -68,12 +75,12 @@ class Linkdrop extends React.Component {
     </div>
   }
 
-  renderTitle ({ tokenAmount, tokenSymbol, ethAmount, tokenType, linksAmount }) {
+  renderTitle ({ tokenAmount, chainId, tokenSymbol, ethAmount, tokenType, linksAmount }) {
     if (tokenType === 'erc20' && !ethAmount) {
       return <div className={styles.title}>{convertFromExponents(multiply(bignumber(tokenAmount), bignumber(linksAmount)))} {tokenSymbol}</div>
     }
     if (tokenType === 'erc20' && ethAmount) {
-      return <div className={styles.title}>{convertFromExponents(multiply(bignumber(tokenAmount), bignumber(linksAmount)))} {tokenSymbol} + {this.t('eth')}</div>
+      return <div className={styles.title}>{convertFromExponents(multiply(bignumber(tokenAmount), bignumber(linksAmount)))} {tokenSymbol} + {this.defaultSymbol}</div>
     }
 
     if (tokenType === 'erc721' && !ethAmount) {
@@ -81,11 +88,11 @@ class Linkdrop extends React.Component {
     }
 
     if (tokenType === 'erc721' && ethAmount) {
-      return <div className={styles.title}>{linksAmount} {tokenSymbol} + {this.t('eth')}</div>
+      return <div className={styles.title}>{linksAmount} {tokenSymbol} + {this.defaultSymbol}</div>
     }
 
     if (tokenType === 'eth' && ethAmount) {
-      return <div className={styles.title}>{convertFromExponents(multiply(bignumber(ethAmount), bignumber(linksAmount)))} ETH</div>
+      return <div className={styles.title}>{convertFromExponents(multiply(bignumber(ethAmount), bignumber(linksAmount)))} {this.defaultSymbol}</div>
     }
     return null
   }
@@ -152,20 +159,20 @@ class Linkdrop extends React.Component {
 
   renderTokenTypeLabel ({ tokenType }) {
     return <div className={styles.tokenLabel}>
-      {tokenType}
+      {tokenType !== 'eth' ? tokenType : this.defaultSymbol}
     </div>
   }
 
-  renderLinksData ({ linksAmount, tokenAmount, tokenSymbol, ethAmount, tokenType }) {
+  renderLinksData ({ linksAmount, tokenAmount, tokenSymbol, ethAmount, tokenType, chainId }) {
     const linksTitle = linksAmount > 1 ? this.t('linksCount') : this.t('link')
     if (tokenType === 'eth' && ethAmount) {
       return <div className={styles.links}>
-        {linksAmount} {linksTitle} / {convertFromExponents(ethAmount)} ETH
+        {linksAmount} {linksTitle} / {convertFromExponents(ethAmount)} {this.defaultSymbol}
       </div>
     }
     if (tokenType === 'erc20' && linksAmount && tokenAmount && tokenSymbol && ethAmount) {
       return <div className={styles.links}>
-        {linksAmount} {linksTitle} / {convertFromExponents(tokenAmount)} {tokenSymbol} + {ethAmount} ETH
+        {linksAmount} {linksTitle} / {convertFromExponents(tokenAmount)} {tokenSymbol} + {ethAmount} {this.defaultSymbol}
       </div>
     }
 

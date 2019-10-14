@@ -7,12 +7,18 @@ import classNames from 'classnames'
 import { Button, PageHeader, PageLoader } from 'components/common'
 import { Icons } from '@linkdrop/ui-kit'
 import { defineNetworkName, convertFromExponents } from '@linkdrop/commons'
-import { getImages } from 'helpers'
+import { getImages, defineDefaultSymbol } from 'helpers'
 import { factory } from 'app.config.js'
 
 @actions(({ user: { loading, chainId }, campaigns: { items, current } }) => ({ chainId, items, current, loading }))
 @translate('pages.campaignCreate')
 class Step5 extends React.Component {
+  constructor (props) {
+    super(props)
+    const { chainId } = this.props
+    this.defaultSymbol = defineDefaultSymbol({ chainId })
+  }
+
   render () {
     const { items, current, campaignToCheck, loading, chainId } = this.props
     const currentCampaign = items.find(item => item.id === (campaignToCheck || current))
@@ -45,6 +51,7 @@ class Step5 extends React.Component {
               masterAddress: currentAddress,
               campaignId: campaignId,
               linkdropSigner: privateKey,
+              symbol: this.defaultSymbol,
               weiAmount: ethAmount ? weiAmount : 0,
               tokenAddress: tokenAddress || ethers.constants.AddressZero,
               tokenAmount: tokenAmount ? tokenAmountFormatted : 0,

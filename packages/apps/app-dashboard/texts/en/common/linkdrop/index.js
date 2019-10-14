@@ -7,7 +7,6 @@ export default {
   links: 'Links',
   link: 'link',
   viewContract: 'View Contract',
-  eth: 'ETH',
   linksCount: 'links',
   statusType: {
     active: 'Active',

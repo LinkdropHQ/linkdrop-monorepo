@@ -2,16 +2,23 @@ import React from 'react'
 import { actions, translate } from 'decorators'
 import styles from './styles.module'
 import { ActionBlock } from 'components/common'
+import { defineDefaultSymbol } from 'helpers'
 
-@actions(({ user: { currentAddress }, campaigns: { items } }) => ({ currentAddress, items }))
+@actions(({ user: { currentAddress, chainId }, campaigns: { items } }) => ({ chainId, currentAddress, items }))
 @translate('pages.main')
 class Main extends React.Component {
+  constructor (props) {
+    super(props)
+    const { chainId } = this.props
+    this.defaultSymbol = defineDefaultSymbol({ chainId })
+  }
+
   render () {
     return <div className={styles.container}>
       <ActionBlock
         title={this.t('titles.erc20Campaign')}
         description={this.t('texts.listOfLinks')}
-        extraContent={this.t('titles.erc20Eth')}
+        extraContent={this.t('titles.erc20Eth', { symbol: this.defaultSymbol })}
         href='/#/campaigns/create'
         buttonTitle={this.t('buttons.create')}
       />
@@ -19,7 +26,7 @@ class Main extends React.Component {
       <ActionBlock
         title={this.t('titles.erc721Campaign')}
         description={this.t('texts.listOfLinks')}
-        extraContent={this.t('titles.erc721Eth')}
+        extraContent={this.t('titles.erc721Eth', { symbol: this.defaultSymbol })}
         href='/#/campaigns/create-erc-721'
         buttonTitle={this.t('buttons.create')}
       />
