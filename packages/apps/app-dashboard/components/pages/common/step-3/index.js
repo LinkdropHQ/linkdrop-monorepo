@@ -6,6 +6,7 @@ import { Button, PageHeader, MetamaskPopup, PageLoader, Instruction } from 'comp
 import config from 'config-dashboard'
 import { multiply, add, bignumber, subtract } from 'mathjs'
 import EthSummaryBlock from './eth-summary-block'
+import { defineDefaultSymbol } from 'helpers'
 
 @actions(({
   user: {
@@ -51,6 +52,8 @@ import EthSummaryBlock from './eth-summary-block'
 class Step3 extends React.Component {
   constructor (props) {
     super(props)
+    const { chainId } = props
+    this.defaultSymbol = defineDefaultSymbol({ chainId })
     this.state = {
       loading: false
     }
@@ -98,7 +101,7 @@ class Step3 extends React.Component {
     const serviceFee = multiply(bignumber(config.linkPrice), bignumber(linksAmount))
     return <div className={styles.container}>
       {(loading || stateLoading) && <PageLoader transaction={stateLoading} />}
-      <PageHeader title={this.t('titles.sendEth', { ethAmount: ethAmountFinal })} />
+      <PageHeader title={this.t('titles.sendEth', { symbol: this.defaultSymbol, ethAmount: ethAmountFinal })} />
       <div className={styles.main}>
         <div className={styles.description}>
           <p className={styles.text} dangerouslySetInnerHTML={{ __html: this.t('texts._10') }} />
@@ -107,7 +110,7 @@ class Step3 extends React.Component {
           <Instruction linksAmount={linksAmount} ethAmount={ethAmount} />
         </div>
       </div>
-      <EthSummaryBlock ethTotal={ethAmountFinal} ethToDistribute={subtract(bignumber(ethAmountFinal), bignumber(serviceFee))} serviceFee={serviceFee} text={this.t} />
+      <EthSummaryBlock symbol={this.defaultSymbol} ethTotal={ethAmountFinal} ethToDistribute={subtract(bignumber(ethAmountFinal), bignumber(serviceFee))} serviceFee={serviceFee} text={this.t} />
       <div className={styles.controls}>
         <Button
           disabled={loading || stateLoading}
