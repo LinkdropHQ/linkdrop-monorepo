@@ -16,12 +16,13 @@ import {
   getLinkdropMasterWallet
 } from './utils'
 import deployProxyIfNeeded from './deploy_proxy'
+
 ethers.errors.setLogLevel('error')
 
 const JSON_RPC_URL = getString('jsonRpcUrl')
 const CHAIN = getString('CHAIN')
 const LINKDROP_MASTER_PRIVATE_KEY = getString('linkdropMasterPrivateKey')
-const WEI_AMOUNT = getInt('weiAmount')
+let WEI_AMOUNT = getInt('weiAmount')
 const LINKS_NUMBER = getInt('linksNumber')
 const EXPIRATION_TIME = getExpirationTime()
 const NFT_ADDRESS = getString('nftAddress')
@@ -32,6 +33,8 @@ const CAMPAIGN_ID = getInt('CAMPAIGN_ID')
 const FACTORY_ADDRESS = getString('FACTORY_ADDRESS')
 
 const GAS_FEE = ethers.utils.parseUnits('0.002')
+
+WEI_AMOUNT = ethers.utils.bigNumberify(WEI_AMOUNT.toString())
 
 // Initialize linkdrop SDK
 const linkdropSDK = new LinkdropSDK({
@@ -63,10 +66,10 @@ export const generate = async () => {
     const nftSymbol = await nftContract.symbol()
 
     // If owner of tokenId is not proxy contract -> send it to proxy
-    let tokenIds = JSON.parse(NFT_IDS)
+    const tokenIds = JSON.parse(NFT_IDS)
 
     // Approve tokens
-    let isApprovedForAll = await nftContract.isApprovedForAll(
+    const isApprovedForAll = await nftContract.isApprovedForAll(
       LINKDROP_MASTER_WALLET.address,
       proxyAddress
     )
@@ -81,17 +84,17 @@ export const generate = async () => {
       term.bold(`Tx Hash: ^g${tx.hash}\n`)
     }
 
-    if (WEI_AMOUNT > 0) {
+    if (WEI_AMOUNT.gt(0)) {
       // Transfer ethers
-      let cost = WEI_AMOUNT * LINKS_NUMBER
+      let cost = WEI_AMOUNT.mul(tokenIds.length)
       let amountToSend
 
       const tokenSymbol = 'ETH'
       const tokenDecimals = 18
       const proxyBalance = await PROVIDER.getBalance(proxyAddress)
 
-      if (proxyBalance < cost) {
-        amountToSend = cost - proxyBalance
+      if (proxyBalance.lt(cost)) {
+        amountToSend = cost.sub(proxyBalance)
 
         spinner.info(
           term.bold.str(

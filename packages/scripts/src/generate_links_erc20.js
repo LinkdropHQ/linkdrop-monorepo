@@ -20,11 +20,11 @@ import deployProxyIfNeeded from './deploy_proxy'
 const JSON_RPC_URL = getString('jsonRpcUrl')
 const CHAIN = getString('CHAIN')
 const LINKDROP_MASTER_PRIVATE_KEY = getString('linkdropMasterPrivateKey')
-const WEI_AMOUNT = getInt('weiAmount')
+const WEI_AMOUNT = ethers.utils.bigNumberify(getString('weiAmount'))
 const LINKS_NUMBER = getInt('linksNumber')
 const EXPIRATION_TIME = getExpirationTime()
 const TOKEN_ADDRESS = getString('tokenAddress')
-const TOKEN_AMOUNT = getInt('tokenAmount')
+const TOKEN_AMOUNT = ethers.utils.bigNumberify(getString('tokenAmount'))
 const PROVIDER = getProvider()
 const LINKDROP_MASTER_WALLET = getLinkdropMasterWallet()
 const CAMPAIGN_ID = getInt('CAMPAIGN_ID')
@@ -55,8 +55,8 @@ export const generate = async () => {
     await deployProxyIfNeeded(spinner)
 
     // Send tokens to proxy
-    if (TOKEN_AMOUNT > 0 && TOKEN_ADDRESS !== ethers.constants.AddressZero) {
-      const cost = TOKEN_AMOUNT * LINKS_NUMBER
+    if (TOKEN_AMOUNT.gt(0) && TOKEN_ADDRESS !== ethers.constants.AddressZero) {
+      const cost = TOKEN_AMOUNT.mul(LINKS_NUMBER)
 
       const tokenContract = await new ethers.Contract(
         TOKEN_ADDRESS,
@@ -71,7 +71,7 @@ export const generate = async () => {
         LINKDROP_MASTER_WALLET.address,
         proxyAddress
       )
-      if (proxyAllowance < cost) {
+      if (proxyAllowance.lt(cost)) {
         spinner.info(
           term.bold.str(
             `Approving ${cost /
@@ -88,15 +88,15 @@ export const generate = async () => {
 
     if (WEI_AMOUNT > 0) {
       // Transfer ethers
-      let cost = WEI_AMOUNT * LINKS_NUMBER
+      let cost = WEI_AMOUNT.mul(LINKS_NUMBER)
       let amountToSend
 
       const tokenSymbol = 'ETH'
       const tokenDecimals = 18
       const proxyBalance = await PROVIDER.getBalance(proxyAddress)
 
-      if (proxyBalance < cost) {
-        amountToSend = cost - proxyBalance
+      if (proxyBalance.lt(cost)) {
+        amountToSend = cost.sub(proxyBalance)
 
         spinner.info(
           term.bold.str(
