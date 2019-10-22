@@ -48,8 +48,6 @@ const claimERC721 = async () => {
     const proxyAddress = linkdropSDK.getProxyAddress(campaignId)
     console.log('\nproxyAddress: ', proxyAddress)
 
-    linkdropSDK.subscribeForClaimedERC721Events()
-
     const { errors, success, txHash } = await linkdropSDK.claimERC721({
       jsonRpcUrl: JSON_RPC_URL,
       apiHost: API_HOST,
