@@ -33,6 +33,7 @@ var _LinkdropFactory = _interopRequireDefault(require("@linkdrop/contracts/build
 
 var _ethers = require("ethers");
 
+// Turn off annoying warnings
 _ethers.ethers.errors.setLogLevel('error');
 
 var LinkdropSDK =

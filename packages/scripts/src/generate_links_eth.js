@@ -19,7 +19,7 @@ import deployProxyIfNeeded from './deploy_proxy'
 const JSON_RPC_URL = getString('jsonRpcUrl')
 const CHAIN = getString('CHAIN')
 const LINKDROP_MASTER_PRIVATE_KEY = getString('linkdropMasterPrivateKey')
-const WEI_AMOUNT = getInt('weiAmount')
+let WEI_AMOUNT = getInt('weiAmount')
 const LINKS_NUMBER = getInt('linksNumber')
 const EXPIRATION_TIME = getExpirationTime()
 const PROVIDER = getProvider()
@@ -27,6 +27,8 @@ const LINKDROP_MASTER_WALLET = getLinkdropMasterWallet()
 const CAMPAIGN_ID = getInt('CAMPAIGN_ID')
 const FACTORY_ADDRESS = getString('FACTORY_ADDRESS')
 const GAS_FEE = ethers.utils.parseUnits('0.002')
+
+WEI_AMOUNT = ethers.utils.bigNumberify(WEI_AMOUNT.toString())
 
 const linkdropSDK = new LinkdropSDK({
   linkdropMasterAddress: new ethers.Wallet(LINKDROP_MASTER_PRIVATE_KEY).address,
@@ -46,7 +48,7 @@ export const generate = async () => {
 
     const proxyAddress = linkdropSDK.getProxyAddress(CAMPAIGN_ID)
 
-    let cost = WEI_AMOUNT * LINKS_NUMBER
+    let cost = WEI_AMOUNT.mul(LINKS_NUMBER)
 
     let amountToSend
 
@@ -57,9 +59,9 @@ export const generate = async () => {
     // check that proxy address is deployed
     await deployProxyIfNeeded(spinner)
 
-    if (proxyBalance < cost) {
+    if (proxyBalance.lt(cost)) {
       // Transfer ethers
-      amountToSend = cost - proxyBalance
+      amountToSend = cost.sub(proxyBalance)
 
       spinner.info(
         term.bold.str(
