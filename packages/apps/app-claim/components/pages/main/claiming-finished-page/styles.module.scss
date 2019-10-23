@@ -25,3 +25,13 @@
   visibility: hidden;
   opacity: 0;
 }
+
+.button {
+  max-width: 300px;
+  min-width: 300px;
+  transform: translateY(32px);
+
+  &.disableTranslateX {
+    transform: translateY(0px)
+  }
+}
