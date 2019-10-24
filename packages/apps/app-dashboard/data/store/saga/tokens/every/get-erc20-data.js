@@ -4,6 +4,18 @@ import { ethers } from 'ethers'
 import { infuraPk, jsonRpcUrlXdai } from 'app.config.js'
 import { defineJsonRpcUrl } from '@linkdrop/commons'
 
+const defineSymbol = function * ({ tokenContract, tokenAddress }) {
+  try {
+    const symbol = yield tokenContract.symbol()
+    return symbol
+  } catch (e) {
+    if (tokenAddress === '0x89d24a6b4ccb1b6faa2625fe562bdd9a23260359') {
+      return 'DAI'
+    }
+    return 'ERC20'
+  }
+}
+
 const generator = function * ({ payload }) {
   try {
     yield put({ type: 'USER.SET_LOADING', payload: { loading: true } })
@@ -15,7 +27,7 @@ const generator = function * ({ payload }) {
     const provider = yield new ethers.providers.JsonRpcProvider(actualJsonRpcUrl)
     const tokenContract = yield new ethers.Contract(tokenAddress, TokenMock.abi, provider)
     const decimals = yield tokenContract.decimals()
-    const symbol = yield tokenContract.symbol()
+    const symbol = yield defineSymbol({ tokenAddress, tokenContract })
     yield put({ type: 'TOKENS.SET_TOKEN_DECIMALS', payload: { decimals } })
     yield put({ type: 'TOKENS.SET_TOKEN_SYMBOL', payload: { symbol } })
     yield put({ type: 'USER.SET_LOADING', payload: { loading: false } })
