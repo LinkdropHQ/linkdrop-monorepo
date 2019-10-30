@@ -37,7 +37,7 @@ class WalletChoosePage extends React.Component {
       })}
       >
         <div className={classNames(styles.wallet, styles.withBorder, styles.walletPreview)}>
-          <RetinaImage width={60} {...getImages({ src: 'trust' })} />
+          <RetinaImage width={60} {...getImages({ src: w })} />
         </div>
         <div className={styles.title}>{this.t('titles.needWallet')}</div>
         {platform !== 'desktop' && <Button href={buttonLink} target='_blank' className={styles.button}>
