@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, Alert, Icons, RetinaImage } from '@linkdrop/ui-kit'
+import { Button, RetinaImage } from '@linkdrop/ui-kit'
 import { translate, actions, platform } from 'decorators'
 import { getImages, getWalletLink, getWalletData } from 'helpers'
 import { copyToClipboard, getHashVariables } from '@linkdrop/commons'
@@ -36,7 +36,9 @@ class WalletChoosePage extends React.Component {
         [styles.sliderHide]: showSlider === false
       })}
       >
-        <Alert className={styles.alert} icon={<Icons.Exclamation />} />
+        <div className={classNames(styles.wallet, styles.withBorder, styles.walletPreview)}>
+          <RetinaImage width={60} {...getImages({ src: 'trust' })} />
+        </div>
         <div className={styles.title}>{this.t('titles.needWallet')}</div>
         {platform !== 'desktop' && <Button href={buttonLink} target='_blank' className={styles.button}>
           {this.t('buttons.useWallet', { wallet: buttonTitle })}
