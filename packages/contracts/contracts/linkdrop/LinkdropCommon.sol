@@ -2,22 +2,26 @@ pragma solidity ^0.5.6;
 
 import "../interfaces/ILinkdropCommon.sol";
 import "../storage/LinkdropStorage.sol";
-import "openzeppelin-solidity/contracts/cryptography/ECDSA.sol";
-import "openzeppelin-solidity/contracts/math/SafeMath.sol";
+import "openzeppelin-solidity/cryptography/ECDSA.sol";
+import "openzeppelin-solidity/math/SafeMath.sol";
+import "openzeppelin-solidity/utils/ReentrancyGuard.sol";
+import "openzeppelin-solidity/utils/Address.sol";
 
-contract LinkdropCommon is ILinkdropCommon, LinkdropStorage {
+contract LinkdropCommon is ILinkdropCommon, LinkdropStorage, ReentrancyGuard {
+
+    using Address for address payable;
 
     /**
-    * @dev Function called only once to set owner, linkdrop master, contract version and chain id
+    * @dev Function called only once to set owner, sender, contract version and chain id
     * @param _owner Owner address
-    * @param _linkdropMaster Address corresponding to master key
+    * @param _sender Sender address
     * @param _version Contract version
     * @param _chainId Network id
     */
     function initialize
     (
         address _owner,
-        address payable _linkdropMaster,
+        address payable _sender,
         uint _version,
         uint _chainId
     )
@@ -26,21 +30,21 @@ contract LinkdropCommon is ILinkdropCommon, LinkdropStorage {
     {
         require(!initialized, "LINKDROP_PROXY_CONTRACT_ALREADY_INITIALIZED");
         owner = _owner;
-        linkdropMaster = _linkdropMaster;
-        isLinkdropSigner[linkdropMaster] = true;
+        sender = _sender;
+        isSigner[sender] = true;
         version = _version;
         chainId = _chainId;
         initialized = true;
         return true;
     }
 
-    modifier onlyLinkdropMaster() {
-        require(msg.sender == linkdropMaster, "ONLY_LINKDROP_MASTER");
+    modifier onlySender() {
+        require(msg.sender == sender, "ONLY_SENDER");
         _;
     }
 
-    modifier onlyLinkdropMasterOrFactory() {
-        require (msg.sender == linkdropMaster || msg.sender == owner, "ONLY_LINKDROP_MASTER_OR_FACTORY");
+    modifier onlySenderOrFactory() {
+        require (msg.sender == sender || msg.sender == owner, "ONLY_SENDER_OR_FACTORY");
         _;
     }
 
@@ -81,11 +85,11 @@ contract LinkdropCommon is ILinkdropCommon, LinkdropStorage {
     }
 
     /**
-    * @dev Function to cancel a link, can only be called by linkdrop master
+    * @dev Function to cancel a link, can only be called by sender
     * @param _linkId Address corresponding to link key
     * @return True if success
     */
-    function cancel(address _linkId) external onlyLinkdropMaster returns (bool) {
+    function cancel(address _linkId) external onlySender returns (bool) {
         require(!isClaimedLink(_linkId), "LINK_CLAIMED");
         _canceled[_linkId] = true;
         emit Canceled(_linkId);
@@ -93,29 +97,29 @@ contract LinkdropCommon is ILinkdropCommon, LinkdropStorage {
     }
 
     /**
-    * @dev Function to withdraw eth to linkdrop master, can only be called by linkdrop master
+    * @dev Function to withdraw all remaining eth to sender, can only be called by sender
     * @return True if success
     */
-    function withdraw() external onlyLinkdropMaster returns (bool) {
-        linkdropMaster.transfer(address(this).balance);
+    function withdraw() external onlySender nonReentrant returns (bool) {
+        sender.sendValue(address(this).balance);
         return true;
     }
 
     /**
-    * @dev Function to pause contract, can only be called by linkdrop master
+    * @dev Function to pause contract, can only be called by sender
     * @return True if success
     */
-    function pause() external onlyLinkdropMaster whenNotPaused returns (bool) {
+    function pause() external onlySender whenNotPaused returns (bool) {
         _paused = true;
         emit Paused();
         return true;
     }
 
     /**
-    * @dev Function to unpause contract, can only be called by linkdrop master
+    * @dev Function to unpause contract, can only be called by sender
     * @return True if success
     */
-    function unpause() external onlyLinkdropMaster returns (bool) {
+    function unpause() external onlySender returns (bool) {
         require(paused(), "LINKDROP_CONTRACT_ALREADY_UNPAUSED");
         _paused = false;
         emit Unpaused();
@@ -123,33 +127,33 @@ contract LinkdropCommon is ILinkdropCommon, LinkdropStorage {
     }
 
     /**
-    * @dev Function to add new signing key, can only be called by linkdrop master or owner (factory contract)
-    * @param _linkdropSigner Address corresponding to signing key
+    * @dev Function to add new signing key, can only be called by sender or owner (factory contract)
+    * @param _signer Address corresponding to signing key
     * @return True if success
     */
-    function addSigner(address _linkdropSigner) external payable onlyLinkdropMasterOrFactory returns (bool) {
-        require(_linkdropSigner != address(0), "INVALID_LINKDROP_SIGNER_ADDRESS");
-        isLinkdropSigner[_linkdropSigner] = true;
+    function addSigner(address _signer) external payable onlySenderOrFactory returns (bool) {
+        require(_signer != address(0), "INVALID_SIGNER_ADDRESS");
+        isSigner[_signer] = true;
         return true;
     }
 
     /**
-    * @dev Function to remove signing key, can only be called by linkdrop master
-    * @param _linkdropSigner Address corresponding to signing key
+    * @dev Function to remove signing key, can only be called by sender
+    * @param _signer Address corresponding to signing key
     * @return True if success
     */
-    function removeSigner(address _linkdropSigner) external onlyLinkdropMaster returns (bool) {
-        require(_linkdropSigner != address(0), "INVALID_LINKDROP_SIGNER_ADDRESS");
-        isLinkdropSigner[_linkdropSigner] = false;
+    function removeSigner(address _signer) external onlySender returns (bool) {
+        require(_signer != address(0), "INVALID_SIGNER_ADDRESS");
+        isSigner[_signer] = false;
         return true;
     }
 
     /**
-    * @dev Function to destroy this contract, can only be called by owner (factory) or linkdrop master
-    * Withdraws all the remaining ETH to linkdrop master
+    * @dev Function to destroy this contract, can only be called by owner (factory) or sender
+    * Withdraws all the remaining eth to sender
     */
-    function destroy() external onlyLinkdropMasterOrFactory {
-        selfdestruct(linkdropMaster);
+    function destroy() external onlySenderOrFactory {
+        selfdestruct(sender);
     }
 
     /**
@@ -161,7 +165,7 @@ contract LinkdropCommon is ILinkdropCommon, LinkdropStorage {
     }
 
     /**
-    * @dev Fallback function to accept ETH
+    * @dev Fallback function to accept eth
     */
     function () external payable {}
 
