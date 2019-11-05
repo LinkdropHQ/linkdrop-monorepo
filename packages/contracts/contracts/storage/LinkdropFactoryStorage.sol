@@ -15,8 +15,7 @@ contract LinkdropFactoryStorage is Ownable {
     // Network id
     uint public chainId;
 
-    // Maps hash(sender address, campaign id) to its corresponding proxy address
-    mapping (bytes32 => address) public deployed;
+    mapping (address => bool) internal _isDeployed;
 
     // Events
     event Deployed(address payable indexed owner, uint campaignId, address payable proxy, bytes32 salt);

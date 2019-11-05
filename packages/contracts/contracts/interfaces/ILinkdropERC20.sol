@@ -2,14 +2,16 @@ pragma solidity ^0.5.6;
 
 interface ILinkdropERC20 {
 
-    function verifyLinkdropSignerSignature
+    function verifySignerSignature
     (
-        uint _weiAmount,
-        address _tokenAddress,
-        uint _tokenAmount,
+        uint _nativeTokensAmount,
+        address _token,
+        uint _tokensAmount,
+        address _feeToken,
+        uint _feeAmount,
         uint _expiration,
         address _linkId,
-        bytes calldata _signature
+        bytes calldata _signerSignature
     )
     external view returns (bool);
 
@@ -17,36 +19,39 @@ interface ILinkdropERC20 {
     (
         address _linkId,
 	    address _receiver,
-		bytes calldata _signature
+		bytes calldata _receiverSignature
     )
     external view returns (bool);
 
     function checkClaimParams
     (
-        uint _weiAmount,
-        address _tokenAddress,
-        uint _tokenAmount,
+        uint _nativeTokensAmount,
+        address _token,
+        uint _tokensAmount,
+        address _feeToken,
+        uint _feeAmount,
+        address _feeReceiver,
         uint _expiration,
         address _linkId,
-        bytes calldata _linkdropSignerSignature,
+        bytes calldata _signerSignature,
         address _receiver,
-        bytes calldata _receiverSignature,
-        uint _fee
+        bytes calldata _receiverSignature
     )
     external view returns (bool);
 
     function claim
     (
-        uint _weiAmount,
-        address _tokenAddress,
-        uint _tokenAmount,
+        uint _nativeTokensAmount,
+        address _token,
+        uint _tokensAmount,
+        address _feeToken,
+        uint _feeAmount,
+        address _feeReceiver,
         uint _expiration,
         address _linkId,
-        bytes calldata _linkdropSignerSignature,
-        address payable _receiver,
-        bytes calldata _receiverSignature,
-        address payable _feeReceiver,
-        uint _fee
+        bytes calldata _signerSignature,
+        address _receiver,
+        bytes calldata _receiverSignature
     )
     external returns (bool);
 

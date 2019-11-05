@@ -15,7 +15,7 @@ contract LinkdropERC20 is ILinkdropERC20, LinkdropCommon {
     /**
     * @dev Function to verify linkdrop signer's signature
     * @param _nativeTokensAmount Amount of native tokens to be claimed
-    * @param _token Token address compliant to ERC20 standard
+    * @param _token ERC20 token address
     * @param _tokensAmount Amount of tokens to be claimed
     * @param _feeToken Fee token address (0x0 for native token)
     * @param _feeAmount Fee amount
@@ -88,7 +88,7 @@ contract LinkdropERC20 is ILinkdropERC20, LinkdropCommon {
     /**
     * @dev Function to verify claim params
     * @param _nativeTokensAmount Amount of native tokens to be claimed
-    * @param _token Token address
+    * @param _token ERC20 token address
     * @param _tokensAmount Amount of tokens to be claimed
     * @param _feeToken Fee token address (0x0 for native token)
     * @param _feeAmount Fee amount
@@ -130,7 +130,7 @@ contract LinkdropERC20 is ILinkdropERC20, LinkdropCommon {
         require(!isCanceledLink(_linkId), "LINK_CANCELED");
 
         // Make sure link is not expired
-        require(_expiration >= now, "LINK_EXPIRED");
+        require(_expiration >= now, "LINK_EXPIRED"); //solium-disable-line security/no-block-members
 
         // If fee is being paid in native tokens
         if (_feeToken == address(0)) {
@@ -189,7 +189,7 @@ contract LinkdropERC20 is ILinkdropERC20, LinkdropCommon {
     /**
     * @dev Function to claim native tokens and/or ERC20 tokens. Can only be called when contract is not paused
     * @param _nativeTokensAmount Amount of native tokens to be claimed
-    * @param _token Token address
+    * @param _token ERC20 token address
     * @param _tokenAmount Amount of tokens to be claimed
     * @param _feeToken Fee token address (0x0 for native token)
     * @param _feeAmount Fee amount
@@ -245,7 +245,20 @@ contract LinkdropERC20 is ILinkdropERC20, LinkdropCommon {
         claimedTo[_linkId] = _receiver;
 
         // Make sure transfer succeeds
-        require(_transferFunds(_nativeTokensAmount, _token, _tokensAmount, _feeToken, _feeAmount, _feeReceiver, _receiver), "TRANSFER_FAILED");
+        require
+        (
+            _transferFunds
+            (
+                _nativeTokensAmount,
+                _token,
+                _tokensAmount,
+                _feeToken,
+                _feeAmount,
+                _feeReceiver == address(0) ? tx.origin : _feeReceiver, //solium-disable-line security/no-tx-origin
+                _receiver
+            ),
+            "TRANSFER_FAILED"
+        );
 
         // Emit claim event
         emit Claimed(_linkId, _nativeTokensAmount, _token, _tokensAmount, _feeToken, _feeAmount, _feeReceiver, _receiver);
@@ -254,7 +267,7 @@ contract LinkdropERC20 is ILinkdropERC20, LinkdropCommon {
     }
 
     /**
-    * @dev Internal function to transfer native tokens and/or ERC20 tokens
+    * @dev Internal function to handle linkdrop and fee transfer
     * @param _nativeTokensAmount Amount of native tokens to be claimed
     * @param _token Token address
     * @param _tokenAmount Amount of ERC20 tokens to be claimed

@@ -3,110 +3,114 @@ pragma solidity ^0.5.6;
 import "../interfaces/ILinkdropERC20.sol";
 import "../interfaces/ILinkdropFactoryERC20.sol";
 import "./LinkdropFactoryCommon.sol";
-import "openzeppelin-solidity/contracts/token/ERC20/IERC20.sol";
+import "openzeppelin-solidity/token/ERC20/IERC20.sol";
 
 contract LinkdropFactoryERC20 is ILinkdropFactoryERC20, LinkdropFactoryCommon {
 
     /**
-    * @dev Function to verify claim params, make sure the link is not claimed or canceled and proxy has sufficient balance
-    * @param _weiAmount Amount of wei to be claimed
-    * @param _tokenAddress Token address
-    * @param _tokenAmount Amount of tokens to be claimed (in atomic value)
+    * @dev Function to verify claim params
+    * @param _nativeTokensAmount Amount of native tokens to be claimed
+    * @param _token Token address
+    * @param _tokensAmount Amount of ERC20 tokens to be claimed
+    * @param _feeToken Fee token address (0x0 for native token)
+    * @param _feeAmount Fee amount
+    * @param _feeReceiver Fee receiver address
     * @param _expiration Unix timestamp of link expiration time
     * @param _linkId Address corresponding to link key
-    * @param _linkdropMaster Address corresponding to linkdrop master key
-    * @param _campaignId Campaign id
-    * @param _linkdropSignerSignature ECDSA signature of linkdrop signer
+    * @param _signerSignature ECDSA signature of linkdrop signer
     * @param _receiver Address of linkdrop receiver
     * @param _receiverSignature ECDSA signature of linkdrop receiver
+    * @param _linkdropContract Linkdrop contract address
     * @return True if success
     */
     function checkClaimParams
     (
-        uint _weiAmount,
-        address _tokenAddress,
+        uint _nativeTokensAmount,
+        address _token,
         uint _tokenAmount,
+        address _feeToken,
+        uint _feeAmount,
+        address payable _feeReceiver,
         uint _expiration,
         address _linkId,
-        address payable _linkdropMaster,
-        uint _campaignId,
-        bytes memory _linkdropSignerSignature,
-        address _receiver,
-        bytes memory _receiverSignature
+        bytes memory _signerSignature,
+        address payable _receiver,
+        bytes memory _receiverSignature,
+        address _linkdropContract
     )
     public view
     returns (bool)
     {
         // Make sure proxy contract is deployed
-        require(isDeployed(_linkdropMaster, _campaignId), "LINKDROP_PROXY_CONTRACT_NOT_DEPLOYED");
+        require(isDeployed(_linkdropContract), "LINKDROP_PROXY_CONTRACT_NOT_DEPLOYED");
 
-        uint fee = fees[deployed[salt(_linkdropMaster, _campaignId)]];
-
-        return ILinkdropERC20(deployed[salt(_linkdropMaster, _campaignId)]).checkClaimParams
+        return ILinkdropERC20(_linkdropContract).checkClaimParams
         (
-            _weiAmount,
-            _tokenAddress,
-            _tokenAmount,
+            _nativeTokensAmount,
+            _token,
+            _tokensAmount,
+            _feeToken,
+            _feeAmount,
+            _feeReceiver,
             _expiration,
             _linkId,
-            _linkdropSignerSignature,
+            _signerSignature,
             _receiver,
-            _receiverSignature,
-            fee
+            _receiverSignature
         );
     }
 
     /**
-    * @dev Function to claim ETH and/or ERC20 tokens
-    * @param _weiAmount Amount of wei to be claimed
-    * @param _tokenAddress Token address
-    * @param _tokenAmount Amount of tokens to be claimed (in atomic value)
-    * @param _expiration Unix timestamp of link expiration time
+    * @dev Function to claim native tokens and/or ERC20 tokens
+    * @param _nativeTokensAmount Amount of native tokens to be claimed
+    * @param _token ERC20 token address
+    * @param _tokensAmount Amount of tokens to be claimed (in atomic value)
+    * @param _feeToken Fee token (0x0 for native token)
+    * @param _feeAmount Fee amount
+    * @param _feeReceiver Fee receiver address
+    * @param _expiration Link expiration unix timestamp
     * @param _linkId Address corresponding to link key
-    * @param _linkdropMaster Address corresponding to linkdrop master key
-    * @param _campaignId Campaign id
-    * @param _linkdropSignerSignature ECDSA signature of linkdrop signer
+    * @param _signerSignature ECDSA signature of linkdrop signer
     * @param _receiver Address of linkdrop receiver
     * @param _receiverSignature ECDSA signature of linkdrop receiver
+    * @param _linkdropContract Linkdrop contract address
     * @return True if success
     */
     function claim
-    (
-        uint _weiAmount,
-        address _tokenAddress,
+       (
+        uint _nativeTokensAmount,
+        address _token,
         uint _tokenAmount,
+        address _feeToken,
+        uint _feeAmount,
+        address payable _feeReceiver,
         uint _expiration,
         address _linkId,
-        address payable _linkdropMaster,
-        uint _campaignId,
-        bytes calldata _linkdropSignerSignature,
+        bytes memory _signerSignature,
         address payable _receiver,
-        bytes calldata _receiverSignature
+        bytes memory _receiverSignature,
+        address _linkdropContract
     )
     external
     returns (bool)
     {
         // Make sure proxy contract is deployed
-        require(isDeployed(_linkdropMaster, _campaignId), "LINKDROP_PROXY_CONTRACT_NOT_DEPLOYED");
-
-        // Make sure only whitelisted relayer calls this function
-        require(isRelayer[msg.sender], "ONLY_RELAYER");
-
-        uint fee = fees[deployed[salt(_linkdropMaster, _campaignId)]];
+        require(isDeployed(_linkdropContract), "LINKDROP_PROXY_CONTRACT_NOT_DEPLOYED");
 
         // Call claim function in the context of proxy contract
-        ILinkdropERC20(deployed[salt(_linkdropMaster, _campaignId)]).claim
+        ILinkdropERC20(_linkdropContract).claim
         (
-            _weiAmount,
-            _tokenAddress,
-            _tokenAmount,
+            _nativeTokensAmount,
+            _token,
+            _tokensAmount,
+            _feeToken,
+            _feeAmount,
+            _feeReceiver,
             _expiration,
             _linkId,
-            _linkdropSignerSignature,
+            _signerSignature,
             _receiver,
-            _receiverSignature,
-            msg.sender, // Fee receiver
-            fee
+            _receiverSignature
         );
 
         return true;

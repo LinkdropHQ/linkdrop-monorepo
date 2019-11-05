@@ -3,7 +3,7 @@ pragma solidity ^0.5.6;
 import "./LinkdropFactoryERC20.sol";
 import "./LinkdropFactoryERC721.sol";
 
-contract LinkdropFactory is LinkdropFactoryERC20, LinkdropFactoryERC721 {
+contract LinkdropFactory is LinkdropFactoryERC20 {
 
     /**
     * @dev Constructor that sets bootstap initcode, factory owner, chainId and master copy
