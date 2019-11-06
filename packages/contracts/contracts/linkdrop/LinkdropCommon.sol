@@ -1,15 +1,17 @@
 pragma solidity ^0.5.6;
+pragma experimental ABIEncoderV2;
 
 import "../interfaces/ILinkdropCommon.sol";
 import "../storage/LinkdropStorage.sol";
-import "openzeppelin-solidity/cryptography/ECDSA.sol";
-import "openzeppelin-solidity/math/SafeMath.sol";
-import "openzeppelin-solidity/utils/ReentrancyGuard.sol";
-import "openzeppelin-solidity/utils/Address.sol";
+import "@openzeppelin/contracts/cryptography/ECDSA.sol";
+import "@openzeppelin/contracts/math/SafeMath.sol";
+import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
+import "@openzeppelin/contracts/utils/Address.sol";
 
 contract LinkdropCommon is ILinkdropCommon, LinkdropStorage, ReentrancyGuard {
 
     using Address for address payable;
+    using Address for address;
 
     /**
     * @dev Function called only once to set owner, sender, contract version and chain id
@@ -21,7 +23,7 @@ contract LinkdropCommon is ILinkdropCommon, LinkdropStorage, ReentrancyGuard {
     function initialize
     (
         address _owner,
-        address payable _sender,
+        address _sender,
         uint _version,
         uint _chainId
     )
@@ -101,7 +103,7 @@ contract LinkdropCommon is ILinkdropCommon, LinkdropStorage, ReentrancyGuard {
     * @return True if success
     */
     function withdraw() external onlySender nonReentrant returns (bool) {
-        sender.sendValue(address(this).balance);
+        sender.toPayable().sendValue(address(this).balance);
         return true;
     }
 
@@ -153,7 +155,7 @@ contract LinkdropCommon is ILinkdropCommon, LinkdropStorage, ReentrancyGuard {
     * Withdraws all the remaining eth to sender
     */
     function destroy() external onlySenderOrFactory {
-        selfdestruct(sender);
+        selfdestruct(sender.toPayable());
     }
 
     /**

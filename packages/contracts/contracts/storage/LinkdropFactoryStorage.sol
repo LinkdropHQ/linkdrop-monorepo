@@ -18,8 +18,8 @@ contract LinkdropFactoryStorage is Ownable {
     mapping (address => bool) internal _isDeployed;
 
     // Events
-    event Deployed(address payable indexed owner, uint campaignId, address payable proxy, bytes32 salt);
-    event Destroyed(address payable owner, address payable proxy);
+    event Deployed(address indexed sender, uint campaignId, address payable proxy, bytes32 salt);
+    event Destroyed(address payable sender, address payable proxy);
     event SetMasterCopy(address masterCopy, uint version);
 
 }

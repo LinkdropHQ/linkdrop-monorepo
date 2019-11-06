@@ -1,6 +1,8 @@
 /* global describe, before, it */
 
 import chai from 'chai'
+import { ethers } from 'ethers'
+import { AddressZero } from 'ethers/contract'
 
 import {
   createMockProvider,
@@ -9,9 +11,10 @@ import {
   solidity
 } from 'ethereum-waffle'
 
-import LinkdropFactory from '../build/LinkdropFactory'
-import LinkdropMastercopy from '../build/LinkdropMastercopy'
-import TokenMock from '../build/TokenMock'
+import LinkdropFactory from '../build/LinkdropFactory.json'
+import LinkdropMastercopy from '../build/LinkdropMastercopy.json'
+console.log('LinkdropMastercopy1: ', LinkdropMastercopy);
+import TokenMock from '../build/TokenMock.json'
 
 import {
   computeProxyAddress,
@@ -20,7 +23,7 @@ import {
   computeBytecode
 } from '../scripts/utils'
 
-const ethers = require('ethers')
+console.log('LinkdropMastercopy: ', LinkdropMastercopy.bytecode)
 
 // Turn off annoying warnings
 ethers.errors.setLogLevel('error')
@@ -28,11 +31,9 @@ ethers.errors.setLogLevel('error')
 chai.use(solidity)
 const { expect } = chai
 
-let provider = createMockProvider()
+const provider = createMockProvider()
 
-let [linkdropMaster, receiver, nonsender, linkdropSigner, relayer] = getWallets(
-  provider
-)
+let [sender, receiver, nonsender, signer, relayer] = getWallets(provider)
 
 let masterCopy
 let factory
@@ -51,27 +52,31 @@ let version
 let bytecode
 
 const campaignId = 0
-let standardFee
+
+const feeToken = AddressZero // Native token
+const feeAmount = 2e15
+const feeReceiver = AddressZero // So that tx.origin will get fee
 
 const initcode = '0x6352c7420d6000526103ff60206004601c335afa6040516060f3'
 const chainId = 4 // Rinkeby
 
 describe('ETH/ERC20 linkdrop tests', () => {
   before(async () => {
-    tokenInstance = await deployContract(linkdropMaster, TokenMock)
+    tokenInstance = await deployContract(sender, TokenMock.bytecode)
   })
 
   it('should deploy master copy of linkdrop implementation', async () => {
-    masterCopy = await deployContract(linkdropMaster, LinkdropMastercopy, [], {
+    masterCopy = await deployContract(sender, LinkdropMastercopy, [], {
       gasLimit: 6000000
     })
-    expect(masterCopy.address).to.not.eq(ethers.constants.AddressZero)
+    console.log('masterCopy: ', masterCopy)
+    // expect(masterCopy.address).to.not.eq(ethers.constants.AddressZero)
   })
 
   it('should deploy factory', async () => {
     bytecode = computeBytecode(masterCopy.address)
     factory = await deployContract(
-      linkdropMaster,
+      sender,
       LinkdropFactory,
       [masterCopy.address, chainId],
       {
@@ -80,20 +85,14 @@ describe('ETH/ERC20 linkdrop tests', () => {
     )
 
     expect(factory.address).to.not.eq(ethers.constants.AddressZero)
-    let version = await factory.masterCopyVersion()
+    const version = await factory.masterCopyVersion()
     expect(version).to.eq(1)
-
-    await factory.addRelayer(relayer.address)
-    const isWhitelisted = await factory.isRelayer(relayer.address)
-    expect(isWhitelisted).to.be.true
-    standardFee = await factory.standardFee()
   })
 
   it('should deploy proxy and delegate to implementation', async () => {
-    // Compute next address with js function
     proxyAddress = computeProxyAddress(
       factory.address,
-      linkdropMaster.address,
+      sender.address,
       campaignId,
       initcode
     )
@@ -104,22 +103,18 @@ describe('ETH/ERC20 linkdrop tests', () => {
       })
     ).to.emit(factory, 'Deployed')
 
-    proxy = new ethers.Contract(
-      proxyAddress,
-      LinkdropMastercopy.abi,
-      linkdropMaster
-    )
+    proxy = new ethers.Contract(proxyAddress, LinkdropMastercopy.abi, sender)
 
-    let linkdropMasterAddress = await proxy.linkdropMaster()
-    expect(linkdropMasterAddress).to.eq(linkdropMaster.address)
+    const senderAddress = await proxy.sender()
+    expect(senderAddress).to.eq(sender.address)
 
-    let version = await proxy.version()
+    const version = await proxy.version()
     expect(version).to.eq(1)
 
-    let owner = await proxy.owner()
+    const owner = await proxy.owner()
     expect(owner).to.eq(factory.address)
 
-    await linkdropMaster.sendTransaction({
+    await sender.sendTransaction({
       to: proxy.address,
       value: ethers.utils.parseEther('2')
     })

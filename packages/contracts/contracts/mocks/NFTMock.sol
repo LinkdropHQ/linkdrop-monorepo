@@ -1,5 +1,5 @@
 pragma solidity ^0.5.1;
-import "openzeppelin-solidity/contracts/token/ERC721/ERC721Metadata.sol";
+import "@openzeppelin/contracts/token/ERC721/ERC721Metadata.sol";
 
 contract NFTMock is ERC721Metadata {
 

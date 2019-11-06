@@ -1,11 +1,12 @@
-pragma solidity ^0.5.6;
+pragma solidity ^0.5.10;
+pragma experimental ABIEncoderV2;
 
 interface ILinkdropCommon {
 
     function initialize
     (
         address _owner,
-        address payable _linkdropMaster,
+        address _sender,
         uint _version,
         uint _chainId
     )

@@ -1,58 +1,48 @@
-pragma solidity ^0.5.6;
+pragma solidity ^0.5.10;
+pragma experimental ABIEncoderV2;
 
-interface ILinkdropERC20 {
+contract ILinkdropERC20 {
+
+    struct LinkParams {
+        address token;
+        address feeToken;
+        address feeReceiver;
+        address linkId;
+        uint nativeTokensAmount;
+        uint tokensAmount;
+        uint feeAmount;
+        uint expiration;
+        bytes signerSignature;
+    }
 
     function verifySignerSignature
     (
-        uint _nativeTokensAmount,
-        address _token,
-        uint _tokensAmount,
-        address _feeToken,
-        uint _feeAmount,
-        uint _expiration,
-        address _linkId,
-        bytes calldata _signerSignature
+        LinkParams memory _link
     )
-    external view returns (bool);
+    public view returns (bool);
 
     function verifyReceiverSignature
     (
         address _linkId,
-	    address _receiver,
+	    address payable _receiver,
 		bytes calldata _receiverSignature
     )
     external view returns (bool);
 
     function checkClaimParams
     (
-        uint _nativeTokensAmount,
-        address _token,
-        uint _tokensAmount,
-        address _feeToken,
-        uint _feeAmount,
-        address _feeReceiver,
-        uint _expiration,
-        address _linkId,
-        bytes calldata _signerSignature,
-        address _receiver,
-        bytes calldata _receiverSignature
+        LinkParams memory _link,
+        address payable _receiver,
+        bytes memory _receiverSignature
     )
-    external view returns (bool);
+    public view returns (bool);
 
     function claim
     (
-        uint _nativeTokensAmount,
-        address _token,
-        uint _tokensAmount,
-        address _feeToken,
-        uint _feeAmount,
-        address _feeReceiver,
-        uint _expiration,
-        address _linkId,
-        bytes calldata _signerSignature,
-        address _receiver,
-        bytes calldata _receiverSignature
+        LinkParams memory _link,
+        address payable _receiver,
+        bytes memory _receiverSignature
     )
-    external returns (bool);
+    public returns (bool);
 
 }

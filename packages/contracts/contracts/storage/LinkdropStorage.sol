@@ -1,12 +1,36 @@
-pragma solidity ^0.5.6;
+pragma solidity ^0.5.10;
+pragma experimental ABIEncoderV2;
 
 contract LinkdropStorage {
+
+    // /*
+    // * @param _nativeTokensAmount Amount of native tokens to be claimed
+    // * @param _token ERC20 token address
+    // * @param _tokensAmount Amount of tokens to be claimed
+    // * @param _feeToken Fee token address (0x0 for native token)
+    // * @param _feeAmount Fee amount
+    // * @param _feeReceiver Fee receiver address
+    // * @param _expiration Link expiration unix timestamp
+    // * @param _linkId Address corresponding to link key
+    // * @param _signerSignature ECDSA signature of linkdrop signer
+    // */
+    struct LinkParams {
+        address token;
+        address feeToken;
+        address feeReceiver;
+        address linkId;
+        uint nativeTokensAmount;
+        uint tokensAmount;
+        uint feeAmount;
+        uint expiration;
+        bytes signerSignature;
+    }
 
     // Owner address (factory)
     address public owner;
 
     // Sender address
-    address payable public sender;
+    address public sender;
 
     // Mastercopy version
     uint public version;
@@ -31,7 +55,8 @@ contract LinkdropStorage {
 
     // Events
     event Canceled(address linkId);
-    event Claimed(address indexed linkId, uint ethAmount, address indexed token, uint tokenAmount, address receiver);
+
+    event Claimed(address indexed linkId, LinkParams linkParams);
     event ClaimedERC721(address indexed linkId, uint ethAmount, address indexed nft, uint tokenId, address receiver);
     event Paused();
     event Unpaused();

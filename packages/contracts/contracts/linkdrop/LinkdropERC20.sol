@@ -1,41 +1,36 @@
 pragma solidity ^0.5.6;
+pragma experimental ABIEncoderV2;
 
-import "openzeppelin-solidity/token/ERC20/IERC20.sol";
-import "../interfaces/ILinkdropERC20.sol";
+//import "../interfaces/ILinkdropERC20.sol";
 import "./LinkdropCommon.sol";
-import "openzeppelin-solidity/utils/ReentrancyGuard.sol";
-import "openzeppelin-solidity/utils/Address.sol";
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
+import "@openzeppelin/contracts/utils/Address.sol";
 
 
-contract LinkdropERC20 is ILinkdropERC20, LinkdropCommon {
+contract LinkdropERC20 is LinkdropCommon {
 
     using SafeMath for uint;
     using Address for address payable;
+    using Address for address;
 
-    /**
-    * @dev Function to verify linkdrop signer's signature
-    * @param _nativeTokensAmount Amount of native tokens to be claimed
-    * @param _token ERC20 token address
-    * @param _tokensAmount Amount of tokens to be claimed
-    * @param _feeToken Fee token address (0x0 for native token)
-    * @param _feeAmount Fee amount
-    * @param _feeReceiver Fee receiver address
-    * @param _expiration Link expiration unix timestamp
-    * @param _linkId Address corresponding to link key
-    * @param _signerSignature ECDSA signature of linkdrop signer
-    * @return True if signed with valid signer's private key
-    */
+
+    // /**
+    // * @dev Function to verify linkdrop signer's signature
+    // * @param _nativeTokensAmount Amount of native tokens to be claimed
+    // * @param _token ERC20 token address
+    // * @param _tokensAmount Amount of tokens to be claimed
+    // * @param _feeToken Fee token address (0x0 for native token)
+    // * @param _feeAmount Fee amount
+    // * @param _feeReceiver Fee receiver address
+    // * @param _expiration Link expiration unix timestamp
+    // * @param _linkId Address corresponding to link key
+    // * @param _signerSignature ECDSA signature of linkdrop signer
+    // * @return True if signed with valid signer's private key
+    // */
     function verifySignerSignature
     (
-        uint _nativeTokensAmount,
-        address _token,
-        uint _tokensAmount,
-        address _feeToken,
-        uint _feeAmount,
-        address payable _feeReceiver,
-        uint _expiration,
-        address _linkId,
-        bytes memory _signerSignature
+        LinkParams memory _linkParams
     )
     public view
     returns (bool)
@@ -46,21 +41,21 @@ contract LinkdropERC20 is ILinkdropERC20, LinkdropCommon {
             (
                 abi.encodePacked
                 (
-                    _nativeTokensAmount,
-                    _token,
-                    _tokensAmount,
-                    _feeToken,
-                    _feeAmount,
-                    _feeReceiver,
-                    _expiration,
-                    _linkId,
+                    _linkParams.token,
+                    _linkParams.feeToken,
+                    _linkParams.feeReceiver,
+                    _linkParams.linkId,
+                    _linkParams.nativeTokensAmount,
+                    _linkParams.tokensAmount,
+                    _linkParams.feeAmount,
+                    _linkParams.expiration,
                     version,
                     chainId,
                     address(this)
                 )
             )
         );
-        address signer = ECDSA.recover(prefixedHash, _signerSignature);
+        address signer = ECDSA.recover(prefixedHash, _linkParams.signerSignature);
         return isSigner[signer];
     }
 
@@ -74,10 +69,10 @@ contract LinkdropERC20 is ILinkdropERC20, LinkdropCommon {
     function verifyReceiverSignature
     (
         address _linkId,
-        address _receiver,
+        address payable _receiver,
         bytes memory _receiverSignature
     )
-    public view
+    public pure
     returns (bool)
     {
         bytes32 prefixedHash = ECDSA.toEthSignedMessageHash(keccak256(abi.encodePacked(_receiver)));
@@ -85,33 +80,25 @@ contract LinkdropERC20 is ILinkdropERC20, LinkdropCommon {
         return signer == _linkId;
     }
 
-    /**
-    * @dev Function to verify claim params
-    * @param _nativeTokensAmount Amount of native tokens to be claimed
-    * @param _token ERC20 token address
-    * @param _tokensAmount Amount of tokens to be claimed
-    * @param _feeToken Fee token address (0x0 for native token)
-    * @param _feeAmount Fee amount
-    * @param _feeReceiver Fee receiver address
-    * @param _expiration Link expiration unix timestamp
-    * @param _linkId Address corresponding to link key
-    * @param _signerSignature ECDSA signature of linkdrop signer
-    * @param _receiver Linkdrop receiver address
-    * @param _receiverSignature ECDSA signature of linkdrop receiver
-    * @return True if success
-    */
+    // /**
+    // * @dev Function to verify claim params
+    // * @param _nativeTokensAmount Amount of native tokens to be claimed
+    // * @param _token ERC20 token address
+    // * @param _tokensAmount Amount of tokens to be claimed
+    // * @param _feeToken Fee token address (0x0 for native token)
+    // * @param _feeAmount Fee amount
+    // * @param _feeReceiver Fee receiver address
+    // * @param _expiration Link expiration unix timestamp
+    // * @param _linkId Address corresponding to link key
+    // * @param _signerSignature ECDSA signature of linkdrop signer
+    // * @param _receiver Linkdrop receiver address
+    // * @param _receiverSignature ECDSA signature of linkdrop receiver
+    // * @return True if success
+    // */
     function checkClaimParams
     (
-        uint _nativeTokensAmount,
-        address _token,
-        uint _tokensAmount,
-        address _feeToken,
-        uint _feeAmount,
-        address payable _feeReceiver,
-        uint _expiration,
-        address _linkId,
-        bytes memory _signerSignature,
-        address _receiver,
+        LinkParams memory _linkParams,
+        address payable _receiver,
         bytes memory _receiverSignature
     )
     public view
@@ -119,103 +106,80 @@ contract LinkdropERC20 is ILinkdropERC20, LinkdropCommon {
     returns (bool)
     {
         // If tokens are being claimed
-        if (_tokensAmount > 0) {
-            require(_token != address(0), "INVALID_TOKEN_ADDRESS");
+        if (_linkParams.tokensAmount > 0) {
+            require(_linkParams.token != address(0), "INVALID_TOKEN_ADDRESS");
         }
 
         // Make sure link is not claimed
-        require(!isClaimedLink(_linkId), "LINK_CLAIMED");
+        require(!isClaimedLink(_linkParams.linkId), "LINK_CLAIMED");
 
         // Make sure link is not canceled
-        require(!isCanceledLink(_linkId), "LINK_CANCELED");
+        require(!isCanceledLink(_linkParams.linkId), "LINK_CANCELED");
 
         // Make sure link is not expired
-        require(_expiration >= now, "LINK_EXPIRED"); //solium-disable-line security/no-block-members
+        require(_linkParams.expiration >= now, "LINK_EXPIRED"); //solium-disable-line security/no-block-members
 
         // If fee is being paid in native tokens
-        if (_feeToken == address(0)) {
+        if (_linkParams.feeToken == address(0)) {
             // Make sure native tokens amount is enough to cover both linkdrop and fee costs
-            require(address(this).balance >= _nativeTokensAmount.add(_feeAmount), "INSUFFICIENT_NATIVE_TOKENS");
+            require(address(this).balance >= _linkParams.nativeTokensAmount.add(_linkParams.feeAmount), "INSUFFICIENT_NATIVE_TOKENS");
         }
         // If fee is being paid in ERC20 tokens
         else {
-            require(address(this).balance >= _nativeTokensAmount, "INSUFFICIENT_NATIVE_TOKENS");
-            require(IERC20(_feeToken).balanceOf(sender) >= _feeAmount,"INSUFFICIENT_FEE_TOKENS");
-            require(IERC20(_feeToken).allowance(sender, address(this)) >= _feeAmount, "INSUFFICIENT_FEE_TOKENS_ALLOWANCE");
+            require(address(this).balance >= _linkParams.nativeTokensAmount, "INSUFFICIENT_NATIVE_TOKENS");
+            require(IERC20(_linkParams.feeToken).balanceOf(sender) >= _linkParams.feeAmount,"INSUFFICIENT_FEE_TOKENS");
+            require(IERC20(_linkParams.feeToken).allowance(sender, address(this)) >= _linkParams.feeAmount, "INSUFFICIENT_FEE_TOKENS_ALLOWANCE");
         }
 
         // Make sure tokens are available for this contract
-        if (_token != address(0)) {
+        if (_linkParams.token != address(0)) {
             require
             (
-                IERC20(_token).balanceOf(sender) >= _tokensAmount,
+                IERC20(_linkParams.token).balanceOf(sender) >= _linkParams.tokensAmount,
                 "INSUFFICIENT_TOKENS"
             );
 
             require
             (
-                IERC20(_token).allowance(sender, address(this)) >= _tokensAmount, "INSUFFICIENT_TOKENS_ALLOWANCE"
+                IERC20(_linkParams.token).allowance(sender, address(this)) >= _linkParams.tokensAmount, "INSUFFICIENT_TOKENS_ALLOWANCE"
             );
         }
 
-        // Verify that link key is legit and signed by valid signing key
-        require
-        (
-            verifySignerSignature
-            (
-                _nativeTokensAmount,
-                _token,
-                _tokensAmount,
-                _feeToken,
-                _feeAmount,
-                _feeReceiver,
-                _expiration,
-                _linkId,
-                _signerSignature
-            ),
-            "INVALID_SIGNER_SIGNATURE"
-        );
+        // Verify that link params are signed by valid signing key
+        require(verifySignerSignature(_linkParams), "INVALID_SIGNER_SIGNATURE");
 
         // Verify that receiver address is signed by ephemeral link key
         require
         (
-            verifyReceiverSignature(_linkId, _receiver, _receiverSignature),
+            verifyReceiverSignature(_linkParams.linkId, _receiver, _receiverSignature),
             "INVALID_RECEIVER_SIGNATURE"
         );
 
         return true;
     }
 
-    /**
-    * @dev Function to claim native tokens and/or ERC20 tokens. Can only be called when contract is not paused
-    * @param _nativeTokensAmount Amount of native tokens to be claimed
-    * @param _token ERC20 token address
-    * @param _tokenAmount Amount of tokens to be claimed
-    * @param _feeToken Fee token address (0x0 for native token)
-    * @param _feeAmount Fee amount
-    * @param _feeReceiver Fee receiver address
-    * @param _expiration Link expiration unix timestamp
-    * @param _linkId Address corresponding to link key
-    * @param _signerSignature ECDSA signature of linkdrop signer
-    * @param _receiver Linkdrop receiver address
-    * @param _receiverSignature ECDSA signature of linkdrop receiver
-    * @return True if success
-    */
+    // /**
+    // * @dev Function to claim native tokens and/or ERC20 tokens. Can only be called when contract is not paused
+    // * @param _nativeTokensAmount Amount of native tokens to be claimed
+    // * @param _token ERC20 token address
+    // * @param _tokensAmount Amount of tokens to be claimed
+    // * @param _feeToken Fee token address (0x0 for native token)
+    // * @param _feeAmount Fee amount
+    // * @param _feeReceiver Fee receiver address
+    // * @param _expiration Link expiration unix timestamp
+    // * @param _linkId Address corresponding to link key
+    // * @param _signerSignature ECDSA signature of linkdrop signer
+    // * @param _receiver Linkdrop receiver address
+    // * @param _receiverSignature ECDSA signature of linkdrop receiver
+    // * @return True if success
+    // */
     function claim
     (
-        uint _nativeTokensAmount,
-        address _token,
-        uint _tokensAmount,
-        address _feeToken,
-        uint _feeAmount,
-        address payable _feeReceiver,
-        uint _expiration,
-        address _linkId,
-        bytes memory _signerSignature,
-        address _receiver,
+        LinkParams memory _linkParams,
+        address payable _receiver,
         bytes memory _receiverSignature
     )
-    external
+    public
     whenNotPaused
     nonReentrant
     returns (bool)
@@ -226,15 +190,7 @@ contract LinkdropERC20 is ILinkdropERC20, LinkdropCommon {
         (
             checkClaimParams
             (
-                _nativeTokensAmount,
-                _token,
-                _tokensAmount,
-                _feeToken,
-                _feeAmount,
-                _feeReceiver,
-                _expiration,
-                _linkId,
-                _signerSignature,
+                _linkParams,
                 _receiver,
                 _receiverSignature
             ),
@@ -242,26 +198,26 @@ contract LinkdropERC20 is ILinkdropERC20, LinkdropCommon {
         );
 
         // Mark link as claimed
-        claimedTo[_linkId] = _receiver;
+        claimedTo[_linkParams.linkId] = _receiver;
 
         // Make sure transfer succeeds
         require
         (
             _transferFunds
             (
-                _nativeTokensAmount,
-                _token,
-                _tokensAmount,
-                _feeToken,
-                _feeAmount,
-                _feeReceiver == address(0) ? tx.origin : _feeReceiver, //solium-disable-line security/no-tx-origin
+                _linkParams.nativeTokensAmount,
+                _linkParams.token,
+                _linkParams.tokensAmount,
+                _linkParams.feeToken,
+                _linkParams.feeAmount,
+                _linkParams.feeReceiver == address(0) ? tx.origin : _linkParams.feeReceiver.toPayable(), //solium-disable-line security/no-tx-origin
                 _receiver
             ),
             "TRANSFER_FAILED"
         );
 
         // Emit claim event
-        emit Claimed(_linkId, _nativeTokensAmount, _token, _tokensAmount, _feeToken, _feeAmount, _feeReceiver, _receiver);
+        emit Claimed(_linkParams.linkId, _linkParams);
 
         return true;
     }
@@ -270,7 +226,7 @@ contract LinkdropERC20 is ILinkdropERC20, LinkdropCommon {
     * @dev Internal function to handle linkdrop and fee transfer
     * @param _nativeTokensAmount Amount of native tokens to be claimed
     * @param _token Token address
-    * @param _tokenAmount Amount of ERC20 tokens to be claimed
+    * @param _tokensAmount Amount of ERC20 tokens to be claimed
     * @param _feeToken Fee token address (0x0 for native token)
     * @param _feeAmount Fee amount
     * @param _feeReceiver Fee receiver address
@@ -281,7 +237,7 @@ contract LinkdropERC20 is ILinkdropERC20, LinkdropCommon {
     (
         uint _nativeTokensAmount,
         address _token,
-        uint _tokenAmount,
+        uint _tokensAmount,
         address _feeToken,
         uint _feeAmount,
         address payable _feeReceiver,
@@ -292,7 +248,7 @@ contract LinkdropERC20 is ILinkdropERC20, LinkdropCommon {
         // Transfer fee
         if (_feeAmount > 0) {
             if (_feeToken == address(0)) {
-                _feeReceiver.sendValue(_fee);
+                _feeReceiver.sendValue(_feeAmount);
             }
             else {
                 IERC20(_feeToken).transferFrom(sender, _feeReceiver, _feeAmount);
