@@ -37,7 +37,7 @@
     "core-js": "2.6.5",
     "cross-env": "5.0.5",
     "css-loader": "^0.28.0",
-    "ethereum-waffle": "^2.0.12",
+    "ethereum-waffle": "^2.0.16",
     "i18next": "^8.4.3",
     "immutable": "^3.8.1",
     "json-loader": "^0.5.7",

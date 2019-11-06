@@ -13,9 +13,8 @@
   "dependencies": {
     "@linkdrop/sdk": "^1.0.88",
     "@openzeppelin/contracts": "^2.4.0",
-    "ethereum-waffle": "^2.0.14",
+    "ethereum-waffle": "2.0.16",
     "ethers": "^4.0.27",
-    "openzeppelin-solidity": "^2.4.0",
     "solc": "^0.5.12"
   },
   "devDependencies": {

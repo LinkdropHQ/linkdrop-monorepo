@@ -35,7 +35,7 @@
     "cross-env": "5.0.5",
     "css-loader": "^0.28.0",
     "debounce": "^1.2.0",
-    "ethereum-waffle": "^2.0.12",
+    "ethereum-waffle": "^2.0.16",
     "ethereumjs-wallet": "^0.6.3",
     "ethers": "^4.0.27",
     "express": "^4.16.4",

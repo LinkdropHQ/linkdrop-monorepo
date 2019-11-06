@@ -1,33 +1,73 @@
-pragma solidity ^0.5.6;
+pragma solidity ^0.5.12;
 
-import "../storage/LinkdropFactoryStorage.sol";
-import "../interfaces/ILinkdropCommon.sol";
 import "@openzeppelin/contracts/cryptography/ECDSA.sol";
 import "@openzeppelin/contracts/math/SafeMath.sol";
+import "@openzeppelin/contracts/ownership/Ownable.sol";
 import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/utils/Address.sol";
+import "../interfaces/ILinkdropCommon.sol";
 
-contract LinkdropFactoryCommon is LinkdropFactoryStorage, ReentrancyGuard {
+contract LinkdropFactoryCommon is Ownable, ReentrancyGuard {
 
     using SafeMath for uint;
     using Address for address;
     using Address for address payable;
 
-    // /**
-    // * @dev Indicates whether a campaign proxy contract for sender is deployed or not
-    // * @param _sender Sender address
-    // * @param _campaignId Campaign id
-    // * @return True if deployed
-    // */
-    // function isDeployed(address _sender, uint _campaignId) public view returns (bool) {
-    //     return _isDeployed[getProxyAddress(_sender, _campaignId)];
-    // }
+    // Current version of mastercopy contract
+    uint public masterCopyVersion;
 
-    function isDeployed(address _linkdropContract) public view returns (bool) {
+    // Contract bytecode to be installed when deploying proxy
+    bytes internal _bytecode;
+
+    // Bootstrap initcode to fetch the actual contract bytecode. Used to generate repeatable contract addresses
+    bytes internal _initcode;
+
+    // Network id
+    uint public chainId;
+
+    // Is proxy contract deployed
+    mapping (address => bool) internal _isDeployed;
+
+    // Events
+    event Deployed(address indexed sender, uint campaignId, address indexed proxy, bytes32 salt);
+    event Destroyed(address indexed sender, address indexed proxy);
+    event SetMasterCopy(address masterCopy, uint indexed version);
+
+    /**
+    * @dev Indicates whether a campaign proxy contract for sender is deployed or not
+    * @param _sender Sender address
+    * @param _campaignId Campaign id
+    * @return True if deployed
+    */
+    function isDeployed(address _sender, uint _campaignId)
+    public view
+    returns (bool)
+    {
+        return _isDeployed[getProxyAddress(_sender, _campaignId)];
+    }
+
+    /**
+    * @dev Indicates whether a linkdrop contract deployed or not
+    * @param _linkdropContract Linkdrop contract address
+    * @return True if deployed
+    */
+    function isDeployed(address _linkdropContract)
+    public view
+    returns (bool)
+    {
         return _isDeployed[_linkdropContract];
     }
 
-    function getProxyAddress(address _sender, uint _campaignId) public view returns (address payable proxy) {
+    /**
+    * @dev Function to precompute campaign proxy address for sender
+    * @param _sender Linkdrop sender address
+    * @param _campaignId Campaign id
+    * @return Proxy address
+    */
+    function getProxyAddress(address _sender, uint _campaignId)
+    public view
+    returns (address payable proxy)
+    {
         bytes32 temp = keccak256(abi.encodePacked
         (
             bytes1(0xff),
@@ -49,8 +89,10 @@ contract LinkdropFactoryCommon is LinkdropFactoryStorage, ReentrancyGuard {
     * @param _linkId Address corresponding to link key
     * @return True if claimed
     */
-    function isClaimedLink(address _sender, uint _campaignId, address _linkId) public view returns (bool) {
-
+    function isClaimedLink(address _sender, uint _campaignId, address _linkId)
+    public view
+    returns (bool)
+    {
         address payable proxy = getProxyAddress(_sender, _campaignId);
 
         if (!isDeployed(proxy)) {
@@ -59,7 +101,6 @@ contract LinkdropFactoryCommon is LinkdropFactoryStorage, ReentrancyGuard {
         else {
             return ILinkdropCommon(proxy).isClaimedLink(_linkId);
         }
-
     }
 
     /**
@@ -68,9 +109,7 @@ contract LinkdropFactoryCommon is LinkdropFactoryStorage, ReentrancyGuard {
     * @return Proxy contract address
     */
     function deployProxy(uint _campaignId)
-    public
-    payable
-    nonReentrant
+    public payable nonReentrant
     returns (address payable proxy)
     {
         proxy = _deployProxy(msg.sender, _campaignId);
@@ -83,9 +122,7 @@ contract LinkdropFactoryCommon is LinkdropFactoryStorage, ReentrancyGuard {
     * @return Proxy contract address
     */
     function deployProxyWithSigner(uint _campaignId, address _signer)
-    public
-    payable
-    nonReentrant
+    public payable nonReentrant
     returns (address payable proxy)
     {
         proxy = _deployProxy(msg.sender, _campaignId);
@@ -102,7 +139,6 @@ contract LinkdropFactoryCommon is LinkdropFactoryStorage, ReentrancyGuard {
     internal
     returns (address payable proxy)
     {
-
         require(!isDeployed(getProxyAddress(_sender, _campaignId)), "LINKDROP_PROXY_CONTRACT_ALREADY_DEPLOYED");
         require(_sender != address(0), "INVALID_SENDER_ADDRESS");
 
@@ -218,7 +254,10 @@ contract LinkdropFactoryCommon is LinkdropFactoryStorage, ReentrancyGuard {
     * @param _campaignId Campaign id
     * @return Master copy version
     */
-    function getProxyMasterCopyVersion(address _sender, uint _campaignId) external view returns (uint) {
+    function getProxyMasterCopyVersion(address _sender, uint _campaignId)
+    external view
+    returns (uint)
+    {
 
         address payable proxy = getProxyAddress(_sender, _campaignId);
 
@@ -231,12 +270,15 @@ contract LinkdropFactoryCommon is LinkdropFactoryStorage, ReentrancyGuard {
     }
 
     /**
-     * @dev Function to hash `_sender` and `_campaignId` params. Used as salt when deploying with create2
+     * @dev Function to hash `_sender` and `_campaignId` params. Used as salt for create2
      * @param _sender Sender address
      * @param _campaignId Campaign id
      * @return Hash of passed arguments
      */
-    function salt(address _sender, uint _campaignId) public pure returns (bytes32) {
+    function salt(address _sender, uint _campaignId)
+    public pure
+    returns (bytes32)
+    {
         return keccak256(abi.encodePacked(_sender, _campaignId));
     }
 
