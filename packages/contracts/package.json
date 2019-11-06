@@ -4,7 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "test": "mocha --require @babel/polyfill --require @babel/register test/LinkdropERC20V2.js",
+    "test": "mocha --require @babel/polyfill --require @babel/register test/LinkdropERC20.js",
     "compile": "npx waffle .waffle"
   },
   "publishConfig": {
@@ -16,7 +16,7 @@
     "ethereum-waffle": "^2.0.14",
     "ethers": "^4.0.27",
     "openzeppelin-solidity": "^2.4.0",
-    "solc": "^0.5.10"
+    "solc": "^0.5.12"
   },
   "devDependencies": {
     "@babel/cli": "^7.2.3",

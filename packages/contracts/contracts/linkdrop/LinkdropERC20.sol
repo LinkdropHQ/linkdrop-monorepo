@@ -1,33 +1,23 @@
 pragma solidity ^0.5.6;
 pragma experimental ABIEncoderV2;
 
-//import "../interfaces/ILinkdropERC20.sol";
-import "./LinkdropCommon.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/utils/Address.sol";
-
+import "./LinkdropCommon.sol";
 
 contract LinkdropERC20 is LinkdropCommon {
 
     using SafeMath for uint;
-    using Address for address payable;
-    using Address for address;
+    // using Address for address payable;
+    // using Address for address;
 
 
-    // /**
-    // * @dev Function to verify linkdrop signer's signature
-    // * @param _nativeTokensAmount Amount of native tokens to be claimed
-    // * @param _token ERC20 token address
-    // * @param _tokensAmount Amount of tokens to be claimed
-    // * @param _feeToken Fee token address (0x0 for native token)
-    // * @param _feeAmount Fee amount
-    // * @param _feeReceiver Fee receiver address
-    // * @param _expiration Link expiration unix timestamp
-    // * @param _linkId Address corresponding to link key
-    // * @param _signerSignature ECDSA signature of linkdrop signer
-    // * @return True if signed with valid signer's private key
-    // */
+    /**
+    * @dev Function to verify linkdrop signer's signature
+    * @param _linkParams Link params struct
+    * @return True if signed with valid signer's private key
+    */
     function verifySignerSignature
     (
         LinkParams memory _linkParams
@@ -80,21 +70,13 @@ contract LinkdropERC20 is LinkdropCommon {
         return signer == _linkId;
     }
 
-    // /**
-    // * @dev Function to verify claim params
-    // * @param _nativeTokensAmount Amount of native tokens to be claimed
-    // * @param _token ERC20 token address
-    // * @param _tokensAmount Amount of tokens to be claimed
-    // * @param _feeToken Fee token address (0x0 for native token)
-    // * @param _feeAmount Fee amount
-    // * @param _feeReceiver Fee receiver address
-    // * @param _expiration Link expiration unix timestamp
-    // * @param _linkId Address corresponding to link key
-    // * @param _signerSignature ECDSA signature of linkdrop signer
-    // * @param _receiver Linkdrop receiver address
-    // * @param _receiverSignature ECDSA signature of linkdrop receiver
-    // * @return True if success
-    // */
+    /**
+    * @dev Function to verify claim params
+    * @param _linkParams Link params struct
+    * @param _receiver Linkdrop receiver address
+    * @param _receiverSignature ECDSA signature of linkdrop receiver
+    * @return True if success
+    */
     function checkClaimParams
     (
         LinkParams memory _linkParams,
@@ -158,21 +140,13 @@ contract LinkdropERC20 is LinkdropCommon {
         return true;
     }
 
-    // /**
-    // * @dev Function to claim native tokens and/or ERC20 tokens. Can only be called when contract is not paused
-    // * @param _nativeTokensAmount Amount of native tokens to be claimed
-    // * @param _token ERC20 token address
-    // * @param _tokensAmount Amount of tokens to be claimed
-    // * @param _feeToken Fee token address (0x0 for native token)
-    // * @param _feeAmount Fee amount
-    // * @param _feeReceiver Fee receiver address
-    // * @param _expiration Link expiration unix timestamp
-    // * @param _linkId Address corresponding to link key
-    // * @param _signerSignature ECDSA signature of linkdrop signer
-    // * @param _receiver Linkdrop receiver address
-    // * @param _receiverSignature ECDSA signature of linkdrop receiver
-    // * @return True if success
-    // */
+    /**
+    * @dev Function to claim native tokens and/or ERC20 tokens. Can only be called when contract is not paused
+    * @param _linkParams Link params struct
+    * @param _receiver Linkdrop receiver address
+    * @param _receiverSignature ECDSA signature of linkdrop receiver
+    * @return True if success
+    */
     function claim
     (
         LinkParams memory _linkParams,
