@@ -41,11 +41,11 @@ export default {
     mobile: {
       android: {
         support: true,
-        deepLink: (url) => `https://operacrypto.page.link/?link=${encodeURIComponent(url)}&apn=com.opera.browser`
+        deepLink: (url) => `https://operacrypto.page.link/?link=${encodeURIComponent(url)}&efr=1&apn=com.opera.browser`
       },
       ios: {
         support: true,
-        deepLink: (url) => `https://operacrypto.page.link/?link=${encodeURIComponent(url)}&ibi=com.opera.OperaTouch&isi=1411869974`
+        deepLink: (url) => `https://operacrypto.page.link/?link=${encodeURIComponent(url)}&efr=1&ibi=com.opera.OperaTouch&isi=1411869974`
       }
     }
   },
