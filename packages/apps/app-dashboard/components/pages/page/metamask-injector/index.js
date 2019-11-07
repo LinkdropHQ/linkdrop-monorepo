@@ -4,6 +4,7 @@ import { actions, translate } from 'decorators'
 import { Button } from 'components/common'
 import styles from './styles.module'
 import Web3Connect from 'web3connect'
+import Web3 from 'web3'
 
 @actions(({ campaigns: { items } }) => ({ items }))
 @translate('pages.main')
@@ -22,17 +23,14 @@ class MetamaskInjector extends React.Component {
   }
 
   async applyProvider (provider) {
-    // temp hack for Nifty wallet
-    if (!provider.selectedAddress && web3 && web3.eth && web3.eth.accounts && web3.eth.accounts[0]) {
-      provider.selectedAddress = web3.eth.accounts[0]
-      provider.networkVersion = web3.version.network
-    }
-
-    // TODO: this should be changed as only Metamask suppports `provider.selectedAddress`
-    // better to use web3.eth.getAccounts() or web.eth.accounts[0]
-    // another TODO: don't use web3 as global variable!
-    if (provider.selectedAddress) {
-      this.actions().user.checkCurrentProvider()
+    // // temp hack for Nifty wallet
+    // if (!provider.selectedAddress && web3 && web3.eth && web3.eth.accounts && web3.eth.accounts[0]) {
+    //   provider.selectedAddress = web3.eth.accounts[0]
+    //   provider.networkVersion = web3.version.network
+    // }
+    const web3Provider = new Web3(provider)
+    if (web3Provider) {
+      this.actions().user.checkCurrentProvider({ provider: web3Provider })
     }
   }
 

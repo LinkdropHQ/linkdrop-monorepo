@@ -8,6 +8,7 @@ import config from 'config-dashboard'
 import AllTokensControl from './all-tokens-control'
 import Immutable from 'immutable'
 import { defineDefaultSymbol } from 'helpers'
+import wallets from 'wallets'
 
 @actions(({
   user: {
@@ -46,13 +47,18 @@ class Step1 extends React.Component {
     const assetsPrepared = this.prepareAssets({ assets: props.assetsERC721 })
     const currentAsset = props.assetsERC721.find(asset => asset.address === assetsPrepared[0].value)
     this.defaultSymbol = defineDefaultSymbol({ chainId })
+    this.WALLETS = Object.keys(wallets).map(wallet => ({
+      label: wallets[wallet].name,
+      value: wallet
+    }))
     this.state = {
       options: assetsPrepared,
       ethAmount: 0,
       tokenAddress: currentAsset && currentAsset.address,
       currentIds: currentAsset ? currentAsset.ids : [],
       customTokenAddress: '',
-      addEth: false
+      addEth: false,
+      wallet: this.WALLETS[0].value
     }
   }
 
@@ -80,7 +86,7 @@ class Step1 extends React.Component {
   }
 
   render () {
-    const { currentIds, ethAmount, addEth, tokenAddress, customTokenAddress, options } = this.state
+    const { currentIds, ethAmount, addEth, tokenAddress, customTokenAddress, options, wallet } = this.state
     const { privateKey, proxyAddress, symbol, assetsERC721, loading, tokensLoading } = this.props
     const tokenSymbol = (assetsERC721.find(item => item.address === tokenAddress) || {}).symbol
     return <div className={classNames(styles.container, { [styles.customTokenEnabled]: tokenSymbol === 'ERC20' })}>
@@ -102,6 +108,18 @@ class Step1 extends React.Component {
             />
           </div>
           {this.renderTokenInputs({ addEth, ethAmount, tokenAddress, customTokenAddress })}
+          <div className={styles.chooseWallet}>
+            <h3 className={styles.subtitle}>{this.t('titles.defaultReceiverWallet')}</h3>
+            <Select
+              options={this.WALLETS}
+              value={wallet}
+              onChange={({ value }) => {
+                this.setState({
+                  wallet: value
+                })
+              }}
+            />
+          </div>
         </div>
 
         <div className={styles.summary}>
@@ -126,6 +144,7 @@ class Step1 extends React.Component {
         tokenAmount={1}
         ethAmount={ethAmount}
         linksAmount={currentIds.length}
+        wallet={wallet}
         tokenSymbol={symbol || tokenSymbol}
         tokenType='erc721'
         tokenIds={currentIds}
