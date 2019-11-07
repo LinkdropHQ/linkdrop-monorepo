@@ -1,4 +1,4 @@
-/* global describe, before, it */
+/* global describe, it */
 
 import chai from 'chai'
 import { ethers } from 'ethers'
@@ -12,9 +12,8 @@ import {
 
 import LinkdropFactory from '../build/LinkdropFactory'
 import LinkdropMastercopy from '../build/LinkdropMastercopy'
-import TokenMock from '../build/TokenMock'
 
-import { computeProxyAddress, computeBytecode } from '../scripts/utils'
+import { computeProxyAddress } from '../scripts/utils'
 
 // Turn off annoying warnings
 ethers.errors.setLogLevel('error')
@@ -35,10 +34,6 @@ const initcode = '0x6352c7420d6000526103ff60206004601c335afa6040516060f3'
 const chainId = 4 // Rinkeby
 
 describe('Campaigns tests', () => {
-  before(async () => {
-    tokenInstance = await deployContract(sender, TokenMock)
-  })
-
   it('should deploy master copy of linkdrop implementation', async () => {
     masterCopy = await deployContract(sender, LinkdropMastercopy, [], {
       gasLimit: 6000000
