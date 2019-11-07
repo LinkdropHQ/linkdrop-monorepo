@@ -2,16 +2,11 @@ pragma solidity ^0.5.12;
 pragma experimental ABIEncoderV2;
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
-import "@openzeppelin/contracts/utils/Address.sol";
 import "./LinkdropCommon.sol";
 
 contract LinkdropERC20 is LinkdropCommon {
 
     using SafeMath for uint;
-    // using Address for address payable;
-    // using Address for address;
-
 
     /**
     * @dev Function to verify linkdrop signer's signature
@@ -99,7 +94,7 @@ contract LinkdropERC20 is LinkdropCommon {
         require(!isCanceledLink(_linkParams.linkId), "LINK_CANCELED");
 
         // Make sure link is not expired
-        require(_linkParams.expiration >= now, "LINK_EXPIRED"); //solium-disable-line security/no-block-members
+        require(_linkParams.expiration >= now, "LINK_EXPIRED"); // solium-disable-line security/no-block-members
 
         // If fee is being paid in native tokens
         if (_linkParams.feeToken == address(0)) {
@@ -158,7 +153,6 @@ contract LinkdropERC20 is LinkdropCommon {
     nonReentrant
     returns (bool)
     {
-
         // Make sure params are valid
         require
         (

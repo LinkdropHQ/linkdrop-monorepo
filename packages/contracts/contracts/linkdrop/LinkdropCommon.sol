@@ -35,7 +35,31 @@ contract LinkdropCommon is ILinkdropCommon, ReentrancyGuard {
         bytes signerSignature;
     }
 
-    // Owner address (factory)
+    /**
+     * @param nft ERC721 token address
+     * @param feeToken Fee token (0x0 for native token)
+     * @param feeReceiver Fee receiver address
+     * @param linkId Link id
+     * @param nativeTokensAmount Amount of native tokens
+     * @param tokenId NFT id
+     * @param feeAmount Amount of fee
+     * @param expiration Link expiration unix timestamp
+     * @param signerSignature Signature of lindkrop signer
+     */
+    struct LinkParamsERC721 {
+        address nft;
+        address feeToken;
+        address feeReceiver;
+        address linkId;
+        uint nativeTokensAmount;
+        uint tokenId;
+        uint feeAmount;
+        uint expiration;
+        bytes signerSignature;
+    }
+
+
+    // Owner address
     address public owner;
 
     // Sender address
@@ -65,7 +89,7 @@ contract LinkdropCommon is ILinkdropCommon, ReentrancyGuard {
     // Events
     event Canceled(address indexed linkId);
     event Claimed(address indexed linkId, LinkParams linkParams);
-    event ClaimedERC721(address indexed linkId, uint ethAmount, address indexed nft, uint tokenId, address receiver);
+    event ClaimedERC721(address indexed linkId, LinkParamsERC721 linkParams);
     event Paused();
     event Unpaused();
     event AddedSigningKey(address signer);
@@ -103,13 +127,13 @@ contract LinkdropCommon is ILinkdropCommon, ReentrancyGuard {
         _;
     }
 
-    modifier onlySenderOrFactory() {
-        require (msg.sender == sender || msg.sender == owner, "ONLY_SENDER_OR_FACTORY");
+    modifier onlySenderOrOwner() {
+        require (msg.sender == sender || msg.sender == owner, "ONLY_SENDER_OR_OWNER");
         _;
     }
 
-    modifier onlyFactory() {
-        require(msg.sender == owner, "ONLY_FACTORY");
+    modifier onlyOwner() {
+        require(msg.sender == owner, "ONLY_OWNER");
         _;
     }
 
@@ -187,11 +211,11 @@ contract LinkdropCommon is ILinkdropCommon, ReentrancyGuard {
     }
 
     /**
-    * @dev Function to add new signing key, can only be called by sender or owner (factory contract)
+    * @dev Function to add new signing key, can only be called by sender or owner
     * @param _signer Address corresponding to signing key
     * @return True if success
     */
-    function addSigner(address _signer) external payable onlySenderOrFactory returns (bool) {
+    function addSigner(address _signer) external payable onlySenderOrOwner returns (bool) {
         require(_signer != address(0), "INVALID_SIGNER_ADDRESS");
         isSigner[_signer] = true;
         return true;
@@ -209,10 +233,10 @@ contract LinkdropCommon is ILinkdropCommon, ReentrancyGuard {
     }
 
     /**
-    * @dev Function to destroy this contract, can only be called by owner (factory) or sender
+    * @dev Function to destroy this contract, can only be called by owner or sender
     * Withdraws all the remaining native tokens to sender
     */
-    function destroy() external onlySenderOrFactory {
+    function destroy() external onlySenderOrOwner {
         selfdestruct(sender.toPayable());
     }
 

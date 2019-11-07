@@ -1,11 +1,10 @@
 pragma solidity ^0.5.12;
 
 // import "../interfaces/ILinkdropERC721.sol";
-// import "../interfaces/ILinkdropFactoryERC721.sol";
 // import "./LinkdropFactoryCommon.sol";
 // import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 
-// contract LinkdropFactoryERC721 is ILinkdropFactoryERC721, LinkdropFactoryCommon {
+// contract LinkdropFactoryERC721 is LinkdropFactoryCommon {
 
 //     /**
 //     * @dev Function to verify claim params, make sure the link is not claimed or canceled and proxy is allowed to spend token
