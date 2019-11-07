@@ -11,7 +11,7 @@ import {
 } from 'ethereum-waffle'
 
 import LinkdropFactory from '../build/LinkdropFactory'
-import LinkdropMastercopy from '../build/LinkdropMastercopy'
+import Linkdrop from '../build/Linkdrop'
 
 import { computeBytecode, computeProxyAddress } from '../scripts/utils'
 
@@ -38,7 +38,7 @@ describe('Proxy upgradability tests', () => {
   //
 
   it('should deploy initial master copy of linkdrop implementation', async () => {
-    masterCopy = await deployContract(deployer, LinkdropMastercopy, [], {
+    masterCopy = await deployContract(deployer, Linkdrop, [], {
       gasLimit: 6000000
     })
     expect(masterCopy.address).to.not.eq(ethers.constants.AddressZero)
@@ -102,11 +102,7 @@ describe('Proxy upgradability tests', () => {
       })
     ).to.emit(factory, 'Deployed')
 
-    proxy = new ethers.Contract(
-      expectedAddress,
-      LinkdropMastercopy.abi,
-      deployer
-    )
+    proxy = new ethers.Contract(expectedAddress, Linkdrop.abi, deployer)
 
     const senderAddress = await proxy.sender()
     expect(senderAddress).to.eq(sender.address)
@@ -121,7 +117,7 @@ describe('Proxy upgradability tests', () => {
   it('should deploy second version of mastercopy', async () => {
     const oldMasterCopyAddress = masterCopy.address
 
-    masterCopy = await deployContract(deployer, LinkdropMastercopy, [], {
+    masterCopy = await deployContract(deployer, Linkdrop, [], {
       gasLimit: 6000000
     })
 
@@ -199,11 +195,7 @@ describe('Proxy upgradability tests', () => {
     const factoryVersion = await factory.masterCopyVersion()
     expect(factoryVersion).to.eq(2)
 
-    proxy = new ethers.Contract(
-      computedAddress,
-      LinkdropMastercopy.abi,
-      deployer
-    )
+    proxy = new ethers.Contract(computedAddress, Linkdrop.abi, deployer)
 
     const proxyVersion = await proxy.version()
     expect(proxyVersion).to.eq(factoryVersion)
