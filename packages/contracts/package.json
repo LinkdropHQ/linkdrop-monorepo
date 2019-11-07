@@ -4,7 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "test": "mocha --require @babel/polyfill --require @babel/register test/Upgradeable.js",
+    "test": "mocha --require @babel/polyfill --require @babel/register",
     "compile": "npx waffle .waffle"
   },
   "publishConfig": {

@@ -12,8 +12,9 @@ import {
 } from 'ethereum-waffle'
 
 import LinkdropFactory from '../build/LinkdropFactory.json'
-import LinkdropMastercopy from '../build/LinkdropMastercopy.json'
+import Linkdrop from '../build/Linkdrop.json'
 import TokenMock from '../build/TokenMock.json'
+import NFTMock from '../build/NFTMock'
 
 import {
   computeProxyAddress,
@@ -38,6 +39,7 @@ let factory
 let proxy
 let proxyAddress
 let tokenInstance
+let nftInstance
 
 let link
 let receiverAddress
@@ -54,13 +56,14 @@ const initcode = '0x6352c7420d6000526103ff60206004601c335afa6040516060f3'
 const version = 1
 const chainId = 4 // Rinkeby
 
-describe('ERC20 Linkdrop Tests', () => {
+describe('Linkdrop tests', () => {
   before(async () => {
     tokenInstance = await deployContract(sender, TokenMock)
+    nftInstance = await deployContract(sender, NFTMock)
   })
 
-  it('should deploy master copy of linkdrop implementation', async () => {
-    masterCopy = await deployContract(sender, LinkdropMastercopy, [], {
+  it('should deploy master copy of linkdrop contract', async () => {
+    masterCopy = await deployContract(sender, Linkdrop, [], {
       gasLimit: 6000000
     })
     expect(masterCopy.address).to.not.eq(ethers.constants.AddressZero)
@@ -96,7 +99,7 @@ describe('ERC20 Linkdrop Tests', () => {
       })
     ).to.emit(factory, 'Deployed')
 
-    proxy = new ethers.Contract(proxyAddress, LinkdropMastercopy.abi, sender)
+    proxy = new ethers.Contract(proxyAddress, Linkdrop.abi, sender)
 
     const senderAddress = await proxy.sender()
     expect(senderAddress).to.eq(sender.address)
@@ -148,7 +151,7 @@ describe('ERC20 Linkdrop Tests', () => {
     expect(isSigner).to.eq(false)
   })
 
-  it('should revert while checking claim params with insufficient allowance', async () => {
+  it('should revert while checking claim params with insufficient tokens allowance', async () => {
     link = await createLink({
       token: tokenInstance.address,
       feeToken,
@@ -618,5 +621,173 @@ describe('ERC20 Linkdrop Tests', () => {
 
     const receiverTokenBalance = await tokenInstance.balanceOf(receiverAddress)
     expect(receiverTokenBalance).to.eq(tokensAmount)
+  })
+
+  it('should revert while checking claim params with insufficient nft allowance', async () => {
+    link = await createLink({
+      nft: nftInstance.address,
+      feeToken,
+      feeReceiver,
+      nativeTokensAmount: 0,
+      tokenId: 0,
+      feeAmount,
+      expiration,
+      version,
+      chainId,
+      linkdropContract: proxy.address,
+      signingKeyOrWallet: signer
+    })
+    receiverAddress = ethers.Wallet.createRandom().address
+    receiverSignature = await signReceiverAddress(link.linkKey, receiverAddress)
+
+    await expect(
+      factory.checkClaimParams(
+        link.linkParams,
+        receiverAddress,
+        receiverSignature,
+        sender.address,
+        campaignId
+      )
+    ).to.be.revertedWith('INSUFFICIENT_NFT_ALLOWANCE')
+  })
+
+  it('should succesfully claim pre approved nft', async () => {
+    await nftInstance.setApprovalForAll(proxy.address, true)
+    const tokenId = 0
+
+    link = await createLink({
+      nft: nftInstance.address,
+      feeToken,
+      feeReceiver,
+      nativeTokensAmount: 0,
+      tokenId,
+      feeAmount,
+      expiration,
+      version,
+      chainId,
+      linkdropContract: proxy.address,
+      signingKeyOrWallet: signer
+    })
+    receiverAddress = ethers.Wallet.createRandom().address
+    receiverSignature = await signReceiverAddress(link.linkKey, receiverAddress)
+
+    const nftOwnerBefore = await nftInstance.ownerOf(tokenId)
+
+    await proxy.claim(link.linkParams, receiverAddress, receiverSignature, {
+      gasLimit: 500000
+    })
+
+    const nftOwnerAfter = await nftInstance.ownerOf(tokenId)
+    expect(nftOwnerAfter).to.not.eq(nftOwnerBefore)
+    expect(nftOwnerAfter).to.eq(receiverAddress)
+  })
+
+  it('should fail to claim nft not owned by sender', async () => {
+    const tokenId = 0
+
+    link = await createLink({
+      nft: nftInstance.address,
+      feeToken,
+      feeReceiver,
+      nativeTokensAmount: 0,
+      tokenId,
+      feeAmount,
+      expiration,
+      version,
+      chainId,
+      linkdropContract: proxy.address,
+      signingKeyOrWallet: signer
+    })
+    receiverAddress = ethers.Wallet.createRandom().address
+    receiverSignature = await signReceiverAddress(link.linkKey, receiverAddress)
+
+    await expect(
+      proxy.claim(link.linkParams, receiverAddress, receiverSignature, {
+        gasLimit: 500000
+      })
+    ).to.be.revertedWith('SENDER_DOES_NOT_OWN_NFT')
+  })
+
+  it('should fail to claim with insufficient fee tokens', async () => {
+    const tokenId = 1
+
+    link = await createLink({
+      token: tokenInstance.address,
+      nft: nftInstance.address,
+      feeToken: tokenInstance.address,
+      feeReceiver,
+      nativeTokensAmount: 10,
+      tokensAmount: 20,
+      tokenId,
+      feeAmount: 10,
+      expiration,
+      version,
+      chainId,
+      linkdropContract: proxy.address,
+      signingKeyOrWallet: signer
+    })
+    receiverAddress = ethers.Wallet.createRandom().address
+    receiverSignature = await signReceiverAddress(link.linkKey, receiverAddress)
+
+    await expect(
+      proxy.claim(link.linkParams, receiverAddress, receiverSignature, {
+        gasLimit: 500000
+      })
+    ).to.be.revertedWith('INSUFFICIENT_FEE_TOKENS_ALLOWANCE')
+  })
+
+  it('should successfully claim native tokens, ERC20 tokens ans NFTs', async () => {
+    const tokenId = 1
+    const feeAmount = 10
+    const tokensAmount = 20
+    const nativeTokensAmount = 10
+
+    link = await createLink({
+      token: tokenInstance.address,
+      nft: nftInstance.address,
+      feeToken: tokenInstance.address,
+      feeReceiver,
+      nativeTokensAmount,
+      tokensAmount,
+      tokenId,
+      feeAmount,
+      expiration,
+      version,
+      chainId,
+      linkdropContract: proxy.address,
+      signingKeyOrWallet: signer
+    })
+    receiverAddress = ethers.Wallet.createRandom().address
+    receiverSignature = await signReceiverAddress(link.linkKey, receiverAddress)
+
+    await tokenInstance.approve(proxy.address, tokensAmount + feeAmount)
+
+    const receiverNativeBalanceBefore = await provider.getBalance(
+      receiverAddress
+    )
+    const receiverTokenBalanceBefore = await tokenInstance.balanceOf(
+      receiverAddress
+    )
+
+    await proxy.claim(link.linkParams, receiverAddress, receiverSignature, {
+      gasLimit: 500000
+    })
+
+    const receiverNativeBalanceAfter = await provider.getBalance(
+      receiverAddress
+    )
+    const receiverTokenBalanceAfter = await tokenInstance.balanceOf(
+      receiverAddress
+    )
+
+    expect(receiverNativeBalanceAfter).to.eq(
+      receiverNativeBalanceBefore.add(nativeTokensAmount)
+    )
+    expect(receiverTokenBalanceAfter).to.eq(
+      receiverTokenBalanceBefore.add(tokensAmount)
+    )
+
+    const nftOwner = await nftInstance.ownerOf(tokenId)
+    expect(nftOwner).to.eq(receiverAddress)
   })
 })

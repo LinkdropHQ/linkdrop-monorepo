@@ -1,4 +1,5 @@
 import { ethers, utils } from 'ethers'
+import { AddressZero } from 'ethers/constants'
 
 export class LinkParams {
   constructor ({
@@ -122,14 +123,14 @@ export const signLink = async ({
 
 // Generates new link
 export const createLink = async ({
-  token,
-  nft,
-  feeToken,
-  feeReceiver,
-  nativeTokensAmount,
-  tokensAmount,
-  tokenId,
-  feeAmount,
+  token = AddressZero,
+  nft = AddressZero,
+  feeToken = AddressZero,
+  feeReceiver = AddressZero,
+  nativeTokensAmount = 0,
+  tokensAmount = 0,
+  tokenId = 0,
+  feeAmount = 0,
   expiration,
   version,
   chainId,

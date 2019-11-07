@@ -11,8 +11,7 @@ import {
 } from 'ethereum-waffle'
 
 import LinkdropFactory from '../build/LinkdropFactory'
-import LinkdropMastercopy from '../build/LinkdropMastercopy'
-import TokenMock from '../build/TokenMock'
+import Linkdrop from '../build/Linkdrop'
 
 import { computeProxyAddress } from '../scripts/utils'
 
@@ -36,7 +35,7 @@ const chainId = 4 // Rinkeby
 
 describe('Factory tests', () => {
   it('should deploy master copy of linkdrop implementation', async () => {
-    masterCopy = await deployContract(sender, LinkdropMastercopy, [], {
+    masterCopy = await deployContract(sender, Linkdrop, [], {
       gasLimit: 6000000
     })
     expect(masterCopy.address).to.not.eq(ethers.constants.AddressZero)
@@ -75,7 +74,7 @@ describe('Factory tests', () => {
       })
     ).to.emit(factory, 'Deployed')
 
-    proxy = new ethers.Contract(expectedAddress, LinkdropMastercopy.abi, sender)
+    proxy = new ethers.Contract(expectedAddress, Linkdrop.abi, sender)
 
     const senderAddress = await proxy.sender()
     expect(senderAddress).to.eq(sender.address)

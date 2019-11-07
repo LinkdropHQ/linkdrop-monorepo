@@ -11,7 +11,7 @@ import {
 } from 'ethereum-waffle'
 
 import LinkdropFactory from '../build/LinkdropFactory'
-import LinkdropMastercopy from '../build/LinkdropMastercopy'
+import Linkdrop from '../build/Linkdrop'
 
 import { computeProxyAddress } from '../scripts/utils'
 
@@ -23,7 +23,7 @@ const { expect } = chai
 
 const provider = createMockProvider()
 
-const [deployer, sender, signer] = getWallets(provider)
+const [deployer, sender] = getWallets(provider)
 
 let masterCopy
 let factory
@@ -35,7 +35,7 @@ const chainId = 4 // Rinkeby
 
 describe('Campaigns tests', () => {
   it('should deploy master copy of linkdrop implementation', async () => {
-    masterCopy = await deployContract(sender, LinkdropMastercopy, [], {
+    masterCopy = await deployContract(sender, Linkdrop, [], {
       gasLimit: 6000000
     })
     expect(masterCopy.address).to.not.eq(ethers.constants.AddressZero)
@@ -73,7 +73,7 @@ describe('Campaigns tests', () => {
       })
     ).to.emit(factory, 'Deployed')
 
-    proxy = new ethers.Contract(expectedAddress, LinkdropMastercopy.abi, sender)
+    proxy = new ethers.Contract(expectedAddress, Linkdrop.abi, sender)
 
     const linkdropMasterAddress = await proxy.sender()
     expect(linkdropMasterAddress).to.eq(sender.address)
@@ -106,7 +106,7 @@ describe('Campaigns tests', () => {
       })
     ).to.emit(factory, 'Deployed')
 
-    proxy = new ethers.Contract(expectedAddress, LinkdropMastercopy.abi, sender)
+    proxy = new ethers.Contract(expectedAddress, Linkdrop.abi, sender)
 
     const senderAddress = await proxy.sender()
     expect(senderAddress).to.eq(sender.address)
@@ -136,7 +136,7 @@ describe('Campaigns tests', () => {
       })
     ).to.emit(factory, 'Deployed')
 
-    proxy = new ethers.Contract(expectedAddress, LinkdropMastercopy.abi, sender)
+    proxy = new ethers.Contract(expectedAddress, Linkdrop.abi, sender)
 
     const linkdropMasterAddress = await proxy.sender()
     expect(linkdropMasterAddress).to.eq(sender.address)
