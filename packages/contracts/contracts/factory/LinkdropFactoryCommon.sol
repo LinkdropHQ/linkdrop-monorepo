@@ -135,7 +135,7 @@ contract LinkdropFactoryCommon is Ownable, ReentrancyGuard {
     * @param _campaignId Campaign id
     * @return Proxy contract address
     */
-    function _deployProxy(address _sender, uint _campaignId)
+    function _deployProxy(address payable _sender, uint _campaignId)
     internal
     returns (address payable proxy)
     {

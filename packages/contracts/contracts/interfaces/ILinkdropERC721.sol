@@ -1,15 +1,23 @@
 pragma solidity ^0.5.12;
+pragma experimental ABIEncoderV2;
 
 interface ILinkdropERC721 {
 
-    function verifyLinkdropSignerSignatureERC721
+    struct LinkParamsERC721 {
+        address nft;
+        address feeToken;
+        address payable feeReceiver;
+        address linkId;
+        uint nativeTokensAmount;
+        uint tokenId;
+        uint feeAmount;
+        uint expiration;
+        bytes signerSignature;
+    }
+
+    function verifySignerSignatureERC721
     (
-        uint _weiAmount,
-        address _nftAddress,
-        uint _tokenId,
-        uint _expiration,
-        address _linkId,
-        bytes calldata _signature
+        LinkParamsERC721 calldata _linkParams
     )
     external view returns (bool);
 
@@ -17,37 +25,25 @@ interface ILinkdropERC721 {
     (
         address _linkId,
 	    address _receiver,
-		bytes calldata _signature
+		bytes calldata _receiverSignature
     )
-    external view returns (bool);
+    external pure returns (bool);
 
     function checkClaimParamsERC721
     (
-        uint _weiAmount,
-        address _nftAddress,
-        uint _tokenId,
-        uint _expiration,
-        address _linkId,
-        bytes calldata _linkdropSignerSignature,
-        address _receiver,
-        bytes calldata _receiverSignature,
-        uint _fee
+        LinkParamsERC721 calldata _linkParams,
+        address payable _receiver,
+        bytes calldata _receiverSignature
     )
     external view returns (bool);
 
     function claimERC721
     (
-        uint _weiAmount,
-        address _nftAddress,
-        uint _tokenId,
-        uint _expiration,
-        address _linkId,
-        bytes calldata _linkdropSignerSignature,
+        LinkParamsERC721 calldata _linkParams,
         address payable _receiver,
-        bytes calldata _receiverSignature,
-        address payable _feeReceiver,
-        uint _fee
+        bytes calldata _receiverSignature
     )
     external returns (bool);
 
+    event ClaimedERC721(address indexed linkId, LinkParamsERC721 linkParams);
 }

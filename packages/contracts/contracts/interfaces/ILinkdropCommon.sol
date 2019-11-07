@@ -5,7 +5,7 @@ interface ILinkdropCommon {
     function initialize
     (
         address _owner,
-        address _sender,
+        address payable _sender,
         uint _version,
         uint _chainId
     )
@@ -18,10 +18,16 @@ interface ILinkdropCommon {
     function withdraw() external returns (bool);
     function pause() external returns (bool);
     function unpause() external returns (bool);
-    function addSigner(address _linkdropSigner) external payable returns (bool);
-    function removeSigner(address _linkdropSigner) external returns (bool);
+    function addSigner(address _signer) external payable returns (bool);
+    function removeSigner(address _signer) external returns (bool);
     function destroy() external;
     function getMasterCopyVersion() external view returns (uint);
     function () external payable;
+
+    event Canceled(address indexed linkId);
+    event Paused();
+    event Unpaused();
+    event AddedSigningKey(address signer);
+    event RemovedSigningKey(address signer);
 
 }

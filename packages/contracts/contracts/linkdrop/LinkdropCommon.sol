@@ -9,61 +9,14 @@ import "../interfaces/ILinkdropCommon.sol";
 
 contract LinkdropCommon is ILinkdropCommon, ReentrancyGuard {
 
+    using SafeMath for uint;
     using Address for address payable;
-    using Address for address;
-
-    /**
-     * @param token ERC20 token address
-     * @param feeToken Fee token (0x0 for native token)
-     * @param feeReceiver Fee receiver address
-     * @param linkId Link id
-     * @param nativeTokensAmount Amount of native tokens
-     * @param tokensAmount ERC20 tokens amount
-     * @param feeAmount Amount of fee
-     * @param expiration Link expiration unix timestamp
-     * @param signerSignature Signature of lindkrop signer
-     */
-    struct LinkParams {
-        address token;
-        address feeToken;
-        address feeReceiver;
-        address linkId;
-        uint nativeTokensAmount;
-        uint tokensAmount;
-        uint feeAmount;
-        uint expiration;
-        bytes signerSignature;
-    }
-
-    /**
-     * @param nft ERC721 token address
-     * @param feeToken Fee token (0x0 for native token)
-     * @param feeReceiver Fee receiver address
-     * @param linkId Link id
-     * @param nativeTokensAmount Amount of native tokens
-     * @param tokenId NFT id
-     * @param feeAmount Amount of fee
-     * @param expiration Link expiration unix timestamp
-     * @param signerSignature Signature of lindkrop signer
-     */
-    struct LinkParamsERC721 {
-        address nft;
-        address feeToken;
-        address feeReceiver;
-        address linkId;
-        uint nativeTokensAmount;
-        uint tokenId;
-        uint feeAmount;
-        uint expiration;
-        bytes signerSignature;
-    }
-
 
     // Owner address
     address public owner;
 
     // Sender address
-    address public sender;
+    address payable public sender;
 
     // Mastercopy version
     uint public version;
@@ -86,15 +39,6 @@ contract LinkdropCommon is ILinkdropCommon, ReentrancyGuard {
     // Indicates whether the contract is paused or not
     bool internal _paused;
 
-    // Events
-    event Canceled(address indexed linkId);
-    event Claimed(address indexed linkId, LinkParams linkParams);
-    event ClaimedERC721(address indexed linkId, LinkParamsERC721 linkParams);
-    event Paused();
-    event Unpaused();
-    event AddedSigningKey(address signer);
-    event RemovedSigningKey(address signer);
-
     /**
     * @dev Function called only once to set owner, sender, contract version and chain id
     * @param _owner Owner address
@@ -105,7 +49,7 @@ contract LinkdropCommon is ILinkdropCommon, ReentrancyGuard {
     function initialize
     (
         address _owner,
-        address _sender,
+        address payable _sender,
         uint _version,
         uint _chainId
     )
@@ -185,7 +129,7 @@ contract LinkdropCommon is ILinkdropCommon, ReentrancyGuard {
     * @return True if success
     */
     function withdraw() external onlySender nonReentrant returns (bool) {
-        sender.toPayable().sendValue(address(this).balance);
+        sender.sendValue(address(this).balance);
         return true;
     }
 
@@ -237,7 +181,7 @@ contract LinkdropCommon is ILinkdropCommon, ReentrancyGuard {
     * Withdraws all the remaining native tokens to sender
     */
     function destroy() external onlySenderOrOwner {
-        selfdestruct(sender.toPayable());
+        selfdestruct(sender);
     }
 
     /**

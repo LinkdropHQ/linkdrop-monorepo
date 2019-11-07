@@ -2,11 +2,10 @@ pragma solidity ^0.5.12;
 pragma experimental ABIEncoderV2;
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "../interfaces/ILinkdropERC20.sol";
 import "./LinkdropCommon.sol";
 
-contract LinkdropERC20 is LinkdropCommon {
-
-    using SafeMath for uint;
+contract LinkdropERC20 is ILinkdropERC20, LinkdropCommon {
 
     /**
     * @dev Function to verify linkdrop signer's signature
@@ -15,7 +14,7 @@ contract LinkdropERC20 is LinkdropCommon {
     */
     function verifySignerSignature
     (
-        LinkParams memory _linkParams
+        ILinkdropERC20.LinkParams memory _linkParams
     )
     public view
     returns (bool)
@@ -54,7 +53,7 @@ contract LinkdropERC20 is LinkdropCommon {
     function verifyReceiverSignature
     (
         address _linkId,
-        address payable _receiver,
+        address _receiver,
         bytes memory _receiverSignature
     )
     public pure
@@ -74,7 +73,7 @@ contract LinkdropERC20 is LinkdropCommon {
     */
     function checkClaimParams
     (
-        LinkParams memory _linkParams,
+        ILinkdropERC20.LinkParams memory _linkParams,
         address payable _receiver,
         bytes memory _receiverSignature
     )
@@ -144,7 +143,7 @@ contract LinkdropERC20 is LinkdropCommon {
     */
     function claim
     (
-        LinkParams memory _linkParams,
+        ILinkdropERC20.LinkParams memory _linkParams,
         address payable _receiver,
         bytes memory _receiverSignature
     )
@@ -178,7 +177,7 @@ contract LinkdropERC20 is LinkdropCommon {
                 _linkParams.tokensAmount,
                 _linkParams.feeToken,
                 _linkParams.feeAmount,
-                _linkParams.feeReceiver == address(0) ? tx.origin : _linkParams.feeReceiver.toPayable(), //solium-disable-line security/no-tx-origin
+                _linkParams.feeReceiver == address(0) ? tx.origin : _linkParams.feeReceiver, //solium-disable-line security/no-tx-origin
                 _receiver
             ),
             "TRANSFER_FAILED"

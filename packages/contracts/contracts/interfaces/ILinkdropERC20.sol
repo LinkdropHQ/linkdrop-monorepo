@@ -1,12 +1,12 @@
 pragma solidity ^0.5.12;
 pragma experimental ABIEncoderV2;
 
-contract ILinkdropERC20 {
+interface ILinkdropERC20 {
 
     struct LinkParams {
         address token;
         address feeToken;
-        address feeReceiver;
+        address payable feeReceiver;
         address linkId;
         uint nativeTokensAmount;
         uint tokensAmount;
@@ -17,32 +17,33 @@ contract ILinkdropERC20 {
 
     function verifySignerSignature
     (
-        LinkParams memory _link
+        LinkParams calldata _linkParams
     )
-    public view returns (bool);
+    external view returns (bool);
 
     function verifyReceiverSignature
     (
         address _linkId,
-	    address payable _receiver,
+	    address _receiver,
 		bytes calldata _receiverSignature
     )
-    external view returns (bool);
+    external pure returns (bool);
 
     function checkClaimParams
     (
-        LinkParams memory _link,
+        LinkParams calldata _linkParams,
         address payable _receiver,
-        bytes memory _receiverSignature
+        bytes calldata _receiverSignature
     )
-    public view returns (bool);
+    external view returns (bool);
 
     function claim
     (
-        LinkParams memory _link,
+        LinkParams calldata _linkParams,
         address payable _receiver,
-        bytes memory _receiverSignature
+        bytes calldata _receiverSignature
     )
-    public returns (bool);
+    external returns (bool);
 
+    event Claimed(address indexed linkId, LinkParams linkParams);
 }

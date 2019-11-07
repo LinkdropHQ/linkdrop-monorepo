@@ -1,13 +1,12 @@
 pragma solidity ^0.5.12;
 pragma experimental ABIEncoderV2;
 
-// import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
+import "../interfaces/ILinkdropERC721.sol";
 import "./LinkdropCommon.sol";
 
-contract LinkdropERC721 is LinkdropCommon {
-
-    using SafeMath for uint;
+contract LinkdropERC721 is ILinkdropERC721, LinkdropCommon {
 
   /**
     * @dev Function to verify linkdrop signer's signature
@@ -16,7 +15,7 @@ contract LinkdropERC721 is LinkdropCommon {
     */
     function verifySignerSignatureERC721
     (
-        LinkParamsERC721 memory _linkParams
+        ILinkdropERC721.LinkParamsERC721 memory _linkParams
     )
     public view
     returns (bool)
@@ -41,28 +40,28 @@ contract LinkdropERC721 is LinkdropCommon {
                 )
             )
         );
-        address signer = ECDSA.recover(prefixedHash, _signature);
-        return isLinkdropSigner[signer];
+        address signer = ECDSA.recover(prefixedHash, _linkParams.signerSignature);
+        return isSigner[signer];
     }
 
     /**
     * @dev Function to verify linkdrop receiver's signature
     * @param _linkId Address corresponding to link key
     * @param _receiver Address of linkdrop receiver
-    * @param _signature ECDSA signature of linkdrop receiver
+    * @param _receiverSignature ECDSA signature of linkdrop receiver
     * @return True if signed with link key
     */
     function verifyReceiverSignatureERC721
     (
         address _linkId,
         address _receiver,
-        bytes memory _signature
+        bytes memory _receiverSignature
     )
-    public view
+    public pure
     returns (bool)
     {
         bytes32 prefixedHash = ECDSA.toEthSignedMessageHash(keccak256(abi.encodePacked(_receiver)));
-        address signer = ECDSA.recover(prefixedHash, _signature);
+        address signer = ECDSA.recover(prefixedHash, _receiverSignature);
         return signer == _linkId;
     }
 
@@ -75,7 +74,7 @@ contract LinkdropERC721 is LinkdropCommon {
     */
     function checkClaimParamsERC721
     (
-        LinkParamsERC721 memory _linkParams,
+        ILinkdropERC721.LinkParamsERC721 memory _linkParams,
         address payable _receiver,
         bytes memory _receiverSignature
     )
@@ -84,13 +83,13 @@ contract LinkdropERC721 is LinkdropCommon {
     returns (bool)
     {
         // Make sure nft address is not equal to address(0)
-        require(_nftAddress != address(0), "INVALID_NFT_ADDRESS");
+        require(_linkParams.nft != address(0), "INVALID_NFT_ADDRESS");
 
         // Make sure link is not claimed
-        require(!isClaimedLink(_linkId), "LINK_CLAIMED");
+        require(!isClaimedLink(_linkParams.linkId), "LINK_CLAIMED");
 
         // Make sure link is not canceled
-        require(!isCanceledLink(_linkId), "LINK_CANCELED");
+        require(!isCanceledLink(_linkParams.linkId), "LINK_CANCELED");
 
         // Make sure link is not expired
         require(_linkParams.expiration >= now, "LINK_EXPIRED"); //solium-disable-line security/no-block-members
@@ -114,12 +113,12 @@ contract LinkdropERC721 is LinkdropCommon {
         require(IERC721(_linkParams.nft).isApprovedForAll(sender, address(this)), "INSUFFICIENT_ALLOWANCE");
 
         // Verify that link params are signed by valid signing key
-        require(verifySignerSignature(_linkParams), "INVALID_SIGNER_SIGNATURE");
+        require(verifySignerSignatureERC721(_linkParams), "INVALID_SIGNER_SIGNATURE");
 
         // Verify that receiver address is signed by ephemeral link key
         require
         (
-            verifyReceiverSignature(_linkParams.linkId, _receiver, _receiverSignature),
+            verifyReceiverSignatureERC721(_linkParams.linkId, _receiver, _receiverSignature),
             "INVALID_RECEIVER_SIGNATURE"
         );
 
@@ -135,9 +134,9 @@ contract LinkdropERC721 is LinkdropCommon {
     */
     function claimERC721
     (
-        LinkParamsERC721 _linkParams,
+        ILinkdropERC721.LinkParamsERC721 memory _linkParams,
         address payable _receiver,
-        bytes calldata _receiverSignature
+        bytes memory _receiverSignature
     )
     public
     whenNotPaused
@@ -147,7 +146,7 @@ contract LinkdropERC721 is LinkdropCommon {
         // Make sure params are valid
         require
         (
-            checkClaimParams
+            checkClaimParamsERC721
             (
                 _linkParams,
                 _receiver,
@@ -162,14 +161,14 @@ contract LinkdropERC721 is LinkdropCommon {
         // Make sure transfer succeeds
         require
         (
-            _transferFunds
+            _transferFundsERC721
             (
                 _linkParams.nativeTokensAmount,
                 _linkParams.nft,
                 _linkParams.tokenId,
                 _linkParams.feeToken,
                 _linkParams.feeAmount,
-                _linkParams.feeReceiver == address(0) ? tx.origin : _linkParams.feeReceiver.toPayable(), //solium-disable-line security/no-tx-origin
+                _linkParams.feeReceiver == address(0) ? tx.origin : _linkParams.feeReceiver, //solium-disable-line security/no-tx-origin
                 _receiver
             ),
             "TRANSFER_FAILED"
