@@ -1,6 +1,7 @@
 /* global describe, it */
 
 import chai from 'chai'
+import { ethers } from 'ethers'
 
 import {
   createMockProvider,
@@ -14,16 +15,15 @@ import LinkdropMastercopy from '../build/LinkdropMastercopy'
 
 import { computeBytecode, computeProxyAddress } from '../scripts/utils'
 
-const ethers = require('ethers')
 // Turn off annoying warnings
 ethers.errors.setLogLevel('error')
 
 chai.use(solidity)
 const { expect } = chai
 
-let provider = createMockProvider()
+const provider = createMockProvider()
 
-let [linkdropMaster, deployer, relayer] = getWallets(provider)
+const [sender, deployer] = getWallets(provider)
 
 let masterCopy
 let factory
@@ -43,16 +43,16 @@ describe('Proxy upgradability tests', () => {
     })
     expect(masterCopy.address).to.not.eq(ethers.constants.AddressZero)
 
-    let masterCopyOwner = await masterCopy.owner()
+    const masterCopyOwner = await masterCopy.owner()
     expect(masterCopyOwner).to.eq(ethers.constants.AddressZero)
 
-    let masterCopyLinkdropMaster = await masterCopy.linkdropMaster()
-    expect(masterCopyLinkdropMaster).to.eq(ethers.constants.AddressZero)
+    const masterCopySender = await masterCopy.sender()
+    expect(masterCopySender).to.eq(ethers.constants.AddressZero)
 
-    let masterCopyVersion = await masterCopy.version()
+    const masterCopyVersion = await masterCopy.version()
     expect(masterCopyVersion).to.eq(0)
 
-    let masterCopyChainId = await masterCopy.chainId()
+    const masterCopyChainId = await masterCopy.chainId()
     expect(masterCopyChainId).to.eq(0)
   })
 
@@ -66,35 +66,35 @@ describe('Proxy upgradability tests', () => {
       }
     )
     expect(factory.address).to.not.eq(ethers.constants.AddressZero)
-    let factoryVersion = await factory.masterCopyVersion()
+    const factoryVersion = await factory.masterCopyVersion()
     expect(factoryVersion).to.eq(1)
 
-    let factoryChainId = await factory.chainId()
+    const factoryChainId = await factory.chainId()
     expect(factoryChainId).to.eq(chainId)
 
-    let masterCopyOwner = await masterCopy.owner()
+    const masterCopyOwner = await masterCopy.owner()
     expect(masterCopyOwner).to.eq(ethers.constants.AddressZero)
 
-    let masterCopyLinkdropMaster = await masterCopy.linkdropMaster()
-    expect(masterCopyLinkdropMaster).to.eq(ethers.constants.AddressZero)
+    const masterCopySender = await masterCopy.sender()
+    expect(masterCopySender).to.eq(ethers.constants.AddressZero)
 
-    let masterCopyVersion = await masterCopy.version()
+    const masterCopyVersion = await masterCopy.version()
     expect(masterCopyVersion).to.eq(factoryVersion)
 
-    let masterCopyChainId = await masterCopy.chainId()
+    const masterCopyChainId = await masterCopy.chainId()
     expect(masterCopyChainId).to.eq(factoryChainId)
   })
 
   it('should deploy proxy and delegate to implementation', async () => {
     // Compute next address with js function
-    let expectedAddress = computeProxyAddress(
+    const expectedAddress = computeProxyAddress(
       factory.address,
-      linkdropMaster.address,
+      sender.address,
       campaignId,
       initcode
     )
 
-    factory = factory.connect(linkdropMaster)
+    factory = factory.connect(sender)
 
     await expect(
       factory.deployProxy(campaignId, {
@@ -108,18 +108,19 @@ describe('Proxy upgradability tests', () => {
       deployer
     )
 
-    let linkdropMasterAddress = await proxy.linkdropMaster()
-    expect(linkdropMasterAddress).to.eq(linkdropMaster.address)
+    const senderAddress = await proxy.sender()
+    expect(senderAddress).to.eq(sender.address)
 
-    let version = await proxy.version()
+    const version = await proxy.version()
     expect(version).to.eq(1)
 
-    let owner = await proxy.owner()
+    const owner = await proxy.owner()
     expect(owner).to.eq(factory.address)
   })
 
   it('should deploy second version of mastercopy', async () => {
-    let oldMasterCopyAddress = masterCopy.address
+    const oldMasterCopyAddress = masterCopy.address
+
     masterCopy = await deployContract(deployer, LinkdropMastercopy, [], {
       gasLimit: 6000000
     })
@@ -132,33 +133,31 @@ describe('Proxy upgradability tests', () => {
     bytecode = computeBytecode(masterCopy.address)
     factory = factory.connect(deployer)
     await factory.setMasterCopy(masterCopy.address)
-    let deployedBytecode = await factory.getBytecode()
+    const deployedBytecode = await factory.getBytecode()
     expect(deployedBytecode.toString().toLowerCase()).to.eq(
       bytecode.toString().toLowerCase()
     )
   })
 
   it('proxy owner should be able to destroy proxy', async () => {
-    factory = factory.connect(linkdropMaster)
+    factory = factory.connect(sender)
 
-    let isDeployed = await factory.isDeployed(
-      linkdropMaster.address,
+    let isDeployed = await factory['isDeployed(address,uint256)'](
+      sender.address,
       campaignId
     )
     expect(isDeployed).to.eq(true)
 
-    let computedAddress = computeProxyAddress(
+    const computedAddress = computeProxyAddress(
       factory.address,
-      linkdropMaster.address,
+      sender.address,
       campaignId,
       initcode
     )
 
-    let deployedAddress = await factory.functions.deployed(
-      ethers.utils.solidityKeccak256(
-        ['address', 'uint256'],
-        [linkdropMaster.address, campaignId]
-      )
+    const deployedAddress = await factory.getProxyAddress(
+      sender.address,
+      campaignId
     )
     expect(deployedAddress.toString().toLowerCase()).to.eq(
       computedAddress.toString().toLowerCase()
@@ -170,16 +169,11 @@ describe('Proxy upgradability tests', () => {
       })
     ).to.emit(factory, 'Destroyed')
 
-    isDeployed = await factory.isDeployed(linkdropMaster.address, campaignId)
-    expect(isDeployed).to.eq(false)
-
-    deployedAddress = await factory.functions.deployed(
-      ethers.utils.solidityKeccak256(
-        ['address', 'uint256'],
-        [linkdropMaster.address, campaignId]
-      )
+    isDeployed = await factory['isDeployed(address,uint256)'](
+      sender.address,
+      campaignId
     )
-    expect(deployedAddress).to.eq(ethers.constants.AddressZero)
+    expect(isDeployed).to.eq(false)
   })
 
   it('should deploy upgraded proxy to the same address as before', async () => {
@@ -189,31 +183,20 @@ describe('Proxy upgradability tests', () => {
       })
     ).to.emit(factory, 'Deployed')
 
-    let isDeployed = await factory.isDeployed(
-      linkdropMaster.address,
+    const isDeployed = await factory['isDeployed(address,uint256)'](
+      sender.address,
       campaignId
     )
     expect(isDeployed).to.eq(true)
 
-    let deployedAddress = await factory.functions.deployed(
-      ethers.utils.solidityKeccak256(
-        ['address', 'uint256'],
-        [linkdropMaster.address, campaignId]
-      )
-    )
-
-    let computedAddress = computeProxyAddress(
+    const computedAddress = computeProxyAddress(
       factory.address,
-      linkdropMaster.address,
+      sender.address,
       campaignId,
       initcode
     )
 
-    expect(deployedAddress.toString().toLowerCase()).to.eq(
-      computedAddress.toString().toLowerCase()
-    )
-
-    let factoryVersion = await factory.masterCopyVersion()
+    const factoryVersion = await factory.masterCopyVersion()
     expect(factoryVersion).to.eq(2)
 
     proxy = new ethers.Contract(
@@ -222,7 +205,7 @@ describe('Proxy upgradability tests', () => {
       deployer
     )
 
-    let proxyVersion = await proxy.version()
+    const proxyVersion = await proxy.version()
     expect(proxyVersion).to.eq(factoryVersion)
   })
 })
