@@ -7,6 +7,7 @@ import classNames from 'classnames'
 import { Select, Input, PageHeader, PageLoader } from 'components/common'
 import config from 'config-dashboard'
 import Immutable from 'immutable'
+import wallets from 'wallets'
 import { TokenAddressInput, LinksContent, NextButton, AddEthField, EthTexts } from 'components/pages/common'
 
 @actions(({ user: { chainId, currentAddress, loading, privateKey }, campaigns: { items, proxyAddress, links }, tokens: { assets, symbol } }) => ({ assets, privateKey, chainId, symbol, loading, proxyAddress, currentAddress, items, links }))
@@ -25,6 +26,10 @@ class Step1 extends React.Component {
         value: 'ERC20'
       }
     ]
+    this.WALLETS = Object.keys(wallets).map(wallet => ({
+      label: wallets[wallet].name,
+      value: wallet
+    }))
     const assetsPrepared = this.prepareAssets({ assets, chainId })
     this.state = {
       options: assetsPrepared,
@@ -33,7 +38,8 @@ class Step1 extends React.Component {
       ethAmount: '0',
       linksAmount: '0',
       addEth: false,
-      tokenAddress: null
+      tokenAddress: null,
+      wallet: this.WALLETS[0].value
     }
   }
 
@@ -57,10 +63,9 @@ class Step1 extends React.Component {
   }
 
   render () {
-    const { tokenSymbol, ethAmount, linksAmount, tokenAmount, addEth, tokenAddress, options } = this.state
+    const { tokenSymbol, ethAmount, linksAmount, tokenAmount, wallet, addEth, tokenAddress, options } = this.state
     const { symbol, loading, chainId, privateKey, proxyAddress } = this.props
     const tokenType = this.defineTokenType({ tokenSymbol })
-
     return <div className={classNames(styles.container, { [styles.customTokenEnabled]: tokenSymbol === 'ERC20' })}>
       {loading && <PageLoader />}
       <PageHeader title={this.t('titles.setupCampaign')} />
@@ -88,6 +93,18 @@ class Step1 extends React.Component {
             />
           </div>
           {this.renderTokenInputs({ ethAmount, tokenType, tokenAddress, symbol, tokenSymbol, tokenAmount, addEth })}
+          <div className={styles.chooseWallet}>
+            <h3 className={styles.subtitle}>{this.t('titles.defaultReceiverWallet')}</h3>
+            <Select
+              options={this.WALLETS}
+              value={wallet}
+              onChange={({ value }) => {
+                this.setState({
+                  wallet: value
+                })
+              }}
+            />
+          </div>
           <div className={styles.linksAmount}>
             <h3 className={styles.subtitle}>{this.t('titles.totalLinks')}</h3>
             <div className={styles.linksAmountContainer}>
@@ -115,6 +132,7 @@ class Step1 extends React.Component {
         linksAmount={linksAmount}
         tokenSymbol={symbol || tokenSymbol}
         tokenType={tokenType}
+        wallet={wallet}
       />
     </div>
   }

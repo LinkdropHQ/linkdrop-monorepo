@@ -15,8 +15,8 @@ class User {
     this.actions.dispatch({ type: 'USER.SET_CURRENT_ADDRESS', payload: { currentAddress } })
   }
 
-  checkCurrentProvider () {
-    this.actions.dispatch({ type: '*USER.CHECK_CURRENT_PROVIDER' })
+  checkCurrentProvider ({ provider }) {
+    this.actions.dispatch({ type: '*USER.CHECK_CURRENT_PROVIDER', payload: { provider } })
   }
 
   prepareVersionVar ({ chainId, currentAddress }) {

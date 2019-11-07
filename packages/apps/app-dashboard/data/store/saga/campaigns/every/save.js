@@ -19,13 +19,15 @@ const generator = function * ({ payload }) {
       linksAmount,
       tokenType,
       date,
-      proxyAddress
+      proxyAddress,
+      defaultWallet
     } = yield select(generator.selectors.campaignData)
 
     const newCampaign = {
       tokenAmount,
       tokenSymbol,
       ethAmount,
+      defaultWallet,
       status: 'active',
       linksAmount,
       tokenType,
@@ -70,6 +72,7 @@ generator.selectors = {
       tokenType,
       date,
       id,
+      defaultWallet,
       proxyAddress
     }
   }) => ({
@@ -78,6 +81,7 @@ generator.selectors = {
     ethAmount,
     linksAmount,
     tokenType,
+    defaultWallet,
     date,
     id,
     proxyAddress
