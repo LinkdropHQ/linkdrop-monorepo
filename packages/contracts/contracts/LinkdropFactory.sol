@@ -1,13 +1,17 @@
 pragma solidity ^0.5.12;
+pragma experimental ABIEncoderV2;
 
-import "@openzeppelin/contracts/cryptography/ECDSA.sol";
 import "@openzeppelin/contracts/math/SafeMath.sol";
 import "@openzeppelin/contracts/ownership/Ownable.sol";
 import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/utils/Address.sol";
-import "../interfaces/ILinkdropCommon.sol";
+import "./interfaces/ILinkdrop.sol";
 
-contract LinkdropFactoryCommon is Ownable, ReentrancyGuard {
+/**
+* @title Linkdrop factory contract
+* @author Amir Jumaniyazov - <amir@linkdrop.io>
+*/
+contract LinkdropFactory is Ownable, ReentrancyGuard {
 
     using SafeMath for uint;
     using Address for address;
@@ -32,6 +36,85 @@ contract LinkdropFactoryCommon is Ownable, ReentrancyGuard {
     event Deployed(address indexed sender, uint campaignId, address indexed proxy, bytes32 salt);
     event Destroyed(address indexed sender, address indexed proxy);
     event SetMasterCopy(address masterCopy, uint indexed version);
+
+    /**
+    * @dev Constructor that sets bootstap initcode, factory owner, chainId and master copy
+    * @param _masterCopy Linkdrop mastercopy contract address to calculate bytecode from
+    * @param _chainId Chain id
+    */
+    constructor(address payable _masterCopy, uint _chainId) public {
+        _initcode = (hex"6352c7420d6000526103ff60206004601c335afa6040516060f3");
+        chainId = _chainId;
+        setMasterCopy(_masterCopy);
+    }
+
+     /**
+    * @dev Function to verify claim params
+    * @param _linkParams Link params struct
+    * @param _receiver Address of linkdrop receiver
+    * @param _receiverSignature ECDSA signature of linkdrop receiver
+    * @param _sender Linkdrop sender address
+    * @param _campaignId Campaign id
+    * @return True if success
+    */
+    function checkClaimParams
+    (
+        ILinkdrop.LinkParams memory _linkParams,
+        address payable _receiver,
+        bytes memory _receiverSignature,
+        address _sender,
+        uint _campaignId
+    )
+    public view
+    returns (bool)
+    {
+
+        // Make sure proxy contract is deployed
+        require(isDeployed(getProxyAddress(_sender, _campaignId)), "LINKDROP_PROXY_CONTRACT_NOT_DEPLOYED");
+
+        return ILinkdrop(getProxyAddress(_sender, _campaignId)).checkClaimParams
+        (
+            _linkParams,
+            _receiver,
+            _receiverSignature
+        );
+    }
+
+    /**
+    * @dev Function to claim linkdrop
+    * @param _linkParams Link params struct
+    * @param _receiver Address of linkdrop receiver
+    * @param _receiverSignature ECDSA signature of linkdrop receiver
+    * @param _sender Linkdrop sender address
+    * @param _campaignId Campaign id
+    * @return True if success
+    */
+    function claim
+       (
+        ILinkdrop.LinkParams memory _linkParams,
+        address payable _receiver,
+        bytes memory _receiverSignature,
+        address _sender,
+        uint _campaignId
+
+    )
+    public
+    returns (bool)
+    {
+        // Make sure proxy contract is deployed
+        require(isDeployed(getProxyAddress(_sender, _campaignId)), "LINKDROP_PROXY_CONTRACT_NOT_DEPLOYED");
+
+        // Call claim function in the context of proxy contract
+        ILinkdrop(getProxyAddress(_sender, _campaignId)).claim
+        (
+            _linkParams,
+            _receiver,
+            _receiverSignature
+        );
+
+        return true;
+    }
+
 
     /**
     * @dev Indicates whether a campaign proxy contract for sender is deployed or not
@@ -93,13 +176,11 @@ contract LinkdropFactoryCommon is Ownable, ReentrancyGuard {
     public view
     returns (bool)
     {
-        address payable proxy = getProxyAddress(_sender, _campaignId);
-
-        if (!isDeployed(proxy)) {
+        if (!isDeployed(getProxyAddress(_sender, _campaignId))) {
             return false;
         }
         else {
-            return ILinkdropCommon(proxy).isClaimedLink(_linkId);
+            return ILinkdrop(getProxyAddress(_sender, _campaignId)).isClaimedLink(_linkId);
         }
     }
 
@@ -126,7 +207,7 @@ contract LinkdropFactoryCommon is Ownable, ReentrancyGuard {
     returns (address payable proxy)
     {
         proxy = _deployProxy(msg.sender, _campaignId);
-        ILinkdropCommon(proxy).addSigner(_signer);
+        ILinkdrop(proxy).addSigner(_signer);
     }
 
     /**
@@ -156,7 +237,7 @@ contract LinkdropFactoryCommon is Ownable, ReentrancyGuard {
         // Initialize owner address, sender address master copy version in proxy contract
         require
         (
-            ILinkdropCommon(proxy).initialize
+            ILinkdrop(proxy).initialize
             (
                 address(this), // Owner address
                 _sender,
@@ -183,7 +264,7 @@ contract LinkdropFactoryCommon is Ownable, ReentrancyGuard {
     {
         address payable proxy = getProxyAddress(msg.sender, _campaignId);
         require(isDeployed(proxy), "LINKDROP_PROXY_CONTRACT_NOT_DEPLOYED");
-        ILinkdropCommon(proxy).destroy();
+        ILinkdrop(proxy).destroy();
         delete _isDeployed[proxy];
         emit Destroyed(msg.sender, proxy);
         return true;
@@ -225,7 +306,7 @@ contract LinkdropFactoryCommon is Ownable, ReentrancyGuard {
 
         require
         (
-            ILinkdropCommon(_masterCopy).initialize
+            ILinkdrop(_masterCopy).initialize
             (
                 address(0), // Owner address
                 address(0), // Linkdrop master address
@@ -265,7 +346,7 @@ contract LinkdropFactoryCommon is Ownable, ReentrancyGuard {
             return masterCopyVersion;
         }
         else {
-            return ILinkdropCommon(proxy).getMasterCopyVersion();
+            return ILinkdrop(proxy).getMasterCopyVersion();
         }
     }
 

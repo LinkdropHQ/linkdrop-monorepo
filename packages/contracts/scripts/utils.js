@@ -3,21 +3,25 @@ import { ethers, utils } from 'ethers'
 export class LinkParams {
   constructor ({
     token,
+    nft,
     feeToken,
     feeReceiver,
     linkId,
     nativeTokensAmount,
     tokensAmount,
+    tokenId,
     feeAmount,
     expiration,
     signerSignature
   }) {
     this.token = token
+    this.nft = nft
     this.feeToken = feeToken
     this.feeReceiver = feeReceiver
     this.linkId = linkId
     this.nativeTokensAmount = nativeTokensAmount
     this.tokensAmount = tokensAmount
+    this.tokenId = tokenId
     this.feeAmount = feeAmount
     this.expiration = expiration
     this.signerSignature = signerSignature
@@ -61,11 +65,13 @@ export const computeProxyAddress = (
 
 export const signLink = async ({
   token,
+  nft,
   feeToken,
   feeReceiver,
   linkId,
   nativeTokensAmount,
   tokensAmount,
+  tokenId,
   feeAmount,
   expiration,
   version,
@@ -80,11 +86,13 @@ export const signLink = async ({
   const messageHash = ethers.utils.solidityKeccak256(
     [
       'address', // token
+      'address', // nft
       'address', // feeToken
       'address', // feeReceiver
       'address', // linkId
       'uint', // nativeTokensAmount
       'uint', // tokensAmount
+      'uint', // tokenId
       'uint', // feeAmount
       'uint', // expiration
       'uint', // version
@@ -93,11 +101,13 @@ export const signLink = async ({
     ],
     [
       token,
+      nft,
       feeToken,
       feeReceiver,
       linkId,
       nativeTokensAmount,
       tokensAmount,
+      tokenId,
       feeAmount,
       expiration,
       version,
@@ -113,10 +123,12 @@ export const signLink = async ({
 // Generates new link
 export const createLink = async ({
   token,
+  nft,
   feeToken,
   feeReceiver,
   nativeTokensAmount,
   tokensAmount,
+  tokenId,
   feeAmount,
   expiration,
   version,
@@ -129,11 +141,13 @@ export const createLink = async ({
   const linkId = linkWallet.address
   const signerSignature = await signLink({
     token,
+    nft,
     feeToken,
     feeReceiver,
     linkId,
     nativeTokensAmount,
     tokensAmount,
+    tokenId,
     feeAmount,
     expiration,
     version,
@@ -144,11 +158,13 @@ export const createLink = async ({
 
   const linkParams = new LinkParams({
     token,
+    nft,
     feeToken,
     feeReceiver,
     linkId,
     nativeTokensAmount,
     tokensAmount,
+    tokenId,
     feeAmount,
     expiration,
     signerSignature
