@@ -26,7 +26,7 @@ class Step1 extends React.Component {
         value: 'ERC20'
       }
     ]
-    this.WALLETS = Object.keys(wallets).map(wallet => ({
+    this.WALLETS = (['trust', 'coinbase', 'opera', 'status', 'imtoken', 'gowallet', 'buntoy', 'tokenpocket']).map(wallet => ({
       label: wallets[wallet].name,
       value: wallet
     }))
@@ -93,6 +93,12 @@ class Step1 extends React.Component {
             />
           </div>
           {this.renderTokenInputs({ ethAmount, tokenType, tokenAddress, symbol, tokenSymbol, tokenAmount, addEth })}
+          <div className={styles.linksAmount}>
+            <h3 className={styles.subtitle}>{this.t('titles.totalLinks')}</h3>
+            <div className={styles.linksAmountContainer}>
+              <Input numberInput decimalSeparator={false} className={styles.input} value={linksAmount} onChange={({ value }) => this.setField({ field: 'linksAmount', value: parseFloat(value) })} />
+            </div>
+          </div>
           <div className={styles.chooseWallet}>
             <h3 className={styles.subtitle}>{this.t('titles.defaultReceiverWallet')}</h3>
             <Select
@@ -104,12 +110,6 @@ class Step1 extends React.Component {
                 })
               }}
             />
-          </div>
-          <div className={styles.linksAmount}>
-            <h3 className={styles.subtitle}>{this.t('titles.totalLinks')}</h3>
-            <div className={styles.linksAmountContainer}>
-              <Input numberInput decimalSeparator={false} className={styles.input} value={linksAmount} onChange={({ value }) => this.setField({ field: 'linksAmount', value: parseFloat(value) })} />
-            </div>
           </div>
         </div>
 
