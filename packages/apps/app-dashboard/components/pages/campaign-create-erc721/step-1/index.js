@@ -47,7 +47,7 @@ class Step1 extends React.Component {
     const assetsPrepared = this.prepareAssets({ assets: props.assetsERC721 })
     const currentAsset = props.assetsERC721.find(asset => asset.address === assetsPrepared[0].value)
     this.defaultSymbol = defineDefaultSymbol({ chainId })
-    this.WALLETS = Object.keys(wallets).map(wallet => ({
+    this.WALLETS = (['trust', 'coinbase', 'opera', 'status', 'imtoken', 'gowallet', 'buntoy', 'tokenpocket']).map(wallet => ({
       label: wallets[wallet].name,
       value: wallet
     }))

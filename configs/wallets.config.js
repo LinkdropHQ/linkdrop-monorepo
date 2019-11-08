@@ -36,7 +36,8 @@ export default {
   opera: {
     id: 'opera',
     name: 'Opera',
-    walletURL: 'https://play.google.com/store/apps/details?id=com.opera.browser',
+    walletURL: 'https://www.opera.com/mobile/operabrowser',
+    walletURLIos: 'https://www.opera.com/mobile/touch',
     dappStoreUrl: 'https://www.opera.com/dapps-store',
     mobile: {
       android: {
