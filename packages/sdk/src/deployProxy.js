@@ -1,5 +1,5 @@
 import LinkdropFactory from '@linkdrop/contracts/build/LinkdropFactory.json'
-const ethers = require('ethers')
+import { ethers } from 'ethers'
 
 export const connectToFactoryContract = async ({
   jsonRpcUrl,
@@ -7,13 +7,13 @@ export const connectToFactoryContract = async ({
   signingKeyOrWallet
 }) => {
   if (jsonRpcUrl == null || jsonRpcUrl === '') {
-    throw new Error(`Please provide json rpc url`)
+    throw new Error('Please provide json rpc url')
   }
   if (factoryAddress === null || factoryAddress === '') {
-    throw new Error(`Please provide factory address`)
+    throw new Error('Please provide factory address')
   }
   if (signingKeyOrWallet === null || signingKeyOrWallet === '') {
-    throw new Error(`Please provide signing key or wallet`)
+    throw new Error('Please provide signing key or wallet')
   }
   const provider = new ethers.providers.JsonRpcProvider(jsonRpcUrl)
 
@@ -35,16 +35,16 @@ export const deployProxy = async ({
   weiAmount
 }) => {
   if (jsonRpcUrl == null || jsonRpcUrl === '') {
-    throw new Error(`Please provide json rpc url`)
+    throw new Error('Please provide json rpc url')
   }
   if (factoryAddress === null || factoryAddress === '') {
-    throw new Error(`Please provide factory address`)
+    throw new Error('Please provide factory address')
   }
   if (signingKeyOrWallet === null || signingKeyOrWallet === '') {
-    throw new Error(`Please provide signing key or wallet`)
+    throw new Error('Please provide signing key or wallet')
   }
   if (campaignId === null || campaignId === '') {
-    throw new Error(`Please provide campaign id`)
+    throw new Error('Please provide campaign id')
   }
 
   const provider = new ethers.providers.JsonRpcProvider(jsonRpcUrl)
