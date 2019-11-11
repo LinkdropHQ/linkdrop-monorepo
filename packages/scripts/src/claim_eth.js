@@ -1,4 +1,4 @@
-import LinkdropSDK from '@linkdrop/sdk'
+import LinkdropSDK from '../../sdk/src'
 import ora from 'ora'
 import { ethers } from 'ethers'
 import { terminal as term } from 'terminal-kit'

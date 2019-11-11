@@ -2,6 +2,7 @@ import claimService from '../services/claimService'
 
 // POST
 export const claim = async (req, res) => {
+  console.log(req.body)
   // claim transaction
   const txHash = await claimService.claim(req.body)
 

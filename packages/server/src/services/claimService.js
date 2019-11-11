@@ -51,7 +51,7 @@ class ClaimService {
     }
     if (!params.linkdropContractAddress) {
       throw new BadRequestError(
-        'Please provider linkdrop contract address argument'
+        'Please provide linkdrop contract address argument'
       )
     }
     logger.debug('Valid claim params: ' + JSON.stringify(params))
