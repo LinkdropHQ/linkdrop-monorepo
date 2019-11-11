@@ -1,11 +1,4 @@
-import {
-  newError,
-  getLinkdropMasterWallet,
-  getExpirationTime,
-  getProvider,
-  getString,
-  getInt
-} from './utils'
+import { newError } from './utils'
 
 import LinkdropSDK from '@linkdrop/sdk'
 import ora from 'ora'
@@ -16,22 +9,27 @@ import fastcsv from 'fast-csv'
 import fs from 'fs'
 import deployProxyIfNeeded from './deploy_proxy'
 
-const JSON_RPC_URL = getString('jsonRpcUrl')
-const CHAIN = getString('CHAIN')
-const LINKDROP_MASTER_PRIVATE_KEY = getString('linkdropMasterPrivateKey')
-let WEI_AMOUNT = getInt('weiAmount')
-const LINKS_NUMBER = getInt('linksNumber')
-const EXPIRATION_TIME = getExpirationTime()
-const PROVIDER = getProvider()
-const LINKDROP_MASTER_WALLET = getLinkdropMasterWallet()
-const CAMPAIGN_ID = getInt('CAMPAIGN_ID')
-const FACTORY_ADDRESS = getString('FACTORY_ADDRESS')
-const GAS_FEE = ethers.utils.parseUnits('0.002')
+import {
+  JSON_RPC_URL,
+  NATIVE_TOKENS_AMOUNT,
+  SENDER_PRIVATE_KEY,
+  CHAIN,
+  FACTORY_ADDRESS,
+  LINKS_NUMBER,
+  CAMPAIGN_ID,
+  FEE_AMOUNT
+} from '../config.json'
 
-WEI_AMOUNT = ethers.utils.bigNumberify(WEI_AMOUNT.toString())
+const nativeTokensAmount = ethers.utils.bigNumberify(
+  NATIVE_TOKENS_AMOUNT.toString()
+)
+const feeAmount = ethers.utils.bigNumberify(FEE_AMOUNT.toString())
+
+const provider = new ethers.providers.JsonRpcProvider(JSON_RPC_URL)
+const sender = new ethers.Wallet(SENDER_PRIVATE_KEY, provider)
 
 const linkdropSDK = new LinkdropSDK({
-  linkdropMasterAddress: new ethers.Wallet(LINKDROP_MASTER_PRIVATE_KEY).address,
+  senderAddress: sender.address,
   chain: CHAIN,
   jsonRpcUrl: JSON_RPC_URL,
   factoryAddress: FACTORY_ADDRESS
@@ -48,13 +46,13 @@ export const generate = async () => {
 
     const proxyAddress = linkdropSDK.getProxyAddress(CAMPAIGN_ID)
 
-    let cost = WEI_AMOUNT.mul(LINKS_NUMBER)
+    const cost = nativeTokensAmount.mul(LINKS_NUMBER)
 
     let amountToSend
 
     const tokenSymbol = 'ETH'
     const tokenDecimals = 18
-    const proxyBalance = await PROVIDER.getBalance(proxyAddress)
+    const proxyBalance = await provider.getBalance(proxyAddress)
 
     // check that proxy address is deployed
     await deployProxyIfNeeded(spinner)
@@ -70,7 +68,7 @@ export const generate = async () => {
         )
       )
 
-      tx = await LINKDROP_MASTER_WALLET.sendTransaction({
+      tx = await sender.sendTransaction({
         to: proxyAddress,
         value: amountToSend,
         gasLimit: 23000
@@ -79,11 +77,12 @@ export const generate = async () => {
       term.bold(`Tx Hash: ^g${tx.hash}\n`)
     }
 
-    const FEE_COSTS = GAS_FEE.mul(LINKS_NUMBER)
+    const FEE_COSTS = feeAmount.mul(LINKS_NUMBER)
+
     // Transfer fee coverage
     spinner.info(term.bold.str(`Sending fee costs to ^g${proxyAddress}`))
 
-    tx = await LINKDROP_MASTER_WALLET.sendTransaction({
+    tx = await sender.sendTransaction({
       to: proxyAddress,
       value: FEE_COSTS,
       gasLimit: 23000,
@@ -93,24 +92,23 @@ export const generate = async () => {
     term.bold(`Tx Hash: ^g${tx.hash}\n`)
 
     // Generate links
-    let links = []
+    const links = []
 
     for (let i = 0; i < LINKS_NUMBER; i++) {
-      let {
+      const {
         url,
         linkId,
         linkKey,
+
         linkdropSignerSignature
       } = await linkdropSDK.generateLink({
-        signingKeyOrWallet: LINKDROP_MASTER_PRIVATE_KEY,
-        weiAmount: WEI_AMOUNT,
-        tokenAddress: ethers.constants.AddressZero,
-        tokenAmount: 0,
-        expirationTime: EXPIRATION_TIME,
-        campaignId: CAMPAIGN_ID
+        signingKeyOrWallet: sender.privateKey,
+        nativeTokensAmount: NATIVE_TOKENS_AMOUNT,
+        campaignId: CAMPAIGN_ID,
+        feeAmount: FEE_AMOUNT
       })
 
-      let link = { i, linkId, linkKey, linkdropSignerSignature, url }
+      const link = { i, linkId, linkKey, linkdropSignerSignature, url }
       links.push(link)
     }
 
