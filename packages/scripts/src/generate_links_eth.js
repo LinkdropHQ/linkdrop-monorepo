@@ -1,5 +1,5 @@
+/* eslint-disable no-undef */
 import { newError } from './utils'
-
 import LinkdropSDK from '@linkdrop/sdk'
 import ora from 'ora'
 import { terminal as term } from 'terminal-kit'
@@ -8,8 +8,9 @@ import path from 'path'
 import fastcsv from 'fast-csv'
 import fs from 'fs'
 import deployProxyIfNeeded from './deploy_proxy'
+import config from '../config'
 
-import {
+const {
   JSON_RPC_URL,
   NATIVE_TOKENS_AMOUNT,
   SENDER_PRIVATE_KEY,
@@ -18,7 +19,7 @@ import {
   LINKS_NUMBER,
   CAMPAIGN_ID,
   FEE_AMOUNT
-} from '../config.json'
+} = config
 
 const nativeTokensAmount = ethers.utils.bigNumberify(
   NATIVE_TOKENS_AMOUNT.toString()
@@ -99,8 +100,7 @@ export const generate = async () => {
         url,
         linkId,
         linkKey,
-
-        linkdropSignerSignature
+        signerSignature
       } = await linkdropSDK.generateLink({
         signingKeyOrWallet: sender.privateKey,
         nativeTokensAmount: NATIVE_TOKENS_AMOUNT,
@@ -108,7 +108,7 @@ export const generate = async () => {
         feeAmount: FEE_AMOUNT
       })
 
-      const link = { i, linkId, linkKey, linkdropSignerSignature, url }
+      const link = { i, linkId, linkKey, signerSignature, url }
       links.push(link)
     }
 

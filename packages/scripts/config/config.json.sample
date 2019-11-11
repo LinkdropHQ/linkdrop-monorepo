@@ -1,0 +1,15 @@
+{
+    "JSON_RPC_URL": "https://rinkeby.infura.io",
+    "API_HOST": "http://localhost:5000",
+    "CHAIN": "rinkeby",
+    "SENDER_PRIVATE_KEY": "",
+    "NATIVE_TOKENS_AMOUNT": "100",
+    "TOKEN_ADDRESS": "",
+    "NFT_ADDRESS": "",
+    "TOKEN_IDS": "[0,1]",
+    "TOKENS_AMOUNT": "10",
+    "FACTORY_ADDRESS": "0xBa051891B752ecE3670671812486fe8dd34CC1c8",
+    "LINKS_NUMBER": "10",
+    "CAMPAIGN_ID": "0",
+    "FEE_AMOUNT": "2000000000"
+}

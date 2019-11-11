@@ -1,18 +1,16 @@
 import TokenMock from '../../contracts/build/TokenMock'
 import { terminal as term } from 'terminal-kit'
-import { getLinkdropMasterWallet, newError } from './utils'
+import { newError } from './utils'
 import { ethers } from 'ethers'
 import fs from 'fs'
 import ora from 'ora'
-import configs from '../../../configs'
+import config from '../config'
 
-const config = configs.get('scripts')
-const configPath = configs.getPath('scripts')
-
-const LINKDROP_MASTER_WALLET = getLinkdropMasterWallet()
+const provider = new ethers.providers.JsonRpcProvider(config.JSON_RPC_URL)
+const sender = new ethers.Wallet(config.SENDER_PRIVATE_KEY, provider)
 
 export const deploy = async () => {
-  let spinner, factory, tokenMock, txHash
+  let spinner, factory, tokenMock
 
   try {
     spinner = ora({
@@ -26,7 +24,7 @@ export const deploy = async () => {
     factory = new ethers.ContractFactory(
       TokenMock.abi,
       TokenMock.bytecode,
-      LINKDROP_MASTER_WALLET
+      sender
     )
 
     tokenMock = await factory.deploy({
@@ -43,14 +41,14 @@ export const deploy = async () => {
     term.bold.str(`Deployed mock token at ^g${tokenMock.address}`)
   )
 
-  txHash = tokenMock.deployTransaction.hash
+  const txHash = tokenMock.deployTransaction.hash
   term.bold(`Tx Hash: ^g${txHash}\n`)
 
   // Save changes
-  config.tokenAddress = tokenMock.address
-  fs.writeFile(configPath, JSON.stringify(config), err => {
+  config.TOKEN_ADDRESS = tokenMock.address
+  fs.writeFile(config.path, JSON.stringify(config), err => {
     if (err) throw newError(err)
-    term.bold(`Updated ^_${configPath}\n`)
+    term.bold(`Updated ^_${config.path}\n`)
   })
 
   return tokenMock.address

@@ -3,13 +3,15 @@ import LinkdropFactory from '../../contracts/build/LinkdropFactory'
 import { terminal as term } from 'terminal-kit'
 import { ethers } from 'ethers'
 
-import {
+import config from '../config'
+
+const {
   JSON_RPC_URL,
   SENDER_PRIVATE_KEY,
   CHAIN,
   FACTORY_ADDRESS,
   CAMPAIGN_ID
-} from '../config.json'
+} = config
 
 const provider = new ethers.providers.JsonRpcProvider(JSON_RPC_URL)
 const sender = new ethers.Wallet(SENDER_PRIVATE_KEY, provider)

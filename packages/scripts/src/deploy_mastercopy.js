@@ -6,8 +6,7 @@ import fs from 'fs'
 import ora from 'ora'
 import configs from '../../../configs'
 
-const scriptsConfig = configs.get('scripts')
-const scriptsConfigPath = configs.getPath('scripts')
+import scriptsConfig from '../config'
 
 const appConfig = configs.get('app')
 const appConfigPath = configs.getPath('app')
@@ -15,7 +14,7 @@ const appConfigPath = configs.getPath('app')
 const LINKDROP_MASTER_WALLET = getLinkdropMasterWallet()
 
 export const deploy = async () => {
-  let spinner, factory, masterCopy, txHash
+  let spinner, factory, masterCopy
 
   try {
     spinner = ora({
@@ -47,15 +46,15 @@ export const deploy = async () => {
     term.bold.str(`Deployed master copy at ^g${masterCopy.address}`)
   )
 
-  txHash = masterCopy.deployTransaction.hash
+  const txHash = masterCopy.deployTransaction.hash
   term.bold(`Tx Hash: ^g${txHash}\n`)
 
   // Save to scripts config
-  scriptsConfig.masterCopy = masterCopy.address
+  scriptsConfig.MASTERCOPY_ADDRESS = masterCopy.address
 
-  fs.writeFile(scriptsConfigPath, JSON.stringify(scriptsConfig), err => {
+  fs.writeFile(scriptsConfig.path, JSON.stringify(scriptsConfig), err => {
     if (err) throw newError(err)
-    term.bold(`Updated ^_${scriptsConfigPath}\n`)
+    term.bold(`Updated ^_${scriptsConfig.path}\n`)
   })
 
   // Save to app config

@@ -1,47 +1,43 @@
+/* eslint-disable no-undef */
 import NFTMock from '../../contracts/build/NFTMock'
 import LinkdropSDK from '@linkdrop/sdk'
-
 import ora from 'ora'
 import { terminal as term } from 'terminal-kit'
 import { ethers } from 'ethers'
 import path from 'path'
 import fastcsv from 'fast-csv'
 import fs from 'fs'
-import {
-  newError,
-  getString,
-  getInt,
-  getProvider,
-  getExpirationTime,
-  getLinkdropMasterWallet
-} from './utils'
+import { newError } from './utils'
 import deployProxyIfNeeded from './deploy_proxy'
+import config from '../config'
+
+const {
+  JSON_RPC_URL,
+  NATIVE_TOKENS_AMOUNT,
+  NFT_ADDRESS,
+  SENDER_PRIVATE_KEY,
+  CHAIN,
+  FACTORY_ADDRESS,
+  TOKEN_IDS,
+  CAMPAIGN_ID,
+  FEE_AMOUNT
+} = config
 
 ethers.errors.setLogLevel('error')
 
-const JSON_RPC_URL = getString('jsonRpcUrl')
-const CHAIN = getString('CHAIN')
-const LINKDROP_MASTER_PRIVATE_KEY = getString('linkdropMasterPrivateKey')
-let WEI_AMOUNT = getInt('weiAmount')
-const LINKS_NUMBER = getInt('linksNumber')
-const EXPIRATION_TIME = getExpirationTime()
-const NFT_ADDRESS = getString('nftAddress')
-const NFT_IDS = getString('nftIds')
-const PROVIDER = getProvider()
-const LINKDROP_MASTER_WALLET = getLinkdropMasterWallet()
-const CAMPAIGN_ID = getInt('CAMPAIGN_ID')
-const FACTORY_ADDRESS = getString('FACTORY_ADDRESS')
+const nativeTokensAmount = ethers.utils.bigNumberify(
+  NATIVE_TOKENS_AMOUNT.toString()
+)
+const feeAmount = ethers.utils.bigNumberify(FEE_AMOUNT.toString())
 
-const GAS_FEE = ethers.utils.parseUnits('0.002')
+const provider = new ethers.providers.JsonRpcProvider(JSON_RPC_URL)
+const sender = new ethers.Wallet(SENDER_PRIVATE_KEY, provider)
 
-WEI_AMOUNT = ethers.utils.bigNumberify(WEI_AMOUNT.toString())
-
-// Initialize linkdrop SDK
 const linkdropSDK = new LinkdropSDK({
-  linkdropMasterAddress: new ethers.Wallet(LINKDROP_MASTER_PRIVATE_KEY).address,
-  factoryAddress: FACTORY_ADDRESS,
+  senderAddress: sender.address,
   chain: CHAIN,
-  jsonRpcUrl: JSON_RPC_URL
+  jsonRpcUrl: JSON_RPC_URL,
+  factoryAddress: FACTORY_ADDRESS
 })
 
 export const generate = async () => {
@@ -61,16 +57,16 @@ export const generate = async () => {
     const nftContract = await new ethers.Contract(
       NFT_ADDRESS,
       NFTMock.abi,
-      LINKDROP_MASTER_WALLET
+      sender
     )
     const nftSymbol = await nftContract.symbol()
 
     // If owner of tokenId is not proxy contract -> send it to proxy
-    const tokenIds = JSON.parse(NFT_IDS)
+    const tokenIds = JSON.parse(TOKEN_IDS)
 
     // Approve tokens
     const isApprovedForAll = await nftContract.isApprovedForAll(
-      LINKDROP_MASTER_WALLET.address,
+      sender.address,
       proxyAddress
     )
     if (!isApprovedForAll) {
@@ -84,14 +80,14 @@ export const generate = async () => {
       term.bold(`Tx Hash: ^g${tx.hash}\n`)
     }
 
-    if (WEI_AMOUNT.gt(0)) {
+    if (nativeTokensAmount.gt(0)) {
       // Transfer ethers
-      let cost = WEI_AMOUNT.mul(tokenIds.length)
+      const cost = nativeTokensAmount.mul(tokenIds.length)
       let amountToSend
 
       const tokenSymbol = 'ETH'
       const tokenDecimals = 18
-      const proxyBalance = await PROVIDER.getBalance(proxyAddress)
+      const proxyBalance = await provider.getBalance(proxyAddress)
 
       if (proxyBalance.lt(cost)) {
         amountToSend = cost.sub(proxyBalance)
@@ -103,7 +99,7 @@ export const generate = async () => {
           )
         )
 
-        tx = await LINKDROP_MASTER_WALLET.sendTransaction({
+        tx = await sender.sendTransaction({
           to: proxyAddress,
           value: amountToSend,
           gasLimit: 23000
@@ -113,11 +109,11 @@ export const generate = async () => {
       }
     }
 
-    const FEE_COSTS = GAS_FEE.mul(tokenIds.length)
+    const FEE_COSTS = feeAmount.mul(tokenIds.length)
     // Transfer fee coverage
     spinner.info(term.bold.str(`Sending fee costs to ^g${proxyAddress}`))
 
-    tx = await LINKDROP_MASTER_WALLET.sendTransaction({
+    tx = await sender.sendTransaction({
       to: proxyAddress,
       value: FEE_COSTS,
       gasLimit: 23000
@@ -126,24 +122,24 @@ export const generate = async () => {
     term.bold(`Tx Hash: ^g${tx.hash}\n`)
 
     // Generate links
-    let links = []
+    const links = []
 
     for (let i = 0; i < tokenIds.length; i++) {
-      let {
+      const {
         url,
         linkId,
         linkKey,
-        linkdropSignerSignature
-      } = await linkdropSDK.generateLinkERC721({
-        signingKeyOrWallet: LINKDROP_MASTER_PRIVATE_KEY,
-        weiAmount: WEI_AMOUNT,
+        signerSignature
+      } = await linkdropSDK.generateLink({
+        signingKeyOrWallet: sender.privateKey,
+        nativeTokensAmount: NATIVE_TOKENS_AMOUNT,
         nftAddress: NFT_ADDRESS,
         tokenId: tokenIds[i],
-        expirationTime: EXPIRATION_TIME,
-        campaignId: CAMPAIGN_ID
+        campaignId: CAMPAIGN_ID,
+        feeAmount: FEE_AMOUNT
       })
 
-      let link = { i, linkId, linkKey, linkdropSignerSignature, url }
+      const link = { i, linkId, linkKey, signerSignature, url }
       links.push(link)
     }
 

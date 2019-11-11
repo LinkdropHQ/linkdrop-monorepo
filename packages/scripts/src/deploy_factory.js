@@ -6,10 +6,9 @@ import fs from 'fs'
 import ora from 'ora'
 import configs from '../../../configs'
 
-ethers.errors.setLogLevel('error')
+import scriptsConfig from '../config'
 
-const scriptsConfig = configs.get('scripts')
-const scriptsConfigPath = configs.getPath('scripts')
+ethers.errors.setLogLevel('error')
 
 const serverConfig = configs.get('server')
 const serverConfigPath = configs.getPath('server')
@@ -24,9 +23,9 @@ const CHAIN_ID = getInt('chainId')
 const RELAYER_ADDRESS = getString('RELAYER_ADDRESS')
 
 export const deploy = async () => {
-  let spinner, factory, proxyFactory, txHash
+  let factory, proxyFactory
 
-  spinner = ora({
+  const spinner = ora({
     text: term.bold.green.str('Deploying linkdrop proxy factory contract'),
     color: 'green'
   })
@@ -66,14 +65,14 @@ export const deploy = async () => {
     term.bold.str(`Deployed proxy factory at ^g${proxyFactory.address}`)
   )
 
-  txHash = proxyFactory.deployTransaction.hash
+  const txHash = proxyFactory.deployTransaction.hash
   term.bold(`Tx Hash: ^g${txHash}\n`)
 
   // Save to scripts config
   scriptsConfig.FACTORY_ADDRESS = proxyFactory.address
-  fs.writeFile(scriptsConfigPath, JSON.stringify(scriptsConfig), err => {
+  fs.writeFile(scriptsConfig.ath, JSON.stringify(scriptsConfig), err => {
     if (err) throw newError(err)
-    term.bold(`Updated ^_${scriptsConfigPath}\n`)
+    term.bold(`Updated ^_${scriptsConfig.path}\n`)
   })
 
   // Save to server config
