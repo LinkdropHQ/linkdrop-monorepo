@@ -2,66 +2,76 @@ import LinkdropSDK from '@linkdrop/sdk'
 import ora from 'ora'
 import { ethers } from 'ethers'
 import { terminal as term } from 'terminal-kit'
-import { newError, getString, getUrlParams, getLinkNumber } from './utils'
+import { newError, getUrlParams, getLinkNumber } from './utils'
+import config from '../config'
 
 ethers.errors.setLogLevel('error')
 
-const JSON_RPC_URL = getString('jsonRpcUrl')
-const CHAIN = getString('CHAIN')
-const API_HOST = getString('API_HOST')
-const RECEIVER_ADDRESS = getString('receiverAddress')
-const FACTORY_ADDRESS = getString('FACTORY_ADDRESS')
-const NFT_IDS = getString('nftIds')
+const {
+  JSON_RPC_URL,
+  CHAIN,
+  API_HOST,
+  RECEIVER_ADDRESS,
+  FACTORY_ADDRESS,
+  TOKEN_IDS,
+  SENDER_PRIVATE_KEY
+} = config
+
+const sender = new ethers.Wallet(SENDER_PRIVATE_KEY)
 
 const claimERC721 = async () => {
   let spinner
+
   try {
-    let LINKS_NUMBER = JSON.parse(NFT_IDS).length - 1
-    const linkNumber = getLinkNumber(LINKS_NUMBER)
+    const linkNumber = getLinkNumber(JSON.parse(TOKEN_IDS).length - 1)
+
     term.bold(`Claiming link #${linkNumber}:\n`)
+
     spinner = ora({
       text: term.bold.green.str('Claiming\n'),
       color: 'green'
     })
     spinner.start()
+
     const {
-      weiAmount,
-      nftAddress,
+      token,
+      nft,
+      feeToken,
+      feeReceiver,
+      linkId,
+      nativeTokensAmount,
+      tokensAmount,
       tokenId,
-      expirationTime,
-      version,
-      chainId,
-      linkKey,
-      linkdropMasterAddress,
-      linkdropSignerSignature,
-      campaignId
+      feeAmount,
+      expiration,
+      signerSignature,
+      linkdropContract
     } = await getUrlParams('erc721', linkNumber)
 
     const linkdropSDK = new LinkdropSDK({
-      linkdropMasterAddress,
+      senderAddress: sender.address,
       factoryAddress: FACTORY_ADDRESS,
       chain: CHAIN,
       jsonRpcUrl: JSON_RPC_URL,
       apiHost: API_HOST
     })
 
-    const proxyAddress = linkdropSDK.getProxyAddress(campaignId)
-    console.log('\nproxyAddress: ', proxyAddress)
-
-    const { errors, success, txHash } = await linkdropSDK.claimERC721({
+    const { success, txHash } = await linkdropSDK.claim({
       jsonRpcUrl: JSON_RPC_URL,
       apiHost: API_HOST,
-      weiAmount,
-      nftAddress,
+      token,
+      nft,
+      feeToken,
+      feeReceiver,
+      linkId,
+      nativeTokensAmount,
+      tokensAmount,
       tokenId,
-      expirationTime,
-      version,
-      chainId,
-      linkKey,
-      linkdropMasterAddress,
-      linkdropSignerSignature,
+      feeAmount,
+      expiration,
+      signerSignature,
       receiverAddress: RECEIVER_ADDRESS,
-      campaignId
+      linkdropContract
     })
 
     if (success === true && txHash) {

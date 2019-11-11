@@ -2,16 +2,22 @@ import LinkdropSDK from '@linkdrop/sdk'
 import ora from 'ora'
 import { ethers } from 'ethers'
 import { terminal as term } from 'terminal-kit'
-import { newError, getString, getUrlParams, getLinkNumber } from './utils'
+import { newError, getUrlParams, getLinkNumber } from './utils'
+import config from '../config'
 
 ethers.errors.setLogLevel('error')
 
-const JSON_RPC_URL = getString('jsonRpcUrl')
-const CHAIN = getString('CHAIN')
-const API_HOST = getString('API_HOST')
-const RECEIVER_ADDRESS = getString('receiverAddress')
-const FACTORY_ADDRESS = getString('FACTORY_ADDRESS')
-const LINKS_NUMBER = getString('linksNumber')
+const {
+  JSON_RPC_URL,
+  CHAIN,
+  API_HOST,
+  RECEIVER_ADDRESS,
+  FACTORY_ADDRESS,
+  LINKS_NUMBER,
+  SENDER_PRIVATE_KEY
+} = config
+
+const sender = new ethers.Wallet(SENDER_PRIVATE_KEY)
 
 const claim = async () => {
   let spinner
@@ -28,40 +34,44 @@ const claim = async () => {
     spinner.start()
 
     const {
-      weiAmount,
-      tokenAddress,
-      tokenAmount,
-      expirationTime,
-      version,
-      chainId,
-      linkKey,
-      linkdropMasterAddress,
-      linkdropSignerSignature,
-      campaignId
+      token,
+      nft,
+      feeToken,
+      feeReceiver,
+      linkId,
+      nativeTokensAmount,
+      tokensAmount,
+      tokenId,
+      feeAmount,
+      expiration,
+      signerSignature,
+      linkdropContract
     } = await getUrlParams('erc20', linkNumber)
 
     const linkdropSDK = new LinkdropSDK({
-      linkdropMasterAddress,
+      senderAddress: sender.address,
       chain: CHAIN,
       jsonRpcUrl: JSON_RPC_URL,
       apiHost: API_HOST,
       factoryAddress: FACTORY_ADDRESS
     })
 
-    const { errors, success, txHash } = await linkdropSDK.claim({
+    const { success, txHash } = await linkdropSDK.claim({
       jsonRpcUrl: JSON_RPC_URL,
       apiHost: API_HOST,
-      weiAmount,
-      tokenAddress,
-      tokenAmount,
-      expirationTime,
-      version,
-      chainId,
-      linkKey,
-      linkdropMasterAddress,
-      linkdropSignerSignature,
+      token,
+      nft,
+      feeToken,
+      feeReceiver,
+      linkId,
+      nativeTokensAmount,
+      tokensAmount,
+      tokenId,
+      feeAmount,
+      expiration,
+      signerSignature,
       receiverAddress: RECEIVER_ADDRESS,
-      campaignId
+      linkdropContract
     })
 
     if (success === true && txHash) {
