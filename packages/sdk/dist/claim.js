@@ -26,7 +26,7 @@ var claim = function claim(_ref) {
         case 0:
           jsonRpcUrl = _ref.jsonRpcUrl, apiHost = _ref.apiHost, token = _ref.token, nft = _ref.nft, feeToken = _ref.feeToken, feeReceiver = _ref.feeReceiver, linkKey = _ref.linkKey, nativeTokensAmount = _ref.nativeTokensAmount, tokensAmount = _ref.tokensAmount, tokenId = _ref.tokenId, feeAmount = _ref.feeAmount, expiration = _ref.expiration, signerSignature = _ref.signerSignature, receiverAddress = _ref.receiverAddress, linkdropContract = _ref.linkdropContract;
 
-          if (!(jsonRpcUrl === null || jsonRpcUrl === '')) {
+          if (!(jsonRpcUrl == null || jsonRpcUrl === '')) {
             _context.next = 3;
             break;
           }
@@ -34,7 +34,7 @@ var claim = function claim(_ref) {
           throw new Error('Please provide json rpc url');
 
         case 3:
-          if (!(apiHost === null || apiHost === '')) {
+          if (!(apiHost == null || apiHost === '')) {
             _context.next = 5;
             break;
           }
@@ -42,7 +42,7 @@ var claim = function claim(_ref) {
           throw new Error('Please provide api host');
 
         case 5:
-          if (!(nativeTokensAmount === null || nativeTokensAmount === '')) {
+          if (!(nativeTokensAmount == null || nativeTokensAmount === '')) {
             _context.next = 7;
             break;
           }
@@ -50,7 +50,7 @@ var claim = function claim(_ref) {
           throw new Error('Please provide native tokens amount to claim');
 
         case 7:
-          if (!(token === null || token === '')) {
+          if (!(token == null || token === '')) {
             _context.next = 9;
             break;
           }
@@ -58,7 +58,7 @@ var claim = function claim(_ref) {
           throw new Error('Please provide token address');
 
         case 9:
-          if (!(nft === null || nft === '')) {
+          if (!(nft == null || nft === '')) {
             _context.next = 11;
             break;
           }
@@ -66,7 +66,7 @@ var claim = function claim(_ref) {
           throw new Error('Please provide NFT address');
 
         case 11:
-          if (!(feeToken === null || feeToken === '')) {
+          if (!(feeToken == null || feeToken === '')) {
             _context.next = 13;
             break;
           }
@@ -74,7 +74,7 @@ var claim = function claim(_ref) {
           throw new Error('Please provide fee token address');
 
         case 13:
-          if (!(feeReceiver === null || feeReceiver === '')) {
+          if (!(feeReceiver == null || feeReceiver === '')) {
             _context.next = 15;
             break;
           }
@@ -82,7 +82,7 @@ var claim = function claim(_ref) {
           throw new Error('Please provide fee receiver address');
 
         case 15:
-          if (!(linkKey === null || linkKey === '')) {
+          if (!(linkKey == null || linkKey === '')) {
             _context.next = 17;
             break;
           }
@@ -90,7 +90,7 @@ var claim = function claim(_ref) {
           throw new Error('Please provide link key');
 
         case 17:
-          if (!(nativeTokensAmount === null || nativeTokensAmount === '')) {
+          if (!(nativeTokensAmount == null || nativeTokensAmount === '')) {
             _context.next = 19;
             break;
           }
@@ -98,7 +98,7 @@ var claim = function claim(_ref) {
           throw new Error('Please provide native tokens amount');
 
         case 19:
-          if (!(tokensAmount === null || tokensAmount === '')) {
+          if (!(tokensAmount == null || tokensAmount === '')) {
             _context.next = 21;
             break;
           }
@@ -106,7 +106,7 @@ var claim = function claim(_ref) {
           throw new Error('Please provide amount of tokens to claim');
 
         case 21:
-          if (!(tokenId === null || tokenId === '')) {
+          if (!(tokenId == null || tokenId === '')) {
             _context.next = 23;
             break;
           }
@@ -114,7 +114,7 @@ var claim = function claim(_ref) {
           throw new Error('Please provide NFT id');
 
         case 23:
-          if (!(feeAmount === null || feeAmount === '')) {
+          if (!(feeAmount == null || feeAmount === '')) {
             _context.next = 25;
             break;
           }
@@ -130,7 +130,7 @@ var claim = function claim(_ref) {
           throw new Error('Please provide link expiration timestamp');
 
         case 27:
-          if (!(signerSignature === null || signerSignature === '')) {
+          if (!(signerSignature == null || signerSignature === '')) {
             _context.next = 29;
             break;
           }
@@ -138,7 +138,7 @@ var claim = function claim(_ref) {
           throw new Error('Please provide linkdropMaster signature');
 
         case 29:
-          if (!(receiverAddress === null || receiverAddress === '')) {
+          if (!(receiverAddress == null || receiverAddress === '')) {
             _context.next = 31;
             break;
           }
@@ -146,7 +146,7 @@ var claim = function claim(_ref) {
           throw new Error('Please provide receiver address');
 
         case 31:
-          if (!(linkdropContract === null || linkdropContract === '')) {
+          if (!(linkdropContract == null || linkdropContract === '')) {
             _context.next = 33;
             break;
           }

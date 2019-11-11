@@ -31,7 +31,7 @@ var connectToFactoryContract = function connectToFactoryContract(_ref) {
           throw new Error('Please provide json rpc url');
 
         case 3:
-          if (!(factoryAddress === null || factoryAddress === '')) {
+          if (!(factoryAddress == null || factoryAddress === '')) {
             _context.next = 5;
             break;
           }
@@ -39,7 +39,7 @@ var connectToFactoryContract = function connectToFactoryContract(_ref) {
           throw new Error('Please provide factory address');
 
         case 5:
-          if (!(signingKeyOrWallet === null || signingKeyOrWallet === '')) {
+          if (!(signingKeyOrWallet == null || signingKeyOrWallet === '')) {
             _context.next = 7;
             break;
           }
@@ -83,7 +83,7 @@ var deployProxy = function deployProxy(_ref2) {
           throw new Error('Please provide json rpc url');
 
         case 3:
-          if (!(factoryAddress === null || factoryAddress === '')) {
+          if (!(factoryAddress == null || factoryAddress === '')) {
             _context2.next = 5;
             break;
           }
@@ -91,7 +91,7 @@ var deployProxy = function deployProxy(_ref2) {
           throw new Error('Please provide factory address');
 
         case 5:
-          if (!(signingKeyOrWallet === null || signingKeyOrWallet === '')) {
+          if (!(signingKeyOrWallet == null || signingKeyOrWallet === '')) {
             _context2.next = 7;
             break;
           }
@@ -99,7 +99,7 @@ var deployProxy = function deployProxy(_ref2) {
           throw new Error('Please provide signing key or wallet');
 
         case 7:
-          if (!(campaignId === null || campaignId === '')) {
+          if (!(campaignId == null || campaignId === '')) {
             _context2.next = 9;
             break;
           }
