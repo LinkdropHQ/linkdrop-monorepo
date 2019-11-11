@@ -9,12 +9,13 @@ export const connectToFactoryContract = async ({
   if (jsonRpcUrl == null || jsonRpcUrl === '') {
     throw new Error('Please provide json rpc url')
   }
-  if (factoryAddress === null || factoryAddress === '') {
+  if (factoryAddress == null || factoryAddress === '') {
     throw new Error('Please provide factory address')
   }
-  if (signingKeyOrWallet === null || signingKeyOrWallet === '') {
+  if (signingKeyOrWallet == null || signingKeyOrWallet === '') {
     throw new Error('Please provide signing key or wallet')
   }
+
   const provider = new ethers.providers.JsonRpcProvider(jsonRpcUrl)
 
   let wallet
@@ -37,13 +38,13 @@ export const deployProxy = async ({
   if (jsonRpcUrl == null || jsonRpcUrl === '') {
     throw new Error('Please provide json rpc url')
   }
-  if (factoryAddress === null || factoryAddress === '') {
+  if (factoryAddress == null || factoryAddress === '') {
     throw new Error('Please provide factory address')
   }
-  if (signingKeyOrWallet === null || signingKeyOrWallet === '') {
+  if (signingKeyOrWallet == null || signingKeyOrWallet === '') {
     throw new Error('Please provide signing key or wallet')
   }
-  if (campaignId === null || campaignId === '') {
+  if (campaignId == null || campaignId === '') {
     throw new Error('Please provide campaign id')
   }
 

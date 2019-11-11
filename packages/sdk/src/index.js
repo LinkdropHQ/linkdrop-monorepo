@@ -4,7 +4,6 @@ import * as claimUtils from './claim'
 import * as deployUtils from './deployProxy'
 import * as topupAndApproveUtils from './topupAndApprove'
 import { subscribeForClaimEvents } from './subscribeForEvents'
-
 import LinkdropFactory from '@linkdrop/contracts/build/LinkdropFactory'
 import { ethers } from 'ethers'
 import { AddressZero } from 'ethers/constants'

@@ -30,7 +30,6 @@ export const generateLink = async ({
   if (sender == null || sender === '') {
     throw new Error('Please provide sender address')
   }
-
   if (campaignId == null || campaignId === '') {
     throw new Error('Please provide campaign id')
   }
