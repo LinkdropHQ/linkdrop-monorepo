@@ -48,6 +48,7 @@ export const claim = async ({
   if (feeReceiver === null || feeReceiver === '') {
     throw new Error('Please provide fee receiver address')
   }
+
   if (linkKey === null || linkKey === '') {
     throw new Error('Please provide link key')
   }
@@ -109,23 +110,32 @@ export const claim = async ({
   const response = await axios.post(`${apiHost}/api/v1/linkdrops/claim`, {
     linkParams,
     receiverAddress,
-    receiverSignature
+    receiverSignature,
+    linkdropContractAddress: linkdropContract
   })
 
   const { error, errors, success, txHash } = response.data
   return { error, errors, success, txHash }
 }
 
-export const getLinkStatus = async ({ apiHost, senderAddress, linkId }) => {
+export const getLinkStatus = async ({
+  apiHost,
+  linkdropContractAddress,
+  linkId
+}) => {
   const response = await axios.get(
-    `${apiHost}/api/v1/linkdrops/getStatus/${senderAddress}/${linkId}`
+    `${apiHost}/api/v1/linkdrops/getStatus/${linkdropContractAddress}/${linkId}`
   )
   return response.data
 }
 
-export const cancelLink = async ({ apiHost, senderAddress, linkId }) => {
+export const cancelLink = async ({
+  apiHost,
+  linkdropContractAddress,
+  linkId
+}) => {
   const response = await axios.post(`${apiHost}/api/v1/linkdrops/cancel`, {
-    senderAddress,
+    linkdropContractAddress,
     linkId
   })
 

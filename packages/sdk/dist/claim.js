@@ -181,7 +181,8 @@ var claim = function claim(_ref) {
           return _regenerator["default"].awrap(_axios["default"].post("".concat(apiHost, "/api/v1/linkdrops/claim"), {
             linkParams: linkParams,
             receiverAddress: receiverAddress,
-            receiverSignature: receiverSignature
+            receiverSignature: receiverSignature,
+            linkdropContractAddress: linkdropContract
           }));
 
         case 41:
@@ -205,14 +206,14 @@ var claim = function claim(_ref) {
 exports.claim = claim;
 
 var getLinkStatus = function getLinkStatus(_ref2) {
-  var apiHost, senderAddress, linkId, response;
+  var apiHost, linkdropContractAddress, linkId, response;
   return _regenerator["default"].async(function getLinkStatus$(_context2) {
     while (1) {
       switch (_context2.prev = _context2.next) {
         case 0:
-          apiHost = _ref2.apiHost, senderAddress = _ref2.senderAddress, linkId = _ref2.linkId;
+          apiHost = _ref2.apiHost, linkdropContractAddress = _ref2.linkdropContractAddress, linkId = _ref2.linkId;
           _context2.next = 3;
-          return _regenerator["default"].awrap(_axios["default"].get("".concat(apiHost, "/api/v1/linkdrops/getStatus/").concat(senderAddress, "/").concat(linkId)));
+          return _regenerator["default"].awrap(_axios["default"].get("".concat(apiHost, "/api/v1/linkdrops/getStatus/").concat(linkdropContractAddress, "/").concat(linkId)));
 
         case 3:
           response = _context2.sent;
@@ -229,16 +230,16 @@ var getLinkStatus = function getLinkStatus(_ref2) {
 exports.getLinkStatus = getLinkStatus;
 
 var cancelLink = function cancelLink(_ref3) {
-  var apiHost, senderAddress, linkId, response, _response$data2, error, errors, success, claimOperation;
+  var apiHost, linkdropContractAddress, linkId, response, _response$data2, error, errors, success, claimOperation;
 
   return _regenerator["default"].async(function cancelLink$(_context3) {
     while (1) {
       switch (_context3.prev = _context3.next) {
         case 0:
-          apiHost = _ref3.apiHost, senderAddress = _ref3.senderAddress, linkId = _ref3.linkId;
+          apiHost = _ref3.apiHost, linkdropContractAddress = _ref3.linkdropContractAddress, linkId = _ref3.linkId;
           _context3.next = 3;
           return _regenerator["default"].awrap(_axios["default"].post("".concat(apiHost, "/api/v1/linkdrops/cancel"), {
-            senderAddress: senderAddress,
+            linkdropContractAddress: linkdropContractAddress,
             linkId: linkId
           }));
 

@@ -1,15 +1,15 @@
-import { BadRequestError, NotImplementedError } from '../../utils/errors'
-import logger from '../../utils/logger'
-import operationService from '../operationService'
-import linkdropService from '../linkdropService'
+import { BadRequestError } from '../utils/errors'
+import logger from '../utils/logger'
+import operationService from './operationService'
+import linkdropService from './linkdropService'
 
 class ClaimService {
-  _computeId ({ linkId, linkdropMasterAddress }) {
-    return `claim-${linkdropMasterAddress.toLowerCase()}-${linkId.toLowerCase()}`
+  _computeId ({ linkId, linkdropContractAddress }) {
+    return `claim-${linkdropContractAddress.toLowerCase()}-${linkId.toLowerCase()}`
   }
 
-  async cancel (linkdropMasterAddress, linkId) {
-    const claimId = this._computeId({ linkdropMasterAddress, linkId })
+  async cancel (linkdropContractAddress, linkId) {
+    const claimId = this._computeId({ linkId, linkdropContractAddress })
     let operation = await operationService.findById(claimId)
     if (!operation) {
       operation = await operationService.create({
@@ -20,8 +20,8 @@ class ClaimService {
     return operationService.update({ id: claimId, status: 'canceled' })
   }
 
-  async getStatus (linkdropMasterAddress, linkId) {
-    const claimId = this._computeId({ linkdropMasterAddress, linkId })
+  async getStatus (linkdropContractAddress, linkId) {
+    const claimId = this._computeId({ linkdropContractAddress, linkId })
     const operation = await operationService.findById(claimId)
     if (!operation) {
       return 'not_claimed'
@@ -30,8 +30,8 @@ class ClaimService {
   }
 
   // Check whether a claim tx exists in database
-  findClaimInDB ({ linkId, linkdropMasterAddress }) {
-    const id = this._computeId({ linkId, linkdropMasterAddress })
+  findClaimInDB ({ linkId, linkdropContractAddress }) {
+    const id = this._computeId({ linkId, linkdropContractAddress })
     return operationService.findById(id)
   }
 
@@ -39,29 +39,9 @@ class ClaimService {
     return operationService.findById(id)
   }
 
-  _checkClaimParamsBase (params) {
-    if (!params.weiAmount) {
-      throw new BadRequestError('Please provide weiAmount argument')
-    }
-    if (!params.expirationTime) {
-      throw new BadRequestError('Please provide expirationTime argument')
-    }
-    if (!params.version) {
-      throw new BadRequestError('Please provide version argument')
-    }
-    if (!params.chainId) {
-      throw new BadRequestError('Please provide chainId argument')
-    }
-    if (!params.linkId) {
-      throw new BadRequestError('Please provide linkId argument')
-    }
-    if (!params.linkdropMasterAddress) {
-      throw new BadRequestError('Please provide linkdropMasterAddress argument')
-    }
-    if (!params.linkdropSignerSignature) {
-      throw new BadRequestError(
-        'Please provide linkdropSignerSignature argument'
-      )
+  _checkClaimParams (params) {
+    if (!params.linkParams) {
+      throw new BadRequestError('Please provide link params argument')
     }
     if (!params.receiverAddress) {
       throw new BadRequestError('Please provide receiverAddress argument')
@@ -69,24 +49,20 @@ class ClaimService {
     if (!params.receiverSignature) {
       throw new BadRequestError('Please provide receiverSignature argument')
     }
-
-    if (!params.campaignId) {
-      throw new BadRequestError('Please provide campaignId argument')
+    if (!params.linkdropContractAddress) {
+      throw new BadRequestError(
+        'Please provider linkdrop contract address argument'
+      )
     }
-
     logger.debug('Valid claim params: ' + JSON.stringify(params))
   }
 
   _checkParamsWithBlockchainCall (params) {
-    throw new NotImplementedError(
-      'This method should be implemented in subclass'
-    )
+    return linkdropService.checkClaimParams(params)
   }
 
   _sendClaimTx (params) {
-    throw new NotImplementedError(
-      'This method should be implemented in subclass'
-    )
+    return linkdropService.claim(params)
   }
 
   async claim (params) {
@@ -94,7 +70,10 @@ class ClaimService {
     this._checkClaimParams(params)
 
     // Check whether a claim tx exists in database
-    const claim = await this.findClaimInDB(params)
+    const claim = await this.findClaimInDB({
+      linkId: params.linkParams.linkId,
+      linkdropContractAddress: params.linkParams.linkdropContractAddress
+    })
     if (claim) {
       logger.info(`Existing claim transaction found: ${claim.id}`)
 
@@ -111,24 +90,15 @@ class ClaimService {
     }
     logger.debug("Claim doesn't exist in database yet. Creating new claim...")
 
-    // compute proxyAddress from master address
-    const proxyAddress = await linkdropService.getProxyAddress(
-      params.linkdropMasterAddress,
-      params.campaignId
-    )
-
-    logger.debug(`Proxy address computed: ${proxyAddress}`)
-    params = {
-      ...params,
-      proxyAddress
-    }
-
     // blockhain check that params are valid
     await this._checkParamsWithBlockchainCall(params)
     logger.debug('Blockchain params check passed. Submitting claim tx...')
 
     // save claim operation to database
-    const claimId = this._computeId(params)
+    const claimId = this._computeId({
+      linkId: params.linkParams.linkId,
+      linkdropContractAddress: params.linkParams.linkdropContractAddress
+    })
     logger.debug('Saving claim operation to database...')
     await operationService.create({ id: claimId, type: 'claim', data: params })
 
@@ -143,4 +113,4 @@ class ClaimService {
   }
 }
 
-export default ClaimService
+export default new ClaimService()
