@@ -72,7 +72,7 @@ class ClaimService {
     // Check whether a claim tx exists in database
     const claim = await this.findClaimInDB({
       linkId: params.linkParams.linkId,
-      linkdropContractAddress: params.linkParams.linkdropContractAddress
+      linkdropContractAddress: params.linkdropContractAddress
     })
     if (claim) {
       logger.info(`Existing claim transaction found: ${claim.id}`)
@@ -97,7 +97,7 @@ class ClaimService {
     // save claim operation to database
     const claimId = this._computeId({
       linkId: params.linkParams.linkId,
-      linkdropContractAddress: params.linkParams.linkdropContractAddress
+      linkdropContractAddress: params.linkdropContractAddress
     })
     logger.debug('Saving claim operation to database...')
     await operationService.create({ id: claimId, type: 'claim', data: params })

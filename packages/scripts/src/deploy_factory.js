@@ -1,12 +1,12 @@
 import LinkdropFactory from '../../contracts/build/LinkdropFactory'
 import { terminal as term } from 'terminal-kit'
-import { getLinkdropMasterWallet, newError, getInt, getString } from './utils'
+import { newError } from './utils'
 import { ethers } from 'ethers'
 import fs from 'fs'
 import ora from 'ora'
 import configs from '../../../configs'
 
-import scriptsConfig from '../config'
+import config from '../config'
 
 ethers.errors.setLogLevel('error')
 
@@ -16,11 +16,8 @@ const serverConfigPath = configs.getPath('server')
 const appConfig = configs.get('app')
 const appConfigPath = configs.getPath('app')
 
-const LINKDROP_MASTER_WALLET = getLinkdropMasterWallet()
-const LINKDROP_MASTER_COPY_ADDRESS = getString('masterCopy')
-
-const CHAIN_ID = getInt('chainId')
-const RELAYER_ADDRESS = getString('RELAYER_ADDRESS')
+const provider = new ethers.providers.JsonRpcProvider(config.JSON_RPC_URL)
+const sender = new ethers.Wallet(config.SENDER_PRIVATE_KEY, provider)
 
 export const deploy = async () => {
   let factory, proxyFactory
@@ -37,12 +34,12 @@ export const deploy = async () => {
     factory = new ethers.ContractFactory(
       LinkdropFactory.abi,
       LinkdropFactory.bytecode,
-      LINKDROP_MASTER_WALLET
+      sender
     )
 
     proxyFactory = await factory.deploy(
-      LINKDROP_MASTER_COPY_ADDRESS,
-      CHAIN_ID,
+      config.MASTERCOPY_ADDRESS,
+      config.CHAIN_ID,
       {
         gasLimit: 4500000,
         gasPrice: ethers.utils.parseUnits('4', 'gwei')
@@ -50,12 +47,6 @@ export const deploy = async () => {
     )
 
     await proxyFactory.deployed()
-
-    spinner.info(
-      term.bold.green.str(`Adding ${RELAYER_ADDRESS} to whitelisted relayers`)
-    )
-    const tx = await proxyFactory.addRelayer(RELAYER_ADDRESS)
-    term.bold(`Tx Hash: ^g${tx.hash}\n`)
   } catch (err) {
     spinner.fail(term.bold.red.str('Failed to deploy contract'))
     throw newError(err)
@@ -69,10 +60,10 @@ export const deploy = async () => {
   term.bold(`Tx Hash: ^g${txHash}\n`)
 
   // Save to scripts config
-  scriptsConfig.FACTORY_ADDRESS = proxyFactory.address
-  fs.writeFile(scriptsConfig.ath, JSON.stringify(scriptsConfig), err => {
+  config.FACTORY_ADDRESS = proxyFactory.address
+  fs.writeFile(config.path, JSON.stringify(config), err => {
     if (err) throw newError(err)
-    term.bold(`Updated ^_${scriptsConfig.path}\n`)
+    term.bold(`Updated ^_${config.path}\n`)
   })
 
   // Save to server config

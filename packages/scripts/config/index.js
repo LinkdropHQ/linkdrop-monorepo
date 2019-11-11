@@ -11,4 +11,29 @@ if (!fs.existsSync(configPath)) {
   })
 }
 
-export default { ...require(configPath), path: configPath }
+const config = require(configPath)
+
+const getChainId = chain => {
+  switch (chain) {
+    case 'mainnet':
+      return 1
+    case 'ropsten':
+      return 3
+    case 'rinkeby':
+      return 4
+    case 'goerli':
+      return 5
+    case 'kovan':
+      return 42
+    case 'xdai':
+      return 100
+    default:
+      return null
+  }
+}
+
+if (config.CHAIN && !config.CHAIN_ID) {
+  config.CHAIN_ID = getChainId(config.CHAIN)
+}
+
+export default { ...config, path: configPath }

@@ -1,17 +1,18 @@
-import LinkdropMastercopy from '../../contracts/build/LinkdropMastercopy'
+import Linkdrop from '../../contracts/build/Linkdrop'
 import { terminal as term } from 'terminal-kit'
-import { getLinkdropMasterWallet, newError } from './utils'
+import { newError } from './utils'
 import { ethers } from 'ethers'
 import fs from 'fs'
 import ora from 'ora'
 import configs from '../../../configs'
 
-import scriptsConfig from '../config'
+import config from '../config'
 
 const appConfig = configs.get('app')
 const appConfigPath = configs.getPath('app')
 
-const LINKDROP_MASTER_WALLET = getLinkdropMasterWallet()
+const provider = new ethers.providers.JsonRpcProvider(config.JSON_RPC_URL)
+const sender = new ethers.Wallet(config.SENDER_PRIVATE_KEY, provider)
 
 export const deploy = async () => {
   let spinner, factory, masterCopy
@@ -26,9 +27,9 @@ export const deploy = async () => {
 
     // Deploy contract
     factory = new ethers.ContractFactory(
-      LinkdropMastercopy.abi,
-      LinkdropMastercopy.bytecode,
-      LINKDROP_MASTER_WALLET
+      Linkdrop.abi,
+      Linkdrop.bytecode,
+      sender
     )
 
     masterCopy = await factory.deploy({
@@ -50,11 +51,11 @@ export const deploy = async () => {
   term.bold(`Tx Hash: ^g${txHash}\n`)
 
   // Save to scripts config
-  scriptsConfig.MASTERCOPY_ADDRESS = masterCopy.address
+  config.MASTERCOPY_ADDRESS = masterCopy.address
 
-  fs.writeFile(scriptsConfig.path, JSON.stringify(scriptsConfig), err => {
+  fs.writeFile(config.path, JSON.stringify(config), err => {
     if (err) throw newError(err)
-    term.bold(`Updated ^_${scriptsConfig.path}\n`)
+    term.bold(`Updated ^_${config.path}\n`)
   })
 
   // Save to app config
