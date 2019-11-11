@@ -26,10 +26,7 @@ class Step1 extends React.Component {
         value: 'ERC20'
       }
     ]
-    this.WALLETS = (['trust', 'coinbase', 'opera', 'status', 'imtoken', 'gowallet', 'buntoy', 'tokenpocket']).map(wallet => ({
-      label: wallets[wallet].name,
-      value: wallet
-    }))
+    this.WALLETS = this.createWalletOptions()
     const assetsPrepared = this.prepareAssets({ assets, chainId })
     this.state = {
       options: assetsPrepared,
@@ -41,6 +38,16 @@ class Step1 extends React.Component {
       tokenAddress: null,
       wallet: this.WALLETS[0].value
     }
+  }
+
+  createWalletOptions () {
+    return (['trust', 'coinbase', 'opera', 'status', 'imtoken', 'gowallet', 'buntoy', 'tokenpocket']).map(wallet => {
+      const label = `Metamask / ${wallets[wallet].name}`
+      return {
+        label: wallet === 'trust' ? `Default: ${label}` : label,
+        value: wallet
+      }
+    })
   }
 
   componentDidMount () {
@@ -100,7 +107,7 @@ class Step1 extends React.Component {
             </div>
           </div>
           <div className={styles.chooseWallet}>
-            <h3 className={styles.subtitle}>{this.t('titles.defaultReceiverWallet')}</h3>
+            <h3 className={styles.subtitle}>{this.t('titles.receiverWallet')}</h3>
             <Select
               options={this.WALLETS}
               value={wallet}

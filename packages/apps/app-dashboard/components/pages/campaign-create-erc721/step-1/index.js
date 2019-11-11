@@ -47,10 +47,7 @@ class Step1 extends React.Component {
     const assetsPrepared = this.prepareAssets({ assets: props.assetsERC721 })
     const currentAsset = props.assetsERC721.find(asset => asset.address === assetsPrepared[0].value)
     this.defaultSymbol = defineDefaultSymbol({ chainId })
-    this.WALLETS = (['trust', 'coinbase', 'opera', 'status', 'imtoken', 'gowallet', 'buntoy', 'tokenpocket']).map(wallet => ({
-      label: wallets[wallet].name,
-      value: wallet
-    }))
+    this.WALLETS = this.createWalletOptions()
     this.state = {
       options: assetsPrepared,
       ethAmount: 0,
@@ -60,6 +57,16 @@ class Step1 extends React.Component {
       addEth: false,
       wallet: this.WALLETS[0].value
     }
+  }
+
+  createWalletOptions () {
+    return (['trust', 'coinbase', 'opera', 'status', 'imtoken', 'gowallet', 'buntoy', 'tokenpocket']).map(wallet => {
+      const label = `Metamask / ${wallets[wallet].name}`
+      return {
+        label: wallet === 'trust' ? `Default: ${label}` : label,
+        value: wallet
+      }
+    })
   }
 
   componentDidMount () {
@@ -109,7 +116,7 @@ class Step1 extends React.Component {
           </div>
           {this.renderTokenInputs({ addEth, ethAmount, tokenAddress, customTokenAddress })}
           <div className={styles.chooseWallet}>
-            <h3 className={styles.subtitle}>{this.t('titles.defaultReceiverWallet')}</h3>
+            <h3 className={styles.subtitle}>{this.t('titles.receiverWallet')}</h3>
             <Select
               options={this.WALLETS}
               value={wallet}
