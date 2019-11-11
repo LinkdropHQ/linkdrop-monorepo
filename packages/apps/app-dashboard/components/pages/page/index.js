@@ -8,27 +8,28 @@ import MetamaskInjector from './metamask-injector'
 import { Loading } from '@linkdrop/ui-kit'
 import NetworkNotSupported from './network-not-supported'
 import { defineNetworkName } from '@linkdrop/commons'
-
-let web3Obj
+import Web3 from 'web3'
 const ls = window.localStorage
+
+let web3Provider
 try {
-  web3Obj = web3
+  web3Provider = new Web3(web3.currentProvider)
 } catch (e) {
-  web3Obj = null
+  web3Provider = null
 }
 
 @actions(({ user: { currentAddress, chainId, loading, step } }) => ({ loading, currentAddress, chainId, step }))
 @translate('pages.page')
 class Page extends React.Component {
   componentDidMount () {
-    if (web3Obj) {
-      this.actions().user.checkCurrentProvider()
+    if (web3Provider) {
+      this.actions().user.checkCurrentProvider({ provider: web3Provider })
     }
   }
 
   defineContent ({ currentAddress }) {
     const { chainId, loading } = this.props
-    if (!web3Obj) {
+    if (!web3Provider) {
       return <MetamaskInjector disabled />
     }
     if (currentAddress === null && loading) {

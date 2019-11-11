@@ -10,6 +10,7 @@ import setCurrent from './set-current'
 import setProxyAddress from './set-proxy-address'
 import setId from './set-id'
 import setTokenIds from './set-token-ids'
+import setDefaultWallet from './set-default-wallet'
 
 export default {
   setTokenAmount,
@@ -23,5 +24,6 @@ export default {
   setCurrent,
   setId,
   setProxyAddress,
-  setTokenIds
+  setTokenIds,
+  setDefaultWallet
 }
