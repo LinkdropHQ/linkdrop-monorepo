@@ -36,16 +36,17 @@ export default {
   opera: {
     id: 'opera',
     name: 'Opera',
-    walletURL: 'https://play.google.com/store/apps/details?id=com.opera.browser',
+    walletURL: 'https://www.opera.com/mobile/operabrowser',
+    walletURLIos: 'https://www.opera.com/mobile/touch',
     dappStoreUrl: 'https://www.opera.com/dapps-store',
     mobile: {
       android: {
         support: true,
-        deepLink: (url) => `https://operacrypto.page.link/?link=${encodeURIComponent(url)}&apn=com.opera.browser`
+        deepLink: (url) => `https://operacrypto.page.link/?link=${encodeURIComponent(url)}&efr=1&apn=com.opera.browser`
       },
       ios: {
         support: true,
-        deepLink: (url) => `https://operacrypto.page.link/?link=${encodeURIComponent(url)}&ibi=com.opera.OperaTouch&isi=1411869974`
+        deepLink: (url) => `https://operacrypto.page.link/?link=${encodeURIComponent(url)}&efr=1&ibi=com.opera.OperaTouch&isi=1411869974`
       }
     }
   },

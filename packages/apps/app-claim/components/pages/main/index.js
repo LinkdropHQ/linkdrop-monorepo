@@ -1,6 +1,7 @@
+/* global web3 */
 import React from 'react'
 import { Loading } from '@linkdrop/ui-kit'
-import { actions, translate, platform } from 'decorators'
+import { actions, translate, platform, detectBrowser } from 'decorators'
 import InitialPage from './initial-page'
 import WalletChoosePage from './wallet-choose-page'
 import ClaimingProcessPage from './claiming-process-page'
@@ -8,6 +9,12 @@ import ErrorPage from './error-page'
 import ClaimingFinishedPage from './claiming-finished-page'
 import { getHashVariables, defineNetworkName, capitalize } from '@linkdrop/commons'
 import { Web3Consumer } from 'web3-react'
+let web3Obj
+try {
+  web3Obj = web3
+} catch (err) {
+  console.error(err)
+}
 
 @actions(({ user: { errors, step, loading: userLoading, readyToClaim, alreadyClaimed }, tokens: { transactionId }, contract: { loading, decimals, amount, symbol, icon } }) => ({
   userLoading,
@@ -23,6 +30,7 @@ import { Web3Consumer } from 'web3-react'
   readyToClaim
 }))
 @platform()
+@detectBrowser()
 @translate('pages.claim')
 class Claim extends React.Component {
   componentDidMount () {
@@ -98,10 +106,19 @@ class Claim extends React.Component {
     // networkId,
     // account,
     // error
-    const {
+    let {
       account,
       networkId
     } = context
+    if (this.isOpera) {
+      if (!account || !networkId) {
+        if (web3Obj && web3Obj.currentProvider && web3Obj.currentProvider.publicConfigStore && web3Obj.currentProvider.publicConfigStore.getState) {
+          const data = web3Obj.currentProvider.publicConfigStore.getState()
+          account = data.selectedAddress
+          networkId = data.networkVersion
+        }
+      }
+    }
     const {
       chainId,
       linkdropMasterAddress

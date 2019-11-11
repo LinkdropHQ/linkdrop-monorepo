@@ -37,7 +37,7 @@ class WalletChoosePage extends React.Component {
       })}
       >
         <div className={classNames(styles.wallet, styles.withBorder, styles.walletPreview)}>
-          <RetinaImage width={60} {...getImages({ src: w })} />
+          {this.renderIcon({ id: w })}
         </div>
         <div className={styles.title}>{this.t('titles.needWallet')}</div>
         {platform !== 'desktop' && <Button href={buttonLink} target='_blank' className={styles.button}>
@@ -48,9 +48,28 @@ class WalletChoosePage extends React.Component {
     }
   }
 
+  renderIcon ({ id }) {
+    let imageId = id
+    if (id === 'opera') {
+      if (this.platform === 'ios') {
+        imageId = 'opera-touch'
+      }
+    }
+    return <RetinaImage width={60} {...getImages({ src: imageId })} />
+  }
+
+  defineWalletHref ({ walletURL, walletURLIos, walletType }) {
+    if (walletType === 'opera') {
+      if (this.platform === 'ios') {
+        return walletURLIos
+      }
+    }
+    return walletURL
+  }
+
   renderWalletInstruction ({ walletType }) {
     const { showSlider } = this.state
-    const { name: walletTitle, walletURL } = getWalletData({ wallet: walletType })
+    const { name: walletTitle, walletURL, walletURLIos } = getWalletData({ wallet: walletType })
     let instruction = ''
     switch (walletType) {
       case 'trust':
@@ -59,7 +78,7 @@ class WalletChoosePage extends React.Component {
       case 'status':
       case 'imtoken':
       case 'opera':
-        instruction = this.renderDeepLinkInstruction({ walletType, title: walletTitle, href: walletURL })
+        instruction = this.renderDeepLinkInstruction({ walletType, title: walletTitle, href: this.defineWalletHref({ walletURL, walletURLIos, walletType }) })
         break
       default:
         instruction = this.renderCommonInstruction({ walletType, title: walletTitle, href: walletURL })
@@ -70,7 +89,7 @@ class WalletChoosePage extends React.Component {
     })}
     >
       <div className={classNames(styles.wallet, styles.withBorder, styles.walletPreview)}>
-        <RetinaImage width={60} {...getImages({ src: walletType })} />
+        {this.renderIcon({ id: walletType })}
       </div>
       <div className={classNames(styles.title, styles.instructionTitle)}>{this.t('titles.howToClaim', { wallet: walletTitle })}</div>
       {instruction}
