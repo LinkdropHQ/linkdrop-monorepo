@@ -1,0 +1,12 @@
+@import "variables";
+
+.container {
+  max-width: 300px;
+  background: $violetColor;
+}
+
+.inverted {
+  border-color: $violetColor;
+  background: none;
+  color: $violetColor;
+}

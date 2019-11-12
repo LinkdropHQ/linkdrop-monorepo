@@ -1,0 +1,58 @@
+@import "variables";
+
+.container {
+  position: relative;
+}
+
+.subtitle {
+  font-size: 18px;
+  margin-bottom: 40px;
+  text-align: center;
+
+  span {
+    font-family: 'Inter-Medium';
+  }
+}
+
+.title {
+  font-size: 24px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+
+  svg {
+    margin-right: 8px;
+  }
+}
+
+.button {
+  margin-bottom: 20px;
+}
+
+.iconedButton {
+  position: relative;
+
+  svg {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+}
+
+.qr {
+  width: 150px;
+  height: 150px;
+  border: 1px solid $dbBlue;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.qrSubtitle {
+  font-size: 16px;
+  color: $greyColor;
+  text-align: center;
+}

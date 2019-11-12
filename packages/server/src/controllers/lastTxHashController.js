@@ -1,11 +1,11 @@
 import lastTxHashService from '../services/lastTxHashService'
 
 export const getLastTxHash = async (req, res) => {
-  const linkdropMasterAddress = req.params.linkdropMasterAddress
+  const linkdropContractAddress = req.params.linkdropContractAddress
   const linkId = req.params.linkId
 
   const txHash = await lastTxHashService.getLastTxHash({
-    linkdropMasterAddress,
+    linkdropContractAddress,
     linkId
   })
 

@@ -1,16 +1,20 @@
 import LinkdropFactory from '../../contracts/build/LinkdropFactory'
-import LinkdropMastercopy from '../../contracts/build/LinkdropMastercopy'
-
+import Linkdrop from '../../contracts/build/Linkdrop'
 import { terminal as term } from 'terminal-kit'
-import { getLinkdropMasterWallet, newError, getString } from './utils'
+import { newError } from './utils'
 import { ethers } from 'ethers'
 import ora from 'ora'
+import config from '../config'
 
 ethers.errors.setLogLevel('error')
-
-const LINKDROP_MASTER_WALLET = getLinkdropMasterWallet()
-const FACTORY_ADDRESS = getString('FACTORY_ADDRESS')
-const MASTERCOPY_ADDRESS = getString('masterCopy')
+const {
+  MASTERCOPY_ADDRESS,
+  FACTORY_ADDRESS,
+  JSON_RPC_URL,
+  SENDER_PRIVATE_KEY
+} = config
+const provider = new ethers.providers.JsonRpcProvider(JSON_RPC_URL)
+const sender = new ethers.Wallet(SENDER_PRIVATE_KEY, provider)
 
 export const set = async () => {
   let spinner, factory, masterCopy, tx
@@ -23,11 +27,7 @@ export const set = async () => {
 
     spinner.start()
 
-    masterCopy = new ethers.Contract(
-      MASTERCOPY_ADDRESS,
-      LinkdropMastercopy.abi,
-      LINKDROP_MASTER_WALLET
-    )
+    masterCopy = new ethers.Contract(MASTERCOPY_ADDRESS, Linkdrop.abi, sender)
 
     const initialized = await masterCopy.initialized()
 
@@ -35,11 +35,7 @@ export const set = async () => {
       return spinner.fail(term.bold.red.str('Master copy already initialized'))
     }
 
-    factory = new ethers.Contract(
-      FACTORY_ADDRESS,
-      LinkdropFactory.abi,
-      LINKDROP_MASTER_WALLET
-    )
+    factory = new ethers.Contract(FACTORY_ADDRESS, LinkdropFactory.abi, sender)
 
     tx = await factory.setMasterCopy(MASTERCOPY_ADDRESS, {
       gasLimit: 1200000

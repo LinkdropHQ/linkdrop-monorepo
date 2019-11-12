@@ -1,6 +1,7 @@
-/* global describe, before, it */
+/* global describe, it */
 
 import chai from 'chai'
+import { ethers } from 'ethers'
 
 import {
   createMockProvider,
@@ -10,17 +11,9 @@ import {
 } from 'ethereum-waffle'
 
 import LinkdropFactory from '../build/LinkdropFactory'
-import LinkdropMastercopy from '../build/LinkdropMastercopy'
-import TokenMock from '../build/TokenMock'
+import Linkdrop from '../build/Linkdrop'
 
-import {
-  computeProxyAddress,
-  createLink,
-  signReceiverAddress,
-  computeBytecode
-} from '../scripts/utils'
-
-const ethers = require('ethers')
+import { computeProxyAddress } from '../scripts/utils'
 
 // Turn off annoying warnings
 ethers.errors.setLogLevel('error')
@@ -28,47 +21,29 @@ ethers.errors.setLogLevel('error')
 chai.use(solidity)
 const { expect } = chai
 
-let provider = createMockProvider()
+const provider = createMockProvider()
 
-let [linkdropMaster, linkdropSigner, relayer] = getWallets(provider)
+const [sender, signer] = getWallets(provider)
 
 let masterCopy
 let factory
 let proxy
-let proxyAddress
-let tokenInstance
-
-let link
-let receiverAddress
-let receiverSignature
-let weiAmount
-let tokenAddress
-let tokenAmount
-let expirationTime
-let version
-let bytecode
-
 const campaignId = 0
 
 const initcode = '0x6352c7420d6000526103ff60206004601c335afa6040516060f3'
 const chainId = 4 // Rinkeby
 
 describe('Factory tests', () => {
-  before(async () => {
-    tokenInstance = await deployContract(linkdropMaster, TokenMock)
-  })
-
   it('should deploy master copy of linkdrop implementation', async () => {
-    masterCopy = await deployContract(linkdropMaster, LinkdropMastercopy, [], {
+    masterCopy = await deployContract(sender, Linkdrop, [], {
       gasLimit: 6000000
     })
     expect(masterCopy.address).to.not.eq(ethers.constants.AddressZero)
   })
 
   it('should deploy factory', async () => {
-    bytecode = computeBytecode(masterCopy.address)
     factory = await deployContract(
-      linkdropMaster,
+      sender,
       LinkdropFactory,
       [masterCopy.address, chainId],
       {
@@ -77,44 +52,40 @@ describe('Factory tests', () => {
     )
 
     expect(factory.address).to.not.eq(ethers.constants.AddressZero)
-    let version = await factory.masterCopyVersion()
+    const version = await factory.masterCopyVersion()
     expect(version).to.eq(1)
   })
 
   it('should deploy proxy with signing key and topup with ethers in single tx', async () => {
     // Compute next address with js function
-    let expectedAddress = computeProxyAddress(
+    const expectedAddress = computeProxyAddress(
       factory.address,
-      linkdropMaster.address,
+      sender.address,
       campaignId,
       initcode
     )
 
-    const value = 100 // wei
+    const value = 100
 
     await expect(
-      factory.deployProxyWithSigner(campaignId, linkdropSigner.address, {
+      factory.deployProxyWithSigner(campaignId, signer.address, {
         value,
         gasLimit: 6000000
       })
     ).to.emit(factory, 'Deployed')
 
-    proxy = new ethers.Contract(
-      expectedAddress,
-      LinkdropMastercopy.abi,
-      linkdropMaster
-    )
+    proxy = new ethers.Contract(expectedAddress, Linkdrop.abi, sender)
 
-    let linkdropMasterAddress = await proxy.linkdropMaster()
-    expect(linkdropMasterAddress).to.eq(linkdropMaster.address)
+    const senderAddress = await proxy.sender()
+    expect(senderAddress).to.eq(sender.address)
 
-    let version = await proxy.version()
+    const version = await proxy.version()
     expect(version).to.eq(1)
 
-    let owner = await proxy.owner()
+    const owner = await proxy.owner()
     expect(owner).to.eq(factory.address)
 
-    let isSigner = await proxy.isLinkdropSigner(linkdropSigner.address)
+    const isSigner = await proxy.isSigner(signer.address)
     expect(isSigner).to.eq(true)
 
     const balance = await provider.getBalance(proxy.address)
