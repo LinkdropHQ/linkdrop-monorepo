@@ -7,8 +7,8 @@ class Contract {
     this.actions.dispatch({ type: '*CONTRACT.GET_TOKEN_ERC20_DATA', payload: { tokenAddress, tokenAmount, weiAmount, chainId } })
   }
 
-  getTokenERC721Data ({ nftAddress, tokenId, chainId }) {
-    this.actions.dispatch({ type: '*CONTRACT.GET_TOKEN_ERC721_DATA', payload: { nftAddress, tokenId, chainId } })
+  getTokenERC721Data ({ nftAddress, tokenId, chainId, name }) {
+    this.actions.dispatch({ type: '*CONTRACT.GET_TOKEN_ERC721_DATA', payload: { nftAddress, tokenId, chainId, name } })
   }
 
   getPastEvents ({ linkKey, chainId, campaignId }) {
