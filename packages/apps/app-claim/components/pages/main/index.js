@@ -59,7 +59,8 @@ class Claim extends React.Component {
       expirationTime,
       chainId,
       nftAddress,
-      tokenId
+      tokenId,
+      name
     } = getHashVariables()
     // params in url:
     // token - contract/token address,
@@ -85,7 +86,7 @@ class Claim extends React.Component {
     }
 
     if (nftAddress && tokenId) {
-      return this.actions().contract.getTokenERC721Data({ nftAddress, tokenId, chainId })
+      return this.actions().contract.getTokenERC721Data({ nftAddress, tokenId, chainId, name })
     }
     this.actions().contract.getTokenERC20Data({ tokenAddress, weiAmount, tokenAmount, chainId })
   }

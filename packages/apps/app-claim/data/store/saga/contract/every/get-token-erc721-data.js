@@ -9,8 +9,8 @@ const getImage = function * ({ metadataURL }) {
   try {
     const data = yield call(getERC721TokenData, { erc721URL: metadataURL })
     return data.image
-  } catch (error) {
-    console.error(e)
+  } catch (err) {
+    console.error(err)
     return ''
   }
 }
@@ -18,8 +18,8 @@ const getImage = function * ({ metadataURL }) {
 const getContractData = function * ({ tokenId, nftContract }) {
   try {
     return yield nftContract.tokenURI(tokenId)
-  } catch (e) {
-    console.error(e)
+  } catch (err) {
+    console.error(err)
     return ''
   }
 }
@@ -27,8 +27,8 @@ const getContractData = function * ({ tokenId, nftContract }) {
 const getSymbol = function * ({ nftContract, nftAddress }) {
   try {
     return yield nftContract.symbol()
-  } catch (e) {
-    console.error(e)
+  } catch (err) {
+    console.error(err)
     if (nftAddress === '0xfac7bea255a6990f749363002136af6556b31e04') {
       return 'ENS'
     }
@@ -40,7 +40,7 @@ const generator = function * ({ payload }) {
   let image = +(new Date())
   try {
     yield put({ type: 'CONTRACT.SET_LOADING', payload: { loading: true } })
-    const { nftAddress, tokenId, chainId } = payload
+    const { nftAddress, tokenId, chainId, name: linkFromName } = payload
     const actualJsonRpcUrl = defineJsonRpcUrl({ chainId, infuraPk, jsonRpcUrlXdai })
     const provider = yield new ethers.providers.JsonRpcProvider(actualJsonRpcUrl)
     const nftContract = yield new ethers.Contract(nftAddress, NFTMock.abi, provider)
@@ -49,7 +49,7 @@ const generator = function * ({ payload }) {
     if (metadataURL !== '') {
       image = yield getImage({ metadataURL })
     }
-    yield put({ type: 'CONTRACT.SET_SYMBOL', payload: { symbol: name } })
+    yield put({ type: 'CONTRACT.SET_SYMBOL', payload: { symbol: linkFromName || name } })
 
     yield put({ type: 'CONTRACT.SET_ICON', payload: { icon: image } })
 
@@ -58,12 +58,12 @@ const generator = function * ({ payload }) {
     yield put({ type: 'USER.SET_STEP', payload: { step: 1 } })
   } catch (e) {
     console.error(e)
-    const { nftAddress, chainId } = payload
+    const { nftAddress, chainId, name: linkFromName } = payload
     const actualJsonRpcUrl = defineJsonRpcUrl({ chainId, infuraPk, jsonRpcUrlXdai })
     const provider = yield new ethers.providers.JsonRpcProvider(actualJsonRpcUrl)
     const nftContract = yield new ethers.Contract(nftAddress, NFTMock.abi, provider)
-    const name = yield nftContract.symbol()
-    yield put({ type: 'CONTRACT.SET_SYMBOL', payload: { symbol: name } })
+    const name = yield getSymbol({ nftContract, nftAddress })
+    yield put({ type: 'CONTRACT.SET_SYMBOL', payload: { symbol: linkFromName || name } })
     yield put({ type: 'CONTRACT.SET_ICON', payload: { icon: image } })
     yield put({ type: 'CONTRACT.SET_AMOUNT', payload: { amount: undefined } })
     yield put({ type: 'CONTRACT.SET_LOADING', payload: { loading: false } })
