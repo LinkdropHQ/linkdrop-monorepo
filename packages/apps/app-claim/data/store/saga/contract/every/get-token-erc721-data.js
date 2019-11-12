@@ -10,7 +10,29 @@ const getImage = function * ({ metadataURL }) {
     const data = yield call(getERC721TokenData, { erc721URL: metadataURL })
     return data.image
   } catch (error) {
+    console.error(e)
     return ''
+  }
+}
+
+const getContractData = function * ({ tokenId, nftContract }) {
+  try {
+    return yield nftContract.tokenURI(tokenId)
+  } catch (e) {
+    console.error(e)
+    return ''
+  }
+}
+
+const getSymbol = function * ({ nftContract, nftAddress }) {
+  try {
+    return yield nftContract.symbol()
+  } catch (e) {
+    console.error(e)
+    if (nftAddress === '0xfac7bea255a6990f749363002136af6556b31e04') {
+      return 'ENS'
+    }
+    return 'ERC721'
   }
 }
 
@@ -22,8 +44,8 @@ const generator = function * ({ payload }) {
     const actualJsonRpcUrl = defineJsonRpcUrl({ chainId, infuraPk, jsonRpcUrlXdai })
     const provider = yield new ethers.providers.JsonRpcProvider(actualJsonRpcUrl)
     const nftContract = yield new ethers.Contract(nftAddress, NFTMock.abi, provider)
-    const metadataURL = yield nftContract.tokenURI(tokenId)
-    const name = yield nftContract.symbol()
+    const metadataURL = yield getContractData({ tokenId, nftContract })
+    const name = yield getSymbol({ nftContract, nftAddress })
     if (metadataURL !== '') {
       image = yield getImage({ metadataURL })
     }
