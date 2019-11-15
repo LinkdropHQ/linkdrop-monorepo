@@ -39,7 +39,8 @@ class Finished extends React.Component {
       />
       <Button
         className={styles.button}
-        onClick={getHashVariables({ value: link })}
+        target='_blank'
+        href={link}
       >
         {this.t('buttons.claimInWallet')}
       </Button>

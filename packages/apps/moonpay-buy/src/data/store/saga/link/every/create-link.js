@@ -8,14 +8,14 @@ const generator = function * ({ payload }) {
     const sdk = yield select(generator.selectors.sdk)
     yield put({ type: 'LINK.SET_LOADING', payload: { loading: true } })
     const ethersContractZeroAddress = ethers.constants.AddressZero
-    const link = yield sdk.generateLink({
+    const { url } = yield sdk.generateLink({
       campaignId: 0, // 0
       tokenAddress: ethersContractZeroAddress,
-      nativeTokensAmount: ethBalance, // atomic value
+      nativeTokensAmount: String(ethBalance), // atomic value
       signingKeyOrWallet: privateKey // private key of wallet
     })
-    console.log({ link })
-    yield put({ type: 'LINK.SET_LINK', payload: { link } })
+    console.log({ url })
+    yield put({ type: 'LINK.SET_LINK', payload: { link: url } })
     yield put({ type: 'LINK.SET_PAGE', payload: { page: 'finished' } })
     yield put({ type: 'LINK.SET_LOADING', payload: { loading: false } })
   } catch (e) {
