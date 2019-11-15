@@ -4,7 +4,12 @@ import { Page } from 'components/pages'
 import { actions } from 'decorators'
 import { Loading } from '@linkdrop/ui-kit'
 
-@actions(({ user: { wallet, privateKey, sdk } }) => ({ wallet, sdk, privateKey }))
+@actions(({ assets: { ethBalance }, user: { wallet, privateKey, sdk } }) => ({
+  wallet,
+  sdk,
+  privateKey,
+  ethBalance
+}))
 class Main extends React.Component {
   constructor (props) {
     super(props)
@@ -17,17 +22,30 @@ class Main extends React.Component {
     this.actions().user.createInitialData()
   }
 
+  componentWillReceiveProps ({ ethBalance }) {
+    const { ethBalance: prevEthBalance } = this.props
+    if (!prevEthBalance && ethBalance) {
+      if (window.balanceCheck) {
+        window.clearInterval(window.balanceCheck)
+        window.location.href = '/#/link-generate'
+      }
+    }
+  }
+
   shouldComponentUpdate (nextProps, nextState) {
     const { loaded } = nextState
-    console.log({ loaded })
     if (loaded) { return false }
-    console.log('should reload')
     return true
+  }
+
+  applyBalanceCheck () {
+    if (window.balanceCheck) { window.clearInterval(window.balanceCheck) }
+    window.balanceCheck = window.setInterval(_ => this.actions().assets.checkBalance(), 3000)
   }
 
   render () {
     const { loaded } = this.state
-    const { sdk, wallet, privateKey } = this.props
+    const { sdk, wallet, privateKey, ethBalance } = this.props
     if (!wallet) {
       return <Loading />
     }
@@ -36,8 +54,12 @@ class Main extends React.Component {
         <iframe
           frameBorder='0'
           height='100%'
-          onLoad={_ => this.setState({ loaded: true })}
-          src={`https://buy-staging.moonpay.io?apiKey=pk_test_8XCxJYhz1ztZR6AenQHE0UAfxPvCyrSI&currencyCode=eth&walletAddress=${wallet}&redirectURL=http%3A%2F%2Flocalhost%3A9004%2F%23%2Flink-generate`}
+          onLoad={_ => this.setState({
+            loaded: true
+          }, _ => {
+            this.applyBalanceCheck()
+          })}
+          src={`https://buy-staging.moonpay.io?apiKey=pk_test_8XCxJYhz1ztZR6AenQHE0UAfxPvCyrSI&currencyCode=eth&walletAddress=${wallet}&redirectURL=http%3A%2F%2Flocalhost%3A9004%2F%23%2Floading`}
           width='100%'
         >
           <p>Your browser does not support iframes.</p>

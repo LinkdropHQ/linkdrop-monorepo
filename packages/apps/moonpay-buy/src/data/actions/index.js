@@ -1,5 +1,6 @@
 import User from './user'
 import Link from './link'
+import Assets from './assets'
 
 class Actions {
   constructor (env) {
@@ -7,6 +8,7 @@ class Actions {
     this.history = (env.props || env).history
     this.link = new Link(this)
     this.user = new User(this)
+    this.assets = new Assets(this)
   }
 }
 
