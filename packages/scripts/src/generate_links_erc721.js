@@ -133,7 +133,7 @@ export const generate = async () => {
       } = await linkdropSDK.generateLink({
         signingKeyOrWallet: sender.privateKey,
         nativeTokensAmount: NATIVE_TOKENS_AMOUNT,
-        nftAddress: NFT_ADDRESS,
+        nft: NFT_ADDRESS,
         tokenId: tokenIds[i],
         campaignId: CAMPAIGN_ID,
         feeAmount: FEE_AMOUNT
