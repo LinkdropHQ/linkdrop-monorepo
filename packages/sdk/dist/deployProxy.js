@@ -9,14 +9,12 @@ exports.deployProxy = exports.connectToFactoryContract = void 0;
 
 var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"));
 
-var _typeof2 = _interopRequireDefault(require("@babel/runtime/helpers/typeof"));
-
 var _LinkdropFactory = _interopRequireDefault(require("@linkdrop/contracts/build/LinkdropFactory.json"));
 
 var _ethers = require("ethers");
 
 var connectToFactoryContract = function connectToFactoryContract(_ref) {
-  var jsonRpcUrl, factoryAddress, signingKeyOrWallet, provider, wallet;
+  var jsonRpcUrl, factoryAddress, signingKeyOrWallet, provider;
   return _regenerator["default"].async(function connectToFactoryContract$(_context) {
     while (1) {
       switch (_context.prev = _context.next) {
@@ -50,12 +48,10 @@ var connectToFactoryContract = function connectToFactoryContract(_ref) {
           provider = new _ethers.ethers.providers.JsonRpcProvider(jsonRpcUrl);
 
           if (typeof signingKeyOrWallet === 'string') {
-            wallet = new _ethers.ethers.Wallet(signingKeyOrWallet, provider);
-          } else if ((0, _typeof2["default"])(signingKeyOrWallet) === 'object') {
-            wallet = signingKeyOrWallet;
+            signingKeyOrWallet = new _ethers.ethers.Wallet(signingKeyOrWallet, provider);
           }
 
-          return _context.abrupt("return", new _ethers.ethers.Contract(factoryAddress, _LinkdropFactory["default"].abi, wallet));
+          return _context.abrupt("return", new _ethers.ethers.Contract(factoryAddress, _LinkdropFactory["default"].abi, signingKeyOrWallet));
 
         case 10:
         case "end":
@@ -68,12 +64,12 @@ var connectToFactoryContract = function connectToFactoryContract(_ref) {
 exports.connectToFactoryContract = connectToFactoryContract;
 
 var deployProxy = function deployProxy(_ref2) {
-  var jsonRpcUrl, factoryAddress, signingKeyOrWallet, campaignId, weiAmount, provider, wallet, factoryContract, data;
+  var jsonRpcUrl, factoryAddress, signingKeyOrWallet, campaignId, nativeTokensAmount, provider, factoryContract, data;
   return _regenerator["default"].async(function deployProxy$(_context2) {
     while (1) {
       switch (_context2.prev = _context2.next) {
         case 0:
-          jsonRpcUrl = _ref2.jsonRpcUrl, factoryAddress = _ref2.factoryAddress, signingKeyOrWallet = _ref2.signingKeyOrWallet, campaignId = _ref2.campaignId, weiAmount = _ref2.weiAmount;
+          jsonRpcUrl = _ref2.jsonRpcUrl, factoryAddress = _ref2.factoryAddress, signingKeyOrWallet = _ref2.signingKeyOrWallet, campaignId = _ref2.campaignId, nativeTokensAmount = _ref2.nativeTokensAmount;
 
           if (!(jsonRpcUrl == null || jsonRpcUrl === '')) {
             _context2.next = 3;
@@ -107,40 +103,46 @@ var deployProxy = function deployProxy(_ref2) {
           throw new Error('Please provide campaign id');
 
         case 9:
+          if (!(nativeTokensAmount == null || nativeTokensAmount === '')) {
+            _context2.next = 11;
+            break;
+          }
+
+          throw new Error('Please provide native tokens amount');
+
+        case 11:
           provider = new _ethers.ethers.providers.JsonRpcProvider(jsonRpcUrl);
 
           if (typeof signingKeyOrWallet === 'string') {
-            wallet = new _ethers.ethers.Wallet(signingKeyOrWallet, provider);
-          } else if ((0, _typeof2["default"])(signingKeyOrWallet) === 'object') {
-            wallet = signingKeyOrWallet;
+            signingKeyOrWallet = new _ethers.ethers.Wallet(signingKeyOrWallet, provider);
           }
 
-          _context2.next = 13;
+          _context2.next = 15;
           return _regenerator["default"].awrap(connectToFactoryContract({
             jsonRpcUrl: jsonRpcUrl,
             factoryAddress: factoryAddress,
             signingKeyOrWallet: signingKeyOrWallet
           }));
 
-        case 13:
+        case 15:
           factoryContract = _context2.sent;
 
-          if (!(weiAmount > 0)) {
-            _context2.next = 17;
+          if (!(nativeTokensAmount > 0)) {
+            _context2.next = 19;
             break;
           }
 
           data = factoryContract["interface"].functions.deployProxy.encode(campaignId);
-          return _context2.abrupt("return", wallet.sendTransaction({
+          return _context2.abrupt("return", signingKeyOrWallet.sendTransaction({
             to: factoryAddress,
-            value: weiAmount,
+            value: nativeTokensAmount,
             data: data
           }));
 
-        case 17:
+        case 19:
           return _context2.abrupt("return", factoryContract.deployProxy(campaignId));
 
-        case 18:
+        case 20:
         case "end":
           return _context2.stop();
       }
