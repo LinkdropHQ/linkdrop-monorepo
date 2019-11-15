@@ -6,6 +6,7 @@ import { PageExpandable } from 'components/pages'
 import QRCode from 'qrcode.react'
 import { Icons } from '@linkdrop/ui-kit'
 import variables from 'variables'
+import { getHashVariables } from '@linkdrop/commons'
 
 @actions(({ link: { link } }) => ({
   link
@@ -38,6 +39,7 @@ class Finished extends React.Component {
       />
       <Button
         className={styles.button}
+        onClick={getHashVariables({ value: link })}
       >
         {this.t('buttons.claimInWallet')}
       </Button>
