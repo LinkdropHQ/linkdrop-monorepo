@@ -68,12 +68,12 @@ class LinkdropSDK {
   }
 
   async generateLink ({
-    campaignId, // 0
-    tokenAddress = AddressZero,
-    nftAddress = AddressZero,
-    feeTokenAddress = AddressZero,
-    feeReceiverAddress = AddressZero,
-    nativeTokensAmount = 0, // atomic value
+    campaignId = 0,
+    token = AddressZero,
+    nft = AddressZero,
+    feeToken = AddressZero,
+    feeReceiver = AddressZero,
+    nativeTokensAmount = 0,
     tokensAmount = 0,
     tokenId = 0,
     feeAmount = 0,
@@ -85,10 +85,10 @@ class LinkdropSDK {
       factory: this.factoryAddress,
       sender: this.senderAddress,
       campaignId,
-      token: tokenAddress,
-      nft: nftAddress,
-      feeToken: feeTokenAddress,
-      feeReceiver: feeReceiverAddress,
+      token,
+      nft,
+      feeToken,
+      feeReceiver,
       nativeTokensAmount,
       tokensAmount,
       tokenId,
@@ -100,11 +100,11 @@ class LinkdropSDK {
     })
   }
 
-  getProxyAddress (campaingId) {
+  getProxyAddress (campaignId = 0) {
     return computeProxyAddress(
       this.factoryAddress,
       this.senderAddress,
-      campaingId
+      campaignId
     )
   }
 
@@ -142,12 +142,12 @@ class LinkdropSDK {
     })
   }
 
-  async topup ({ signingKeyOrWallet, proxyAddress, weiAmount }) {
+  async topup ({ signingKeyOrWallet, proxyAddress, nativeTokensAmount }) {
     return topupAndApproveUtils.topup({
       jsonRpcUrl: this.jsonRpcUrl,
       signingKeyOrWallet,
       proxyAddress,
-      weiAmount
+      nativeTokensAmount
     })
   }
 
@@ -175,13 +175,17 @@ class LinkdropSDK {
     })
   }
 
-  async deployProxy ({ signingKeyOrWallet, campaignId = 0, weiAmount }) {
+  async deployProxy ({
+    signingKeyOrWallet,
+    campaignId = 0,
+    nativeTokensAmount = 0
+  }) {
     return deployUtils.deployProxy({
       jsonRpcUrl: this.jsonRpcUrl,
       factoryAddress: this.factoryAddress,
       signingKeyOrWallet,
       campaignId,
-      weiAmount
+      nativeTokensAmount
     })
   }
 

@@ -106,22 +106,22 @@ function () {
   }, {
     key: "generateLink",
     value: function generateLink(_ref2) {
-      var campaignId, _ref2$tokenAddress, tokenAddress, _ref2$nftAddress, nftAddress, _ref2$feeTokenAddress, feeTokenAddress, _ref2$feeReceiverAddr, feeReceiverAddress, _ref2$nativeTokensAmo, nativeTokensAmount, _ref2$tokensAmount, tokensAmount, _ref2$tokenId, tokenId, _ref2$feeAmount, feeAmount, _ref2$expiration, expiration, signingKeyOrWallet;
+      var _ref2$campaignId, campaignId, _ref2$token, token, _ref2$nft, nft, _ref2$feeToken, feeToken, _ref2$feeReceiver, feeReceiver, _ref2$nativeTokensAmo, nativeTokensAmount, _ref2$tokensAmount, tokensAmount, _ref2$tokenId, tokenId, _ref2$feeAmount, feeAmount, _ref2$expiration, expiration, signingKeyOrWallet;
 
       return _regenerator["default"].async(function generateLink$(_context2) {
         while (1) {
           switch (_context2.prev = _context2.next) {
             case 0:
-              campaignId = _ref2.campaignId, _ref2$tokenAddress = _ref2.tokenAddress, tokenAddress = _ref2$tokenAddress === void 0 ? _constants.AddressZero : _ref2$tokenAddress, _ref2$nftAddress = _ref2.nftAddress, nftAddress = _ref2$nftAddress === void 0 ? _constants.AddressZero : _ref2$nftAddress, _ref2$feeTokenAddress = _ref2.feeTokenAddress, feeTokenAddress = _ref2$feeTokenAddress === void 0 ? _constants.AddressZero : _ref2$feeTokenAddress, _ref2$feeReceiverAddr = _ref2.feeReceiverAddress, feeReceiverAddress = _ref2$feeReceiverAddr === void 0 ? _constants.AddressZero : _ref2$feeReceiverAddr, _ref2$nativeTokensAmo = _ref2.nativeTokensAmount, nativeTokensAmount = _ref2$nativeTokensAmo === void 0 ? 0 : _ref2$nativeTokensAmo, _ref2$tokensAmount = _ref2.tokensAmount, tokensAmount = _ref2$tokensAmount === void 0 ? 0 : _ref2$tokensAmount, _ref2$tokenId = _ref2.tokenId, tokenId = _ref2$tokenId === void 0 ? 0 : _ref2$tokenId, _ref2$feeAmount = _ref2.feeAmount, feeAmount = _ref2$feeAmount === void 0 ? 0 : _ref2$feeAmount, _ref2$expiration = _ref2.expiration, expiration = _ref2$expiration === void 0 ? 11111111111 : _ref2$expiration, signingKeyOrWallet = _ref2.signingKeyOrWallet;
+              _ref2$campaignId = _ref2.campaignId, campaignId = _ref2$campaignId === void 0 ? 0 : _ref2$campaignId, _ref2$token = _ref2.token, token = _ref2$token === void 0 ? _constants.AddressZero : _ref2$token, _ref2$nft = _ref2.nft, nft = _ref2$nft === void 0 ? _constants.AddressZero : _ref2$nft, _ref2$feeToken = _ref2.feeToken, feeToken = _ref2$feeToken === void 0 ? _constants.AddressZero : _ref2$feeToken, _ref2$feeReceiver = _ref2.feeReceiver, feeReceiver = _ref2$feeReceiver === void 0 ? _constants.AddressZero : _ref2$feeReceiver, _ref2$nativeTokensAmo = _ref2.nativeTokensAmount, nativeTokensAmount = _ref2$nativeTokensAmo === void 0 ? 0 : _ref2$nativeTokensAmo, _ref2$tokensAmount = _ref2.tokensAmount, tokensAmount = _ref2$tokensAmount === void 0 ? 0 : _ref2$tokensAmount, _ref2$tokenId = _ref2.tokenId, tokenId = _ref2$tokenId === void 0 ? 0 : _ref2$tokenId, _ref2$feeAmount = _ref2.feeAmount, feeAmount = _ref2$feeAmount === void 0 ? 0 : _ref2$feeAmount, _ref2$expiration = _ref2.expiration, expiration = _ref2$expiration === void 0 ? 11111111111 : _ref2$expiration, signingKeyOrWallet = _ref2.signingKeyOrWallet;
               _context2.t0 = generateLinkUtils;
               _context2.t1 = this.claimHost;
               _context2.t2 = this.factoryAddress;
               _context2.t3 = this.senderAddress;
               _context2.t4 = campaignId;
-              _context2.t5 = tokenAddress;
-              _context2.t6 = nftAddress;
-              _context2.t7 = feeTokenAddress;
-              _context2.t8 = feeReceiverAddress;
+              _context2.t5 = token;
+              _context2.t6 = nft;
+              _context2.t7 = feeToken;
+              _context2.t8 = feeReceiver;
               _context2.t9 = nativeTokensAmount;
               _context2.t10 = tokensAmount;
               _context2.t11 = tokenId;
@@ -173,8 +173,9 @@ function () {
     }
   }, {
     key: "getProxyAddress",
-    value: function getProxyAddress(campaingId) {
-      return (0, _utils.computeProxyAddress)(this.factoryAddress, this.senderAddress, campaingId);
+    value: function getProxyAddress() {
+      var campaignId = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0;
+      return (0, _utils.computeProxyAddress)(this.factoryAddress, this.senderAddress, campaignId);
     }
   }, {
     key: "claim",
@@ -213,17 +214,17 @@ function () {
   }, {
     key: "topup",
     value: function topup(_ref4) {
-      var signingKeyOrWallet, proxyAddress, weiAmount;
+      var signingKeyOrWallet, proxyAddress, nativeTokensAmount;
       return _regenerator["default"].async(function topup$(_context4) {
         while (1) {
           switch (_context4.prev = _context4.next) {
             case 0:
-              signingKeyOrWallet = _ref4.signingKeyOrWallet, proxyAddress = _ref4.proxyAddress, weiAmount = _ref4.weiAmount;
+              signingKeyOrWallet = _ref4.signingKeyOrWallet, proxyAddress = _ref4.proxyAddress, nativeTokensAmount = _ref4.nativeTokensAmount;
               return _context4.abrupt("return", topupAndApproveUtils.topup({
                 jsonRpcUrl: this.jsonRpcUrl,
                 signingKeyOrWallet: signingKeyOrWallet,
                 proxyAddress: proxyAddress,
-                weiAmount: weiAmount
+                nativeTokensAmount: nativeTokensAmount
               }));
 
             case 2:
@@ -283,19 +284,19 @@ function () {
   }, {
     key: "deployProxy",
     value: function deployProxy(_ref7) {
-      var signingKeyOrWallet, _ref7$campaignId, campaignId, weiAmount;
+      var signingKeyOrWallet, _ref7$campaignId, campaignId, _ref7$nativeTokensAmo, nativeTokensAmount;
 
       return _regenerator["default"].async(function deployProxy$(_context7) {
         while (1) {
           switch (_context7.prev = _context7.next) {
             case 0:
-              signingKeyOrWallet = _ref7.signingKeyOrWallet, _ref7$campaignId = _ref7.campaignId, campaignId = _ref7$campaignId === void 0 ? 0 : _ref7$campaignId, weiAmount = _ref7.weiAmount;
+              signingKeyOrWallet = _ref7.signingKeyOrWallet, _ref7$campaignId = _ref7.campaignId, campaignId = _ref7$campaignId === void 0 ? 0 : _ref7$campaignId, _ref7$nativeTokensAmo = _ref7.nativeTokensAmount, nativeTokensAmount = _ref7$nativeTokensAmo === void 0 ? 0 : _ref7$nativeTokensAmo;
               return _context7.abrupt("return", deployUtils.deployProxy({
                 jsonRpcUrl: this.jsonRpcUrl,
                 factoryAddress: this.factoryAddress,
                 signingKeyOrWallet: signingKeyOrWallet,
                 campaignId: campaignId,
-                weiAmount: weiAmount
+                nativeTokensAmount: nativeTokensAmount
               }));
 
             case 2:

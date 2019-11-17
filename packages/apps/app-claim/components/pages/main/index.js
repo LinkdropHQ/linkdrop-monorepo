@@ -53,14 +53,21 @@ class Claim extends React.Component {
       alreadyClaimed == null
     ) { return }
     const {
-      tokenAddress,
-      weiAmount,
-      tokenAmount,
-      expirationTime,
-      chainId,
-      nftAddress,
-      tokenId
+      token,
+      tokensAmount,
+      expiration,
+      nft,
+      feeToken,
+      tokenId,
+      feeAmount,
+      feeReceiver,
+      nativeTokensAmount,
+      linkdropContract,
+      linkKey,
+      signerSignature,
+      receiverAddress
     } = getHashVariables()
+
     // params in url:
     // token - contract/token address,
     // amount - tokens amount,
@@ -79,15 +86,47 @@ class Claim extends React.Component {
     // token: ERC20 token address, 0x000...000 for ether - can be received from url params
     // tokenAmount: token amount in atomic values - can be received from url params
     // expirationTime: link expiration time - can be received from url params
-    if (Number(expirationTime) < (+(new Date()) / 1000)) {
+    if (Number(expiration) < (+(new Date()) / 1000)) {
       // show error page if link expired
       return this.actions().user.setErrors({ errors: ['LINK_EXPIRED'] })
     }
 
-    if (nftAddress && tokenId) {
-      return this.actions().contract.getTokenERC721Data({ nftAddress, tokenId, chainId })
+    if (nft && tokenId) {
+      // jsonRpcUrl,
+      // apiHost,
+      // token,
+      // nft,
+      // feeToken,
+      // feeReceiver,
+      // linkKey,
+      // nativeTokensAmount,
+      // tokensAmount,
+      // tokenId,
+      // feeAmount,
+      // expiration,
+      // signerSignature,
+      // receiverAddress,
+      // linkdropContract
+      return this.actions().contract.getTokenERC721Data({
+        nft,
+        tokenId,
+        chainId
+        // feeToken,
+        // feeReceiver,
+        // feeAmount,
+        // linkKey,
+        // expiration,
+        // nativeTokensAmount,
+        // signerSignature,
+        // linkdropContract
+      })
     }
-    this.actions().contract.getTokenERC20Data({ tokenAddress, weiAmount, tokenAmount, chainId })
+    this.actions().contract.getTokenERC20Data({
+      tokenAddress,
+      weiAmount,
+      tokenAmount,
+      chainId
+    })
   }
 
   render () {

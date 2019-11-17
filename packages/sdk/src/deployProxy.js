@@ -18,14 +18,15 @@ export const connectToFactoryContract = async ({
 
   const provider = new ethers.providers.JsonRpcProvider(jsonRpcUrl)
 
-  let wallet
   if (typeof signingKeyOrWallet === 'string') {
-    wallet = new ethers.Wallet(signingKeyOrWallet, provider)
-  } else if (typeof signingKeyOrWallet === 'object') {
-    wallet = signingKeyOrWallet
+    signingKeyOrWallet = new ethers.Wallet(signingKeyOrWallet, provider)
   }
 
-  return new ethers.Contract(factoryAddress, LinkdropFactory.abi, wallet)
+  return new ethers.Contract(
+    factoryAddress,
+    LinkdropFactory.abi,
+    signingKeyOrWallet
+  )
 }
 
 export const deployProxy = async ({
@@ -33,7 +34,7 @@ export const deployProxy = async ({
   factoryAddress,
   signingKeyOrWallet,
   campaignId,
-  weiAmount
+  nativeTokensAmount
 }) => {
   if (jsonRpcUrl == null || jsonRpcUrl === '') {
     throw new Error('Please provide json rpc url')
@@ -47,15 +48,14 @@ export const deployProxy = async ({
   if (campaignId == null || campaignId === '') {
     throw new Error('Please provide campaign id')
   }
+  if (nativeTokensAmount == null || nativeTokensAmount === '') {
+    throw new Error('Please provide native tokens amount')
+  }
 
   const provider = new ethers.providers.JsonRpcProvider(jsonRpcUrl)
 
-  let wallet
-
   if (typeof signingKeyOrWallet === 'string') {
-    wallet = new ethers.Wallet(signingKeyOrWallet, provider)
-  } else if (typeof signingKeyOrWallet === 'object') {
-    wallet = signingKeyOrWallet
+    signingKeyOrWallet = new ethers.Wallet(signingKeyOrWallet, provider)
   }
 
   const factoryContract = await connectToFactoryContract({
@@ -64,13 +64,13 @@ export const deployProxy = async ({
     signingKeyOrWallet
   })
 
-  if (weiAmount > 0) {
+  if (nativeTokensAmount > 0) {
     const data = factoryContract.interface.functions.deployProxy.encode(
       campaignId
     )
-    return wallet.sendTransaction({
+    return signingKeyOrWallet.sendTransaction({
       to: factoryAddress,
-      value: weiAmount,
+      value: nativeTokensAmount,
       data
     })
   }

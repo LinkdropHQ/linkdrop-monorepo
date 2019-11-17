@@ -1,6 +1,6 @@
 /* eslint-disable no-undef */
 import TokenMock from '../../contracts/build/TokenMock'
-import LinkdropSDK from '@linkdrop/sdk'
+import LinkdropSDK from '../../sdk/src'
 import ora from 'ora'
 import { terminal as term } from 'terminal-kit'
 import { ethers } from 'ethers'
@@ -139,7 +139,7 @@ export const generate = async () => {
       } = await linkdropSDK.generateLink({
         signingKeyOrWallet: sender.privateKey,
         nativeTokensAmount: NATIVE_TOKENS_AMOUNT,
-        tokenAddress: TOKEN_ADDRESS,
+        token: TOKEN_ADDRESS,
         tokensAmount: TOKENS_AMOUNT,
         campaignId: CAMPAIGN_ID,
         feeAmount: FEE_AMOUNT

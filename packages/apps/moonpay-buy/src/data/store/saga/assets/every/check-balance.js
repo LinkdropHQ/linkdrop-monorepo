@@ -1,5 +1,4 @@
 import { put, select } from 'redux-saga/effects'
-import { delay } from 'redux-saga'
 import { ethers } from 'ethers'
 
 const generator = function * ({ payload }) {
@@ -10,7 +9,6 @@ const generator = function * ({ payload }) {
     const provider = yield ethers.getDefaultProvider(networkName)
     const ethBalance = yield provider.getBalance(wallet)
     const balanceAmount = Number(ethBalance)
-    console.log({ wallet, balanceAmount })
     if (balanceAmount > 0) {
       yield put({ type: 'ASSETS.SET_ETH_BALANCE', payload: { ethBalance: balanceAmount } })
     }

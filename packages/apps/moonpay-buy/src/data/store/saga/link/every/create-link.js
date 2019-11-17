@@ -10,11 +10,10 @@ const generator = function * ({ payload }) {
     const ethersContractZeroAddress = ethers.constants.AddressZero
     const { url } = yield sdk.generateLink({
       campaignId: 0, // 0
-      tokenAddress: ethersContractZeroAddress,
+      token: ethersContractZeroAddress,
       nativeTokensAmount: String(ethBalance), // atomic value
       signingKeyOrWallet: privateKey // private key of wallet
     })
-    console.log({ url })
     yield put({ type: 'LINK.SET_LINK', payload: { link: url } })
     yield put({ type: 'LINK.SET_PAGE', payload: { page: 'finished' } })
     yield put({ type: 'LINK.SET_LOADING', payload: { loading: false } })
