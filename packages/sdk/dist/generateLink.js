@@ -82,6 +82,11 @@ var generateLink = function generateLink(_ref) {
           signerSignature = _ref2.signerSignature;
           // Construct url
           url = "".concat(claimHost, "/#/receive?token=").concat(token, "&nft=").concat(nft, "&feeToken=").concat(feeToken, "&feeReceiver=").concat(feeReceiver, "&linkKey=").concat(linkKey, "&nativeTokensAmount=").concat(nativeTokensAmount, "&tokensAmount=").concat(tokensAmount, "&tokenId=").concat(tokenId, "&feeAmount=").concat(feeAmount, "&expiration=").concat(expiration, "&signerSignature=").concat(signerSignature, "&linkdropContract=").concat(linkdropContract);
+
+          if (String(chainId) !== '1') {
+            url = "".concat(url, "&chainId=").concat(chainId);
+          }
+
           return _context.abrupt("return", {
             url: url,
             linkId: linkId,
@@ -90,7 +95,7 @@ var generateLink = function generateLink(_ref) {
             signerSignature: signerSignature
           });
 
-        case 19:
+        case 20:
         case "end":
           return _context.stop();
       }
