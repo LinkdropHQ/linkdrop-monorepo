@@ -163,12 +163,13 @@ contract LinkdropFactory is Ownable, ReentrancyGuard {
     public view
     returns (address payable proxy)
     {
+
         bytes32 temp = keccak256(abi.encodePacked
         (
             bytes1(0xff),
             address(this),
             salt(_sender, _campaignId),
-            keccak256(getInitcode())
+            keccak256(_campaignId == 0 ? getInitcodeP2P() : getInitcode())
         ));
         uint mask = 2 ** 160 - 1;
         //solium-disable-next-line security/no-inline-assembly

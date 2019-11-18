@@ -12,6 +12,7 @@ import {
 
 import LinkdropFactory from '../build/LinkdropFactory'
 import Linkdrop from '../build/Linkdrop'
+import LinkdropP2P from '../build/LinkdropP2P'
 
 import { computeBytecode, computeProxyAddress } from '../scripts/utils'
 
@@ -26,13 +27,13 @@ const provider = createMockProvider()
 const [sender, deployer] = getWallets(provider)
 
 let masterCopy
+let masterCopyP2P
 let factory
 let proxy
 let bytecode
 
-const initcode = '0x6352c7420d6000526103ff60206004601c335afa6040516060f3'
 const chainId = 4 // Rinkeby
-const campaignId = 0
+const campaignId = 1
 
 describe('Proxy upgradability tests', () => {
   //
@@ -54,13 +55,30 @@ describe('Proxy upgradability tests', () => {
 
     const masterCopyChainId = await masterCopy.chainId()
     expect(masterCopyChainId).to.eq(0)
+
+    masterCopyP2P = await deployContract(deployer, LinkdropP2P, [], {
+      gasLimit: 6000000
+    })
+    expect(masterCopyP2P.address).to.not.eq(ethers.constants.AddressZero)
+
+    const masterCopyP2POwner = await masterCopyP2P.owner()
+    expect(masterCopyP2POwner).to.eq(ethers.constants.AddressZero)
+
+    const masterCopyP2PSender = await masterCopyP2P.sender()
+    expect(masterCopyP2PSender).to.eq(ethers.constants.AddressZero)
+
+    const masterCopyP2PVersion = await masterCopyP2P.version()
+    expect(masterCopyP2PVersion).to.eq(0)
+
+    const masterCopyP2PChainId = await masterCopyP2P.chainId()
+    expect(masterCopyP2PChainId).to.eq(0)
   })
 
   it('should deploy factory', async () => {
     factory = await deployContract(
       deployer,
       LinkdropFactory,
-      [masterCopy.address, chainId],
+      [masterCopyP2P.address, masterCopy.address, chainId],
       {
         gasLimit: 6000000
       }
@@ -90,8 +108,7 @@ describe('Proxy upgradability tests', () => {
     const expectedAddress = computeProxyAddress(
       factory.address,
       sender.address,
-      campaignId,
-      initcode
+      campaignId
     )
 
     factory = factory.connect(sender)
@@ -112,6 +129,9 @@ describe('Proxy upgradability tests', () => {
 
     const owner = await proxy.owner()
     expect(owner).to.eq(factory.address)
+
+    const type = await proxy.getType()
+    expect(type).to.eq('ONE_TO_MANY')
   })
 
   it('should deploy second version of mastercopy', async () => {
@@ -142,13 +162,13 @@ describe('Proxy upgradability tests', () => {
       sender.address,
       campaignId
     )
+
     expect(isDeployed).to.eq(true)
 
     const computedAddress = computeProxyAddress(
       factory.address,
       sender.address,
-      campaignId,
-      initcode
+      campaignId
     )
 
     const deployedAddress = await factory.getProxyAddress(
@@ -188,8 +208,7 @@ describe('Proxy upgradability tests', () => {
     const computedAddress = computeProxyAddress(
       factory.address,
       sender.address,
-      campaignId,
-      initcode
+      campaignId
     )
 
     const factoryVersion = await factory.masterCopyVersion()
