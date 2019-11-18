@@ -48,18 +48,24 @@ export const computeBytecode = masterCopyAddress => {
 }
 
 // const initcode = '0x6352c7420d6000526103ff60206004601c335afa6040516060f3'
+// const initcodeP2P = '0x63fcb1b2706000526103ff60206004601c335afa6040516060f3'
 
 export const computeProxyAddress = (
   factoryAddress,
   senderAddress,
-  campaignId,
-  initcode
+  campaignId
 ) => {
   const salt = utils.solidityKeccak256(
     ['address', 'uint256'],
     [senderAddress, campaignId]
   )
   // const bytecode = computePendingRuntimeCode(masterCopyAddress)
+
+  const initcode =
+    String(campaignId) === '0'
+      ? '0x63fcb1b2706000526103ff60206004601c335afa6040516060f3'
+      : '0x6352c7420d6000526103ff60206004601c335afa6040516060f3'
+
   const proxyAddress = buildCreate2Address(factoryAddress, salt, initcode)
   return proxyAddress
 }

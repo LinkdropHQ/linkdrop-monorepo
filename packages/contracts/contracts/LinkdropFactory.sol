@@ -18,10 +18,10 @@ contract LinkdropFactory is Ownable, ReentrancyGuard {
     using Address for address payable;
 
     // Current version of one-to-one linkdrop mastercopy contract
-    uint public masterCopyVerionP2P;
+    uint public masterCopyVersionP2P;
 
     // Current version of one-to-many linkdrop mastercopy contract
-    uint public masterCopyVerion;
+    uint public masterCopyVersion;
 
     // One-to-one linkdrop contract bytecode to be installed when deploying proxy
     bytes internal _bytecodeP2P;
@@ -267,7 +267,7 @@ contract LinkdropFactory is Ownable, ReentrancyGuard {
             (
                 address(this), // Owner address
                 _sender,
-                _campaignId == 0 ? masterCopyVersionP2P : masterCopyVerion,
+                _campaignId == 0 ? masterCopyVersionP2P : masterCopyVersion,
                 chainId
             ),
             "INITIALIZATION_FAILED"
@@ -386,7 +386,7 @@ contract LinkdropFactory is Ownable, ReentrancyGuard {
     * @param _masterCopy Address of one-to-one linkdrop contract mastercopy to calculate bytecode from
     * @return True if updated successfully
     */
-    function setCampaignMasterCopy(address payable _masterCopy)
+    function setMasterCopy(address payable _masterCopy)
     public onlyOwner
     returns (bool)
     {

@@ -436,7 +436,7 @@ contract LinkdropP2P is ILinkdrop, ReentrancyGuard {
     /**
     * @dev Function to get linkdrop type
     */
-    function getType() external view returns (string memory) {
+    function getType() external pure returns (string memory) {
         return _type;
     }
 
