@@ -10,7 +10,7 @@ import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 import "./interfaces/ILinkdrop.sol";
 
 /**
-* @title Linkdrop contract (one-to-one)
+* @title One-to-many linkdrop contract
 * @author Amir Jumaniyazov - <amir@linkdrop.io>
 */
 contract Linkdrop is ILinkdrop, ReentrancyGuard {
@@ -18,7 +18,7 @@ contract Linkdrop is ILinkdrop, ReentrancyGuard {
     using SafeMath for uint;
     using Address for address payable;
 
-    string constant public name = "ONE_TO_ONE";
+    string constant private _type = "ONE_TO_MANY";
 
     // Owner address
     address public owner;
@@ -431,6 +431,13 @@ contract Linkdrop is ILinkdrop, ReentrancyGuard {
     */
     function getMasterCopyVersion() external view returns (uint) {
         return version;
+    }
+
+    /**
+    * @dev Function to get linkdrop type
+    */
+    function getType() external view returns (string memory) {
+        return _type;
     }
 
     /**

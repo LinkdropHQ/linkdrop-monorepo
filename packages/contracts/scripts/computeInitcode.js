@@ -21,10 +21,10 @@ const getSigHash = signature => {
 }
 
 let InitcodeAsm = `
-; sighash("getLinkdropCampaignBytecode()") =>  0x4ea20432
-; mstore(0x00,  0x4ea20432) (sighash("getLinkdropCampaignBytecode()"))
+; sighash("getBytecodeP2P()") =>  0xfcb1b270
+; mstore(0x00,  0xfcb1b270) (sighash("getBytecodeP2P()"))
 0x63
-0x4ea20432
+0xfcb1b270
 0x60
 0x00
 0x52
@@ -60,4 +60,4 @@ let InitcodeAsm = `
 let initcode = assemble(InitcodeAsm)
 console.log({ initcode })
 
-console.log(getSigHash('getLinkdropCampaignBytecode()'))
+console.log(getSigHash('getBytecodeP2P()'))

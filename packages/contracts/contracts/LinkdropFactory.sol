@@ -53,8 +53,8 @@ contract LinkdropFactory is Ownable, ReentrancyGuard {
     * @param _chainId Chain id
     */
     constructor(address payable _masterCopyP2P, address payable _masterCopy, uint _chainId) public {
-        _initcodeP2P = (hex"");
-        _initcode = (hex"");
+        _initcodeP2P = (hex"63fcb1b2706000526103ff60206004601c335afa6040516060f3");
+        _initcode = (hex"6352c7420d6000526103ff60206004601c335afa6040516060f3");
         chainId = _chainId;
         setMasterCopyP2P(_masterCopyP2P);
         setMasterCopy(_masterCopy);
