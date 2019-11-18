@@ -10,15 +10,15 @@ import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 import "./interfaces/ILinkdrop.sol";
 
 /**
-* @title Linkdrop contract (one-to-one)
+* @title Linkdrop campaign contract (one-to-many)
 * @author Amir Jumaniyazov - <amir@linkdrop.io>
 */
-contract Linkdrop is ILinkdrop, ReentrancyGuard {
+contract LinkdropCampaign is ILinkdrop, ReentrancyGuard {
 
     using SafeMath for uint;
     using Address for address payable;
 
-    string constant public name = "ONE_TO_ONE";
+    string constant public name = "ONE_TO_MANY";
 
     // Owner address
     address public owner;

@@ -14,11 +14,17 @@ function assemble (ASM) {
   return ethers.utils.hexlify(ethers.utils.concat(opcodes))
 }
 
+const getSigHash = signature => {
+  return ethers.utils
+    .keccak256(ethers.utils.toUtf8Bytes(signature))
+    .substring(0, 10)
+}
+
 let InitcodeAsm = `
-; sighash("getBytecode()") =>  0x52c7420d
-; mstore(0x00,  0x52c7420d) (sighash("getBytecode()"))
+; sighash("getLinkdropCampaignBytecode()") =>  0x4ea20432
+; mstore(0x00,  0x4ea20432) (sighash("getLinkdropCampaignBytecode()"))
 0x63
-0x52c7420d
+0x4ea20432
 0x60
 0x00
 0x52
@@ -53,3 +59,5 @@ let InitcodeAsm = `
 
 let initcode = assemble(InitcodeAsm)
 console.log({ initcode })
+
+console.log(getSigHash('getLinkdropCampaignBytecode()'))
