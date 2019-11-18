@@ -11,6 +11,7 @@ import {
 } from 'ethereum-waffle'
 
 import LinkdropFactory from '../build/LinkdropFactory'
+import LinkdropP2P from '../build/LinkdropP2P'
 import Linkdrop from '../build/Linkdrop'
 
 import { computeProxyAddress } from '../scripts/utils'
@@ -26,26 +27,31 @@ const provider = createMockProvider()
 const [deployer, sender] = getWallets(provider)
 
 let masterCopy
+let masterCopyP2P
 let factory
 let proxy
 let campaignId
 
-const initcode = '0x6352c7420d6000526103ff60206004601c335afa6040516060f3'
 const chainId = 4 // Rinkeby
 
 describe('Campaigns tests', () => {
-  it('should deploy master copy of linkdrop implementation', async () => {
+  it('should deploy master copies of linkdrop contracts', async () => {
     masterCopy = await deployContract(sender, Linkdrop, [], {
       gasLimit: 6000000
     })
     expect(masterCopy.address).to.not.eq(ethers.constants.AddressZero)
+
+    masterCopyP2P = await deployContract(sender, LinkdropP2P, [], {
+      gasLimit: 6000000
+    })
+    expect(masterCopyP2P.address).to.not.eq(ethers.constants.AddressZero)
   })
 
   it('should deploy factory', async () => {
     factory = await deployContract(
       deployer,
       LinkdropFactory,
-      [masterCopy.address, chainId],
+      [masterCopyP2P.address, masterCopy.address, chainId],
       {
         gasLimit: 6000000
       }
@@ -63,8 +69,7 @@ describe('Campaigns tests', () => {
     const expectedAddress = computeProxyAddress(
       factory.address,
       sender.address,
-      campaignId,
-      initcode
+      campaignId
     )
 
     await expect(
@@ -86,6 +91,9 @@ describe('Campaigns tests', () => {
 
     const isSigner = await proxy.isSigner(sender.address)
     expect(isSigner).to.eq(true)
+
+    const type = await proxy.getType()
+    expect(type).to.eq('ONE_TO_ONE')
   })
 
   it('should deploy proxy for the second campaign', async () => {
@@ -96,8 +104,7 @@ describe('Campaigns tests', () => {
     const expectedAddress = computeProxyAddress(
       factory.address,
       sender.address,
-      campaignId,
-      initcode
+      campaignId
     )
 
     await expect(
@@ -116,6 +123,9 @@ describe('Campaigns tests', () => {
 
     const owner = await proxy.owner()
     expect(owner).to.eq(factory.address)
+
+    const type = await proxy.getType()
+    expect(type).to.eq('ONE_TO_MANY')
   })
 
   it('should deploy proxy for the third campaign', async () => {
@@ -126,8 +136,7 @@ describe('Campaigns tests', () => {
     const expectedAddress = computeProxyAddress(
       factory.address,
       sender.address,
-      campaignId,
-      initcode
+      campaignId
     )
 
     await expect(
@@ -146,5 +155,8 @@ describe('Campaigns tests', () => {
 
     const owner = await proxy.owner()
     expect(owner).to.eq(factory.address)
+
+    const type = await proxy.getType()
+    expect(type).to.eq('ONE_TO_MANY')
   })
 })
