@@ -10,7 +10,7 @@
     "packages/apps/*"
   ],
   "scripts": {
-    "test": "cd packages/contracts/ && mocha --require @babel/polyfill --require @babel/register test/Campaigns.js",
+    "test": "cd packages/contracts/ && mocha --require @babel/polyfill --require @babel/register test/Linkdrop.js",
     "compile-contracts": "cd packages/contracts && npx waffle .waffle",
     "deploy-registry": "npx babel-node packages/scripts/src/deploy_registry.js",
     "deploy-mastercopy": "npx babel-node packages/scripts/src/deploy_mastercopy.js",

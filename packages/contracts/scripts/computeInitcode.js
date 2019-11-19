@@ -21,10 +21,10 @@ const getSigHash = signature => {
 }
 
 let InitcodeAsm = `
-; sighash("getBytecodeP2P()") =>  0xfcb1b270
-; mstore(0x00,  0xfcb1b270) (sighash("getBytecodeP2P()"))
+; sighash("getBytecodeTransfer()") =>  0x19ed2626
+; mstore(0x00,  0x19ed2626) (sighash("getBytecodeTransfer()"))
 0x63
-0xfcb1b270
+0x19ed2626
 0x60
 0x00
 0x52
@@ -60,4 +60,4 @@ let InitcodeAsm = `
 let initcode = assemble(InitcodeAsm)
 console.log({ initcode })
 
-console.log(getSigHash('getBytecodeP2P()'))
+console.log(getSigHash('getBytecodeTransfer()'))

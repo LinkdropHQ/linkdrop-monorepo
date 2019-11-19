@@ -18,19 +18,19 @@ contract LinkdropFactory is Ownable, ReentrancyGuard {
     using Address for address payable;
 
     // Current version of one-to-one linkdrop mastercopy contract
-    uint public masterCopyVersionP2P;
+    uint public masterCopyVersionTransfer;
 
     // Current version of one-to-many linkdrop mastercopy contract
     uint public masterCopyVersion;
 
     // One-to-one linkdrop contract bytecode to be installed when deploying proxy
-    bytes internal _bytecodeP2P;
+    bytes internal _bytecodeTransfer;
 
     // One-to-many linkdrop contract bytecode to be installed when deploying proxy
     bytes internal _bytecode;
 
     // Bootstrap initcode to fetch the actual contract bytecode. Used to generate repeatable contract addresses
-    bytes internal _initcodeP2P;
+    bytes internal _initcodeTransfer;
 
     bytes internal _initcode;
 
@@ -43,20 +43,20 @@ contract LinkdropFactory is Ownable, ReentrancyGuard {
     // Events
     event Deployed(address indexed sender, uint campaignId, address indexed proxy, bytes32 salt);
     event Destroyed(address indexed sender, address indexed proxy);
-    event SetMasterCopyP2P(address masterCopy, uint indexed version);
+    event SetMasterCopyTransfer(address masterCopy, uint indexed version);
     event SetMasterCopy(address masterCopy, uint indexed version);
 
     /**
     * @dev Constructor that sets bootstap initcode, chainId and master copies
-    * @param _masterCopyP2P One-to-one linkdrop contract mastercopy address
+    * @param _masterCopyTransfer One-to-one linkdrop contract mastercopy address
     * @param _masterCopy One-to-many linkdrop contract mastercopy address
     * @param _chainId Chain id
     */
-    constructor(address payable _masterCopyP2P, address payable _masterCopy, uint _chainId) public {
-        _initcodeP2P = (hex"63fcb1b2706000526103ff60206004601c335afa6040516060f3");
+    constructor(address payable _masterCopyTransfer, address payable _masterCopy, uint _chainId) public {
+        _initcodeTransfer = (hex"6319ed26266000526103ff60206004601c335afa6040516060f3");
         _initcode = (hex"6352c7420d6000526103ff60206004601c335afa6040516060f3");
         chainId = _chainId;
-        setMasterCopyP2P(_masterCopyP2P);
+        setMasterCopyTransfer(_masterCopyTransfer);
         setMasterCopy(_masterCopy);
     }
 
@@ -169,7 +169,7 @@ contract LinkdropFactory is Ownable, ReentrancyGuard {
             bytes1(0xff),
             address(this),
             salt(_sender, _campaignId),
-            keccak256(_campaignId == 0 ? getInitcodeP2P() : getInitcode())
+            keccak256(_campaignId == 0 ? getInitcodeTransfer() : getInitcode())
         ));
         uint mask = 2 ** 160 - 1;
         //solium-disable-next-line security/no-inline-assembly
@@ -251,7 +251,7 @@ contract LinkdropFactory is Ownable, ReentrancyGuard {
 
         bytes32 salt = salt(_sender, _campaignId);
 
-        bytes memory initcode = _campaignId == 0 ? getInitcodeP2P() : getInitcode();
+        bytes memory initcode = _campaignId == 0 ? getInitcodeTransfer() : getInitcode();
 
         //solium-disable-next-line security/no-inline-assembly
         assembly {
@@ -268,7 +268,7 @@ contract LinkdropFactory is Ownable, ReentrancyGuard {
             (
                 address(this), // Owner address
                 _sender,
-                _campaignId == 0 ? masterCopyVersionP2P : masterCopyVersion,
+                _campaignId == 0 ? masterCopyVersionTransfer : masterCopyVersion,
                 chainId
             ),
             "INITIALIZATION_FAILED"
@@ -301,11 +301,11 @@ contract LinkdropFactory is Ownable, ReentrancyGuard {
     * @dev Function to get one-to-one linkdrop initcode for generating repeatable contract addresses
     * @return Static bootstrap initcode
     */
-    function getInitcodeP2P()
+    function getInitcodeTransfer()
     public view
     returns (bytes memory)
     {
-        return _initcodeP2P;
+        return _initcodeTransfer;
     }
 
     /**
@@ -324,11 +324,11 @@ contract LinkdropFactory is Ownable, ReentrancyGuard {
     * @dev Called by proxy when executing initcode
     * @return Contract bytecode to install
     */
-    function getBytecodeP2P()
+    function getBytecodeTransfer()
     public view
     returns (bytes memory)
     {
-        return _bytecodeP2P;
+        return _bytecodeTransfer;
     }
 
      /**
@@ -346,23 +346,23 @@ contract LinkdropFactory is Ownable, ReentrancyGuard {
     /**
     * @dev Function to set one-to-one linkdrop contract master copy and update bytecode to install.
     * @dev Can only be called by factory owner
-    * @param _masterCopyP2P Address of one-to-one linkdrop contract mastercopy to calculate bytecode from
+    * @param _masterCopyTransfer Address of one-to-one linkdrop contract mastercopy to calculate bytecode from
     * @return True if updated successfully
     */
-    function setMasterCopyP2P(address payable _masterCopyP2P)
+    function setMasterCopyTransfer(address payable _masterCopyTransfer)
     public onlyOwner
     returns (bool)
     {
-        require(_masterCopyP2P != address(0), "INVALID_MASTER_COPY_ADDRESS");
-        masterCopyVersionP2P = masterCopyVersionP2P.add(1);
+        require(_masterCopyTransfer != address(0), "INVALID_MASTER_COPY_ADDRESS");
+        masterCopyVersionTransfer = masterCopyVersionTransfer.add(1);
 
         require
         (
-            ILinkdrop(_masterCopyP2P).initialize
+            ILinkdrop(_masterCopyTransfer).initialize
             (
                 address(0), // Owner address
                 address(0), // Linkdrop master address
-                masterCopyVersionP2P,
+                masterCopyVersionTransfer,
                 chainId
             ),
             "INITIALIZATION_FAILED"
@@ -371,13 +371,13 @@ contract LinkdropFactory is Ownable, ReentrancyGuard {
         bytes memory bytecode = abi.encodePacked
         (
             hex"363d3d373d3d3d363d73",
-            _masterCopyP2P,
+            _masterCopyTransfer,
             hex"5af43d82803e903d91602b57fd5bf3"
         );
 
-        _bytecodeP2P = bytecode;
+        _bytecodeTransfer = bytecode;
 
-        emit SetMasterCopyP2P(_masterCopyP2P, masterCopyVersionP2P);
+        emit SetMasterCopyTransfer(_masterCopyTransfer, masterCopyVersionTransfer);
         return true;
     }
 

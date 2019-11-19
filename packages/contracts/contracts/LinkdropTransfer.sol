@@ -13,7 +13,7 @@ import "./interfaces/ILinkdrop.sol";
 * @title One-to-one linkdrop contract
 * @author Amir Jumaniyazov - <amir@linkdrop.io>
 */
-contract LinkdropP2P is ILinkdrop, ReentrancyGuard {
+contract LinkdropTransfer is ILinkdrop, ReentrancyGuard {
 
     using SafeMath for uint;
     using Address for address payable;

@@ -11,7 +11,7 @@ import {
 } from 'ethereum-waffle'
 
 import LinkdropFactory from '../build/LinkdropFactory'
-import LinkdropP2P from '../build/LinkdropP2P'
+import LinkdropTransfer from '../build/LinkdropTransfer'
 import Linkdrop from '../build/Linkdrop'
 
 import { computeProxyAddress } from '../scripts/utils'
@@ -27,7 +27,7 @@ const provider = createMockProvider()
 const [deployer, sender] = getWallets(provider)
 
 let masterCopy
-let masterCopyP2P
+let masterCopyTransfer
 let factory
 let proxy
 let campaignId
@@ -41,17 +41,17 @@ describe('Campaigns tests', () => {
     })
     expect(masterCopy.address).to.not.eq(ethers.constants.AddressZero)
 
-    masterCopyP2P = await deployContract(sender, LinkdropP2P, [], {
+    masterCopyTransfer = await deployContract(sender, LinkdropTransfer, [], {
       gasLimit: 6000000
     })
-    expect(masterCopyP2P.address).to.not.eq(ethers.constants.AddressZero)
+    expect(masterCopyTransfer.address).to.not.eq(ethers.constants.AddressZero)
   })
 
   it('should deploy factory', async () => {
     factory = await deployContract(
       deployer,
       LinkdropFactory,
-      [masterCopyP2P.address, masterCopy.address, chainId],
+      [masterCopyTransfer.address, masterCopy.address, chainId],
       {
         gasLimit: 6000000
       }

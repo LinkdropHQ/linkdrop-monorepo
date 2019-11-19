@@ -48,7 +48,7 @@ export const computeBytecode = masterCopyAddress => {
 }
 
 // const initcode = '0x6352c7420d6000526103ff60206004601c335afa6040516060f3'
-// const initcodeP2P = '0x63fcb1b2706000526103ff60206004601c335afa6040516060f3'
+// const initcodeTransfer = '0x6319ed26266000526103ff60206004601c335afa6040516060f3'
 
 export const computeProxyAddress = (
   factoryAddress,
@@ -63,7 +63,7 @@ export const computeProxyAddress = (
 
   const initcode =
     String(campaignId) === '0'
-      ? '0x63fcb1b2706000526103ff60206004601c335afa6040516060f3'
+      ? '0x6319ed26266000526103ff60206004601c335afa6040516060f3'
       : '0x6352c7420d6000526103ff60206004601c335afa6040516060f3'
 
   const proxyAddress = buildCreate2Address(factoryAddress, salt, initcode)

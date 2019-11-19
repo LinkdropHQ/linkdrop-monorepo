@@ -12,7 +12,7 @@ import {
 
 import LinkdropFactory from '../build/LinkdropFactory'
 import Linkdrop from '../build/Linkdrop'
-import LinkdropP2P from '../build/LinkdropP2P'
+import LinkdropTransfer from '../build/LinkdropTransfer'
 
 import { computeBytecode, computeProxyAddress } from '../scripts/utils'
 
@@ -27,7 +27,7 @@ const provider = createMockProvider()
 const [sender, deployer] = getWallets(provider)
 
 let masterCopy
-let masterCopyP2P
+let masterCopyTransfer
 let factory
 let proxy
 let bytecode
@@ -56,29 +56,29 @@ describe('Proxy upgradability tests', () => {
     const masterCopyChainId = await masterCopy.chainId()
     expect(masterCopyChainId).to.eq(0)
 
-    masterCopyP2P = await deployContract(deployer, LinkdropP2P, [], {
+    masterCopyTransfer = await deployContract(deployer, LinkdropTransfer, [], {
       gasLimit: 6000000
     })
-    expect(masterCopyP2P.address).to.not.eq(ethers.constants.AddressZero)
+    expect(masterCopyTransfer.address).to.not.eq(ethers.constants.AddressZero)
 
-    const masterCopyP2POwner = await masterCopyP2P.owner()
-    expect(masterCopyP2POwner).to.eq(ethers.constants.AddressZero)
+    const masterCopyTransferOwner = await masterCopyTransfer.owner()
+    expect(masterCopyTransferOwner).to.eq(ethers.constants.AddressZero)
 
-    const masterCopyP2PSender = await masterCopyP2P.sender()
-    expect(masterCopyP2PSender).to.eq(ethers.constants.AddressZero)
+    const masterCopyTransferSender = await masterCopyTransfer.sender()
+    expect(masterCopyTransferSender).to.eq(ethers.constants.AddressZero)
 
-    const masterCopyP2PVersion = await masterCopyP2P.version()
-    expect(masterCopyP2PVersion).to.eq(0)
+    const masterCopyTransferVersion = await masterCopyTransfer.version()
+    expect(masterCopyTransferVersion).to.eq(0)
 
-    const masterCopyP2PChainId = await masterCopyP2P.chainId()
-    expect(masterCopyP2PChainId).to.eq(0)
+    const masterCopyTransferChainId = await masterCopyTransfer.chainId()
+    expect(masterCopyTransferChainId).to.eq(0)
   })
 
   it('should deploy factory', async () => {
     factory = await deployContract(
       deployer,
       LinkdropFactory,
-      [masterCopyP2P.address, masterCopy.address, chainId],
+      [masterCopyTransfer.address, masterCopy.address, chainId],
       {
         gasLimit: 6000000
       }
