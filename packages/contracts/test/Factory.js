@@ -12,6 +12,7 @@ import {
 
 import LinkdropFactory from '../build/LinkdropFactory'
 import Linkdrop from '../build/Linkdrop'
+import LinkdropTransfer from '../build/LinkdropTransfer'
 
 import { computeProxyAddress } from '../scripts/utils'
 
@@ -26,6 +27,7 @@ const provider = createMockProvider()
 const [sender, signer] = getWallets(provider)
 
 let masterCopy
+let masterCopyTransfer
 let factory
 let proxy
 const campaignId = 0
@@ -38,14 +40,18 @@ describe('Factory tests', () => {
     masterCopy = await deployContract(sender, Linkdrop, [], {
       gasLimit: 6000000
     })
+    masterCopyTransfer = await deployContract(sender, LinkdropTransfer, [], {
+      gasLimit: 6000000
+    })
     expect(masterCopy.address).to.not.eq(ethers.constants.AddressZero)
+    expect(masterCopyTransfer.address).to.not.eq(ethers.constants.AddressZero)
   })
 
   it('should deploy factory', async () => {
     factory = await deployContract(
       sender,
       LinkdropFactory,
-      [masterCopy.address, chainId],
+      [masterCopyTransfer.address, masterCopy.address, chainId],
       {
         gasLimit: 6000000
       }
@@ -56,13 +62,12 @@ describe('Factory tests', () => {
     expect(version).to.eq(1)
   })
 
-  it('should deploy proxy with signing key and topup with ethers in single tx', async () => {
+  it('should deploy proxy with signing key and topup with native tokens in single tx', async () => {
     // Compute next address with js function
     const expectedAddress = computeProxyAddress(
       factory.address,
       sender.address,
-      campaignId,
-      initcode
+      campaignId
     )
 
     const value = 100

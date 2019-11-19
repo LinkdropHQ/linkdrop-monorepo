@@ -11,6 +11,7 @@ import {
 } from 'ethereum-waffle'
 
 import LinkdropFactory from '../build/LinkdropFactory'
+import LinkdropTransfer from '../build/LinkdropTransfer'
 import Linkdrop from '../build/Linkdrop'
 
 import { computeProxyAddress } from '../scripts/utils'
@@ -26,26 +27,31 @@ const provider = createMockProvider()
 const [deployer, sender] = getWallets(provider)
 
 let masterCopy
+let masterCopyTransfer
 let factory
 let proxy
 let campaignId
 
-const initcode = '0x6352c7420d6000526103ff60206004601c335afa6040516060f3'
 const chainId = 4 // Rinkeby
 
 describe('Campaigns tests', () => {
-  it('should deploy master copy of linkdrop implementation', async () => {
+  it('should deploy master copies of linkdrop contracts', async () => {
     masterCopy = await deployContract(sender, Linkdrop, [], {
       gasLimit: 6000000
     })
     expect(masterCopy.address).to.not.eq(ethers.constants.AddressZero)
+
+    masterCopyTransfer = await deployContract(sender, LinkdropTransfer, [], {
+      gasLimit: 6000000
+    })
+    expect(masterCopyTransfer.address).to.not.eq(ethers.constants.AddressZero)
   })
 
   it('should deploy factory', async () => {
     factory = await deployContract(
       deployer,
       LinkdropFactory,
-      [masterCopy.address, chainId],
+      [masterCopyTransfer.address, masterCopy.address, chainId],
       {
         gasLimit: 6000000
       }
@@ -63,8 +69,7 @@ describe('Campaigns tests', () => {
     const expectedAddress = computeProxyAddress(
       factory.address,
       sender.address,
-      campaignId,
-      initcode
+      campaignId
     )
 
     await expect(
@@ -96,8 +101,7 @@ describe('Campaigns tests', () => {
     const expectedAddress = computeProxyAddress(
       factory.address,
       sender.address,
-      campaignId,
-      initcode
+      campaignId
     )
 
     await expect(
@@ -126,8 +130,7 @@ describe('Campaigns tests', () => {
     const expectedAddress = computeProxyAddress(
       factory.address,
       sender.address,
-      campaignId,
-      initcode
+      campaignId
     )
 
     await expect(
