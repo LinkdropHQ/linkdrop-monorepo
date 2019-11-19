@@ -1,6 +1,7 @@
 /* eslint-disable no-undef */
 import path from 'path'
 import fs from 'fs'
+import { ethers } from 'ethers'
 
 const configPath = path.resolve(__dirname, './config.json')
 
@@ -32,8 +33,12 @@ const getChainId = chain => {
   }
 }
 
-if (config.CHAIN && !config.CHAIN_ID) {
+if (config.CHAIN) {
   config.CHAIN_ID = getChainId(config.CHAIN)
+}
+
+if (config.SENDER_PRIVATE_KEY) {
+  config.SENDER_ADDRESS = new ethers.Wallet(config.SENDER_PRIVATE_KEY).address
 }
 
 export default { ...config, path: configPath }
