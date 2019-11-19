@@ -91,9 +91,6 @@ describe('Campaigns tests', () => {
 
     const isSigner = await proxy.isSigner(sender.address)
     expect(isSigner).to.eq(true)
-
-    const type = await proxy.getType()
-    expect(type).to.eq('ONE_TO_ONE')
   })
 
   it('should deploy proxy for the second campaign', async () => {
@@ -123,9 +120,6 @@ describe('Campaigns tests', () => {
 
     const owner = await proxy.owner()
     expect(owner).to.eq(factory.address)
-
-    const type = await proxy.getType()
-    expect(type).to.eq('ONE_TO_MANY')
   })
 
   it('should deploy proxy for the third campaign', async () => {
@@ -155,8 +149,5 @@ describe('Campaigns tests', () => {
 
     const owner = await proxy.owner()
     expect(owner).to.eq(factory.address)
-
-    const type = await proxy.getType()
-    expect(type).to.eq('ONE_TO_MANY')
   })
 })

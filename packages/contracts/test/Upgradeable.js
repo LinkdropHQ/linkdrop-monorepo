@@ -129,9 +129,6 @@ describe('Proxy upgradability tests', () => {
 
     const owner = await proxy.owner()
     expect(owner).to.eq(factory.address)
-
-    const type = await proxy.getType()
-    expect(type).to.eq('ONE_TO_MANY')
   })
 
   it('should deploy second version of mastercopy', async () => {
