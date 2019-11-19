@@ -38,6 +38,7 @@ export const deploy = async () => {
     )
 
     proxyFactory = await factory.deploy(
+      config.MASTERCOPY_TRANSFER_ADDRESS,
       config.MASTERCOPY_ADDRESS,
       config.CHAIN_ID,
       {

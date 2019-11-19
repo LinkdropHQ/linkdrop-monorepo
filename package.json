@@ -14,6 +14,7 @@
     "compile-contracts": "cd packages/contracts && npx waffle .waffle",
     "deploy-registry": "npx babel-node packages/scripts/src/deploy_registry.js",
     "deploy-mastercopy": "npx babel-node packages/scripts/src/deploy_mastercopy.js",
+    "deploy-mastercopy-transfer": "npx babel-node packages/scripts/src/deploy_mastercopy_transfer.js",
     "deploy-factory": "npx babel-node packages/scripts/src/deploy_factory.js",
     "deploy-erc20": "npx babel-node packages/scripts/src/deploy_erc20.js",
     "deploy-erc721": "npx babel-node packages/scripts/src/deploy_erc721.js",
