@@ -365,6 +365,26 @@ function () {
         }
       }, null, this);
     }
+  }, {
+    key: "isDeployed",
+    value: function isDeployed(campaignId) {
+      return _regenerator["default"].async(function isDeployed$(_context11) {
+        while (1) {
+          switch (_context11.prev = _context11.next) {
+            case 0:
+              return _context11.abrupt("return", deployUtils.isDeployed({
+                apiHost: this.apiHost,
+                senderAddress: this.senderAddress,
+                campaignId: campaignId
+              }));
+
+            case 1:
+            case "end":
+              return _context11.stop();
+          }
+        }
+      }, null, this);
+    }
   }]);
   return LinkdropSDK;
 }();

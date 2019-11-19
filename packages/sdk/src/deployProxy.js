@@ -1,5 +1,6 @@
 import LinkdropFactory from '@linkdrop/contracts/build/LinkdropFactory.json'
 import { ethers } from 'ethers'
+import axios from 'axios'
 
 export const connectToFactoryContract = async ({
   jsonRpcUrl,
@@ -76,4 +77,11 @@ export const deployProxy = async ({
   }
 
   return factoryContract.deployProxy(campaignId)
+}
+
+export const isDeployed = async ({ apiHost, senderAddress, campaignId }) => {
+  const response = await axios.get(
+    `${apiHost}/api/v1/linkdrops/getStatus/${senderAddress}/${campaignId}`
+  )
+  return response.data
 }
