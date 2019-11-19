@@ -34,14 +34,15 @@ try {
 @translate('pages.claim')
 class Claim extends React.Component {
   componentDidMount () {
+    const { account } = this.props
     const {
       linkKey,
       chainId,
-      linkdropMasterAddress,
-      campaignId
+      campaignId,
+      linkdropContract
     } = getHashVariables()
-    this.actions().tokens.checkIfClaimed({ linkKey, chainId, linkdropMasterAddress, campaignId })
-    this.actions().user.createSdk({ linkdropMasterAddress, chainId, linkKey, campaignId })
+    this.actions().tokens.checkIfClaimed({ linkKey, chainId, linkdropContract })
+    this.actions().user.createSdk({ senderAddress: account, chainId, linkKey, campaignId })
   }
 
   componentWillReceiveProps ({ readyToClaim, alreadyClaimed }) {
@@ -65,7 +66,8 @@ class Claim extends React.Component {
       linkdropContract,
       linkKey,
       signerSignature,
-      receiverAddress
+      receiverAddress,
+      chainId
     } = getHashVariables()
 
     // params in url:
@@ -122,9 +124,9 @@ class Claim extends React.Component {
       })
     }
     this.actions().contract.getTokenERC20Data({
-      tokenAddress,
-      weiAmount,
-      tokenAmount,
+      token,
+      nativeTokensAmount,
+      tokensAmount,
       chainId
     })
   }
