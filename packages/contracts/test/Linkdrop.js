@@ -13,6 +13,7 @@ import {
 
 import LinkdropFactory from '../build/LinkdropFactory.json'
 import Linkdrop from '../build/Linkdrop.json'
+import LinkdropTransfer from '../build/LinkdropTransfer'
 import TokenMock from '../build/TokenMock.json'
 import NFTMock from '../build/NFTMock'
 
@@ -35,6 +36,7 @@ const provider = createMockProvider()
 const [sender, receiver, nonsender, signer] = getWallets(provider)
 
 let masterCopy
+let masterCopyTransfer
 let factory
 let proxy
 let proxyAddress
@@ -45,14 +47,13 @@ let link
 let receiverAddress
 let receiverSignature
 
-const campaignId = 0
+let campaignId = 1
 const expiration = 99999999999
 const feeToken = AddressZero // Native token
 const feeAmount = 2e15
 const feeReceiver = AddressZero // So that tx.origin will get fee
 const tokensAmount = 100
 
-const initcode = '0x6352c7420d6000526103ff60206004601c335afa6040516060f3'
 const version = 1
 const chainId = 4 // Rinkeby
 
@@ -62,8 +63,13 @@ describe('Linkdrop tests', () => {
     nftInstance = await deployContract(sender, NFTMock)
   })
 
-  it('should deploy master copy of linkdrop contract', async () => {
+  it('should deploy master copies of linkdrop contracts', async () => {
     masterCopy = await deployContract(sender, Linkdrop, [], {
+      gasLimit: 6000000
+    })
+    expect(masterCopy.address).to.not.eq(ethers.constants.AddressZero)
+
+    masterCopyTransfer = await deployContract(sender, LinkdropTransfer, [], {
       gasLimit: 6000000
     })
     expect(masterCopy.address).to.not.eq(ethers.constants.AddressZero)
@@ -74,7 +80,7 @@ describe('Linkdrop tests', () => {
     factory = await deployContract(
       sender,
       LinkdropFactory,
-      [masterCopy.address, chainId],
+      [masterCopyTransfer.address, masterCopy.address, chainId],
       {
         gasLimit: 6000000
       }
@@ -89,8 +95,7 @@ describe('Linkdrop tests', () => {
     proxyAddress = computeProxyAddress(
       factory.address,
       sender.address,
-      campaignId,
-      initcode
+      campaignId
     )
 
     await expect(
@@ -789,5 +794,80 @@ describe('Linkdrop tests', () => {
 
     const nftOwner = await nftInstance.ownerOf(tokenId)
     expect(nftOwner).to.eq(receiverAddress)
+  })
+
+  it('should deploy one-to-one linkdrop contract with campaignId = 0 ', async () => {
+    campaignId = 0
+
+    proxyAddress = computeProxyAddress(
+      factory.address,
+      sender.address,
+      campaignId
+    )
+
+    await expect(
+      factory.deployProxy(campaignId, {
+        gasLimit: 6000000
+      })
+    ).to.emit(factory, 'Deployed')
+
+    proxy = new ethers.Contract(proxyAddress, Linkdrop.abi, sender)
+
+    const senderAddress = await proxy.sender()
+    expect(senderAddress).to.eq(sender.address)
+  })
+
+  it("should claim tokens from linkdrop contract's balance", async () => {
+    const feeAmount = 10
+    const tokensAmount = 20
+    const nativeTokensAmount = 10
+
+    link = await createLink({
+      token: tokenInstance.address,
+      feeToken: tokenInstance.address,
+      feeReceiver,
+      nativeTokensAmount,
+      tokensAmount,
+      feeAmount,
+      expiration,
+      version,
+      chainId,
+      linkdropContract: proxy.address,
+      signingKeyOrWallet: sender
+    })
+    receiverAddress = ethers.Wallet.createRandom().address
+    receiverSignature = await signReceiverAddress(link.linkKey, receiverAddress)
+
+    await sender.sendTransaction({
+      to: proxy.address,
+      value: nativeTokensAmount
+    })
+
+    await tokenInstance.transfer(proxy.address, tokensAmount + feeAmount)
+
+    const receiverNativeBalanceBefore = await provider.getBalance(
+      receiverAddress
+    )
+    const receiverTokenBalanceBefore = await tokenInstance.balanceOf(
+      receiverAddress
+    )
+
+    await proxy.claim(link.linkParams, receiverAddress, receiverSignature, {
+      gasLimit: 500000
+    })
+
+    const receiverNativeBalanceAfter = await provider.getBalance(
+      receiverAddress
+    )
+    const receiverTokenBalanceAfter = await tokenInstance.balanceOf(
+      receiverAddress
+    )
+
+    expect(receiverNativeBalanceAfter).to.eq(
+      receiverNativeBalanceBefore.add(nativeTokensAmount)
+    )
+    expect(receiverTokenBalanceAfter).to.eq(
+      receiverTokenBalanceBefore.add(tokensAmount)
+    )
   })
 })

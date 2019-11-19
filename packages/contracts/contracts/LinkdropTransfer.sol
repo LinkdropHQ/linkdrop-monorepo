@@ -10,10 +10,10 @@ import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 import "./interfaces/ILinkdrop.sol";
 
 /**
-* @title Linkdrop contract (Approve)
+* @title Linkdrop contract (Transfer)
 * @author Amir Jumaniyazov - <amir@linkdrop.io>
 */
-contract Linkdrop is ILinkdrop, ReentrancyGuard {
+contract LinkdropTransfer is ILinkdrop, ReentrancyGuard {
 
     using SafeMath for uint;
     using Address for address payable;
@@ -151,31 +151,31 @@ contract Linkdrop is ILinkdrop, ReentrancyGuard {
         // If fee is being paid in ERC20 tokens
         else {
             require(address(this).balance >= _linkParams.nativeTokensAmount, "INSUFFICIENT_NATIVE_TOKENS");
-            require(IERC20(_linkParams.feeToken).balanceOf(sender) >= _linkParams.feeAmount,"SENDER_DOES_NOT_OWN_ENOUGH_FEE_TOKENS");
-            require(IERC20(_linkParams.feeToken).allowance(sender, address(this)) >= _linkParams.feeAmount, "INSUFFICIENT_FEE_TOKENS_ALLOWANCE");
+            require(IERC20(_linkParams.feeToken).balanceOf(address(this)) >= _linkParams.feeAmount,"INSUFFICIENT_FEE_TOKENS");
         }
 
         // Make sure tokens are available for this contract
         if (_linkParams.token != address(0)) {
-            require
-            (
-                IERC20(_linkParams.token).balanceOf(sender) >= _linkParams.tokensAmount,
-                "SENDER_DOES_NOT_OWN_ENOUGH_TOKENS"
-            );
 
-            require
-            (
-                IERC20(_linkParams.token).allowance(sender, address(this)) >= _linkParams.tokensAmount, "INSUFFICIENT_TOKENS_ALLOWANCE"
-            );
+            if (_linkParams.token == _linkParams.feeToken) {
+                require
+                (
+                    IERC20(_linkParams.token).balanceOf(address(this)) >= _linkParams.tokensAmount.add(_linkParams.feeAmount), "INSUFFICIENT_TOKENS"
+                );
+            }
+            else {
+                require
+                (
+                    IERC20(_linkParams.token).balanceOf(address(this)) >= _linkParams.tokensAmount,
+                    "INSUFFICIENT_TOKENS"
+                );
+            }
         }
 
         // Make sure nft is available for this contract
         if (_linkParams.nft != address(0)) {
             // Make sure sender owns NFT
-            require(IERC721(_linkParams.nft).ownerOf(_linkParams.tokenId) == sender, "SENDER_DOES_NOT_OWN_NFT");
-
-            // Make sure NFT is available for this contract
-            require(IERC721(_linkParams.nft).isApprovedForAll(sender, address(this)), "INSUFFICIENT_NFT_ALLOWANCE");
+            require(IERC721(_linkParams.nft).ownerOf(_linkParams.tokenId) == address(this), "UNAVAILABLE_NFT");
         }
 
         // Verify that link params are signed by valid signing key
@@ -256,7 +256,7 @@ contract Linkdrop is ILinkdrop, ReentrancyGuard {
                 feeReceiver.sendValue(_linkParams.feeAmount);
             }
             else {
-                IERC20(_linkParams.feeToken).transferFrom(sender, feeReceiver, _linkParams.feeAmount);
+                IERC20(_linkParams.feeToken).transfer(feeReceiver, _linkParams.feeAmount);
             }
         }
 
@@ -267,12 +267,12 @@ contract Linkdrop is ILinkdrop, ReentrancyGuard {
 
         // Transfer tokens
         if (_linkParams.tokensAmount > 0) {
-            IERC20(_linkParams.token).transferFrom(sender, _receiver, _linkParams.tokensAmount);
+            IERC20(_linkParams.token).transfer(_receiver, _linkParams.tokensAmount);
         }
 
         // Transfer NFT
         if (_linkParams.nft != address(0)) {
-            IERC721(_linkParams.nft).safeTransferFrom(sender, _receiver, _linkParams.tokenId);
+            IERC721(_linkParams.nft).safeTransferFrom(address(this), _receiver, _linkParams.tokenId);
         }
 
         return true;

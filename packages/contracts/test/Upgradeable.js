@@ -12,6 +12,7 @@ import {
 
 import LinkdropFactory from '../build/LinkdropFactory'
 import Linkdrop from '../build/Linkdrop'
+import LinkdropTransfer from '../build/LinkdropTransfer'
 
 import { computeBytecode, computeProxyAddress } from '../scripts/utils'
 
@@ -26,13 +27,13 @@ const provider = createMockProvider()
 const [sender, deployer] = getWallets(provider)
 
 let masterCopy
+let masterCopyTransfer
 let factory
 let proxy
 let bytecode
 
-const initcode = '0x6352c7420d6000526103ff60206004601c335afa6040516060f3'
 const chainId = 4 // Rinkeby
-const campaignId = 0
+const campaignId = 1
 
 describe('Proxy upgradability tests', () => {
   //
@@ -54,13 +55,30 @@ describe('Proxy upgradability tests', () => {
 
     const masterCopyChainId = await masterCopy.chainId()
     expect(masterCopyChainId).to.eq(0)
+
+    masterCopyTransfer = await deployContract(deployer, LinkdropTransfer, [], {
+      gasLimit: 6000000
+    })
+    expect(masterCopyTransfer.address).to.not.eq(ethers.constants.AddressZero)
+
+    const masterCopyTransferOwner = await masterCopyTransfer.owner()
+    expect(masterCopyTransferOwner).to.eq(ethers.constants.AddressZero)
+
+    const masterCopyTransferSender = await masterCopyTransfer.sender()
+    expect(masterCopyTransferSender).to.eq(ethers.constants.AddressZero)
+
+    const masterCopyTransferVersion = await masterCopyTransfer.version()
+    expect(masterCopyTransferVersion).to.eq(0)
+
+    const masterCopyTransferChainId = await masterCopyTransfer.chainId()
+    expect(masterCopyTransferChainId).to.eq(0)
   })
 
   it('should deploy factory', async () => {
     factory = await deployContract(
       deployer,
       LinkdropFactory,
-      [masterCopy.address, chainId],
+      [masterCopyTransfer.address, masterCopy.address, chainId],
       {
         gasLimit: 6000000
       }
@@ -90,8 +108,7 @@ describe('Proxy upgradability tests', () => {
     const expectedAddress = computeProxyAddress(
       factory.address,
       sender.address,
-      campaignId,
-      initcode
+      campaignId
     )
 
     factory = factory.connect(sender)
@@ -142,13 +159,13 @@ describe('Proxy upgradability tests', () => {
       sender.address,
       campaignId
     )
+
     expect(isDeployed).to.eq(true)
 
     const computedAddress = computeProxyAddress(
       factory.address,
       sender.address,
-      campaignId,
-      initcode
+      campaignId
     )
 
     const deployedAddress = await factory.getProxyAddress(
@@ -188,8 +205,7 @@ describe('Proxy upgradability tests', () => {
     const computedAddress = computeProxyAddress(
       factory.address,
       sender.address,
-      campaignId,
-      initcode
+      campaignId
     )
 
     const factoryVersion = await factory.masterCopyVersion()

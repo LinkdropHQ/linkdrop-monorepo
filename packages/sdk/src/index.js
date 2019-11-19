@@ -214,6 +214,14 @@ class LinkdropSDK {
       linkId
     })
   }
+
+  async isDeployed (campaignId) {
+    return deployUtils.isDeployed({
+      apiHost: this.apiHost,
+      senderAddress: this.senderAddress,
+      campaignId
+    })
+  }
 }
 
 function getJsonRpcUrl (chain) {

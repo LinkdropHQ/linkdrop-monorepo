@@ -17,13 +17,21 @@ contract LinkdropFactory is Ownable, ReentrancyGuard {
     using Address for address;
     using Address for address payable;
 
-    // Current version of mastercopy contract
+    // Current version of one-to-one linkdrop mastercopy contract
+    uint public masterCopyVersionTransfer;
+
+    // Current version of one-to-many linkdrop mastercopy contract
     uint public masterCopyVersion;
 
-    // Contract bytecode to be installed when deploying proxy
+    // One-to-one linkdrop contract bytecode to be installed when deploying proxy
+    bytes internal _bytecodeTransfer;
+
+    // One-to-many linkdrop contract bytecode to be installed when deploying proxy
     bytes internal _bytecode;
 
     // Bootstrap initcode to fetch the actual contract bytecode. Used to generate repeatable contract addresses
+    bytes internal _initcodeTransfer;
+
     bytes internal _initcode;
 
     // Network id
@@ -35,16 +43,20 @@ contract LinkdropFactory is Ownable, ReentrancyGuard {
     // Events
     event Deployed(address indexed sender, uint campaignId, address indexed proxy, bytes32 salt);
     event Destroyed(address indexed sender, address indexed proxy);
+    event SetMasterCopyTransfer(address masterCopy, uint indexed version);
     event SetMasterCopy(address masterCopy, uint indexed version);
 
     /**
-    * @dev Constructor that sets bootstap initcode, factory owner, chainId and master copy
-    * @param _masterCopy Linkdrop mastercopy contract address to calculate bytecode from
+    * @dev Constructor that sets bootstap initcode, chainId and master copies
+    * @param _masterCopyTransfer One-to-one linkdrop contract mastercopy address
+    * @param _masterCopy One-to-many linkdrop contract mastercopy address
     * @param _chainId Chain id
     */
-    constructor(address payable _masterCopy, uint _chainId) public {
+    constructor(address payable _masterCopyTransfer, address payable _masterCopy, uint _chainId) public {
+        _initcodeTransfer = (hex"6319ed26266000526103ff60206004601c335afa6040516060f3");
         _initcode = (hex"6352c7420d6000526103ff60206004601c335afa6040516060f3");
         chainId = _chainId;
+        setMasterCopyTransfer(_masterCopyTransfer);
         setMasterCopy(_masterCopy);
     }
 
@@ -151,12 +163,13 @@ contract LinkdropFactory is Ownable, ReentrancyGuard {
     public view
     returns (address payable proxy)
     {
+
         bytes32 temp = keccak256(abi.encodePacked
         (
             bytes1(0xff),
             address(this),
             salt(_sender, _campaignId),
-            keccak256(getInitcode())
+            keccak256(_campaignId == 0 ? getInitcodeTransfer() : getInitcode())
         ));
         uint mask = 2 ** 160 - 1;
         //solium-disable-next-line security/no-inline-assembly
@@ -182,6 +195,19 @@ contract LinkdropFactory is Ownable, ReentrancyGuard {
         else {
             return ILinkdrop(getProxyAddress(_sender, _campaignId)).isClaimedLink(_linkId);
         }
+    }
+
+    /**
+    * @dev Function to deploy a proxy contract for `_sender`
+    * @param _sender Sender address
+    * @param _campaignId Campaign id
+    * @return Proxy contract address
+    */
+    function deployProxy(address payable _sender, uint _campaignId)
+    public payable nonReentrant
+    returns (address payable proxy)
+    {
+        proxy = _deployProxy(_sender, _campaignId);
     }
 
     /**
@@ -224,7 +250,8 @@ contract LinkdropFactory is Ownable, ReentrancyGuard {
         require(_sender != address(0), "INVALID_SENDER_ADDRESS");
 
         bytes32 salt = salt(_sender, _campaignId);
-        bytes memory initcode = getInitcode();
+
+        bytes memory initcode = _campaignId == 0 ? getInitcodeTransfer() : getInitcode();
 
         //solium-disable-next-line security/no-inline-assembly
         assembly {
@@ -241,7 +268,7 @@ contract LinkdropFactory is Ownable, ReentrancyGuard {
             (
                 address(this), // Owner address
                 _sender,
-                masterCopyVersion,
+                _campaignId == 0 ? masterCopyVersionTransfer : masterCopyVersion,
                 chainId
             ),
             "INITIALIZATION_FAILED"
@@ -271,7 +298,18 @@ contract LinkdropFactory is Ownable, ReentrancyGuard {
     }
 
     /**
-    * @dev Function to get bootstrap initcode for generating repeatable contract addresses
+    * @dev Function to get one-to-one linkdrop initcode for generating repeatable contract addresses
+    * @return Static bootstrap initcode
+    */
+    function getInitcodeTransfer()
+    public view
+    returns (bytes memory)
+    {
+        return _initcodeTransfer;
+    }
+
+    /**
+    * @dev Function to get one-to-many linkdrop campaign initcode for generating repeatable contract addresses
     * @return Static bootstrap initcode
     */
     function getInitcode()
@@ -282,7 +320,20 @@ contract LinkdropFactory is Ownable, ReentrancyGuard {
     }
 
     /**
-    * @dev Function to fetch the actual contract bytecode to install. Called by proxy when executing initcode
+    * @dev Function to fetch the actual one-to-one linkdrop contract bytecode to install.
+    * @dev Called by proxy when executing initcode
+    * @return Contract bytecode to install
+    */
+    function getBytecodeTransfer()
+    public view
+    returns (bytes memory)
+    {
+        return _bytecodeTransfer;
+    }
+
+     /**
+    * @dev Function to fetch the actual one-to-many linkdrop campaign contract bytecode to install.
+    * @dev Called by proxy when executing initcode
     * @return Contract bytecode to install
     */
     function getBytecode()
@@ -293,8 +344,47 @@ contract LinkdropFactory is Ownable, ReentrancyGuard {
     }
 
     /**
-    * @dev Function to set new master copy and update contract bytecode to install. Can only be called by factory owner
-    * @param _masterCopy Address of linkdrop mastercopy contract to calculate bytecode from
+    * @dev Function to set one-to-one linkdrop contract master copy and update bytecode to install.
+    * @dev Can only be called by factory owner
+    * @param _masterCopyTransfer Address of one-to-one linkdrop contract mastercopy to calculate bytecode from
+    * @return True if updated successfully
+    */
+    function setMasterCopyTransfer(address payable _masterCopyTransfer)
+    public onlyOwner
+    returns (bool)
+    {
+        require(_masterCopyTransfer != address(0), "INVALID_MASTER_COPY_ADDRESS");
+        masterCopyVersionTransfer = masterCopyVersionTransfer.add(1);
+
+        require
+        (
+            ILinkdrop(_masterCopyTransfer).initialize
+            (
+                address(0), // Owner address
+                address(0), // Linkdrop master address
+                masterCopyVersionTransfer,
+                chainId
+            ),
+            "INITIALIZATION_FAILED"
+        );
+
+        bytes memory bytecode = abi.encodePacked
+        (
+            hex"363d3d373d3d3d363d73",
+            _masterCopyTransfer,
+            hex"5af43d82803e903d91602b57fd5bf3"
+        );
+
+        _bytecodeTransfer = bytecode;
+
+        emit SetMasterCopyTransfer(_masterCopyTransfer, masterCopyVersionTransfer);
+        return true;
+    }
+
+    /**
+    * @dev Function to set one-to-many linkdrop contract master copy and update contract bytecode to install.
+    * @dev Can only be called by factory owner
+    * @param _masterCopy Address of one-to-one linkdrop contract mastercopy to calculate bytecode from
     * @return True if updated successfully
     */
     function setMasterCopy(address payable _masterCopy)

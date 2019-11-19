@@ -29,6 +29,18 @@ const routes = {
       method: 'getLastTxHashById'
     }
   },
+  '/linkdrops/deploy': {
+    post: {
+      controller: 'factoryController',
+      method: 'deploy'
+    }
+  },
+  '/linkdrops/isDeployed/:senderAddress/:campaignId': {
+    get: {
+      controller: 'factoryController',
+      method: 'isDeployed'
+    }
+  },
   '/utils/get-coinbase-deeplink': {
     post: {
       controller: 'utilsController',

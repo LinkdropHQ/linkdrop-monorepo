@@ -5,13 +5,15 @@ var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefau
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.deployProxy = exports.connectToFactoryContract = void 0;
+exports.isDeployed = exports.deployProxy = exports.connectToFactoryContract = void 0;
 
 var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"));
 
 var _LinkdropFactory = _interopRequireDefault(require("@linkdrop/contracts/build/LinkdropFactory.json"));
 
 var _ethers = require("ethers");
+
+var _axios = _interopRequireDefault(require("axios"));
 
 var connectToFactoryContract = function connectToFactoryContract(_ref) {
   var jsonRpcUrl, factoryAddress, signingKeyOrWallet, provider;
@@ -151,3 +153,27 @@ var deployProxy = function deployProxy(_ref2) {
 };
 
 exports.deployProxy = deployProxy;
+
+var isDeployed = function isDeployed(_ref3) {
+  var apiHost, senderAddress, campaignId, response;
+  return _regenerator["default"].async(function isDeployed$(_context3) {
+    while (1) {
+      switch (_context3.prev = _context3.next) {
+        case 0:
+          apiHost = _ref3.apiHost, senderAddress = _ref3.senderAddress, campaignId = _ref3.campaignId;
+          _context3.next = 3;
+          return _regenerator["default"].awrap(_axios["default"].get("".concat(apiHost, "/api/v1/linkdrops/getStatus/").concat(senderAddress, "/").concat(campaignId)));
+
+        case 3:
+          response = _context3.sent;
+          return _context3.abrupt("return", response.data);
+
+        case 5:
+        case "end":
+          return _context3.stop();
+      }
+    }
+  });
+};
+
+exports.isDeployed = isDeployed;
