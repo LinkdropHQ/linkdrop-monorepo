@@ -25,16 +25,10 @@ class FactoryService {
   }
 
   async isDeployed (senderAddress, campaignId) {
-    logger.error('FUCK')
-    const isDeployed = await this.factory['isDeployed(address,uint256)'](
+    return this.factory['isDeployed(address,uint256)'](
       senderAddress,
       campaignId
     )
-    console.log(isDeployed)
-
-    const addr = await this.factory.getProxyAddress(senderAddress, campaignId)
-    console.log('addr: ', addr)
-    return isDeployed
   }
 
   async claimAndDeploy ({
@@ -54,7 +48,7 @@ class FactoryService {
 
     const gasPrice = await relayerWalletService.getGasPrice()
     logger.debug(
-      `🚨🚨🚨Deploying campaign 0 for ${senderAddress} at address ${linkdropContractAddress}`
+      `Deploying campaign 0 for ${senderAddress} at address ${linkdropContractAddress}`
     )
 
     const deployProxyData = utilsService.encodeParams(

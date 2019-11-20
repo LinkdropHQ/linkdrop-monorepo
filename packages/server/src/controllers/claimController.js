@@ -16,7 +16,6 @@ export const claim = async (req, res) => {
 export const claimAndDeploy = async (req, res) => {
   // claim transaction
   const txHash = await claimService.claimAndDeploy(req.body)
-  console.log('CLAIM_AND_DEPLOY txHash: ', txHash)
 
   // return tx hash in successful response
   res.json({

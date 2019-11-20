@@ -45,7 +45,8 @@ const claim = async () => {
       feeAmount,
       expiration,
       signerSignature,
-      linkdropContract
+      linkdropContract,
+      sender: senderAddress
     } = await getUrlParams('erc20', linkNumber)
 
     const linkdropSDK = new LinkdropSDK({
@@ -71,7 +72,8 @@ const claim = async () => {
       expiration,
       signerSignature,
       receiverAddress: RECEIVER_ADDRESS,
-      linkdropContract
+      linkdropContract,
+      sender: senderAddress
     })
 
     if (success === true && txHash) {

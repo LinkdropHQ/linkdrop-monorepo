@@ -143,15 +143,11 @@ class LinkdropSDK {
       sender
     }
     if (linkdropContract === this.getProxyAddress()) {
-      console.log(`\nEQUAL ${linkdropContract}\nfgfgdg`)
       const { isDeployed } = await this.isDeployed()
-      console.log(`\nisDeployed: ${isDeployed}\nfg`)
       if (isDeployed === false) {
-        console.log('NOTDEPLOY\nfgfgdg')
         return claimUtils.claimAndDeploy(claimParams)
       }
     }
-    console.log('SHITs\nfgfgdg')
     return claimUtils.claim(claimParams)
   }
 
