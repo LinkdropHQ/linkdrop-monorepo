@@ -81,7 +81,7 @@ export const deployProxy = async ({
 
 export const isDeployed = async ({ apiHost, senderAddress, campaignId }) => {
   const response = await axios.get(
-    `${apiHost}/api/v1/linkdrops/getStatus/${senderAddress}/${campaignId}`
+    `${apiHost}/api/v1/linkdrops/isDeployed/${senderAddress}/${campaignId}`
   )
   return response.data
 }

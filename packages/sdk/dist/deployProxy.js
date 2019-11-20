@@ -162,7 +162,7 @@ var isDeployed = function isDeployed(_ref3) {
         case 0:
           apiHost = _ref3.apiHost, senderAddress = _ref3.senderAddress, campaignId = _ref3.campaignId;
           _context3.next = 3;
-          return _regenerator["default"].awrap(_axios["default"].get("".concat(apiHost, "/api/v1/linkdrops/getStatus/").concat(senderAddress, "/").concat(campaignId)));
+          return _regenerator["default"].awrap(_axios["default"].get("".concat(apiHost, "/api/v1/linkdrops/isDeployed/").concat(senderAddress, "/").concat(campaignId)));
 
         case 3:
           response = _context3.sent;

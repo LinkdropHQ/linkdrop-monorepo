@@ -180,13 +180,14 @@ function () {
   }, {
     key: "claim",
     value: function claim(_ref3) {
-      var token, nft, feeToken, feeReceiver, linkKey, nativeTokensAmount, tokensAmount, tokenId, feeAmount, expiration, signerSignature, receiverAddress, linkdropContract;
+      var token, nft, feeToken, feeReceiver, linkKey, nativeTokensAmount, tokensAmount, tokenId, feeAmount, expiration, signerSignature, receiverAddress, linkdropContract, sender, claimParams, _ref4, isDeployed;
+
       return _regenerator["default"].async(function claim$(_context3) {
         while (1) {
           switch (_context3.prev = _context3.next) {
             case 0:
-              token = _ref3.token, nft = _ref3.nft, feeToken = _ref3.feeToken, feeReceiver = _ref3.feeReceiver, linkKey = _ref3.linkKey, nativeTokensAmount = _ref3.nativeTokensAmount, tokensAmount = _ref3.tokensAmount, tokenId = _ref3.tokenId, feeAmount = _ref3.feeAmount, expiration = _ref3.expiration, signerSignature = _ref3.signerSignature, receiverAddress = _ref3.receiverAddress, linkdropContract = _ref3.linkdropContract;
-              return _context3.abrupt("return", claimUtils.claim({
+              token = _ref3.token, nft = _ref3.nft, feeToken = _ref3.feeToken, feeReceiver = _ref3.feeReceiver, linkKey = _ref3.linkKey, nativeTokensAmount = _ref3.nativeTokensAmount, tokensAmount = _ref3.tokensAmount, tokenId = _ref3.tokenId, feeAmount = _ref3.feeAmount, expiration = _ref3.expiration, signerSignature = _ref3.signerSignature, receiverAddress = _ref3.receiverAddress, linkdropContract = _ref3.linkdropContract, sender = _ref3.sender;
+              claimParams = {
                 jsonRpcUrl: this.jsonRpcUrl,
                 apiHost: this.apiHost,
                 token: token,
@@ -201,10 +202,33 @@ function () {
                 expiration: expiration,
                 signerSignature: signerSignature,
                 receiverAddress: receiverAddress,
-                linkdropContract: linkdropContract
-              }));
+                linkdropContract: linkdropContract,
+                sender: sender
+              };
 
-            case 2:
+              if (!(linkdropContract === this.getProxyAddress())) {
+                _context3.next = 9;
+                break;
+              }
+
+              _context3.next = 5;
+              return _regenerator["default"].awrap(this.isDeployed());
+
+            case 5:
+              _ref4 = _context3.sent;
+              isDeployed = _ref4.isDeployed;
+
+              if (!(isDeployed === false)) {
+                _context3.next = 9;
+                break;
+              }
+
+              return _context3.abrupt("return", claimUtils.claimAndDeploy(claimParams));
+
+            case 9:
+              return _context3.abrupt("return", claimUtils.claim(claimParams));
+
+            case 10:
             case "end":
               return _context3.stop();
           }
@@ -213,13 +237,13 @@ function () {
     }
   }, {
     key: "topup",
-    value: function topup(_ref4) {
+    value: function topup(_ref5) {
       var signingKeyOrWallet, proxyAddress, nativeTokensAmount;
       return _regenerator["default"].async(function topup$(_context4) {
         while (1) {
           switch (_context4.prev = _context4.next) {
             case 0:
-              signingKeyOrWallet = _ref4.signingKeyOrWallet, proxyAddress = _ref4.proxyAddress, nativeTokensAmount = _ref4.nativeTokensAmount;
+              signingKeyOrWallet = _ref5.signingKeyOrWallet, proxyAddress = _ref5.proxyAddress, nativeTokensAmount = _ref5.nativeTokensAmount;
               return _context4.abrupt("return", topupAndApproveUtils.topup({
                 jsonRpcUrl: this.jsonRpcUrl,
                 signingKeyOrWallet: signingKeyOrWallet,
@@ -236,13 +260,13 @@ function () {
     }
   }, {
     key: "approve",
-    value: function approve(_ref5) {
+    value: function approve(_ref6) {
       var signingKeyOrWallet, proxyAddress, tokenAddress, tokensAmount;
       return _regenerator["default"].async(function approve$(_context5) {
         while (1) {
           switch (_context5.prev = _context5.next) {
             case 0:
-              signingKeyOrWallet = _ref5.signingKeyOrWallet, proxyAddress = _ref5.proxyAddress, tokenAddress = _ref5.tokenAddress, tokensAmount = _ref5.tokensAmount;
+              signingKeyOrWallet = _ref6.signingKeyOrWallet, proxyAddress = _ref6.proxyAddress, tokenAddress = _ref6.tokenAddress, tokensAmount = _ref6.tokensAmount;
               return _context5.abrupt("return", topupAndApproveUtils.approve({
                 jsonRpcUrl: this.jsonRpcUrl,
                 signingKeyOrWallet: signingKeyOrWallet,
@@ -260,13 +284,13 @@ function () {
     }
   }, {
     key: "approveNFT",
-    value: function approveNFT(_ref6) {
+    value: function approveNFT(_ref7) {
       var signingKeyOrWallet, proxyAddress, nftAddress;
       return _regenerator["default"].async(function approveNFT$(_context6) {
         while (1) {
           switch (_context6.prev = _context6.next) {
             case 0:
-              signingKeyOrWallet = _ref6.signingKeyOrWallet, proxyAddress = _ref6.proxyAddress, nftAddress = _ref6.nftAddress;
+              signingKeyOrWallet = _ref7.signingKeyOrWallet, proxyAddress = _ref7.proxyAddress, nftAddress = _ref7.nftAddress;
               return _context6.abrupt("return", topupAndApproveUtils.approveNFT({
                 jsonRpcUrl: this.jsonRpcUrl,
                 signingKeyOrWallet: signingKeyOrWallet,
@@ -283,14 +307,14 @@ function () {
     }
   }, {
     key: "deployProxy",
-    value: function deployProxy(_ref7) {
-      var signingKeyOrWallet, _ref7$campaignId, campaignId, _ref7$nativeTokensAmo, nativeTokensAmount;
+    value: function deployProxy(_ref8) {
+      var signingKeyOrWallet, _ref8$campaignId, campaignId, _ref8$nativeTokensAmo, nativeTokensAmount;
 
       return _regenerator["default"].async(function deployProxy$(_context7) {
         while (1) {
           switch (_context7.prev = _context7.next) {
             case 0:
-              signingKeyOrWallet = _ref7.signingKeyOrWallet, _ref7$campaignId = _ref7.campaignId, campaignId = _ref7$campaignId === void 0 ? 0 : _ref7$campaignId, _ref7$nativeTokensAmo = _ref7.nativeTokensAmount, nativeTokensAmount = _ref7$nativeTokensAmo === void 0 ? 0 : _ref7$nativeTokensAmo;
+              signingKeyOrWallet = _ref8.signingKeyOrWallet, _ref8$campaignId = _ref8.campaignId, campaignId = _ref8$campaignId === void 0 ? 0 : _ref8$campaignId, _ref8$nativeTokensAmo = _ref8.nativeTokensAmount, nativeTokensAmount = _ref8$nativeTokensAmo === void 0 ? 0 : _ref8$nativeTokensAmo;
               return _context7.abrupt("return", deployUtils.deployProxy({
                 jsonRpcUrl: this.jsonRpcUrl,
                 factoryAddress: this.factoryAddress,
@@ -367,18 +391,21 @@ function () {
     }
   }, {
     key: "isDeployed",
-    value: function isDeployed(campaignId) {
+    value: function isDeployed() {
+      var campaignId,
+          _args11 = arguments;
       return _regenerator["default"].async(function isDeployed$(_context11) {
         while (1) {
           switch (_context11.prev = _context11.next) {
             case 0:
+              campaignId = _args11.length > 0 && _args11[0] !== undefined ? _args11[0] : 0;
               return _context11.abrupt("return", deployUtils.isDeployed({
                 apiHost: this.apiHost,
                 senderAddress: this.senderAddress,
                 campaignId: campaignId
               }));
 
-            case 1:
+            case 2:
             case "end":
               return _context11.stop();
           }

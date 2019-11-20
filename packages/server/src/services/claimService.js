@@ -2,6 +2,7 @@ import { BadRequestError } from '../utils/errors'
 import logger from '../utils/logger'
 import operationService from './operationService'
 import linkdropService from './linkdropService'
+import factoryService from './factoryService'
 
 class ClaimService {
   _computeId ({ linkId, linkdropContractAddress }) {
@@ -105,6 +106,54 @@ class ClaimService {
     // send claim transaction to blockchain
     const tx = await this._sendClaimTx(params)
     logger.info('Submitted claim tx: ' + tx.hash)
+
+    // add transaction details to database
+    await operationService.addTransaction(claimId, tx)
+
+    return tx.hash
+  }
+
+  async claimAndDeploy (params) {
+    // Make sure all arguments are passed
+    this._checkClaimParams(params)
+
+    // Check whether a claim tx exists in database
+    const claim = await this.findClaimInDB({
+      linkId: params.linkParams.linkId,
+      linkdropContractAddress: params.linkdropContractAddress
+    })
+
+    if (claim) {
+      logger.info(`Existing claim transaction found: ${claim.id}`)
+
+      if (!claim.transactions) {
+        logger.warn(
+          `Existing claim transaction found: ${claim.id} without transactions`
+        )
+        throw new Error('Claim link was already submitted')
+      }
+
+      // retrieving the latest transactoin and returning it's tx hash
+      const tx = claim.transactions[claim.transactions.length - 1]
+      return tx.hash
+    }
+    logger.debug("Claim doesn't exist in database yet. Creating new claim...")
+
+    // save claim operation to database
+    const claimId = this._computeId({
+      linkId: params.linkParams.linkId,
+      linkdropContractAddress: params.linkdropContractAddress
+    })
+    logger.debug('Saving claim operation to database...')
+    await operationService.create({
+      id: claimId,
+      type: 'claimAndDeploy',
+      data: params
+    })
+
+    // send claim transaction to blockchain
+    const tx = await factoryService.claimAndDeploy(params)
+    logger.info('Submitted claim and deploy tx: ' + tx.hash)
 
     // add transaction details to database
     await operationService.addTransaction(claimId, tx)

@@ -80,7 +80,10 @@ export const computeProxyAddress = (
     [senderAddress, campaignId]
   )
 
-  const initcode = '0x6352c7420d6000526103ff60206004601c335afa6040516060f3'
+  const initcode =
+    String(campaignId) === '0'
+      ? '0x6319ed26266000526103ff60206004601c335afa6040516060f3'
+      : '0x6352c7420d6000526103ff60206004601c335afa6040516060f3'
 
   const proxyAddress = buildCreate2Address(factoryAddress, salt, initcode)
   return proxyAddress

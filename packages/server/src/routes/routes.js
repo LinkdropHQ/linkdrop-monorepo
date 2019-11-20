@@ -5,6 +5,12 @@ const routes = {
       method: 'claim'
     }
   },
+  '/linkdrops/claimAndDeploy': {
+    post: {
+      controller: 'claimController',
+      method: 'claimAndDeploy'
+    }
+  },
   '/linkdrops/getStatus/:linkdropContractAddress/:linkId': {
     get: {
       controller: 'claimController',
