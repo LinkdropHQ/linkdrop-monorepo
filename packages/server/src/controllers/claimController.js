@@ -12,6 +12,19 @@ export const claim = async (req, res) => {
   })
 }
 
+// POST
+export const claimAndDeploy = async (req, res) => {
+  // claim transaction
+  const txHash = await claimService.claimAndDeploy(req.body)
+  console.log('CLAIM_AND_DEPLOY txHash: ', txHash)
+
+  // return tx hash in successful response
+  res.json({
+    success: true,
+    txHash: txHash
+  })
+}
+
 // GET
 export const getStatus = async (req, res) => {
   const linkdropContractAddress = req.params.linkdropContractAddress

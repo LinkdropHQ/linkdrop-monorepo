@@ -121,9 +121,10 @@ class LinkdropSDK {
     expiration,
     signerSignature,
     receiverAddress,
-    linkdropContract
+    linkdropContract,
+    sender
   }) {
-    return claimUtils.claim({
+    const claimParams = {
       jsonRpcUrl: this.jsonRpcUrl,
       apiHost: this.apiHost,
       token,
@@ -138,8 +139,20 @@ class LinkdropSDK {
       expiration,
       signerSignature,
       receiverAddress,
-      linkdropContract
-    })
+      linkdropContract,
+      sender
+    }
+    if (linkdropContract === this.getProxyAddress()) {
+      console.log(`\nEQUAL ${linkdropContract}\nfgfgdg`)
+      const { isDeployed } = await this.isDeployed()
+      console.log(`\nisDeployed: ${isDeployed}\nfg`)
+      if (isDeployed === false) {
+        console.log('NOTDEPLOY\nfgfgdg')
+        return claimUtils.claimAndDeploy(claimParams)
+      }
+    }
+    console.log('SHITs\nfgfgdg')
+    return claimUtils.claim(claimParams)
   }
 
   async topup ({ signingKeyOrWallet, proxyAddress, nativeTokensAmount }) {
@@ -215,7 +228,7 @@ class LinkdropSDK {
     })
   }
 
-  async isDeployed (campaignId) {
+  async isDeployed (campaignId = 0) {
     return deployUtils.isDeployed({
       apiHost: this.apiHost,
       senderAddress: this.senderAddress,

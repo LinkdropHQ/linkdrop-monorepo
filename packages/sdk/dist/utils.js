@@ -87,7 +87,7 @@ var computeProxyAddress = function computeProxyAddress(factoryAddress, senderAdd
 
   var salt = _ethers.ethers.utils.solidityKeccak256(['address', 'uint256'], [senderAddress, campaignId]);
 
-  var initcode = '0x6352c7420d6000526103ff60206004601c335afa6040516060f3';
+  var initcode = String(campaignId) === '0' ? '0x6319ed26266000526103ff60206004601c335afa6040516060f3' : '0x6352c7420d6000526103ff60206004601c335afa6040516060f3';
   var proxyAddress = buildCreate2Address(factoryAddress, salt, initcode);
   return proxyAddress;
 };

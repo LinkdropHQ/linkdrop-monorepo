@@ -55,8 +55,8 @@ export const generate = async () => {
     const tokenDecimals = 18
     const proxyBalance = await provider.getBalance(proxyAddress)
 
-    // check that proxy address is deployed
-    await deployProxyIfNeeded(spinner)
+    // // check that proxy address is deployed
+    // await deployProxyIfNeeded(spinner)
 
     if (proxyBalance.lt(cost)) {
       // Transfer ethers
