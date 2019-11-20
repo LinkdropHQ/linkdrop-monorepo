@@ -81,7 +81,7 @@ var generateLink = function generateLink(_ref) {
           linkParams = _ref2.linkParams;
           signerSignature = _ref2.signerSignature;
           // Construct url
-          url = "".concat(claimHost, "/#/receive?token=").concat(token, "&nft=").concat(nft, "&feeToken=").concat(feeToken, "&feeReceiver=").concat(feeReceiver, "&linkKey=").concat(linkKey, "&nativeTokensAmount=").concat(nativeTokensAmount, "&tokensAmount=").concat(tokensAmount, "&tokenId=").concat(tokenId, "&feeAmount=").concat(feeAmount, "&expiration=").concat(expiration, "&signerSignature=").concat(signerSignature, "&linkdropContract=").concat(linkdropContract);
+          url = "".concat(claimHost, "/#/receive?token=").concat(token, "&nft=").concat(nft, "&feeToken=").concat(feeToken, "&feeReceiver=").concat(feeReceiver, "&linkKey=").concat(linkKey, "&nativeTokensAmount=").concat(nativeTokensAmount, "&tokensAmount=").concat(tokensAmount, "&tokenId=").concat(tokenId, "&feeAmount=").concat(feeAmount, "&expiration=").concat(expiration, "&signerSignature=").concat(signerSignature, "&linkdropContract=").concat(linkdropContract, "&sender=").concat(sender);
 
           if (String(chainId) !== '1') {
             url = "".concat(url, "&chainId=").concat(chainId);
