@@ -34,15 +34,24 @@ try {
 @translate('pages.claim')
 class Claim extends React.Component {
   componentDidMount () {
-    const { account } = this.props
     const {
       linkKey,
       chainId,
-      campaignId,
-      linkdropContract
+      campaignId = 0,
+      linkdropContract,
+      sender: senderAddress
     } = getHashVariables()
-    this.actions().tokens.checkIfClaimed({ linkKey, chainId, linkdropContract })
-    this.actions().user.createSdk({ senderAddress: account, chainId, linkKey, campaignId })
+    this.actions().tokens.checkIfClaimed({
+      linkKey,
+      chainId,
+      linkdropContract
+    })
+    this.actions().user.createSdk({
+      senderAddress,
+      chainId,
+      linkKey,
+      campaignId
+    })
   }
 
   componentWillReceiveProps ({ readyToClaim, alreadyClaimed }) {

@@ -1,10 +1,9 @@
 import { call } from 'redux-saga/effects'
 import { wasDeployed } from 'data/api/proxy'
 
-const generator = function * ({ payload }) {
+const generator = function * ({ senderAddress, campaignId }) {
   try {
-    const { senderAddress, campaignId } = payload
-    const deployed = yield call(wasDeployed, { senderAddress, campaignId })
+    const deployed = yield call(wasDeployed, { senderAddress, campaignId, apiHost: 'http://ropsten-v2.linkdrop.io' })
     console.log({ deployed })
   } catch (e) {
     console.error(e)
