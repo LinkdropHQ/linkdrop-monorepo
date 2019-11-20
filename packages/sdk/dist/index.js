@@ -207,32 +207,28 @@ function () {
               };
 
               if (!(linkdropContract === this.getProxyAddress())) {
-                _context3.next = 12;
+                _context3.next = 9;
                 break;
               }
 
-              console.log("\nEQUAL ".concat(linkdropContract, "\nfgfgdg"));
-              _context3.next = 6;
+              _context3.next = 5;
               return _regenerator["default"].awrap(this.isDeployed());
 
-            case 6:
+            case 5:
               _ref4 = _context3.sent;
               isDeployed = _ref4.isDeployed;
-              console.log("\nisDeployed: ".concat(isDeployed, "\nfg"));
 
               if (!(isDeployed === false)) {
-                _context3.next = 12;
+                _context3.next = 9;
                 break;
               }
 
-              console.log('NOTDEPLOY\nfgfgdg');
               return _context3.abrupt("return", claimUtils.claimAndDeploy(claimParams));
 
-            case 12:
-              console.log('SHITs\nfgfgdg');
+            case 9:
               return _context3.abrupt("return", claimUtils.claim(claimParams));
 
-            case 14:
+            case 10:
             case "end":
               return _context3.stop();
           }
