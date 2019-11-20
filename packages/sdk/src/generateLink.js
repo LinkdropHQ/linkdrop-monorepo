@@ -53,7 +53,7 @@ export const generateLink = async ({
   })
 
   // Construct url
-  let url = `${claimHost}/#/receive?token=${token}&nft=${nft}&feeToken=${feeToken}&feeReceiver=${feeReceiver}&linkKey=${linkKey}&nativeTokensAmount=${nativeTokensAmount}&tokensAmount=${tokensAmount}&tokenId=${tokenId}&feeAmount=${feeAmount}&expiration=${expiration}&signerSignature=${signerSignature}&linkdropContract=${linkdropContract}`
+  let url = `${claimHost}/#/receive?token=${token}&nft=${nft}&feeToken=${feeToken}&feeReceiver=${feeReceiver}&linkKey=${linkKey}&nativeTokensAmount=${nativeTokensAmount}&tokensAmount=${tokensAmount}&tokenId=${tokenId}&feeAmount=${feeAmount}&expiration=${expiration}&signerSignature=${signerSignature}&linkdropContract=${linkdropContract}&sender=${sender}`
 
   if (String(chainId) !== '1') {
     url = `${url}&chainId=${chainId}`
