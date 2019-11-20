@@ -6,7 +6,7 @@ const generator = function * ({ payload }) {
     const { wallet } = payload
     const sdk = yield initializeSdk({
       senderAddress: wallet,
-      factoryAddress: '0xd8A0d5C630A73f2bC2DC0C8fcc53032Df4c635D2',
+      factoryAddress: '0xED0435532B24eECf225514c74f78B9F7eCfe88c0',
       apiHost: 'http://ropsten-v2.linkdrop.io'
     })
     if (sdk) {
