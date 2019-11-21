@@ -1,7 +1,7 @@
 import { put } from 'redux-saga/effects'
 import { ethers, utils } from 'ethers'
 import { getImages } from 'helpers'
-import TokenMock from 'contracts/TokenMock.json'
+import TokenMock from '@linkdrop/contracts/build/TokenMock.json'
 import { jsonRpcUrlXdai, infuraPk } from 'app.config.js'
 import { defineJsonRpcUrl } from '@linkdrop/commons'
 

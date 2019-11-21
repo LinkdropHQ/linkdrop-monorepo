@@ -57,7 +57,6 @@ module.exports = {
       dapps: path.resolve(__dirname, '../../../configs/dapps.config'),
       config: path.resolve(__dirname, '../../../configs/app.config'),
       'config-claim': path.resolve(__dirname, '../../../configs/claim.config'),
-      contracts: path.resolve(__dirname, '../../contracts/build'),
       variables: path.resolve(__dirname, '../linkdrop-commons/variables/index.module.scss')
     }
   },
