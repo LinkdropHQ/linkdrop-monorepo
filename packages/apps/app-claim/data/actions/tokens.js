@@ -3,12 +3,41 @@ class Tokens {
     this.actions = actions
   }
 
-  claimTokensERC20 ({ campaignId, wallet, tokenAddress, tokenAmount, weiAmount, expirationTime, linkKey, linkdropMasterAddress, linkdropSignerSignature }) {
-    this.actions.dispatch({ type: '*TOKENS.CLAIM_TOKENS_ERC20', payload: { campaignId, wallet, tokenAddress, tokenAmount, weiAmount, expirationTime, linkKey, linkdropMasterAddress, linkdropSignerSignature } })
-  }
-
-  claimTokensERC721 ({ wallet, campaignId, nftAddress, tokenId, weiAmount, expirationTime, linkKey, linkdropSignerSignature }) {
-    this.actions.dispatch({ type: '*TOKENS.CLAIM_TOKENS_ERC721', payload: { wallet, campaignId, nftAddress, tokenId, weiAmount, expirationTime, linkKey, linkdropSignerSignature } })
+  claim ({
+    token,
+    feeToken,
+    feeReceiver,
+    linkKey,
+    nativeTokensAmount,
+    tokensAmount,
+    feeAmount,
+    expiration,
+    signerSignature,
+    receiverAddress,
+    linkdropContract,
+    sender,
+    nft,
+    tokenId
+  }) {
+    this.actions.dispatch({
+      type: '*TOKENS.CLAIM',
+      payload: {
+        token,
+        feeToken,
+        feeReceiver,
+        linkKey,
+        nativeTokensAmount,
+        tokensAmount,
+        feeAmount,
+        expiration,
+        signerSignature,
+        receiverAddress,
+        linkdropContract,
+        sender,
+        nft,
+        tokenId
+      }
+    })
   }
 
   checkTransactionStatus ({ transactionId, chainId }) {

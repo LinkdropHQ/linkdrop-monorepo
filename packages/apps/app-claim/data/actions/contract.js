@@ -4,6 +4,7 @@ class Contract {
   }
 
   getTokenERC20Data ({ token, nativeTokensAmount, tokensAmount, chainId }) {
+    console.log('here')
     this.actions.dispatch({ type: '*CONTRACT.GET_TOKEN_ERC20_DATA', payload: { token, nativeTokensAmount, tokensAmount, chainId } })
   }
 

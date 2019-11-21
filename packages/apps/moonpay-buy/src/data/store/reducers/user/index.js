@@ -4,6 +4,7 @@ const initialState = {
   id: undefined,
   locale: 'en',
   wallet: null,
+  proxyAddress: null,
   privateKey: null,
   sdk: null
 }
@@ -21,5 +22,6 @@ const ACTIONS = {
   'USER.SET_LOCALE': reducers.setLocale,
   'USER.SET_WALLET': reducers.setWallet,
   'USER.SET_PRIVATE_KEY': reducers.setPrivateKey,
-  'USER.SET_SDK': reducers.setSdk
+  'USER.SET_SDK': reducers.setSdk,
+  'USER.SET_PROXY_ADDRESS': reducers.setProxyAddress
 }

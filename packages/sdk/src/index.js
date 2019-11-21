@@ -142,6 +142,7 @@ class LinkdropSDK {
       linkdropContract,
       sender
     }
+
     if (linkdropContract === this.getProxyAddress()) {
       const { isDeployed } = await this.isDeployed()
       if (isDeployed === false) {

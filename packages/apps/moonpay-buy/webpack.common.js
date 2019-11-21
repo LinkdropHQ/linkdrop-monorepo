@@ -48,7 +48,7 @@ module.exports = {
       path.resolve('../../../node_modules')
     ],
     alias: {
-      config: path.resolve(__dirname, '../../../configs/app.config'),
+      config: path.resolve(__dirname, 'app.config'),
       contracts: path.resolve(__dirname, '../../contracts/build'),
       variables: '@linkdrop/commons/variables/index.module.scss'
     }
@@ -99,6 +99,11 @@ module.exports = {
     }),
     new webpack.HotModuleReplacementPlugin(),
     new webpack.DefinePlugin({
+      DEFAULT_CHAIN_ID: JSON.stringify(process.env.DEFAULT_CHAIN_ID),
+      JSON_RPC_URL_XDAI: JSON.stringify(process.env.JSON_RPC_URL_XDAI),
+      INFURA_PK: JSON.stringify(process.env.INFURA_PK),
+      FACTORY: JSON.stringify(process.env.FACTORY),
+      MASTER_COPY: JSON.stringify(process.env.MASTER_COPY),
       'process.env': {
         NODE_ENV: JSON.stringify(process.env.NODE_ENV || 'development')
       }

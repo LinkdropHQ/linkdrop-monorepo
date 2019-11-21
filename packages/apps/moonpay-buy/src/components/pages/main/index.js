@@ -4,8 +4,8 @@ import { Page } from 'components/pages'
 import { actions } from 'decorators'
 import { Loading } from '@linkdrop/ui-kit'
 
-@actions(({ assets: { ethBalance }, user: { wallet, privateKey, sdk } }) => ({
-  wallet,
+@actions(({ assets: { ethBalance }, user: { proxyAddress, privateKey, sdk } }) => ({
+  proxyAddress,
   sdk,
   privateKey,
   ethBalance
@@ -45,8 +45,8 @@ class Main extends React.Component {
 
   render () {
     const { loaded } = this.state
-    const { sdk, wallet, privateKey, ethBalance } = this.props
-    if (!wallet) {
+    const { sdk, proxyAddress, privateKey, ethBalance } = this.props
+    if (!proxyAddress) {
       return <Loading />
     }
     return <Page>
@@ -59,7 +59,7 @@ class Main extends React.Component {
           }, _ => {
             this.applyBalanceCheck()
           })}
-          src={`https://buy-staging.moonpay.io?apiKey=pk_test_8XCxJYhz1ztZR6AenQHE0UAfxPvCyrSI&currencyCode=eth&walletAddress=${wallet}&redirectURL=http%3A%2F%2Flocalhost%3A9004%2F%23%2Floading`}
+          src={`https://buy-staging.moonpay.io?apiKey=pk_test_8XCxJYhz1ztZR6AenQHE0UAfxPvCyrSI&currencyCode=eth&walletAddress=${proxyAddress}&redirectURL=http%3A%2F%2Flocalhost%3A9004%2F%23%2Floading`}
           width='100%'
         >
           <p>Your browser does not support iframes.</p>

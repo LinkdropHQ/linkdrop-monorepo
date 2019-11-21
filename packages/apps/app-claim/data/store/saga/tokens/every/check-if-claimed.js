@@ -14,12 +14,14 @@ const generator = function * ({ payload }) {
     const linkId = yield linkWallet.address
     const linkdropContractInstance = yield new ethers.Contract(linkdropContract, Linkdrop.abi, provider)
     const claimed = yield linkdropContractInstance.isClaimedLink(linkId)
-    console.log({ claimed })
     yield put({ type: 'USER.SET_ALREADY_CLAIMED', payload: { alreadyClaimed: claimed } })
     yield put({ type: 'USER.SET_READY_TO_CLAIM', payload: { readyToClaim: true } })
     yield put({ type: 'USER.SET_LOADING', payload: { loading: false } })
   } catch (e) {
     console.error(e)
+    yield put({ type: 'USER.SET_ALREADY_CLAIMED', payload: { alreadyClaimed: false } })
+    yield put({ type: 'USER.SET_READY_TO_CLAIM', payload: { readyToClaim: true } })
+    yield put({ type: 'USER.SET_LOADING', payload: { loading: false } })
   }
 }
 

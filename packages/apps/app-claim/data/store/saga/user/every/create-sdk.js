@@ -2,7 +2,8 @@ import { put } from 'redux-saga/effects'
 import initializeSdk from 'data/sdk'
 import {
   jsonRpcUrlXdai,
-  infuraPk
+  infuraPk,
+  factory
 } from 'app.config.js'
 import { ethers } from 'ethers'
 import Web3 from 'web3'
@@ -20,14 +21,12 @@ const generator = function * ({ payload }) {
     const actualJsonRpcUrl = defineJsonRpcUrl({ chainId, infuraPk, jsonRpcUrlXdai })
     const provider = yield new ethers.providers.JsonRpcProvider(actualJsonRpcUrl)
     const sdk = initializeSdk({
-      factoryAddress: '0xd8A0d5C630A73f2bC2DC0C8fcc53032Df4c635D2',
+      factoryAddress: factory,
       chain: networkName,
       senderAddress,
       jsonRpcUrl: actualJsonRpcUrl,
-      // apiHost: `https://${networkName}.linkdrop.io`
-      apiHost: 'http://ropsten-v2.linkdrop.io'
+      apiHost: `https://${networkName}-v2.linkdrop.io`
     })
-    console.log({ sdk })
     const coinbaseLink = yield getCoinbaseLink({ payload: { chainId } })
     yield put({ type: 'USER.SET_SDK', payload: { sdk } })
     const address = sdk.getProxyAddress(campaignId)

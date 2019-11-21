@@ -102,7 +102,7 @@ class Claim extends React.Component {
       return this.actions().user.setErrors({ errors: ['LINK_EXPIRED'] })
     }
 
-    if (nft && tokenId) {
+    if (nft && Number(tokenId) !== 0) {
       // jsonRpcUrl,
       // apiHost,
       // token,

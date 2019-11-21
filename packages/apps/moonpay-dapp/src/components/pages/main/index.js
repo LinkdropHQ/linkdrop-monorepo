@@ -3,6 +3,7 @@ import styles from './styles.module'
 import { ModalWindow, Button } from 'components/common'
 import { Page } from 'components/pages'
 import { translate } from 'decorators'
+import { applicationUrl } from 'config'
 
 @translate('pages.main')
 class Main extends React.Component {
@@ -35,7 +36,7 @@ class Main extends React.Component {
         frameBorder='0'
         height='100%'
         onLoad={_ => console.log('hello')}
-        src='http://localhost:9004'
+        src={applicationUrl}
         width='100%'
       >
         <p>Your browser does not support iframes.</p>
