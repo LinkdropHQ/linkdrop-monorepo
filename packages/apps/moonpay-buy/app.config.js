@@ -1,4 +1,4 @@
-/* global MASTER_COPY, DEFAULT_CHAIN_ID, JSON_RPC_URL_XDAI, INFURA_PK, FACTORY */
+/* global MASTER_COPY, DEFAULT_CHAIN_ID, MOONPAY_API_KEY, JSON_RPC_URL_XDAI, INFURA_PK, FACTORY */
 
 let config
 
@@ -12,12 +12,14 @@ const masterCopy = MASTER_COPY || String(config.masterCopy)
 const factory = FACTORY || String(config.factory)
 const infuraPk = INFURA_PK || String(config.infuraPk)
 const jsonRpcUrlXdai = JSON_RPC_URL_XDAI || String(config.jsonRpcUrlXdai)
-const defaultChainId = DEFAULT_CHAIN_ID || '4'
+const defaultChainId = DEFAULT_CHAIN_ID || '3'
+const moonpayApiKey = MOONPAY_API_KEY || String(config.moonpayApiKey)
 
 module.exports = {
   masterCopy,
   jsonRpcUrlXdai,
   factory,
   defaultChainId,
-  infuraPk
+  infuraPk,
+  moonpayApiKey
 }

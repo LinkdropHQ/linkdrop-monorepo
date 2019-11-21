@@ -104,6 +104,7 @@ module.exports = {
       INFURA_PK: JSON.stringify(process.env.INFURA_PK),
       FACTORY: JSON.stringify(process.env.FACTORY),
       MASTER_COPY: JSON.stringify(process.env.MASTER_COPY),
+      MOONPAY_API_KEY: JSON.stringify(process.env.MOONPAY_API_KEY),
       'process.env': {
         NODE_ENV: JSON.stringify(process.env.NODE_ENV || 'development')
       }

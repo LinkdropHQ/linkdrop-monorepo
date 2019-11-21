@@ -3,6 +3,7 @@ import styles from './styles.module'
 import { Page } from 'components/pages'
 import { actions } from 'decorators'
 import { Loading } from '@linkdrop/ui-kit'
+import { moonpayApiKey } from 'config'
 
 @actions(({ assets: { ethBalance }, user: { proxyAddress, privateKey, sdk } }) => ({
   proxyAddress,
@@ -59,7 +60,7 @@ class Main extends React.Component {
           }, _ => {
             this.applyBalanceCheck()
           })}
-          src={`https://buy-staging.moonpay.io?apiKey=pk_test_8XCxJYhz1ztZR6AenQHE0UAfxPvCyrSI&currencyCode=eth&walletAddress=${proxyAddress}&redirectURL=http%3A%2F%2Flocalhost%3A9004%2F%23%2Floading`}
+          src={`https://buy-staging.moonpay.io?apiKey=${moonpayApiKey}&currencyCode=eth&walletAddress=${proxyAddress}&redirectURL=${encodeURIComponent(`${window.location.origin}/#/loading`)}`}
           width='100%'
         >
           <p>Your browser does not support iframes.</p>
