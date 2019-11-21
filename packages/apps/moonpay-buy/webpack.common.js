@@ -105,6 +105,7 @@ module.exports = {
       FACTORY: JSON.stringify(process.env.FACTORY),
       MASTER_COPY: JSON.stringify(process.env.MASTER_COPY),
       MOONPAY_API_KEY: JSON.stringify(process.env.MOONPAY_API_KEY),
+      CLAIM_HOST: JSON.stringify(process.env.CLAIM_HOST),
       'process.env': {
         NODE_ENV: JSON.stringify(process.env.NODE_ENV || 'development')
       }

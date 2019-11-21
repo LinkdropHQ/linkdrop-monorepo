@@ -5,7 +5,8 @@ import {
   jsonRpcUrlXdai,
   infuraPk,
   factory,
-  defaultChainId
+  defaultChainId,
+  claimHost
 } from 'config'
 
 const generator = function * ({ payload }) {
@@ -17,6 +18,7 @@ const generator = function * ({ payload }) {
       senderAddress: wallet,
       factoryAddress: factory,
       jsonRpcUrl: actualJsonRpcUrl,
+      claimHost,
       apiHost: `https://${networkName}-v2.linkdrop.io`
     })
 

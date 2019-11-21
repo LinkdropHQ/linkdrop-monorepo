@@ -8,7 +8,7 @@ import {
 import { ethers } from 'ethers'
 import Web3 from 'web3'
 import { getInitialBlock } from 'helpers'
-import LinkdropMastercopy from 'contracts/LinkdropMastercopy.json'
+import LinkdropMastercopy from '@linkdrop/contracts/build/LinkdropMastercopy.json'
 import { defineNetworkName, defineJsonRpcUrl } from '@linkdrop/commons'
 import getCoinbaseLink from 'data/store/saga/deeplinks/every/get-coinbase-link'
 
