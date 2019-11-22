@@ -8,7 +8,7 @@ import {
 import { ethers } from 'ethers'
 import Web3 from 'web3'
 import { getInitialBlock } from 'helpers'
-import LinkdropMastercopy from '@linkdrop/contracts/build/LinkdropMastercopy.json'
+import Linkdrop from '@linkdrop/contracts/build/Linkdrop.json'
 import { defineNetworkName, defineJsonRpcUrl } from '@linkdrop/commons'
 import getCoinbaseLink from 'data/store/saga/deeplinks/every/get-coinbase-link'
 
@@ -32,8 +32,8 @@ const generator = function * ({ payload }) {
     const address = sdk.getProxyAddress(campaignId)
     const linkWallet = yield new ethers.Wallet(linkKey, provider)
     const linkId = yield linkWallet.address
-    const contractWeb3 = yield new web3.eth.Contract(LinkdropMastercopy.abi, address)
-    const contractEthers = new ethers.Contract(address, LinkdropMastercopy.abi, provider)
+    const contractWeb3 = yield new web3.eth.Contract(Linkdrop.abi, address)
+    const contractEthers = new ethers.Contract(address, Linkdrop.abi, provider)
     const initialBlock = getInitialBlock({ chainId })
     yield put({ type: '*CONTRACT.GET_PAST_EVENTS', payload: { networkName, linkId, contract: contractWeb3, initialBlock } })
     yield put({ type: '*CONTRACT.SUBSCRIBE_TO_CLAIM_EVENT', payload: { networkName, linkId, contract: contractEthers, initialBlock } })
