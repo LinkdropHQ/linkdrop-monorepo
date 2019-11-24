@@ -41,6 +41,12 @@ const routes = {
       method: 'deploy'
     }
   },
+  '/linkdrops/withdraw': {
+    post: {
+      controller: 'factoryController',
+      method: 'withdraw'
+    }
+  },
   '/linkdrops/isDeployed/:senderAddress/:campaignId': {
     get: {
       controller: 'factoryController',

@@ -6,6 +6,7 @@ import relayerWalletService from './relayerWalletService'
 import utilsService from './utilsService'
 import { ethers } from 'ethers'
 import logger from '../utils/logger'
+import Deploy from '../models/Deploy'
 
 const config = configs.get('server')
 
@@ -29,6 +30,46 @@ class FactoryService {
       senderAddress,
       campaignId
     )
+  }
+
+  async deploy ({ senderAddress }) {
+    if (this.isDeployed(senderAddress, 0) === true) {
+      throw new Error('Proxy is already deployed')
+    }
+
+    const gasPrice = await relayerWalletService.getGasPrice()
+
+    const linkdropSDK = new LinkdropSDK({
+      senderAddress,
+      factoryAddress: this.factory.address,
+      chain: relayerWalletService.chain
+    })
+
+    const linkdropContractAddress = linkdropSDK.getProxyAddress()
+
+    logger.debug(
+      `Deploying campaign 0 for ${senderAddress} at address ${linkdropContractAddress}`
+    )
+
+    const tx = await this.factory['deployProxy(address,uint256)'](
+      senderAddress,
+      0,
+      {
+        gasPrice
+      }
+    )
+
+    const deploy = new Deploy({
+      senderAddress,
+      linkdropContractAddress,
+      deployedAt: new Date().getTime()
+    })
+    await deploy.save()
+
+    logger.debug('Saved deploy data to database:')
+    logger.json(deploy)
+
+    return tx.hash
   }
 
   async claimAndDeploy ({
