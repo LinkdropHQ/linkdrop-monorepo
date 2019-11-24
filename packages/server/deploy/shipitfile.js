@@ -1,3 +1,5 @@
+/* eslint-disable no-undef */
+
 module.exports = shipit => {
   require('shipit-deploy')(shipit)
 
