@@ -1,0 +1,12 @@
+@import "variables";
+
+.container {
+  max-width: 300px;
+  background: $dbBlue;
+}
+
+.inverted {
+  border-color: $dbBlue;
+  background: none;
+  color: $dbBlue;
+}

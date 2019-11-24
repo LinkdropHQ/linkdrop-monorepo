@@ -13,11 +13,11 @@ ethers.errors.setLogLevel('error')
 
 class LinkdropSDK {
   constructor ({
-    senderAddress,
+    senderAddress, // generate on front, senderPrivateKey -> sender key (ethers wallet create random)
     factoryAddress,
-    chain = 'mainnet',
+    chain = 'mainnet', // rinkeby
     jsonRpcUrl = getJsonRpcUrl(chain),
-    apiHost = `https://${chain}.linkdrop.io`,
+    apiHost = `https://${chain}.linkdrop.io`, // http://localhost:5000
     claimHost = 'https://claim.linkdrop.io'
   }) {
     if (senderAddress == null || senderAddress === '') {
@@ -78,7 +78,7 @@ class LinkdropSDK {
     tokenId = 0,
     feeAmount = 0,
     expiration = 11111111111,
-    signingKeyOrWallet
+    signingKeyOrWallet // private key of wallet
   }) {
     return generateLinkUtils.generateLink({
       claimHost: this.claimHost,
@@ -142,6 +142,7 @@ class LinkdropSDK {
       linkdropContract,
       sender
     }
+
     if (linkdropContract === this.getProxyAddress()) {
       const { isDeployed } = await this.isDeployed()
       if (isDeployed === false) {

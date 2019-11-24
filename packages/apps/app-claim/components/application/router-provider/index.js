@@ -20,7 +20,7 @@ export default function RouterProvider () {
   } else {
     return <ConnectedRouter history={history}>
       <Router history={history}>
-        <AppRouter />
+        <AppRouter account={context.account} />
       </Router>
     </ConnectedRouter>
   }

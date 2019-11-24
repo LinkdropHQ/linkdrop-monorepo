@@ -1,4 +1,3 @@
-/* global web3 */
 import { put } from 'redux-saga/effects'
 import { delay } from 'redux-saga'
 import initializeSdk from 'data/sdk'
@@ -9,32 +8,35 @@ const generator = function * ({ payload }) {
   try {
     yield put({ type: 'USER.SET_LOADING', payload: { loading: true } })
     yield delay(3000)
-    const currentProvider = (web3 || {}).currentProvider
-    if (!currentProvider) {
+    const { provider } = payload
+    if (!provider) {
       return yield put({ type: 'USER.SET_LOADING', payload: { loading: false } })
     }
-    const { selectedAddress, networkVersion } = currentProvider
-    if (!selectedAddress || !networkVersion) {
+
+    const result = yield provider.eth.getAccounts()
+    const chainId = yield provider.eth.getChainId()
+    const address = (result || [])[0]
+    if (!address || !chainId) {
       return yield put({ type: 'USER.SET_LOADING', payload: { loading: false } })
     }
     window.addressChangeInterval && window.clearInterval(window.addressChangeInterval)
-    const networkName = defineNetworkName({ chainId: networkVersion })
-    const jsonRpcUrl = defineJsonRpcUrl({ chainId: networkVersion, infuraPk, jsonRpcUrlXdai })
+    const networkName = defineNetworkName({ chainId })
+    const jsonRpcUrl = defineJsonRpcUrl({ chainId, infuraPk, jsonRpcUrlXdai })
     const sdk = initializeSdk({
       claimHost,
       factoryAddress: factory,
       chainId: networkName,
-      linkdropMasterAddress: selectedAddress,
+      linkdropMasterAddress: address,
       jsonRpcUrl,
       apiHost: `https://${networkName}.linkdrop.io`
     })
     yield put({ type: 'USER.SET_SDK', payload: { sdk } })
-    yield put({ type: 'USER.SET_CURRENT_ADDRESS', payload: { currentAddress: selectedAddress } })
-    yield put({ type: 'USER.SET_CHAIN_ID', payload: { chainId: networkVersion } })
+    yield put({ type: 'USER.SET_CURRENT_ADDRESS', payload: { currentAddress: address } })
+    yield put({ type: 'USER.SET_CHAIN_ID', payload: { chainId } })
     yield put({ type: 'USER.SET_LOADING', payload: { loading: false } })
-    window.addressChangeInterval = window.setInterval(() => {
-      const currentMetamaskAddress = web3.eth.accounts[0]
-      if (selectedAddress !== currentMetamaskAddress) {
+    window.addressChangeInterval = window.setInterval(async () => {
+      const currentMetamaskAddress = await provider.eth.getAccounts()
+      if ((address || '').toLowerCase() !== ((currentMetamaskAddress || [])[0] || '').toLowerCase()) {
         window.location.reload()
       }
     }, 2000)

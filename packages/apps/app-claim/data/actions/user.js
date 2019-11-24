@@ -23,8 +23,8 @@ class User {
     this.actions.dispatch({ type: 'USER.SET_WALLET_TYPE', payload: { walletType } })
   }
 
-  createSdk ({ linkdropMasterAddress, chainId, linkKey, campaignId }) {
-    this.actions.dispatch({ type: '*USER.CREATE_SDK', payload: { linkdropMasterAddress, chainId, linkKey, campaignId } })
+  createSdk ({ senderAddress, chainId, linkKey, campaignId }) {
+    this.actions.dispatch({ type: '*USER.CREATE_SDK', payload: { senderAddress, chainId, linkKey, campaignId } })
   }
 }
 

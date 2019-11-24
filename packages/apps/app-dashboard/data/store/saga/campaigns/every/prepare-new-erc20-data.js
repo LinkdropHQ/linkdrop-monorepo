@@ -2,9 +2,10 @@ import { put } from 'redux-saga/effects'
 
 const generator = function * ({ payload }) {
   try {
-    const { tokenAmount, ethAmount, linksAmount, tokenSymbol } = payload
+    const { tokenAmount, ethAmount, linksAmount, tokenSymbol, wallet } = payload
     yield put({ type: 'USER.SET_LOADING', payload: { loading: true } })
     yield put({ type: 'CAMPAIGNS.SET_TOKEN_AMOUNT', payload: { tokenAmount } })
+    yield put({ type: 'CAMPAIGNS.SET_DEFAULT_WALLET', payload: { defaultWallet: wallet } })
     yield put({ type: 'CAMPAIGNS.SET_TOKEN_SYMBOL', payload: { tokenSymbol } })
     yield put({ type: 'CAMPAIGNS.SET_DATE', payload: { date: new Date() } })
     yield put({ type: 'CAMPAIGNS.SET_ETH_AMOUNT', payload: { ethAmount } })
