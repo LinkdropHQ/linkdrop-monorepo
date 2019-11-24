@@ -6,10 +6,10 @@ import { PageExpandable } from 'components/pages'
 import QRCode from 'qrcode.react'
 import { Icons } from '@linkdrop/ui-kit'
 import variables from 'variables'
-import { getHashVariables } from '@linkdrop/commons'
 
-@actions(({ link: { link } }) => ({
-  link
+@actions(({ assets: { ethBalanceFormatted }, link: { link } }) => ({
+  link,
+  ethBalanceFormatted
 }))
 @translate('pages.linkGenerate')
 class Finished extends React.Component {
@@ -22,7 +22,7 @@ class Finished extends React.Component {
 
   render () {
     const { expanded } = this.state
-    const { link } = this.props
+    const { link, ethBalanceFormatted } = this.props
     return <div className={styles.container}>
       {this.renderQR({ expanded, link })}
       <div className={styles.title}>
@@ -32,8 +32,8 @@ class Finished extends React.Component {
         className={styles.subtitle}
         dangerouslySetInnerHTML={{
           __html: this.t('titles.instruction', {
-            amount: 50,
-            symbol: 'DAI'
+            amount: ethBalanceFormatted || 0,
+            symbol: 'ETH'
           })
         }}
       />

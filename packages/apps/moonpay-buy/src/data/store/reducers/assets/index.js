@@ -1,7 +1,8 @@
 import reducers from './reducers'
 
 const initialState = {
-  ethBalance: 0
+  ethBalance: 0,
+  ethBalanceFormatted: 0
 }
 
 export default (state = initialState, action = {}) => {

@@ -1,5 +1,5 @@
 import { put, select } from 'redux-saga/effects'
-import { ethers } from 'ethers'
+import { ethers, utils } from 'ethers'
 
 const generator = function * ({ payload }) {
   try {
@@ -10,7 +10,13 @@ const generator = function * ({ payload }) {
     const ethBalance = yield provider.getBalance(proxyAddress)
     const balanceAmount = Number(ethBalance)
     if (balanceAmount > 0) {
-      yield put({ type: 'ASSETS.SET_ETH_BALANCE', payload: { ethBalance: balanceAmount } })
+      yield put({
+        type: 'ASSETS.SET_ETH_BALANCE',
+        payload: {
+          ethBalance: balanceAmount,
+          ethBalanceFormatted: utils.formatUnits(String(balanceAmount), 18)
+        }
+      })
     }
   } catch (e) {
     console.error(e)

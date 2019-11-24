@@ -1,1 +1,1 @@
-export default (state, { payload: { ethBalance } }) => ({ ...state, ethBalance })
+export default (state, { payload: { ethBalance, ethBalanceFormatted } }) => ({ ...state, ethBalanceFormatted, ethBalance })
