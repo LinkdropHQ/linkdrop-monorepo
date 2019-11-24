@@ -59,14 +59,14 @@ class FactoryService {
       }
     )
 
-    const deploy = new Deploy({
+    const deploy = await Deploy.findOne({
       senderAddress,
-      linkdropContractAddress,
-      deployedAt: new Date().getTime()
+      linkdropContractAddress
     })
+    deploy.deployedAt = new Date().getTime()
     await deploy.save()
 
-    logger.debug('Saved deploy data to database:')
+    logger.debug('Updated deploy data in database:')
     logger.json(deploy)
 
     return tx.hash

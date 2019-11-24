@@ -25,6 +25,14 @@ export const withdraw = async (req, res) => {
   })
 }
 
+// POST
+export const register = async (req, res) => {
+  const success = await linkdropService.register(req.body)
+  res.json({
+    success
+  })
+}
+
 // GET
 export const isDeployed = async (req, res) => {
   const senderAddress = req.params.senderAddress

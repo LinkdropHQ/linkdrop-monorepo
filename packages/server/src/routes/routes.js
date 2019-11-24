@@ -41,6 +41,12 @@ const routes = {
       method: 'deploy'
     }
   },
+  '/linkdrops/register': {
+    post: {
+      controller: 'factoryController',
+      method: 'register'
+    }
+  },
   '/linkdrops/withdraw': {
     post: {
       controller: 'factoryController',
