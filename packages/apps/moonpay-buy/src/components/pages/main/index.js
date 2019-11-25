@@ -50,6 +50,7 @@ class Main extends React.Component {
     if (!proxyAddress) {
       return <Loading />
     }
+
     return <Page>
       <div className={styles.container}>
         <iframe

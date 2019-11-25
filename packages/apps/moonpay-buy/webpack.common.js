@@ -39,6 +39,11 @@ module.exports = {
     filename: 'bundle.js',
     path: path.resolve(__dirname, 'dist')
   },
+  node: {
+    fs: 'empty',
+    net: 'empty',
+    tls: 'empty'
+  },
   context: __dirname,
   resolve: {
     extensions: ['.js', '.jsx', '.json', '.scss', '.css', '*'],
