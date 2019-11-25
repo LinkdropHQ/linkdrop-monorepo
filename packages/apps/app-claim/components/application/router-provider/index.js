@@ -10,18 +10,19 @@ const platform = definePlatform()
 
 export default function RouterProvider () {
   const context = useWeb3Context()
-  // const connectors = platform === 'desktop' ? ['MetaMask', 'Infura', 'WalletConnect', 'Fortmatic', 'Portis'] : ['MetaMask', 'Infura']
-  const connectors = ['MetaMask', 'Infura']
+  const connectors = platform === 'desktop' ? ['MetaMask', 'Network', 'WalletConnect', 'Portis'] : ['MetaMask', 'Network']
   useEffect(() => {
     context.setFirstValidConnector(connectors)
   }, [])
-  console.log({ context })
 
   if (!context.active && !context.error) {
     return <Loading />
   } else if (context.error) {
-    console.log(`error: ${context.error.code} (line: ${context.error.line}, col: ${context.error.column})`)
-    return <div>{`error: ${context.error.code} (line: ${context.error.line}, col: ${context.error.column})`}</div>
+    return <ConnectedRouter history={history}>
+      <Router history={history}>
+        <AppRouter web3Provider={null} context={context} />
+      </Router>
+    </ConnectedRouter>
   } else {
     return <ConnectedRouter history={history}>
       <Router history={history}>

@@ -29,7 +29,7 @@ class Claim extends React.Component {
   constructor (props) {
     super(props)
     const { web3Provider } = props
-    const currentProvider = new Web3(web3Provider)
+    const currentProvider = web3Provider && new Web3(web3Provider)
     this.state = {
       accounts: null,
       connectorChainId: null,
@@ -47,10 +47,12 @@ class Claim extends React.Component {
     const { currentProvider } = this.state
     this.actions().tokens.checkIfClaimed({ linkKey, chainId, linkdropMasterAddress, campaignId })
     this.actions().user.createSdk({ linkdropMasterAddress, chainId, linkKey, campaignId })
-    const { accounts, connectorChainId } = await this.getProviderData({ currentProvider })
-    this.setState({
-      accounts, connectorChainId
-    })
+    if (currentProvider) {
+      const { accounts, connectorChainId } = await this.getProviderData({ currentProvider })
+      this.setState({
+        accounts, connectorChainId
+      })
+    }
   }
 
   componentWillReceiveProps ({ readyToClaim, alreadyClaimed }) {
@@ -71,24 +73,6 @@ class Claim extends React.Component {
       tokenId,
       name
     } = getHashVariables()
-    // params in url:
-    // token - contract/token address,
-    // amount - tokens amount,
-    // expirationTime - expiration time of link,
-    // sender,
-    // linkdropSignerSignature,
-    // linkKey - private key for link,
-    // chainId - network id
-
-    // params needed for claim
-    // sender: sender key address, e.g. 0x1234...ff
-    // linkdropSignerSignature: ECDSA signature signed by sender (contained in claim link)
-    // receiverSignature: ECDSA signature signed by receiver using link key
-
-    // destination: destination address - can be received from web3-react context
-    // token: ERC20 token address, 0x000...000 for ether - can be received from url params
-    // tokenAmount: token amount in atomic values - can be received from url params
-    // expirationTime: link expiration time - can be received from url params
     if (Number(expirationTime) < (+(new Date()) / 1000)) {
       // show error page if link expired
       return this.actions().user.setErrors({ errors: ['LINK_EXPIRED'] })
@@ -113,16 +97,7 @@ class Claim extends React.Component {
 
   renderCurrentPage ({ context }) {
     const { decimals, amount, symbol, icon, step, userLoading, errors, alreadyClaimed, web3Provider } = this.props
-    const { accounts, connectorChainId } = this.state
-    // in context we can find:
-    // active,
-    // connectorName,
-    // connector,
-    // library,
-    // networkId,
-    // account,
-    // error
-    if (accounts === null || connectorChainId === null) { return null }
+    const { connectorChainId } = this.state
     const {
       account
     } = context

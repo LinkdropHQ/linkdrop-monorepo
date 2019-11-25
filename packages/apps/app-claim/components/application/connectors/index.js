@@ -45,8 +45,8 @@ const supportedNetworkURLs = {
 
 const defaultNetwork = Number(chainId)
 
-const Infura = new NetworkOnlyConnector({
-  providerURL: `https://${networkName}.infura.io/v3/${infuraPk}`
+const Network = new NetworkOnlyConnector({
+  providerURL: supportedNetworkURLs[1]
 })
 
 const WalletConnect = new WalletConnectConnector({
@@ -71,12 +71,12 @@ const Portis = new PortisConnector({
 export const authereum = new AuthereumConnector({ chainId: Number(chainId) })
 const connectors = platform === 'desktop' ? {
   MetaMask,
-  Infura,
+  Network,
   WalletConnect,
   Fortmatic,
   Portis
 } : {
   MetaMask,
-  Infura
+  Network
 }
 export default connectors
