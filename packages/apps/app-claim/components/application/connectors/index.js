@@ -6,6 +6,19 @@ import PortisApi from '@portis/web3'
 import { AuthereumConnector } from '@web3-react/authereum-connector'
 import { getHashVariables, defineNetworkName, definePlatform } from '@linkdrop/commons'
 
+// import { Connectors } from 'web3-react'
+// const { InjectedConnector, NetworkOnlyConnector } = Connectors
+
+// const MetaMask = new InjectedConnector({
+//   supportedNetworks: [1, 3, 4, 5, 42]
+// })
+
+// const Infura = new NetworkOnlyConnector({
+//   providerURL: 'https://mainnet.infura.io'
+// })
+
+// export default { MetaMask, Infura }
+
 const { chainId } = getHashVariables()
 const networkName = defineNetworkName({ chainId })
 const platform = definePlatform()
@@ -33,7 +46,7 @@ const supportedNetworkURLs = {
 const defaultNetwork = Number(chainId)
 
 const Infura = new NetworkOnlyConnector({
-  providerURL: `https://mainnet.infura.io/v3/${infuraPk}`
+  providerURL: `https://${networkName}.infura.io/v3/${infuraPk}`
 })
 
 const WalletConnect = new WalletConnectConnector({
