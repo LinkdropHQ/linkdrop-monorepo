@@ -1,24 +1,10 @@
 import { Connectors } from 'web3-react'
-import { infuraPk } from 'app.config.js'
+import { infuraPk, portisDappId, formaticApiKeyTestnet, formaticApiKeyMainnet } from 'app.config.js'
 import WalletConnectApi from '@walletconnect/web3-subprovider'
 import FortmaticApi from 'fortmatic'
 import PortisApi from '@portis/web3'
 import { AuthereumConnector } from '@web3-react/authereum-connector'
 import { getHashVariables, defineNetworkName, definePlatform } from '@linkdrop/commons'
-
-// import { Connectors } from 'web3-react'
-// const { InjectedConnector, NetworkOnlyConnector } = Connectors
-
-// const MetaMask = new InjectedConnector({
-//   supportedNetworks: [1, 3, 4, 5, 42]
-// })
-
-// const Infura = new NetworkOnlyConnector({
-//   providerURL: 'https://mainnet.infura.io'
-// })
-
-// export default { MetaMask, Infura }
-
 const { chainId } = getHashVariables()
 const networkName = defineNetworkName({ chainId })
 const platform = definePlatform()
@@ -43,28 +29,26 @@ const supportedNetworkURLs = {
   42: `https://kovan.infura.io/v3/${infuraPk}`
 }
 
-const defaultNetwork = Number(chainId)
-
 const Network = new NetworkOnlyConnector({
-  providerURL: supportedNetworkURLs[1]
+  providerURL: `https://${networkName}.infura.io/v3/${infuraPk}`
 })
 
 const WalletConnect = new WalletConnectConnector({
   api: WalletConnectApi,
   bridge: 'https://bridge.walletconnect.org',
   supportedNetworkURLs,
-  defaultNetwork
+  defaultNetwork: Number(chainId)
 })
 
 const Fortmatic = new FortmaticConnector({
   api: FortmaticApi,
-  apiKey: Number(chainId) === 1 ? 'pk_live_22A63DE762B0BEE8' : 'pk_test_8099341B84816987',
+  apiKey: Number(chainId) === 1 ? formaticApiKeyMainnet : formaticApiKeyTestnet,
   logoutOnDeactivation: false
 })
 
 const Portis = new PortisConnector({
   api: PortisApi,
-  dAppId: 'ed1f3db5-3fe6-4644-a511-7333437d6205',
+  dAppId: portisDappId,
   network: networkName
 })
 
