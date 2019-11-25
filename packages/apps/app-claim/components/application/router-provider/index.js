@@ -10,7 +10,7 @@ const platform = definePlatform()
 
 export default function RouterProvider () {
   const context = useWeb3Context()
-  const connectors = platform === 'desktop' ? ['MetaMask', 'Network', 'WalletConnect', 'Portis'] : ['MetaMask', 'Network']
+  const connectors = platform === 'desktop' ? ['MetaMask', 'Network', 'WalletConnect', 'Fortmatic', 'Portis'] : ['MetaMask', 'Network']
   useEffect(() => {
     context.setFirstValidConnector(connectors)
   }, [])
