@@ -31,7 +31,7 @@ const supportedNetworkURLs = {
 const defaultNetwork = Number(chainId)
 
 const Infura = new NetworkOnlyConnector({
-  providerURL: `https://${networkName}.infura.io/v3/${infuraPk}`
+  providerURL: `https://mainnet.infura.io/v3/${infuraPk}`
 })
 
 const WalletConnect = new WalletConnectConnector({

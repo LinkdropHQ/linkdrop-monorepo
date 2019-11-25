@@ -1,4 +1,3 @@
-/* global web3 */
 import React from 'react'
 import { Loading } from '@linkdrop/ui-kit'
 import { actions, translate, platform, detectBrowser } from 'decorators'
@@ -8,13 +7,7 @@ import ClaimingProcessPage from './claiming-process-page'
 import ErrorPage from './error-page'
 import ClaimingFinishedPage from './claiming-finished-page'
 import { getHashVariables, defineNetworkName, capitalize } from '@linkdrop/commons'
-import { Web3Consumer } from 'web3-react'
-let web3Obj
-try {
-  web3Obj = web3
-} catch (err) {
-  console.error(err)
-}
+import Web3 from 'web3'
 
 @actions(({ user: { errors, step, loading: userLoading, readyToClaim, alreadyClaimed }, tokens: { transactionId }, contract: { loading, decimals, amount, symbol, icon } }) => ({
   userLoading,
@@ -33,15 +26,31 @@ try {
 @detectBrowser()
 @translate('pages.claim')
 class Claim extends React.Component {
-  componentDidMount () {
+  constructor (props) {
+    super(props)
+    const { web3Provider } = props
+    const currentProvider = new Web3(web3Provider)
+    this.state = {
+      accounts: null,
+      connectorChainId: null,
+      currentProvider
+    }
+  }
+
+  async componentDidMount () {
     const {
       linkKey,
       chainId,
       linkdropMasterAddress,
       campaignId
     } = getHashVariables()
+    const { currentProvider } = this.state
     this.actions().tokens.checkIfClaimed({ linkKey, chainId, linkdropMasterAddress, campaignId })
     this.actions().user.createSdk({ linkdropMasterAddress, chainId, linkKey, campaignId })
+    const { accounts, connectorChainId } = await this.getProviderData({ currentProvider })
+    this.setState({
+      accounts, connectorChainId
+    })
   }
 
   componentWillReceiveProps ({ readyToClaim, alreadyClaimed }) {
@@ -92,13 +101,19 @@ class Claim extends React.Component {
   }
 
   render () {
-    return <Web3Consumer>
-      {context => this.renderCurrentPage({ context })}
-    </Web3Consumer>
+    const { context } = this.props
+    return this.renderCurrentPage({ context })
+  }
+
+  async getProviderData ({ currentProvider }) {
+    const accounts = await currentProvider.eth.getAccounts()
+    const connectorChainId = await currentProvider.eth.getChainId()
+    return { accounts, connectorChainId }
   }
 
   renderCurrentPage ({ context }) {
-    const { decimals, amount, symbol, icon, step, userLoading, errors, alreadyClaimed } = this.props
+    const { decimals, amount, symbol, icon, step, userLoading, errors, alreadyClaimed, web3Provider } = this.props
+    const { accounts, connectorChainId } = this.state
     // in context we can find:
     // active,
     // connectorName,
@@ -107,19 +122,11 @@ class Claim extends React.Component {
     // networkId,
     // account,
     // error
-    let {
-      account,
-      networkId
+    if (accounts === null || connectorChainId === null) { return null }
+    const {
+      account
     } = context
-    if (this.isOpera) {
-      if (!account || !networkId) {
-        if (web3Obj && web3Obj.currentProvider && web3Obj.currentProvider.publicConfigStore && web3Obj.currentProvider.publicConfigStore.getState) {
-          const data = web3Obj.currentProvider.publicConfigStore.getState()
-          account = data.selectedAddress
-          networkId = data.networkVersion
-        }
-      }
-    }
+
     const {
       chainId,
       linkdropMasterAddress
@@ -141,8 +148,8 @@ class Claim extends React.Component {
       return <ErrorPage error={errors[0]} />
     }
     if (
-      (this.platform === 'desktop' && networkId && Number(chainId) !== Number(networkId)) ||
-      (this.platform !== 'desktop' && account && networkId && Number(chainId) !== Number(networkId))) {
+      (this.platform === 'desktop' && connectorChainId && Number(chainId) !== Number(connectorChainId)) ||
+      (this.platform !== 'desktop' && account && connectorChainId && Number(chainId) !== Number(connectorChainId))) {
       // if network id in the link and in the web3 are different
       return <ErrorPage error='NETWORK_NOT_SUPPORTED' network={capitalize({ string: defineNetworkName({ chainId }) })} />
     }
