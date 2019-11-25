@@ -18,7 +18,8 @@ const generator = function * ({ payload }) {
     })
     let finalLink = url
     if (finalLink.indexOf('localhost') === -1) {
-      finalLink = yield bitly.shorten(finalLink)
+      const shortenUrl = yield bitly.shorten(finalLink)
+      finalLink = shortenUrl.url
     }
 
     yield put({ type: 'LINK.SET_LINK', payload: { link: finalLink } })
