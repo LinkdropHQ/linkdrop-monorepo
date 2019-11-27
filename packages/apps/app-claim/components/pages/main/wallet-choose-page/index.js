@@ -1,7 +1,7 @@
 import React from 'react'
 import { Button, RetinaImage } from '@linkdrop/ui-kit'
 import { translate, actions, platform } from 'decorators'
-import { getImages, getWalletLink, getWalletData } from 'helpers'
+import { getImages, getWalletLink, getWalletData, capitalize } from 'helpers'
 import { copyToClipboard, getHashVariables } from '@linkdrop/commons'
 import classNames from 'classnames'
 import styles from './styles.module'
@@ -23,14 +23,15 @@ class WalletChoosePage extends React.Component {
   }
 
   render () {
-    const { showSlider } = this.state
-    const { walletType, coinbaseLink } = this.props
+    const { showSlider, loading } = this.state
+    const { walletType, coinbaseLink, context } = this.props
     const { platform } = this
     const { w = 'trust' } = getHashVariables()
+    console.log({ walletType })
     if (walletType && walletType != null) {
       return this.renderWalletInstruction({ walletType })
     } else {
-      const buttonLink = platform !== 'desktop' && getWalletLink({ coinbaseLink, platform, wallet: w, currentUrl: window.location.href })
+      const buttonLink = this.defineButtonLink({ platform, loading, context })
       const buttonTitle = getWalletData({ wallet: w }).name
       return <div className={classNames(commonStyles.container, styles.container, {
         [styles.sliderShow]: showSlider,
@@ -47,6 +48,12 @@ class WalletChoosePage extends React.Component {
         {this.renderSlider({ walletType })}
       </div>
     }
+  }
+
+  defineButtonLink ({ platform, coinbaseLink, w, context, loading }) {
+    if (platform === 'desktop') return null
+    if (w !== 'fortmatic' && w !== 'portis') return getWalletLink({ coinbaseLink, platform, wallet: w, currentUrl: window.location.href })
+    return this.renderConnectorButton({ context, loading, connector: capitalize({ string: w }) })
   }
 
   renderIcon ({ id }) {
@@ -72,11 +79,15 @@ class WalletChoosePage extends React.Component {
     const { showSlider } = this.state
     const { name: walletTitle, walletURL, walletURLIos } = getWalletData({ wallet: walletType })
     let instruction = ''
+    let title = <div className={classNames(styles.title, styles.instructionTitle)}>{this.t('titles.howToClaim', { wallet: walletTitle })}</div>
+
     switch (walletType) {
       case 'trust':
       case 'coinbase':
+        break
       case 'fortmatic':
       case 'portis':
+        title = <div className={styles.title}>{this.t('titles.needWallet')}</div>
         break
       case 'status':
       case 'imtoken':
@@ -94,7 +105,7 @@ class WalletChoosePage extends React.Component {
       <div className={classNames(styles.wallet, styles.withBorder, styles.walletPreview)}>
         {this.renderIcon({ id: walletType })}
       </div>
-      <div className={classNames(styles.title, styles.instructionTitle)}>{this.t('titles.howToClaim', { wallet: walletTitle })}</div>
+      {title}
       {instruction}
       {this.renderInstructionButton({ walletType })}
       {this.renderSlider({ walletType })}
@@ -136,11 +147,11 @@ class WalletChoosePage extends React.Component {
         this.setState({
           loading: true
         }, _ => {
-          context.setConnector('Fortmatic')
+          context.setConnector(connector)
         })
       }}
     >
-      {this.t('buttons.connect')}
+      {this.t('buttons.useWallet', { wallet: connector })}
     </Button>
   }
 
