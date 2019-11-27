@@ -15,7 +15,8 @@ export default {
   buttons: {
     useWallet: 'Use {{wallet}}',
     copyLink: 'Copy link',
-    goTo: 'Go to {{dapp}}'
+    goTo: 'Go to {{dapp}}',
+    connect: 'Connect'
   },
   errors: {
     LINKDROP_PROXY_CONTRACT_PAUSED: {

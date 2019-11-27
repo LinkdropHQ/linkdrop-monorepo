@@ -1,7 +1,7 @@
 import React from 'react'
 import styles from '../styles.module'
 import classNames from 'classnames'
-import { Slider, RetinaImage } from '@linkdrop/ui-kit'
+import { Slider, RetinaImage, Button } from '@linkdrop/ui-kit'
 import { getImages } from 'helpers'
 import { getHashVariables } from '@linkdrop/commons'
 
@@ -11,6 +11,11 @@ const SliderComponent = ({ t, walletType, selectWallet, showSlider, platform }) 
     <Slider visibleSlides={4} className={styles.slider} step={4}>
       {(platform === 'ios' ? IOS_WALLETS : ANDROID_WALLETS).map(wallet => renderImage({ id: wallet, platform, walletType, selectWallet }))}
     </Slider>
+    {/* <Button
+      onClick={() => context.setConnector('Fortmatic')}
+    >
+      fortmatic
+    </Button> */}
   </div>
 }
 
@@ -39,5 +44,5 @@ const renderIcon = ({ id, platform }) => {
 
 export default SliderComponent
 
-const ANDROID_WALLETS = ['trust', 'coinbase', 'opera', 'imtoken', 'status', 'gowallet', 'buntoy']
-const IOS_WALLETS = ['trust', 'coinbase', 'imtoken', 'status', 'tokenpocket', 'opera']
+const ANDROID_WALLETS = ['trust', 'coinbase', 'opera', 'imtoken', 'status', 'gowallet', 'buntoy', 'fortmatic', 'portis']
+const IOS_WALLETS = ['trust', 'coinbase', 'imtoken', 'status', 'tokenpocket', 'opera', 'fortmatic', 'portis']

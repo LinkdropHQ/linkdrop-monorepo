@@ -6,6 +6,7 @@ import WalletChoosePage from './wallet-choose-page'
 import ClaimingProcessPage from './claiming-process-page'
 import ErrorPage from './error-page'
 import ClaimingFinishedPage from './claiming-finished-page'
+import NeedWallet from './need-wallet'
 import { getHashVariables, defineNetworkName, capitalize } from '@linkdrop/commons'
 import Web3 from 'web3'
 
@@ -55,14 +56,21 @@ class Claim extends React.Component {
     }
   }
 
-  componentWillReceiveProps ({ readyToClaim, alreadyClaimed }) {
-    const { readyToClaim: prevReadyToClaim } = this.props
+  componentWillReceiveProps ({ readyToClaim, alreadyClaimed, context, step }) {
+    const { readyToClaim: prevReadyToClaim, context: prevContext } = this.props
     if (
       (readyToClaim === true && prevReadyToClaim === true) ||
       readyToClaim == null ||
       readyToClaim === false ||
       alreadyClaimed == null
-    ) { return }
+    ) {
+      if (step === 2) {
+        if (context.active && context.account && !prevContext.account && !prevContext.active) {
+          this.actions().user.setStep({ step: 1 })
+        }
+      }
+      return
+    }
     const {
       tokenAddress,
       weiAmount,
@@ -96,27 +104,32 @@ class Claim extends React.Component {
   }
 
   renderCurrentPage ({ context }) {
-    const { decimals, amount, symbol, icon, step, userLoading, errors, alreadyClaimed, web3Provider } = this.props
+    const { decimals, amount, symbol, icon, step, userLoading, errors, alreadyClaimed, web3Provider, readyToClaim } = this.props
     const { connectorChainId } = this.state
     const {
       account
     } = context
+
+    if (!readyToClaim) { return <Loading /> }
 
     const {
       chainId,
       linkdropMasterAddress
     } = getHashVariables()
     const commonData = { linkdropMasterAddress, chainId, decimals, amount, symbol, icon, wallet: account, loading: userLoading }
-    if (this.platform === 'desktop' && chainId && !account) {
-      return <ErrorPage error='NETWORK_NOT_SUPPORTED' network={capitalize({ string: defineNetworkName({ chainId }) })} />
+    // if (this.platform === 'desktop' && chainId && !account) {
+    //   return <ErrorPage error='NETWORK_NOT_SUPPORTED' network={capitalize({ string: defineNetworkName({ chainId }) })} />
+    // }
+
+    if (alreadyClaimed) {
+      // if tokens we already claimed (if wallet is totally empty).
+      return <ClaimingFinishedPage
+        {...commonData}
+      />
     }
 
     if (this.platform === 'desktop' && !account) {
-      return <div>
-        <ErrorPage
-          error='NEED_METAMASK'
-        />
-      </div>
+      return <NeedWallet context={context} />
     }
     if (errors && errors.length > 0) {
       // if some errors occured and can be found in redux store, then show error page
@@ -129,12 +142,6 @@ class Claim extends React.Component {
       return <ErrorPage error='NETWORK_NOT_SUPPORTED' network={capitalize({ string: defineNetworkName({ chainId }) })} />
     }
 
-    if (alreadyClaimed) {
-      // if tokens we already claimed (if wallet is totally empty).
-      return <ClaimingFinishedPage
-        {...commonData}
-      />
-    }
     switch (step) {
       case 1:
         return <InitialPage
@@ -150,9 +157,11 @@ class Claim extends React.Component {
         />
       case 2:
         // page with wallet select component
-        return <WalletChoosePage onClick={_ => {
-          this.actions().user.setStep({ step: 3 })
-        }}
+        return <WalletChoosePage
+          context={context}
+          onClick={_ => {
+            this.actions().user.setStep({ step: 3 })
+          }}
         />
       case 3:
         // page with info about current wallet and button to claim tokens
