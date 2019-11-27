@@ -2,5 +2,9 @@
   "pooltogether": {
     "name": "PoolTogether",
     "link": "https://app.pooltogether.us/"
+  },
+  "superrare": {
+    "name": "SuperRare",
+    "link": "https://superrare.co"
   }
 }

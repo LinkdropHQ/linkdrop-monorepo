@@ -8,19 +8,22 @@ import AppRouter from '../router'
 
 export default function RouterProvider () {
   const context = useWeb3Context()
-
   useEffect(() => {
-    context.setFirstValidConnector(['MetaMask', 'Infura'])
+    context.setFirstValidConnector(['MetaMask', 'Network'])
   }, [])
 
   if (!context.active && !context.error) {
     return <Loading />
   } else if (context.error) {
-    return <div>error: {context.error.code} (line: {context.error.line}, col: {context.error.column})</div>
+    return <ConnectedRouter history={history}>
+      <Router history={history}>
+        <AppRouter web3Provider={null} context={context} />
+      </Router>
+    </ConnectedRouter>
   } else {
     return <ConnectedRouter history={history}>
       <Router history={history}>
-        <AppRouter />
+        <AppRouter web3Provider={context.library._web3Provider} context={context} />
       </Router>
     </ConnectedRouter>
   }
