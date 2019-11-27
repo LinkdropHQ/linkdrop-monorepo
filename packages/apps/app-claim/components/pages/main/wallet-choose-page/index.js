@@ -56,7 +56,7 @@ class WalletChoosePage extends React.Component {
         {this.t('buttons.useWallet', { wallet: buttonTitle })}
       </Button>
     }
-    return this.renderConnectorButton({ context, loading, connector: capitalize({ string: 'Fortmatic' }) })
+    return this.renderConnectorButton({ context, loading, connector: capitalize({ string: w }) })
   }
 
   renderIcon ({ id }) {
