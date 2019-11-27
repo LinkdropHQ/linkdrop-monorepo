@@ -1,6 +1,14 @@
 const _withoutProtocol = (url) => url.replace(/(^\w+:|^)\/\//, '')
 
 export default {
+  fortmatic: {
+    id: 'fortmatic',
+    name: 'Fortmatic'
+  },
+  portis: {
+    id: 'portis',
+    name: 'Portis'
+  },
   trust: {
     id: 'trust',
     name: 'Trust Wallet',
@@ -14,22 +22,6 @@ export default {
       ios: {
         support: true,
         deepLink: (url) => `https://link.trustwallet.com/open_url?coin_id=60&url=${encodeURIComponent(url)}`
-      }
-    }
-  },
-  portis: {
-    id: 'portis',
-    name: 'Portis',
-    walletURL: 'https://portis.io/',
-    dappStoreUrl: 'https://wallet.portis.io/',
-    mobile: {
-      android: {
-        support: false,
-        deepLink: () => {}
-      },
-      ios: {
-        support: false,
-        deepLink: () => {}
       }
     }
   },

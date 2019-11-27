@@ -4,10 +4,9 @@ import WalletConnectApi from '@walletconnect/web3-subprovider'
 import FortmaticApi from 'fortmatic'
 import PortisApi from '@portis/web3'
 import { AuthereumConnector } from '@web3-react/authereum-connector'
-import { getHashVariables, defineNetworkName, definePlatform } from '@linkdrop/commons'
+import { getHashVariables, defineNetworkName } from '@linkdrop/commons'
 const { chainId } = getHashVariables()
 const networkName = defineNetworkName({ chainId })
-const platform = definePlatform()
 
 const {
   InjectedConnector,
@@ -43,7 +42,7 @@ const WalletConnect = new WalletConnectConnector({
 const Fortmatic = new FortmaticConnector({
   api: FortmaticApi,
   apiKey: Number(chainId) === 1 ? formaticApiKeyMainnet : formaticApiKeyTestnet,
-  logoutOnDeactivation: false
+  logoutOnDeactivation: true
 })
 
 const Portis = new PortisConnector({
@@ -53,14 +52,11 @@ const Portis = new PortisConnector({
 })
 
 export const authereum = new AuthereumConnector({ chainId: Number(chainId) })
-const connectors = platform === 'desktop' ? {
+const connectors = {
   MetaMask,
   Network,
   WalletConnect,
   Fortmatic,
   Portis
-} : {
-  MetaMask,
-  Network
 }
 export default connectors

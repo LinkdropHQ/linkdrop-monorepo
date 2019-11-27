@@ -5,14 +5,11 @@ import { ConnectedRouter } from 'connected-react-router'
 import { history } from 'data/store'
 import { Loading } from '@linkdrop/ui-kit'
 import AppRouter from '../router'
-import { definePlatform } from '@linkdrop/commons'
-const platform = definePlatform()
 
 export default function RouterProvider () {
   const context = useWeb3Context()
-  const connectors = platform === 'desktop' ? ['MetaMask', 'Network', 'WalletConnect', 'Fortmatic', 'Portis'] : ['MetaMask', 'Network']
   useEffect(() => {
-    context.setFirstValidConnector(connectors)
+    context.setFirstValidConnector(['MetaMask', 'Network'])
   }, [])
 
   if (!context.active && !context.error) {

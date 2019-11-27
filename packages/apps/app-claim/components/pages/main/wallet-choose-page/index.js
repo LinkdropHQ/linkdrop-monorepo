@@ -17,7 +17,8 @@ class WalletChoosePage extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      showSlider: null
+      showSlider: null,
+      loading: false
     }
   }
 
@@ -74,6 +75,8 @@ class WalletChoosePage extends React.Component {
     switch (walletType) {
       case 'trust':
       case 'coinbase':
+      case 'fortmatic':
+      case 'portis':
         break
       case 'status':
       case 'imtoken':
@@ -99,9 +102,14 @@ class WalletChoosePage extends React.Component {
   }
 
   renderInstructionButton ({ walletType }) {
-    const { coinbaseLink } = this.props
+    const { coinbaseLink, context } = this.props
+    const { loading } = this.state
     const { platform } = this
     switch (walletType) {
+      case 'fortmatic':
+        return this.renderConnectorButton({ context, loading, connector: 'Fortmatic' })
+      case 'portis':
+        return this.renderConnectorButton({ context, loading, connector: 'Portis' })
       case 'trust':
       case 'imtoken':
       case 'coinbase':
@@ -118,6 +126,22 @@ class WalletChoosePage extends React.Component {
           {this.t('buttons.copyLink')}
         </Button>
     }
+  }
+
+  renderConnectorButton ({ context, connector, loading }) {
+    return <Button
+      className={styles.button}
+      loading={loading}
+      onClick={_ => {
+        this.setState({
+          loading: true
+        }, _ => {
+          context.setConnector('Fortmatic')
+        })
+      }}
+    >
+      {this.t('buttons.connect')}
+    </Button>
   }
 
   renderSlider ({ walletType }) {
