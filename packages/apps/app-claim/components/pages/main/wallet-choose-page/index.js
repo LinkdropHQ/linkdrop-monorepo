@@ -27,12 +27,10 @@ class WalletChoosePage extends React.Component {
     const { walletType, coinbaseLink, context } = this.props
     const { platform } = this
     const { w = 'trust' } = getHashVariables()
-    console.log({ walletType })
     if (walletType && walletType != null) {
       return this.renderWalletInstruction({ walletType })
     } else {
-      const buttonLink = this.defineButtonLink({ platform, loading, context })
-      const buttonTitle = getWalletData({ wallet: w }).name
+      const button = this.defineButton({ platform, coinbaseLink, w, context, loading })
       return <div className={classNames(commonStyles.container, styles.container, {
         [styles.sliderShow]: showSlider,
         [styles.sliderHide]: showSlider === false
@@ -42,18 +40,23 @@ class WalletChoosePage extends React.Component {
           {this.renderIcon({ id: w })}
         </div>
         <div className={styles.title}>{this.t('titles.needWallet')}</div>
-        {platform !== 'desktop' && <Button href={buttonLink} target='_blank' className={styles.button}>
-          {this.t('buttons.useWallet', { wallet: buttonTitle })}
-        </Button>}
+        {button}
         {this.renderSlider({ walletType })}
       </div>
     }
   }
 
-  defineButtonLink ({ platform, coinbaseLink, w, context, loading }) {
-    if (platform === 'desktop') return null
-    if (w !== 'fortmatic' && w !== 'portis') return getWalletLink({ coinbaseLink, platform, wallet: w, currentUrl: window.location.href })
-    return this.renderConnectorButton({ context, loading, connector: capitalize({ string: w }) })
+  defineButton ({ platform, coinbaseLink, w, context, loading }) {
+    if (platform === 'desktop') { return null }
+
+    if (w !== 'fortmatic' && w !== 'portis') {
+      const buttonTitle = getWalletData({ wallet: w }).name
+      const buttonLink = getWalletLink({ coinbaseLink, platform, wallet: w, currentUrl: window.location.href })
+      return <Button href={buttonLink} target='_blank' className={styles.button}>
+        {this.t('buttons.useWallet', { wallet: buttonTitle })}
+      </Button>
+    }
+    return this.renderConnectorButton({ context, loading, connector: capitalize({ string: 'Fortmatic' }) })
   }
 
   renderIcon ({ id }) {
