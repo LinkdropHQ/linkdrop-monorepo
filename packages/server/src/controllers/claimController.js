@@ -1,11 +1,9 @@
-import {
-  claimServiceERC20,
-  claimServiceERC721
-} from '../services/claimServices'
+import claimService from '../services/claimService'
 
+// POST
 export const claim = async (req, res) => {
   // claim transaction
-  const txHash = await claimServiceERC20.claim(req.body)
+  const txHash = await claimService.claim(req.body)
 
   // return tx hash in successful response
   res.json({
@@ -14,9 +12,10 @@ export const claim = async (req, res) => {
   })
 }
 
-export const claimERC721 = async (req, res) => {
+// POST
+export const claimAndDeploy = async (req, res) => {
   // claim transaction
-  const txHash = await claimServiceERC721.claim(req.body)
+  const txHash = await claimService.claimAndDeploy(req.body)
 
   // return tx hash in successful response
   res.json({
@@ -27,26 +26,19 @@ export const claimERC721 = async (req, res) => {
 
 // GET
 export const getStatus = async (req, res) => {
-  const linkdropMasterAddress = req.params.linkdropMasterAddress
+  const linkdropContractAddress = req.params.linkdropContractAddress
   const linkId = req.params.linkId
-
-  const status = await claimServiceERC20.getStatus(
-    linkdropMasterAddress,
-    linkId
-  )
-
+  const status = await claimService.getStatus(linkdropContractAddress, linkId)
   // return status in successful response
   res.send(status)
 }
 
 // POST
 export const cancel = async (req, res) => {
-  const { linkdropMasterAddress, linkId } = req.body
-
-  const claimOperation = await claimServiceERC20.cancel(
-    linkdropMasterAddress,
+  const { linkdropContractAddress, linkId } = req.body
+  const claimOperation = await claimService.cancel(
+    linkdropContractAddress,
     linkId
   )
-
   res.json({ success: true, claimOperation })
 }

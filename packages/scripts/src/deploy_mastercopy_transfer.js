@@ -1,4 +1,4 @@
-import Linkdrop from '../../contracts/build/Linkdrop'
+import LinkdropTranfer from '../../contracts/build/LinkdropTransfer'
 import { terminal as term } from 'terminal-kit'
 import { newError } from './utils'
 import { ethers } from 'ethers'
@@ -19,7 +19,9 @@ export const deploy = async () => {
 
   try {
     spinner = ora({
-      text: term.bold.green.str('Deploying linkdrop contract master copy'),
+      text: term.bold.green.str(
+        'Deploying linkdrop (transfer) contract master copy'
+      ),
       color: 'green'
     })
 
@@ -27,8 +29,8 @@ export const deploy = async () => {
 
     // Deploy contract
     factory = new ethers.ContractFactory(
-      Linkdrop.abi,
-      Linkdrop.bytecode,
+      LinkdropTranfer.abi,
+      LinkdropTranfer.bytecode,
       sender
     )
 
@@ -51,7 +53,7 @@ export const deploy = async () => {
   term.bold(`Tx Hash: ^g${txHash}\n`)
 
   // Save to scripts config
-  config.MASTERCOPY_ADDRESS = masterCopy.address
+  config.MASTERCOPY_TRANSFER_ADDRESS = masterCopy.address
 
   fs.writeFile(config.path, JSON.stringify(config), err => {
     if (err) throw newError(err)
@@ -59,7 +61,7 @@ export const deploy = async () => {
   })
 
   // Save to app config
-  appConfig.masterCopy = masterCopy.address
+  appConfig.masterCopyTransfer = masterCopy.address
   fs.writeFile(appConfigPath, JSON.stringify(appConfig), err => {
     if (err) throw newError(err)
     term.bold(`Updated ^_${appConfigPath}\n`)

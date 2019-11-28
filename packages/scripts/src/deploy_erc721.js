@@ -1,20 +1,19 @@
 import NFTMock from '../../contracts/build/NFTMock'
 import { terminal as term } from 'terminal-kit'
-import { newError, getLinkdropMasterWallet } from './utils'
+import { newError } from './utils'
 import { ethers } from 'ethers'
 import fs from 'fs'
 import ora from 'ora'
-import configs from '../../../configs'
+
+import config from '../config'
 
 ethers.errors.setLogLevel('error')
 
-const config = configs.get('scripts')
-const configPath = configs.getPath('scripts')
-
-const LINKDROP_MASTER_WALLET = getLinkdropMasterWallet()
+const provider = new ethers.providers.JsonRpcProvider(config.JSON_RPC_URL)
+const sender = new ethers.Wallet(config.SENDER_PRIVATE_KEY, provider)
 
 export const deploy = async () => {
-  let spinner, factory, nftMock, txHash
+  let spinner, factory, nftMock
 
   try {
     spinner = ora({
@@ -25,11 +24,7 @@ export const deploy = async () => {
     spinner.start()
 
     // Deploy contract
-    factory = new ethers.ContractFactory(
-      NFTMock.abi,
-      NFTMock.bytecode,
-      LINKDROP_MASTER_WALLET
-    )
+    factory = new ethers.ContractFactory(NFTMock.abi, NFTMock.bytecode, sender)
 
     nftMock = await factory.deploy({
       gasLimit: 4500000,
@@ -44,14 +39,14 @@ export const deploy = async () => {
 
   spinner.succeed(term.bold.str(`Deployed mock NFT at ^g${nftMock.address}`))
 
-  txHash = nftMock.deployTransaction.hash
+  const txHash = nftMock.deployTransaction.hash
   term.bold(`Tx Hash: ^g${txHash}\n`)
 
   // Save changes
-  config.nftAddress = nftMock.address
-  fs.writeFile(configPath, JSON.stringify(config), err => {
+  config.NFT_ADDRESS = nftMock.address
+  fs.writeFile(config.path, JSON.stringify(config), err => {
     if (err) throw newError(err)
-    term.bold(`Updated ^_${configPath}\n`)
+    term.bold(`Updated ^_${config.path}\n`)
   })
 
   return nftMock.address

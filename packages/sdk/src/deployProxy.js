@@ -1,5 +1,6 @@
 import LinkdropFactory from '@linkdrop/contracts/build/LinkdropFactory.json'
-const ethers = require('ethers')
+import { ethers } from 'ethers'
+import axios from 'axios'
 
 export const connectToFactoryContract = async ({
   jsonRpcUrl,
@@ -7,24 +8,26 @@ export const connectToFactoryContract = async ({
   signingKeyOrWallet
 }) => {
   if (jsonRpcUrl == null || jsonRpcUrl === '') {
-    throw new Error(`Please provide json rpc url`)
+    throw new Error('Please provide json rpc url')
   }
-  if (factoryAddress === null || factoryAddress === '') {
-    throw new Error(`Please provide factory address`)
+  if (factoryAddress == null || factoryAddress === '') {
+    throw new Error('Please provide factory address')
   }
-  if (signingKeyOrWallet === null || signingKeyOrWallet === '') {
-    throw new Error(`Please provide signing key or wallet`)
+  if (signingKeyOrWallet == null || signingKeyOrWallet === '') {
+    throw new Error('Please provide signing key or wallet')
   }
+
   const provider = new ethers.providers.JsonRpcProvider(jsonRpcUrl)
 
-  let wallet
   if (typeof signingKeyOrWallet === 'string') {
-    wallet = new ethers.Wallet(signingKeyOrWallet, provider)
-  } else if (typeof signingKeyOrWallet === 'object') {
-    wallet = signingKeyOrWallet
+    signingKeyOrWallet = new ethers.Wallet(signingKeyOrWallet, provider)
   }
 
-  return new ethers.Contract(factoryAddress, LinkdropFactory.abi, wallet)
+  return new ethers.Contract(
+    factoryAddress,
+    LinkdropFactory.abi,
+    signingKeyOrWallet
+  )
 }
 
 export const deployProxy = async ({
@@ -32,29 +35,28 @@ export const deployProxy = async ({
   factoryAddress,
   signingKeyOrWallet,
   campaignId,
-  weiAmount
+  nativeTokensAmount
 }) => {
   if (jsonRpcUrl == null || jsonRpcUrl === '') {
-    throw new Error(`Please provide json rpc url`)
+    throw new Error('Please provide json rpc url')
   }
-  if (factoryAddress === null || factoryAddress === '') {
-    throw new Error(`Please provide factory address`)
+  if (factoryAddress == null || factoryAddress === '') {
+    throw new Error('Please provide factory address')
   }
-  if (signingKeyOrWallet === null || signingKeyOrWallet === '') {
-    throw new Error(`Please provide signing key or wallet`)
+  if (signingKeyOrWallet == null || signingKeyOrWallet === '') {
+    throw new Error('Please provide signing key or wallet')
   }
-  if (campaignId === null || campaignId === '') {
-    throw new Error(`Please provide campaign id`)
+  if (campaignId == null || campaignId === '') {
+    throw new Error('Please provide campaign id')
+  }
+  if (nativeTokensAmount == null || nativeTokensAmount === '') {
+    throw new Error('Please provide native tokens amount')
   }
 
   const provider = new ethers.providers.JsonRpcProvider(jsonRpcUrl)
 
-  let wallet
-
   if (typeof signingKeyOrWallet === 'string') {
-    wallet = new ethers.Wallet(signingKeyOrWallet, provider)
-  } else if (typeof signingKeyOrWallet === 'object') {
-    wallet = signingKeyOrWallet
+    signingKeyOrWallet = new ethers.Wallet(signingKeyOrWallet, provider)
   }
 
   const factoryContract = await connectToFactoryContract({
@@ -63,16 +65,23 @@ export const deployProxy = async ({
     signingKeyOrWallet
   })
 
-  if (weiAmount > 0) {
+  if (nativeTokensAmount > 0) {
     const data = factoryContract.interface.functions.deployProxy.encode(
       campaignId
     )
-    return wallet.sendTransaction({
+    return signingKeyOrWallet.sendTransaction({
       to: factoryAddress,
-      value: weiAmount,
+      value: nativeTokensAmount,
       data
     })
   }
 
   return factoryContract.deployProxy(campaignId)
+}
+
+export const isDeployed = async ({ apiHost, senderAddress, campaignId }) => {
+  const response = await axios.get(
+    `${apiHost}/api/v1/linkdrops/isDeployed/${senderAddress}/${campaignId}`
+  )
+  return response.data
 }

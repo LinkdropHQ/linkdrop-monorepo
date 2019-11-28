@@ -7,7 +7,7 @@ const OperationSchema = new mongoose.Schema(
       type: String,
       required: true,
       index: true,
-      enum: ['claim', 'metatx']
+      enum: ['claim', 'metatx', 'claimAndDeploy']
     },
     id: {
       type: String,

@@ -1,80 +1,87 @@
-import { signReceiverAddress } from './utils'
-const ethers = require('ethers')
-const axios = require('axios')
-
+import { signReceiverAddress, LinkParams } from './utils'
+import axios from 'axios'
+import { ethers } from 'ethers'
 // Turn off annoying warnings
 ethers.errors.setLogLevel('error')
 
 export const claim = async ({
   jsonRpcUrl,
   apiHost,
-  weiAmount,
-  tokenAddress,
-  tokenAmount,
-  expirationTime,
-  version,
-  chainId,
+  token,
+  nft,
+  feeToken,
+  feeReceiver,
   linkKey,
-  linkdropMasterAddress,
-  linkdropSignerSignature,
+  nativeTokensAmount,
+  tokensAmount,
+  tokenId,
+  feeAmount,
+  expiration,
+  signerSignature,
   receiverAddress,
-  factoryAddress,
-  campaignId
+  linkdropContract
 }) => {
-  if (jsonRpcUrl === null || jsonRpcUrl === '') {
+  if (jsonRpcUrl == null || jsonRpcUrl === '') {
     throw new Error('Please provide json rpc url')
   }
 
-  if (apiHost === null || apiHost === '') {
+  if (apiHost == null || apiHost === '') {
     throw new Error('Please provide api host')
   }
 
-  if (weiAmount === null || weiAmount === '') {
-    throw new Error('Please provide amount of eth to claim')
+  if (nativeTokensAmount == null || nativeTokensAmount === '') {
+    throw new Error('Please provide native tokens amount to claim')
   }
 
-  if (tokenAddress === null || tokenAddress === '') {
-    throw new Error('Please provide ERC20 token address')
+  if (token == null || token === '') {
+    throw new Error('Please provide token address')
   }
 
-  if (tokenAmount === null || tokenAmount === '') {
-    throw new Error('Please provide amount of tokens to claim')
+  if (nft == null || nft === '') {
+    throw new Error('Please provide NFT address')
   }
 
-  if (expirationTime === null || expirationTime === '') {
-    throw new Error('Please provide expiration time')
+  if (feeToken == null || feeToken === '') {
+    throw new Error('Please provide fee token address')
   }
 
-  if (version === null || version === '') {
-    throw new Error('Please provide mastercopy version ')
+  if (feeReceiver == null || feeReceiver === '') {
+    throw new Error('Please provide fee receiver address')
   }
 
-  if (chainId === null || chainId === '') {
-    throw new Error('Please provide chain id')
-  }
-
-  if (linkKey === null || linkKey === '') {
+  if (linkKey == null || linkKey === '') {
     throw new Error('Please provide link key')
   }
 
-  if (linkdropMasterAddress === null || linkdropMasterAddress === '') {
-    throw new Error('Please provide linkdropMaster address')
+  if (nativeTokensAmount == null || nativeTokensAmount === '') {
+    throw new Error('Please provide native tokens amount')
   }
 
-  if (linkdropSignerSignature === null || linkdropSignerSignature === '') {
+  if (tokensAmount == null || tokensAmount === '') {
+    throw new Error('Please provide amount of tokens to claim')
+  }
+  if (tokenId == null || tokenId === '') {
+    throw new Error('Please provide NFT id')
+  }
+
+  if (feeAmount == null || feeAmount === '') {
+    throw new Error('Please provide fee amount')
+  }
+
+  if (expiration == null || expiration === '') {
+    throw new Error('Please provide link expiration timestamp')
+  }
+
+  if (signerSignature == null || signerSignature === '') {
     throw new Error('Please provide linkdropMaster signature')
   }
 
-  if (receiverAddress === null || receiverAddress === '') {
+  if (receiverAddress == null || receiverAddress === '') {
     throw new Error('Please provide receiver address')
   }
 
-  if (campaignId === null || campaignId === '') {
-    throw new Error('Please provide campaign id')
-  }
-
-  if (factoryAddress === null || factoryAddress === '') {
-    throw new Error('Please provide factory address')
+  if (linkdropContract == null || linkdropContract === '') {
+    throw new Error('Please provide linkdrop contract address')
   }
 
   // Get provider
@@ -86,105 +93,114 @@ export const claim = async ({
   // Get linkId from linkKey
   const linkId = new ethers.Wallet(linkKey, provider).address
 
-  const claimParams = {
-    weiAmount,
-    tokenAddress,
-    tokenAmount,
-    expirationTime,
-    version,
-    chainId,
+  const linkParams = new LinkParams({
+    token,
+    nft,
+    feeToken,
+    feeReceiver,
     linkId,
-    linkdropMasterAddress,
-    linkdropSignerSignature,
+    nativeTokensAmount,
+    tokensAmount,
+    tokenId,
+    feeAmount,
+    expiration,
+    signerSignature
+  })
+
+  const response = await axios.post(`${apiHost}/api/v1/linkdrops/claim`, {
+    linkParams,
     receiverAddress,
     receiverSignature,
-    factoryAddress,
-    campaignId
-  }
-
-  const response = await axios.post(
-    `${apiHost}/api/v1/linkdrops/claim`,
-    claimParams
-  )
+    linkdropContractAddress: linkdropContract
+  })
 
   const { error, errors, success, txHash } = response.data
   return { error, errors, success, txHash }
 }
 
-export const claimERC721 = async ({
+export const claimAndDeploy = async ({
   jsonRpcUrl,
   apiHost,
-  weiAmount,
-  nftAddress,
-  tokenId,
-  expirationTime,
-  version,
-  chainId,
+  token,
+  nft,
+  feeToken,
+  feeReceiver,
   linkKey,
-  linkdropMasterAddress,
-  linkdropSignerSignature,
+  nativeTokensAmount,
+  tokensAmount,
+  tokenId,
+  feeAmount,
+  expiration,
+  signerSignature,
   receiverAddress,
-  factoryAddress,
-  campaignId
+  linkdropContract,
+  sender
 }) => {
-  if (jsonRpcUrl === null || jsonRpcUrl === '') {
+  if (jsonRpcUrl == null || jsonRpcUrl === '') {
     throw new Error('Please provide json rpc url')
   }
 
-  if (apiHost === null || apiHost === '') {
+  if (apiHost == null || apiHost === '') {
     throw new Error('Please provide api host')
   }
 
-  if (weiAmount === null || weiAmount === '') {
-    throw new Error('Please provide amount of eth to claim')
+  if (nativeTokensAmount == null || nativeTokensAmount === '') {
+    throw new Error('Please provide native tokens amount to claim')
   }
 
-  if (
-    nftAddress === null ||
-    nftAddress === '' ||
-    nftAddress === ethers.constants.AddressZero
-  ) {
-    throw new Error('Please provide ERC721 token address')
+  if (token == null || token === '') {
+    throw new Error('Please provide token address')
   }
 
-  if (tokenId === null || tokenId === '') {
-    throw new Error('Please provide token id to claim')
+  if (nft == null || nft === '') {
+    throw new Error('Please provide NFT address')
   }
 
-  if (expirationTime === null || expirationTime === '') {
-    throw new Error('Please provide expiration time')
+  if (feeToken == null || feeToken === '') {
+    throw new Error('Please provide fee token address')
   }
 
-  if (version === null || version === '') {
-    throw new Error('Please provide mastercopy version ')
+  if (feeReceiver == null || feeReceiver === '') {
+    throw new Error('Please provide fee receiver address')
   }
 
-  if (chainId === null || chainId === '') {
-    throw new Error('Please provide chain id')
-  }
-
-  if (linkKey === null || linkKey === '') {
+  if (linkKey == null || linkKey === '') {
     throw new Error('Please provide link key')
   }
 
-  if (linkdropMasterAddress === null || linkdropMasterAddress === '') {
-    throw new Error('Please provide linkdropMaster address')
+  if (nativeTokensAmount == null || nativeTokensAmount === '') {
+    throw new Error('Please provide native tokens amount')
   }
 
-  if (linkdropSignerSignature === null || linkdropSignerSignature === '') {
+  if (tokensAmount == null || tokensAmount === '') {
+    throw new Error('Please provide amount of tokens to claim')
+  }
+  if (tokenId == null || tokenId === '') {
+    throw new Error('Please provide NFT id')
+  }
+
+  if (feeAmount == null || feeAmount === '') {
+    throw new Error('Please provide fee amount')
+  }
+
+  if (expiration == null || expiration === '') {
+    throw new Error('Please provide link expiration timestamp')
+  }
+
+  if (signerSignature == null || signerSignature === '') {
     throw new Error('Please provide linkdropMaster signature')
   }
 
-  if (receiverAddress === null || receiverAddress === '') {
+  if (receiverAddress == null || receiverAddress === '') {
     throw new Error('Please provide receiver address')
   }
 
-  if (campaignId === null || campaignId === '') {
-    throw new Error('Please provide campaign id')
+  if (linkdropContract == null || linkdropContract === '') {
+    throw new Error('Please provide linkdrop contract address')
   }
 
-  if (factoryAddress === null || factoryAddress === '') {
-    throw new Error('Please provide factory address')
+  if (sender == null || sender === '') {
+    throw new Error('Please provide sender address')
   }
 
   // Get provider
@@ -196,25 +212,29 @@ export const claimERC721 = async ({
   // Get linkId from linkKey
   const linkId = new ethers.Wallet(linkKey, provider).address
 
-  const claimParams = {
-    weiAmount,
-    nftAddress,
-    tokenId,
-    expirationTime,
-    version,
-    chainId,
+  const linkParams = new LinkParams({
+    token,
+    nft,
+    feeToken,
+    feeReceiver,
     linkId,
-    linkdropMasterAddress,
-    linkdropSignerSignature,
-    receiverAddress,
-    receiverSignature,
-    factoryAddress,
-    campaignId
-  }
+    nativeTokensAmount,
+    tokensAmount,
+    tokenId,
+    feeAmount,
+    expiration,
+    signerSignature
+  })
 
   const response = await axios.post(
-    `${apiHost}/api/v1/linkdrops/claim-erc721`,
-    claimParams
+    `${apiHost}/api/v1/linkdrops/claimAndDeploy`,
+    {
+      linkParams,
+      receiverAddress,
+      receiverSignature,
+      linkdropContractAddress: linkdropContract,
+      senderAddress: sender
+    }
   )
 
   const { error, errors, success, txHash } = response.data
@@ -223,22 +243,22 @@ export const claimERC721 = async ({
 
 export const getLinkStatus = async ({
   apiHost,
-  linkdropMasterAddress,
+  linkdropContractAddress,
   linkId
 }) => {
   const response = await axios.get(
-    `${apiHost}/api/v1/linkdrops/getStatus/${linkdropMasterAddress}/${linkId}`
+    `${apiHost}/api/v1/linkdrops/getStatus/${linkdropContractAddress}/${linkId}`
   )
   return response.data
 }
 
 export const cancelLink = async ({
   apiHost,
-  linkdropMasterAddress,
+  linkdropContractAddress,
   linkId
 }) => {
   const response = await axios.post(`${apiHost}/api/v1/linkdrops/cancel`, {
-    linkdropMasterAddress,
+    linkdropContractAddress,
     linkId
   })
 

@@ -3,28 +3,25 @@ import * as generateLinkUtils from './generateLink'
 import * as claimUtils from './claim'
 import * as deployUtils from './deployProxy'
 import * as topupAndApproveUtils from './topupAndApprove'
-import {
-  subscribeForClaimedEvents,
-  subscribeForClaimedERC721Events
-} from './subscribeForEvents'
-
+import { subscribeForClaimEvents } from './subscribeForEvents'
 import LinkdropFactory from '@linkdrop/contracts/build/LinkdropFactory'
 import { ethers } from 'ethers'
+import { AddressZero } from 'ethers/constants'
 
 // Turn off annoying warnings
 ethers.errors.setLogLevel('error')
 
 class LinkdropSDK {
   constructor ({
-    linkdropMasterAddress,
+    senderAddress,
     factoryAddress,
     chain = 'mainnet',
     jsonRpcUrl = getJsonRpcUrl(chain),
     apiHost = `https://${chain}.linkdrop.io`,
     claimHost = 'https://claim.linkdrop.io'
   }) {
-    if (linkdropMasterAddress == null || linkdropMasterAddress === '') {
-      throw new Error('Please provide linkdrop master address')
+    if (senderAddress == null || senderAddress === '') {
+      throw new Error('Please provide sender address')
     }
 
     if (factoryAddress == null || factoryAddress === '') {
@@ -42,7 +39,7 @@ class LinkdropSDK {
       throw new Error('Unsupported chain')
     }
 
-    this.linkdropMasterAddress = linkdropMasterAddress
+    this.senderAddress = senderAddress
     this.factoryAddress = factoryAddress
     this.chain = chain
     this.chainId = getChainId(chain)
@@ -63,7 +60,7 @@ class LinkdropSDK {
       this.version[
         campaignId
       ] = await this.factoryContract.getProxyMasterCopyVersion(
-        this.linkdropMasterAddress,
+        this.senderAddress,
         campaignId
       )
     }
@@ -71,121 +68,95 @@ class LinkdropSDK {
   }
 
   async generateLink ({
-    signingKeyOrWallet,
-    weiAmount,
-    tokenAddress,
-    tokenAmount,
-    expirationTime = 12345678910,
-    campaignId
+    campaignId = 0,
+    token = AddressZero,
+    nft = AddressZero,
+    feeToken = AddressZero,
+    feeReceiver = AddressZero,
+    nativeTokensAmount = 0,
+    tokensAmount = 0,
+    tokenId = 0,
+    feeAmount = 0,
+    expiration = 11111111111,
+    signingKeyOrWallet
   }) {
     return generateLinkUtils.generateLink({
-      factoryAddress: this.factoryAddress,
-      chainId: this.chainId,
       claimHost: this.claimHost,
-      linkdropMasterAddress: this.linkdropMasterAddress,
-      signingKeyOrWallet,
-      weiAmount,
-      tokenAddress,
-      tokenAmount,
-      expirationTime,
-      version: this.version[campaignId] || (await this.getVersion(campaignId)),
-      campaignId
-    })
-  }
-
-  async generateLinkERC721 ({
-    signingKeyOrWallet,
-    weiAmount,
-    nftAddress,
-    tokenId,
-    expirationTime = 12345678910,
-    campaignId
-  }) {
-    return generateLinkUtils.generateLinkERC721({
-      factoryAddress: this.factoryAddress,
-      chainId: this.chainId,
-      claimHost: this.claimHost,
-      linkdropMasterAddress: this.linkdropMasterAddress,
-      signingKeyOrWallet,
-      weiAmount,
-      nftAddress,
+      factory: this.factoryAddress,
+      sender: this.senderAddress,
+      campaignId,
+      token,
+      nft,
+      feeToken,
+      feeReceiver,
+      nativeTokensAmount,
+      tokensAmount,
       tokenId,
-      expirationTime,
+      feeAmount,
+      expiration,
       version: this.version[campaignId] || (await this.getVersion(campaignId)),
-      campaignId
+      chainId: this.chainId,
+      signingKeyOrWallet
     })
   }
 
-  getProxyAddress (campaingId) {
+  getProxyAddress (campaignId = 0) {
     return computeProxyAddress(
       this.factoryAddress,
-      this.linkdropMasterAddress,
-      campaingId
+      this.senderAddress,
+      campaignId
     )
   }
 
   async claim ({
-    weiAmount,
-    tokenAddress,
-    tokenAmount,
-    expirationTime = 12345678910,
+    token,
+    nft,
+    feeToken,
+    feeReceiver,
     linkKey,
-    linkdropSignerSignature,
-    receiverAddress,
-    campaignId
-  }) {
-    return claimUtils.claim({
-      jsonRpcUrl: this.json,
-      apiHost: this.apiHost,
-      weiAmount,
-      tokenAddress,
-      tokenAmount,
-      expirationTime,
-      version: this.version[campaignId] || (await this.getVersion(campaignId)),
-      chainId: this.chainId,
-      linkKey,
-      linkdropMasterAddress: this.linkdropMasterAddress,
-      linkdropSignerSignature,
-      receiverAddress,
-      factoryAddress: this.factoryAddress,
-      campaignId
-    })
-  }
-
-  async claimERC721 ({
-    weiAmount,
-    nftAddress,
+    nativeTokensAmount,
+    tokensAmount,
     tokenId,
-    expirationTime = 12345678910,
-    linkKey,
-    linkdropSignerSignature,
+    feeAmount,
+    expiration,
+    signerSignature,
     receiverAddress,
-    campaignId
+    linkdropContract,
+    sender
   }) {
-    return claimUtils.claimERC721({
+    const claimParams = {
       jsonRpcUrl: this.jsonRpcUrl,
       apiHost: this.apiHost,
-      weiAmount,
-      nftAddress,
-      tokenId,
-      expirationTime,
-      version: this.version[campaignId] || (await this.getVersion(campaignId)),
-      chainId: this.chainId,
+      token,
+      nft,
+      feeToken,
+      feeReceiver,
       linkKey,
-      linkdropMasterAddress: this.linkdropMasterAddress,
-      linkdropSignerSignature,
+      nativeTokensAmount,
+      tokensAmount,
+      tokenId,
+      feeAmount,
+      expiration,
+      signerSignature,
       receiverAddress,
-      factoryAddress: this.factoryAddress,
-      campaignId
-    })
+      linkdropContract,
+      sender
+    }
+    if (linkdropContract === this.getProxyAddress()) {
+      const { isDeployed } = await this.isDeployed()
+      if (isDeployed === false) {
+        return claimUtils.claimAndDeploy(claimParams)
+      }
+    }
+    return claimUtils.claim(claimParams)
   }
 
-  async topup ({ signingKeyOrWallet, proxyAddress, weiAmount }) {
+  async topup ({ signingKeyOrWallet, proxyAddress, nativeTokensAmount }) {
     return topupAndApproveUtils.topup({
       jsonRpcUrl: this.jsonRpcUrl,
       signingKeyOrWallet,
       proxyAddress,
-      weiAmount
+      nativeTokensAmount
     })
   }
 
@@ -193,19 +164,19 @@ class LinkdropSDK {
     signingKeyOrWallet,
     proxyAddress,
     tokenAddress,
-    tokenAmount
+    tokensAmount
   }) {
     return topupAndApproveUtils.approve({
       jsonRpcUrl: this.jsonRpcUrl,
       signingKeyOrWallet,
       proxyAddress,
       tokenAddress,
-      tokenAmount
+      tokensAmount
     })
   }
 
-  async approveERC721 ({ signingKeyOrWallet, proxyAddress, nftAddress }) {
-    return topupAndApproveUtils.approveERC721({
+  async approveNFT ({ signingKeyOrWallet, proxyAddress, nftAddress }) {
+    return topupAndApproveUtils.approveNFT({
       jsonRpcUrl: this.jsonRpcUrl,
       signingKeyOrWallet,
       proxyAddress,
@@ -213,28 +184,22 @@ class LinkdropSDK {
     })
   }
 
-  async deployProxy ({ signingKeyOrWallet, campaignId = 0, weiAmount }) {
+  async deployProxy ({
+    signingKeyOrWallet,
+    campaignId = 0,
+    nativeTokensAmount = 0
+  }) {
     return deployUtils.deployProxy({
       jsonRpcUrl: this.jsonRpcUrl,
       factoryAddress: this.factoryAddress,
       signingKeyOrWallet,
       campaignId,
-      weiAmount
+      nativeTokensAmount
     })
   }
 
-  async subscribeForClaimedEvents (proxyAddress, callback) {
-    return subscribeForClaimedEvents(
-      {
-        jsonRpcUrl: this.jsonRpcUrl,
-        proxyAddress
-      },
-      callback
-    )
-  }
-
-  async subscribeForClaimedERC721Events (proxyAddress, callback) {
-    return subscribeForClaimedERC721Events(
+  async subscribeForClaimEvents (proxyAddress, callback) {
+    return subscribeForClaimEvents(
       {
         jsonRpcUrl: this.jsonRpcUrl,
         proxyAddress
@@ -246,7 +211,7 @@ class LinkdropSDK {
   async getLinkStatus (linkId) {
     return claimUtils.getLinkStatus({
       apiHost: this.apiHost,
-      linkdropMasterAddress: this.linkdropMasterAddress,
+      senderAddress: this.senderAddress,
       linkId
     })
   }
@@ -254,8 +219,16 @@ class LinkdropSDK {
   async cancelLink (linkId) {
     return claimUtils.cancelLink({
       apiHost: this.apiHost,
-      linkdropMasterAddress: this.linkdropMasterAddress,
+      senderAddress: this.senderAddress,
       linkId
+    })
+  }
+
+  async isDeployed (campaignId = 0) {
+    return deployUtils.isDeployed({
+      apiHost: this.apiHost,
+      senderAddress: this.senderAddress,
+      campaignId
     })
   }
 }

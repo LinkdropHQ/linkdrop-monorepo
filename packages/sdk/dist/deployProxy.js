@@ -5,169 +5,175 @@ var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefau
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.deployProxy = exports.connectToFactoryContract = void 0;
+exports.isDeployed = exports.deployProxy = exports.connectToFactoryContract = void 0;
 
 var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"));
 
-var _typeof2 = _interopRequireDefault(require("@babel/runtime/helpers/typeof"));
-
-var _asyncToGenerator2 = _interopRequireDefault(require("@babel/runtime/helpers/asyncToGenerator"));
-
 var _LinkdropFactory = _interopRequireDefault(require("@linkdrop/contracts/build/LinkdropFactory.json"));
 
-var ethers = require('ethers');
+var _ethers = require("ethers");
 
-var connectToFactoryContract =
-/*#__PURE__*/
-function () {
-  var _ref2 = (0, _asyncToGenerator2["default"])(
-  /*#__PURE__*/
-  _regenerator["default"].mark(function _callee(_ref) {
-    var jsonRpcUrl, factoryAddress, signingKeyOrWallet, provider, wallet;
-    return _regenerator["default"].wrap(function _callee$(_context) {
-      while (1) {
-        switch (_context.prev = _context.next) {
-          case 0:
-            jsonRpcUrl = _ref.jsonRpcUrl, factoryAddress = _ref.factoryAddress, signingKeyOrWallet = _ref.signingKeyOrWallet;
+var _axios = _interopRequireDefault(require("axios"));
 
-            if (!(jsonRpcUrl == null || jsonRpcUrl === '')) {
-              _context.next = 3;
-              break;
-            }
+var connectToFactoryContract = function connectToFactoryContract(_ref) {
+  var jsonRpcUrl, factoryAddress, signingKeyOrWallet, provider;
+  return _regenerator["default"].async(function connectToFactoryContract$(_context) {
+    while (1) {
+      switch (_context.prev = _context.next) {
+        case 0:
+          jsonRpcUrl = _ref.jsonRpcUrl, factoryAddress = _ref.factoryAddress, signingKeyOrWallet = _ref.signingKeyOrWallet;
 
-            throw new Error("Please provide json rpc url");
+          if (!(jsonRpcUrl == null || jsonRpcUrl === '')) {
+            _context.next = 3;
+            break;
+          }
 
-          case 3:
-            if (!(factoryAddress === null || factoryAddress === '')) {
-              _context.next = 5;
-              break;
-            }
+          throw new Error('Please provide json rpc url');
 
-            throw new Error("Please provide factory address");
+        case 3:
+          if (!(factoryAddress == null || factoryAddress === '')) {
+            _context.next = 5;
+            break;
+          }
 
-          case 5:
-            if (!(signingKeyOrWallet === null || signingKeyOrWallet === '')) {
-              _context.next = 7;
-              break;
-            }
+          throw new Error('Please provide factory address');
 
-            throw new Error("Please provide signing key or wallet");
+        case 5:
+          if (!(signingKeyOrWallet == null || signingKeyOrWallet === '')) {
+            _context.next = 7;
+            break;
+          }
 
-          case 7:
-            provider = new ethers.providers.JsonRpcProvider(jsonRpcUrl);
+          throw new Error('Please provide signing key or wallet');
 
-            if (typeof signingKeyOrWallet === 'string') {
-              wallet = new ethers.Wallet(signingKeyOrWallet, provider);
-            } else if ((0, _typeof2["default"])(signingKeyOrWallet) === 'object') {
-              wallet = signingKeyOrWallet;
-            }
+        case 7:
+          provider = new _ethers.ethers.providers.JsonRpcProvider(jsonRpcUrl);
 
-            return _context.abrupt("return", new ethers.Contract(factoryAddress, _LinkdropFactory["default"].abi, wallet));
+          if (typeof signingKeyOrWallet === 'string') {
+            signingKeyOrWallet = new _ethers.ethers.Wallet(signingKeyOrWallet, provider);
+          }
 
-          case 10:
-          case "end":
-            return _context.stop();
-        }
+          return _context.abrupt("return", new _ethers.ethers.Contract(factoryAddress, _LinkdropFactory["default"].abi, signingKeyOrWallet));
+
+        case 10:
+        case "end":
+          return _context.stop();
       }
-    }, _callee);
-  }));
-
-  return function connectToFactoryContract(_x) {
-    return _ref2.apply(this, arguments);
-  };
-}();
+    }
+  });
+};
 
 exports.connectToFactoryContract = connectToFactoryContract;
 
-var deployProxy =
-/*#__PURE__*/
-function () {
-  var _ref4 = (0, _asyncToGenerator2["default"])(
-  /*#__PURE__*/
-  _regenerator["default"].mark(function _callee2(_ref3) {
-    var jsonRpcUrl, factoryAddress, signingKeyOrWallet, campaignId, weiAmount, provider, wallet, factoryContract, data;
-    return _regenerator["default"].wrap(function _callee2$(_context2) {
-      while (1) {
-        switch (_context2.prev = _context2.next) {
-          case 0:
-            jsonRpcUrl = _ref3.jsonRpcUrl, factoryAddress = _ref3.factoryAddress, signingKeyOrWallet = _ref3.signingKeyOrWallet, campaignId = _ref3.campaignId, weiAmount = _ref3.weiAmount;
+var deployProxy = function deployProxy(_ref2) {
+  var jsonRpcUrl, factoryAddress, signingKeyOrWallet, campaignId, nativeTokensAmount, provider, factoryContract, data;
+  return _regenerator["default"].async(function deployProxy$(_context2) {
+    while (1) {
+      switch (_context2.prev = _context2.next) {
+        case 0:
+          jsonRpcUrl = _ref2.jsonRpcUrl, factoryAddress = _ref2.factoryAddress, signingKeyOrWallet = _ref2.signingKeyOrWallet, campaignId = _ref2.campaignId, nativeTokensAmount = _ref2.nativeTokensAmount;
 
-            if (!(jsonRpcUrl == null || jsonRpcUrl === '')) {
-              _context2.next = 3;
-              break;
-            }
+          if (!(jsonRpcUrl == null || jsonRpcUrl === '')) {
+            _context2.next = 3;
+            break;
+          }
 
-            throw new Error("Please provide json rpc url");
+          throw new Error('Please provide json rpc url');
 
-          case 3:
-            if (!(factoryAddress === null || factoryAddress === '')) {
-              _context2.next = 5;
-              break;
-            }
+        case 3:
+          if (!(factoryAddress == null || factoryAddress === '')) {
+            _context2.next = 5;
+            break;
+          }
 
-            throw new Error("Please provide factory address");
+          throw new Error('Please provide factory address');
 
-          case 5:
-            if (!(signingKeyOrWallet === null || signingKeyOrWallet === '')) {
-              _context2.next = 7;
-              break;
-            }
+        case 5:
+          if (!(signingKeyOrWallet == null || signingKeyOrWallet === '')) {
+            _context2.next = 7;
+            break;
+          }
 
-            throw new Error("Please provide signing key or wallet");
+          throw new Error('Please provide signing key or wallet');
 
-          case 7:
-            if (!(campaignId === null || campaignId === '')) {
-              _context2.next = 9;
-              break;
-            }
+        case 7:
+          if (!(campaignId == null || campaignId === '')) {
+            _context2.next = 9;
+            break;
+          }
 
-            throw new Error("Please provide campaign id");
+          throw new Error('Please provide campaign id');
 
-          case 9:
-            provider = new ethers.providers.JsonRpcProvider(jsonRpcUrl);
+        case 9:
+          if (!(nativeTokensAmount == null || nativeTokensAmount === '')) {
+            _context2.next = 11;
+            break;
+          }
 
-            if (typeof signingKeyOrWallet === 'string') {
-              wallet = new ethers.Wallet(signingKeyOrWallet, provider);
-            } else if ((0, _typeof2["default"])(signingKeyOrWallet) === 'object') {
-              wallet = signingKeyOrWallet;
-            }
+          throw new Error('Please provide native tokens amount');
 
-            _context2.next = 13;
-            return connectToFactoryContract({
-              jsonRpcUrl: jsonRpcUrl,
-              factoryAddress: factoryAddress,
-              signingKeyOrWallet: signingKeyOrWallet
-            });
+        case 11:
+          provider = new _ethers.ethers.providers.JsonRpcProvider(jsonRpcUrl);
 
-          case 13:
-            factoryContract = _context2.sent;
+          if (typeof signingKeyOrWallet === 'string') {
+            signingKeyOrWallet = new _ethers.ethers.Wallet(signingKeyOrWallet, provider);
+          }
 
-            if (!(weiAmount > 0)) {
-              _context2.next = 17;
-              break;
-            }
+          _context2.next = 15;
+          return _regenerator["default"].awrap(connectToFactoryContract({
+            jsonRpcUrl: jsonRpcUrl,
+            factoryAddress: factoryAddress,
+            signingKeyOrWallet: signingKeyOrWallet
+          }));
 
-            data = factoryContract["interface"].functions.deployProxy.encode(campaignId);
-            return _context2.abrupt("return", wallet.sendTransaction({
-              to: factoryAddress,
-              value: weiAmount,
-              data: data
-            }));
+        case 15:
+          factoryContract = _context2.sent;
 
-          case 17:
-            return _context2.abrupt("return", factoryContract.deployProxy(campaignId));
+          if (!(nativeTokensAmount > 0)) {
+            _context2.next = 19;
+            break;
+          }
 
-          case 18:
-          case "end":
-            return _context2.stop();
-        }
+          data = factoryContract["interface"].functions.deployProxy.encode(campaignId);
+          return _context2.abrupt("return", signingKeyOrWallet.sendTransaction({
+            to: factoryAddress,
+            value: nativeTokensAmount,
+            data: data
+          }));
+
+        case 19:
+          return _context2.abrupt("return", factoryContract.deployProxy(campaignId));
+
+        case 20:
+        case "end":
+          return _context2.stop();
       }
-    }, _callee2);
-  }));
-
-  return function deployProxy(_x2) {
-    return _ref4.apply(this, arguments);
-  };
-}();
+    }
+  });
+};
 
 exports.deployProxy = deployProxy;
+
+var isDeployed = function isDeployed(_ref3) {
+  var apiHost, senderAddress, campaignId, response;
+  return _regenerator["default"].async(function isDeployed$(_context3) {
+    while (1) {
+      switch (_context3.prev = _context3.next) {
+        case 0:
+          apiHost = _ref3.apiHost, senderAddress = _ref3.senderAddress, campaignId = _ref3.campaignId;
+          _context3.next = 3;
+          return _regenerator["default"].awrap(_axios["default"].get("".concat(apiHost, "/api/v1/linkdrops/isDeployed/").concat(senderAddress, "/").concat(campaignId)));
+
+        case 3:
+          response = _context3.sent;
+          return _context3.abrupt("return", response.data);
+
+        case 5:
+        case "end":
+          return _context3.stop();
+      }
+    }
+  });
+};
+
+exports.isDeployed = isDeployed;

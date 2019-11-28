@@ -160,7 +160,6 @@ class OperationService {
           .toObject()
 
         let { gasPrice, gasLimit } = transaction.params
-        console.log('!@#$@!#$@#!$!@#$@!#$!@#$!@#$@')
         logger.error(gasLimit)
 
         // require gasPrice sent is less than max gas price

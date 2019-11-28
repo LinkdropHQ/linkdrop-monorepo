@@ -5,13 +5,13 @@ const routes = {
       method: 'claim'
     }
   },
-  '/linkdrops/claim-erc721': {
+  '/linkdrops/claimAndDeploy': {
     post: {
       controller: 'claimController',
-      method: 'claimERC721'
+      method: 'claimAndDeploy'
     }
   },
-  '/linkdrops/getStatus/:linkdropMasterAddress/:linkId': {
+  '/linkdrops/getStatus/:linkdropContractAddress/:linkId': {
     get: {
       controller: 'claimController',
       method: 'getStatus'
@@ -23,7 +23,7 @@ const routes = {
       method: 'cancel'
     }
   },
-  '/linkdrops/getLastTxHash/:linkdropMasterAddress/:linkId': {
+  '/linkdrops/getLastTxHash/:linkdropContractAddress/:linkId': {
     get: {
       controller: 'lastTxHashController',
       method: 'getLastTxHash'
@@ -33,6 +33,18 @@ const routes = {
     get: {
       controller: 'lastTxHashController',
       method: 'getLastTxHashById'
+    }
+  },
+  '/linkdrops/deploy': {
+    post: {
+      controller: 'factoryController',
+      method: 'deploy'
+    }
+  },
+  '/linkdrops/isDeployed/:senderAddress/:campaignId': {
+    get: {
+      controller: 'factoryController',
+      method: 'isDeployed'
     }
   },
   '/utils/get-coinbase-deeplink': {

@@ -25,7 +25,7 @@ connectDB()
   })
 
 // Define routes
-app.get('/', (req, res) => res.send('👋  Hello from linkdrop server'))
+app.get('/', (req, res) => res.send('Linkdrop Server V2'))
 app.use('/api/v1/', buildRouter('routes'))
 
 // Error handling middleware

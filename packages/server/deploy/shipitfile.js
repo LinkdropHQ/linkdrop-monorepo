@@ -2,38 +2,32 @@ module.exports = shipit => {
   require('shipit-deploy')(shipit)
 
   const network = process.argv[2]
-  const PM2_APP_NAME = `linkdrop-${network}`
+  const PM2_APP_NAME = `linkdrop-${network}-v2`
   let CUSTOM_PORT
 
-  if (network === 'mainnet') CUSTOM_PORT = 10001
-  else if (network === 'rinkeby') CUSTOM_PORT = 10004
-  else if (network === 'ropsten') CUSTOM_PORT = 10003
-  else if (network === 'xdai') CUSTOM_PORT = 10100
+  if (network === 'mainnet') CUSTOM_PORT = 20001
+  else if (network === 'rinkeby') CUSTOM_PORT = 20004
+  else if (network === 'ropsten') CUSTOM_PORT = 20003
+  else if (network === 'xdai') CUSTOM_PORT = 20100
 
   shipit.initConfig({
     default: {
       repositoryUrl: 'git@github.com:LinkdropHQ/linkdrop-monorepo.git',
-      keepReleases: 3
+      keepReleases: 3,
+      deployTo: `linkdrop/${network}-v2`,
+      servers: 'root@rinkeby.linkdrop.io'
     },
     rinkeby: {
-      deployTo: 'linkdrop/rinkeby',
-      servers: 'root@rinkeby.linkdrop.io',
-      branch: 'dev'
+      branch: 'dev-v2-server'
     },
     ropsten: {
-      deployTo: 'linkdrop/ropsten',
-      servers: 'root@rinkeby.linkdrop.io',
-      branch: 'dev'
+      branch: 'dev-v2-server'
     },
     mainnet: {
-      deployTo: 'linkdrop/mainnet',
-      servers: 'root@rinkeby.linkdrop.io',
-      branch: 'dev'
+      branch: 'dev-v2-server'
     },
     xdai: {
-      deployTo: 'linkdrop/xdai',
-      servers: 'root@rinkeby.linkdrop.io',
-      branch: 'dev'
+      branch: 'dev-v2-server'
     }
   })
 
@@ -47,7 +41,7 @@ module.exports = shipit => {
   shipit.task('copyConfig', async () => {
     await shipit.copyToRemote(
       '../../../configs/server.config.json',
-      `linkdrop/${network}/current/configs/server.config.json`
+      `linkdrop/${network}-v2/current/configs/server.config.json`
     )
   })
 

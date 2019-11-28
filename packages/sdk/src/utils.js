@@ -1,7 +1,38 @@
-const ethers = require('ethers')
-const Wallet = require('ethereumjs-wallet')
+import { ethers } from 'ethers'
+import { AddressZero } from 'ethers/constants'
+
+import Wallet from 'ethereumjs-wallet'
+
 // Turn off annoying warnings
 ethers.errors.setLogLevel('error')
+
+export class LinkParams {
+  constructor ({
+    token,
+    nft,
+    feeToken,
+    feeReceiver,
+    linkId,
+    nativeTokensAmount,
+    tokensAmount,
+    tokenId,
+    feeAmount,
+    expiration,
+    signerSignature
+  }) {
+    this.token = token
+    this.nft = nft
+    this.feeToken = feeToken
+    this.feeReceiver = feeReceiver
+    this.linkId = linkId
+    this.nativeTokensAmount = nativeTokensAmount
+    this.tokensAmount = tokensAmount
+    this.tokenId = tokenId
+    this.feeAmount = feeAmount
+    this.expiration = expiration
+    this.signerSignature = signerSignature
+  }
+}
 
 export const buildCreate2Address = (creatorAddress, saltHex, byteCode) => {
   const byteCodeHash = ethers.utils.keccak256(byteCode)
@@ -21,16 +52,22 @@ export const computeBytecode = masterCopyAddress => {
   return bytecode
 }
 
+/**
+ *
+ * @param {String} factoryAddress Factory address
+ * @param {String} senderAddress Sender address
+ * @param {String} campaignId Campaign id
+ */
 export const computeProxyAddress = (
   factoryAddress,
-  linkdropMasterAddress,
+  senderAddress,
   campaignId
 ) => {
   if (factoryAddress == null || factoryAddress === '') {
     throw new Error('Please provide factory address')
   }
 
-  if (linkdropMasterAddress == null || linkdropMasterAddress === '') {
+  if (senderAddress == null || senderAddress === '') {
     throw new Error('Please provide linkdrop master address')
   }
 
@@ -40,139 +77,166 @@ export const computeProxyAddress = (
 
   const salt = ethers.utils.solidityKeccak256(
     ['address', 'uint256'],
-    [linkdropMasterAddress, campaignId]
+    [senderAddress, campaignId]
   )
 
-  const initcode = '0x6352c7420d6000526103ff60206004601c335afa6040516060f3'
+  const initcode =
+    String(campaignId) === '0'
+      ? '0x6319ed26266000526103ff60206004601c335afa6040516060f3'
+      : '0x6352c7420d6000526103ff60206004601c335afa6040516060f3'
 
   const proxyAddress = buildCreate2Address(factoryAddress, salt, initcode)
   return proxyAddress
 }
 
-// Generates new link for ETH and ERC20
-export const createLink = async ({
-  linkdropSigner, // Wallet
-  weiAmount,
-  tokenAddress,
-  tokenAmount,
-  expirationTime,
-  version,
-  chainId,
-  proxyAddress
-}) => {
-  const { address: linkId, privateKey: linkKey } = generateAccount()
-
-  const linkdropSignerSignature = await signLink({
-    linkdropSigner,
-    weiAmount,
-    tokenAddress,
-    tokenAmount,
-    expirationTime,
-    version,
-    chainId,
-    linkId,
-    proxyAddress
-  })
-
-  return {
-    linkKey, // link's ephemeral private key
-    linkId, // address corresponding to link key
-    linkdropSignerSignature // signed by linkdrop verifier
-  }
-}
-
-// Should be signed by linkdropSigner (ETH, ERC20)
-export const signLink = async ({
-  linkdropSigner, // Wallet
-  weiAmount,
-  tokenAddress,
-  tokenAmount,
-  expirationTime,
-  version,
-  chainId,
+const signLink = async ({
+  token,
+  nft,
+  feeToken,
+  feeReceiver,
   linkId,
-  proxyAddress
+  nativeTokensAmount,
+  tokensAmount,
+  tokenId,
+  feeAmount,
+  expiration,
+  version,
+  chainId,
+  linkdropContract,
+  signingKeyOrWallet
 }) => {
+  if (typeof signingKeyOrWallet === 'string') {
+    signingKeyOrWallet = new ethers.Wallet(signingKeyOrWallet)
+  }
+
   const messageHash = ethers.utils.solidityKeccak256(
-    ['uint', 'address', 'uint', 'uint', 'uint', 'uint', 'address', 'address'],
     [
-      weiAmount,
-      tokenAddress,
-      tokenAmount,
-      expirationTime,
-      version,
-      chainId,
+      'address', // token
+      'address', // nft
+      'address', // feeToken
+      'address', // feeReceiver
+      'address', // linkId
+      'uint', // nativeTokensAmount
+      'uint', // tokensAmount
+      'uint', // tokenId
+      'uint', // feeAmount
+      'uint', // expiration
+      'uint', // version
+      'uint', // chainId
+      'address' // linkdropContract
+    ],
+    [
+      token,
+      nft,
+      feeToken,
+      feeReceiver,
       linkId,
-      proxyAddress
-    ]
-  )
-  const messageHashToSign = ethers.utils.arrayify(messageHash)
-  const signature = await linkdropSigner.signMessage(messageHashToSign)
-  return signature
-}
-
-// Generates new link for ERC721
-export const createLinkERC721 = async ({
-  linkdropSigner, // Wallet
-  weiAmount,
-  nftAddress,
-  tokenId,
-  expirationTime,
-  version,
-  chainId,
-  proxyAddress
-}) => {
-  const { address: linkId, privateKey: linkKey } = generateAccount()
-
-  const linkdropSignerSignature = await signLinkERC721({
-    linkdropSigner,
-    weiAmount,
-    nftAddress,
-    tokenId,
-    expirationTime,
-    version,
-    chainId,
-    linkId,
-    proxyAddress
-  })
-  return {
-    linkKey, // link's ephemeral private key
-    linkId, // address corresponding to link key
-    linkdropSignerSignature // signed by linkdrop verifier
-  }
-}
-
-// Should be signed by linkdropSigner (ERC721)
-export const signLinkERC721 = async ({
-  linkdropSigner, // Wallet
-  weiAmount,
-  nftAddress,
-  tokenId,
-  expirationTime,
-  version,
-  chainId,
-  linkId,
-  proxyAddress
-}) => {
-  const messageHash = ethers.utils.solidityKeccak256(
-    ['uint', 'address', 'uint', 'uint', 'uint', 'uint', 'address', 'address'],
-    [
-      weiAmount,
-      nftAddress,
+      nativeTokensAmount,
+      tokensAmount,
       tokenId,
-      expirationTime,
+      feeAmount,
+      expiration,
       version,
       chainId,
-      linkId,
-      proxyAddress
+      linkdropContract
     ]
   )
   const messageHashToSign = ethers.utils.arrayify(messageHash)
-  const signature = await linkdropSigner.signMessage(messageHashToSign)
+  const signature = await signingKeyOrWallet.signMessage(messageHashToSign)
   return signature
+}
+
+export const createLink = async ({
+  token = AddressZero,
+  nft = AddressZero,
+  feeToken = AddressZero,
+  feeReceiver = AddressZero,
+  nativeTokensAmount = 0,
+  tokensAmount = 0,
+  tokenId = 0,
+  feeAmount = 0,
+  expiration,
+  version,
+  chainId,
+  linkdropContract,
+  signingKeyOrWallet
+}) => {
+  if (
+    token === AddressZero &&
+    nft === AddressZero &&
+    nativeTokensAmount === 0
+  ) {
+    throw new Error('Invalid params. No token chosen.')
+  }
+  if (expiration == null || expiration === '') {
+    throw new Error('Please provide link expiration timestamp')
+  }
+
+  if (version == null || version === '') {
+    throw new Error('Please provide contract version')
+  }
+
+  if (chainId == null || chainId === '') {
+    throw new Error('Please provide chain id')
+  }
+
+  if (linkdropContract == null || linkdropContract === '') {
+    throw new Error('Please provide linkdrop contract address')
+  }
+
+  if (signingKeyOrWallet == null || signingKeyOrWallet === '') {
+    throw new Error('Please provide signing key or wallet')
+  }
+
+  const linkWallet = ethers.Wallet.createRandom()
+  const linkKey = linkWallet.privateKey
+  const linkId = linkWallet.address
+  const signerSignature = await signLink({
+    token,
+    nft,
+    feeToken,
+    feeReceiver,
+    linkId,
+    nativeTokensAmount,
+    tokensAmount,
+    tokenId,
+    feeAmount,
+    expiration,
+    version,
+    chainId,
+    linkdropContract,
+    signingKeyOrWallet
+  })
+
+  const linkParams = new LinkParams({
+    token,
+    nft,
+    feeToken,
+    feeReceiver,
+    linkId,
+    nativeTokensAmount,
+    tokensAmount,
+    tokenId,
+    feeAmount,
+    expiration,
+    signerSignature
+  })
+
+  return {
+    linkKey,
+    linkId,
+    signerSignature,
+    linkParams
+  }
 }
 
 export const signReceiverAddress = async (linkKey, receiverAddress) => {
+  if (linkKey == null || linkKey === '') {
+    throw new Error('Please provide link key')
+  }
+  if (receiverAddress == null || receiverAddress === '') {
+    throw new Error('Please provide receiver address')
+  }
   const wallet = new ethers.Wallet(linkKey)
   const messageHash = ethers.utils.solidityKeccak256(
     ['address'],

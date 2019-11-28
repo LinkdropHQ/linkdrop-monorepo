@@ -26,7 +26,7 @@ import LinkdropSDK from '@linkdrop/sdk'
 
 ```js
 const linkdropSDK = new LinkdropSDK({
-  linkdropMasterAddress,
+  senderAddress,
   factoryAddress,
   сhain = 'mainnet',
   jsonRpcUrl = `https://${chain}.infura.io`,
@@ -38,7 +38,7 @@ const linkdropSDK = new LinkdropSDK({
 Linkdrop SDK constructor takes following params:
 
 - Required params:
-  - linkdropMasterAddress - Linkdrop master address
+  - senderAddress - Linkdrop sender address
   - factoryAddress - Linkdrop factory contract address
 
 You can use the factory contract deployed on Mainnet, Ropsten, Rinkeby, Goerli and Kovan at 0xBa051891B752ecE3670671812486fe8dd34CC1c8
@@ -69,15 +69,15 @@ const txHash = await linkdropSDK.approve({
     signingKeyOrWallet,
     proxyAddress,
     tokenAddress,
-    tokenAmount
+    tokensAmount
 })
 ```
-This function will approve `tokenAmount` tokens to provided proxy address
+This function will approve `tokensAmount` tokens to provided proxy address
 
-### Approve ERC721 tokens to proxy contract
+### Approve all non fungible ERC721 tokens to proxy contract
 
 ```js
-const txHash = await linkdropSDK.approveERC721({ 
+const txHash = await linkdropSDK.approveNFT({ 
     signingKeyOrWallet,
     proxyAddress,
     nftAddress
@@ -91,108 +91,74 @@ This function will approve all NFTs to provided proxy address
 const txHash = await linkdropSDK.topup({ 
     signingKeyOrWallet,
     proxyAddress,
-    weiAmount 
+    nativeTokensAmount 
 })
 ```
-This function will topup the provided proxy address with `weiAmount` ethers
+This function will topup the provided proxy address with `nativeTokensAmount` of native tokens amount
 
 
 ### Top-up and deploy proxy contract
 
 ```js
-const txHash = await linkdropSDK.deployProxy({ signingKeyOrWallet, campaignId = 0, weiAmount })
+const txHash = await linkdropSDK.deployProxy({ signingKeyOrWallet, campaignId = 0, nativeTokensAmount = 0 })
 ```
 
-This function will deploy a proxy contract for a given campaign id and top it up with `weiAmount` provided
+This function will deploy a proxy contract for a given campaign id and top it up with `nativeTokensAmount` provided
 
 ## Generate links
 
-### Generate link for ETH or ERC20
+### Generate link
 
 ```js
 const {
   url,
   linkId,
   linkKey,
-  linkdropSignerSignature
+  linkParams,
+  signerSignature
 } = await linkdropSDK.generateLink({
-    signingKeyOrWallet, // Signing private key or ethers.js Wallet instance
-    weiAmount, // Amount of wei per claim
-    tokenAddress, // ERC20 token address
-    tokenAmount, // Amount of ERC20 tokens per claim
-    expirationTime = 12345678910, // Link expiration time
     campaignId = 0, // Campaign id
+    token = AddressZero, // ERC20 token address
+    nft = AddressZero, // ERC721 token address
+    feeToken = AddressZero, // Fee token address (0x0 for native token)
+    feeReceiver = AddressZero, // Fee receiver address
+    nativeTokensAmount = 0, // Native tokens amount
+    tokensAmount = 0, // ERC20 tokens amount
+    tokenId = 0, // ERC721 token id
+    feeAmount = 0, // Fee amount
+    expiration = 11111111111, // Link expiration timestamp
+    signingKeyOrWallet // Signer's private key
   })
 ```
 
-This function will generate link for claiming ETH or any ERC20 token and return the following params `url, linkId, linkKey, linkdropSignerSignature`
-
-### Generate link for ERC721
-
-```js
-const {
-  url,
-  linkId,
-  linkKey,
-  linkdropSignerSignature
-} = await linkdropSDK.generateLinkERC721({
-    signingKeyOrWallet, // Signing private key or ethers.js Wallet instance
-    weiAmount, // Amount of wei per claim
-    nftAddress, // ERC721 token address
-    tokenId, // Token id
-    expirationTime = 12345678910, // Link expiration time
-    campaignId = 0, // Campaign id
-  })
-```
-
-This function will generate link for claiming ERC721 token and return the following params `url, linkId, linkKey, linkdropSignerSignature`
+This function will generate link to claim native tokens and/or ERC20 tokens and/or ERC721 token and return the following params `url, linkId, linkKey, linkParams, signerSignature`
 
 ## Claim links
 
-### Claim ETH or ERC20
-
 ```js
 const txHash = await linkdropSDK.claim({
-    weiAmount, // Amount of wei per claim
-    tokenAddress, // ERC20 token address
-    tokenAmount, // Amount of ERC20 tokens to claim
-    expirationTime = 12345678910, // Link expiration time
-    linkKey, // Link ephemeral key
-    linkdropSignerSignature, // Signature of linkdrop signer
-    receiverAddress, // Address of receiver
-    campaignId = 0, // Campaign id
-}
+    token, // ERC20 token address
+    nft, // ERC721 token address
+    feeToken, // Fee token (0x0 for native token)
+    feeReceiver, // Fee receiver address
+    linkKey, // Ephemeral link key
+    nativeTokensAmount, // Native tokens amount
+    tokensAmount, // ERC20 tokens amount
+    tokenId, // ERC71 token id
+    feeAmount, // Fee amount
+    expiration, // Link expiration timestamp
+    signerSignature, // Signer signature
+    receiverAddress, // Receiver address
+    linkdropContract // Linkdrop contract address
+  }
 ```
 
-This function will claim ETH or ERC20 token by making a POST request to server endpoint. Make sure the server is up by running `yarn server`.
-
-### Claim ERC721
-
-```js
-const txHash = await linkdropSDK.claim({
-    weiAmount, // Amount of wei per claim
-    nftAddress, // ERC721 token address
-    tokenId, // Token id to claim
-    expirationTime = 12345678910, // Link expiration time
-    linkKey, // Link ephemeral key
-    linkdropSignerSignature, // Signature of linkdrop signer
-    receiverAddress, // Address of receiver
-    campaignId = 0, // Campaign id
-}
-```
-
-This function will claim ETH or ERC20 token by making a POST request to server endpoint. Make sure the server is up by running `yarn server`.
+This function will claim ETH and/or ERC20 tokens and/or ERC721 token by making a POST request to the server endpoint. Make sure the server is up by running `yarn server`.
 
 ### Subscribe for `Claimed` events
 
 ```js
-await linkdropSDK.subscribeForClaimedEvents(proxyAddress, callback)
-```
-
-### Subscribe for `ClaimedERC721` events
-
-```js
-await linkdropSDK.subscribeForClaimedERC721Events(proxyAddress, callback)
+await linkdropSDK.subscribeForClaimEvents(proxyAddress, callback)
 ```
 
 ## Stay in Touch
