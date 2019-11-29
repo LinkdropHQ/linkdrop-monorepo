@@ -174,6 +174,7 @@ class LinkdropSDK {
     return claimUtils.claimAndDeploy({
       jsonRpcUrl: this.jsonRpcUrl,
       apiHost: this.apiHost,
+      factory: this.factoryAddress,
       token,
       nft,
       feeToken,

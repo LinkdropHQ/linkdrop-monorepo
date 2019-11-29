@@ -249,6 +249,7 @@ function () {
               return _context4.abrupt("return", claimUtils.claimAndDeploy({
                 jsonRpcUrl: this.jsonRpcUrl,
                 apiHost: this.apiHost,
+                factory: this.factoryAddress,
                 token: token,
                 nft: nft,
                 feeToken: feeToken,

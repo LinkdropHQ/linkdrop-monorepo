@@ -206,13 +206,13 @@ var claim = function claim(_ref) {
 exports.claim = claim;
 
 var claimAndDeploy = function claimAndDeploy(_ref2) {
-  var jsonRpcUrl, apiHost, token, nft, feeToken, feeReceiver, linkKey, nativeTokensAmount, tokensAmount, tokenId, feeAmount, expiration, signerSignature, receiverAddress, linkdropContract, sender, provider, receiverSignature, linkId, linkParams, response, _response$data2, error, errors, success, txHash;
+  var jsonRpcUrl, apiHost, token, nft, feeToken, feeReceiver, linkKey, nativeTokensAmount, tokensAmount, tokenId, feeAmount, expiration, signerSignature, receiverAddress, linkdropContract, sender, factory, provider, receiverSignature, linkId, linkParams, response, _response$data2, error, errors, success, txHash;
 
   return _regenerator["default"].async(function claimAndDeploy$(_context2) {
     while (1) {
       switch (_context2.prev = _context2.next) {
         case 0:
-          jsonRpcUrl = _ref2.jsonRpcUrl, apiHost = _ref2.apiHost, token = _ref2.token, nft = _ref2.nft, feeToken = _ref2.feeToken, feeReceiver = _ref2.feeReceiver, linkKey = _ref2.linkKey, nativeTokensAmount = _ref2.nativeTokensAmount, tokensAmount = _ref2.tokensAmount, tokenId = _ref2.tokenId, feeAmount = _ref2.feeAmount, expiration = _ref2.expiration, signerSignature = _ref2.signerSignature, receiverAddress = _ref2.receiverAddress, linkdropContract = _ref2.linkdropContract, sender = _ref2.sender;
+          jsonRpcUrl = _ref2.jsonRpcUrl, apiHost = _ref2.apiHost, token = _ref2.token, nft = _ref2.nft, feeToken = _ref2.feeToken, feeReceiver = _ref2.feeReceiver, linkKey = _ref2.linkKey, nativeTokensAmount = _ref2.nativeTokensAmount, tokensAmount = _ref2.tokensAmount, tokenId = _ref2.tokenId, feeAmount = _ref2.feeAmount, expiration = _ref2.expiration, signerSignature = _ref2.signerSignature, receiverAddress = _ref2.receiverAddress, linkdropContract = _ref2.linkdropContract, sender = _ref2.sender, factory = _ref2.factory;
 
           if (!(jsonRpcUrl == null || jsonRpcUrl === '')) {
             _context2.next = 3;
@@ -350,13 +350,21 @@ var claimAndDeploy = function claimAndDeploy(_ref2) {
           throw new Error('Please provide sender address');
 
         case 35:
+          if (!(factory == null || factory === '')) {
+            _context2.next = 37;
+            break;
+          }
+
+          throw new Error('Please provide factory address');
+
+        case 37:
           // Get provider
           provider = new _ethers.ethers.providers.JsonRpcProvider(jsonRpcUrl); // Get receiver signature
 
-          _context2.next = 38;
+          _context2.next = 40;
           return _regenerator["default"].awrap((0, _utils.signReceiverAddress)(linkKey, receiverAddress));
 
-        case 38:
+        case 40:
           receiverSignature = _context2.sent;
           // Get linkId from linkKey
           linkId = new _ethers.ethers.Wallet(linkKey, provider).address;
@@ -373,16 +381,17 @@ var claimAndDeploy = function claimAndDeploy(_ref2) {
             expiration: expiration,
             signerSignature: signerSignature
           });
-          _context2.next = 43;
+          _context2.next = 45;
           return _regenerator["default"].awrap(_axios["default"].post("".concat(apiHost, "/api/v1/linkdrops/claimAndDeploy"), {
             linkParams: linkParams,
             receiverAddress: receiverAddress,
             receiverSignature: receiverSignature,
             linkdropContractAddress: linkdropContract,
-            senderAddress: sender
+            senderAddress: sender,
+            factoryAddress: factory
           }));
 
-        case 43:
+        case 45:
           response = _context2.sent;
           _response$data2 = response.data, error = _response$data2.error, errors = _response$data2.errors, success = _response$data2.success, txHash = _response$data2.txHash;
           return _context2.abrupt("return", {
@@ -392,7 +401,7 @@ var claimAndDeploy = function claimAndDeploy(_ref2) {
             txHash: txHash
           });
 
-        case 46:
+        case 48:
         case "end":
           return _context2.stop();
       }

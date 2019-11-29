@@ -49,17 +49,19 @@ class LinkdropService {
     )
   }
 
-  async register ({ senderAddress }) {
+  async register ({ senderAddress, factoryAddress, campaignId = 0 }) {
     const linkdropSDK = new LinkdropSDK({
       senderAddress,
-      factoryAddress: factoryService.factory.address,
+      factoryAddress,
       chain: relayerWalletService.chain
     })
-    const linkdropContractAddress = linkdropSDK.getProxyAddress()
+    const linkdropContractAddress = linkdropSDK.getProxyAddress(campaignId)
 
     let deploy = await Deploy.findOne({
       senderAddress,
-      linkdropContractAddress
+      linkdropContractAddress,
+      factoryAddress,
+      campaignId
     })
 
     if (deploy) {
@@ -68,7 +70,9 @@ class LinkdropService {
 
     deploy = new Deploy({
       senderAddress,
-      linkdropContractAddress
+      linkdropContractAddress,
+      factoryAddress,
+      campaignId
     })
 
     await deploy.save()

@@ -3,7 +3,9 @@ import { Schema, model } from 'mongoose'
 const deploySchema = new Schema(
   {
     senderAddress: { type: String, required: true },
+    campaignId: { type: Number, required: true, default: 0 },
     linkdropContractAddress: { type: String, required: true },
+    factoryAddress: { type: String, required: true },
     deployedAt: { type: Number, required: true, default: 0 },
     isWithdrawn: { type: Boolean, required: true, default: false }
   },
