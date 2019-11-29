@@ -78,7 +78,7 @@ describe('Campaigns tests', () => {
       })
     ).to.emit(factory, 'Deployed')
 
-    proxy = new ethers.Contract(expectedAddress, Linkdrop.abi, sender)
+    proxy = new ethers.Contract(expectedAddress, LinkdropTransfer.abi, sender)
 
     const linkdropMasterAddress = await proxy.sender()
     expect(linkdropMasterAddress).to.eq(sender.address)

@@ -3,18 +3,57 @@ import { ERRORS } from './data'
 
 const generator = function * ({ payload }) {
   try {
-    const { wallet, campaignId, nftAddress, tokenId, weiAmount, expirationTime, linkKey, linkdropSignerSignature } = payload
+    const {
+      token,
+      feeToken,
+      feeReceiver,
+      linkKey,
+      nativeTokensAmount,
+      tokensAmount,
+      feeAmount,
+      expiration,
+      signerSignature,
+      receiverAddress,
+      linkdropContract,
+      sender,
+      nft,
+      tokenId
+    } = payload
+
+    console.log({
+      token,
+      feeToken,
+      feeReceiver,
+      linkKey,
+      nativeTokensAmount,
+      tokensAmount,
+      feeAmount,
+      expiration,
+      signerSignature,
+      receiverAddress,
+      linkdropContract,
+      sender,
+      nft,
+      tokenId
+    })
+
     yield put({ type: 'USER.SET_LOADING', payload: { loading: true } })
     const sdk = yield select(generator.selectors.sdk)
-    const { success, txHash, errors } = yield sdk.claimERC721({
-      weiAmount: weiAmount || '0',
-      nftAddress,
-      tokenId,
-      expirationTime,
+    const { success, errors, txHash } = yield sdk.claim({
+      nativeTokensAmount: nativeTokensAmount || '0',
+      token,
+      tokensAmount: tokensAmount || '0',
+      expiration,
       linkKey,
-      linkdropSignerSignature,
-      receiverAddress: wallet,
-      campaignId
+      signerSignature,
+      receiverAddress,
+      linkdropContract,
+      sender,
+      feeToken,
+      feeReceiver,
+      feeAmount,
+      nft,
+      tokenId
     })
 
     if (success) {
@@ -36,7 +75,6 @@ const generator = function * ({ payload }) {
 }
 
 export default generator
-
 generator.selectors = {
   sdk: ({ user: { sdk } }) => sdk
 }

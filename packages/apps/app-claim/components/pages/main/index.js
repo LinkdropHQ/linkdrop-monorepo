@@ -1,6 +1,7 @@
+/* global web3 */
 import React from 'react'
 import { Loading } from '@linkdrop/ui-kit'
-import { actions, translate, platform } from 'decorators'
+import { actions, translate, platform, detectBrowser } from 'decorators'
 import InitialPage from './initial-page'
 import WalletChoosePage from './wallet-choose-page'
 import ClaimingProcessPage from './claiming-process-page'
@@ -8,6 +9,12 @@ import ErrorPage from './error-page'
 import ClaimingFinishedPage from './claiming-finished-page'
 import { getHashVariables, defineNetworkName, capitalize } from '@linkdrop/commons'
 import { Web3Consumer } from 'web3-react'
+let web3Obj
+try {
+  web3Obj = web3
+} catch (err) {
+  console.error(err)
+}
 
 @actions(({ user: { errors, step, loading: userLoading, readyToClaim, alreadyClaimed }, tokens: { transactionId }, contract: { loading, decimals, amount, symbol, icon } }) => ({
   userLoading,
@@ -23,17 +30,28 @@ import { Web3Consumer } from 'web3-react'
   readyToClaim
 }))
 @platform()
+@detectBrowser()
 @translate('pages.claim')
 class Claim extends React.Component {
   componentDidMount () {
     const {
       linkKey,
       chainId,
-      linkdropMasterAddress,
-      campaignId
+      campaignId = 0,
+      linkdropContract,
+      sender: senderAddress
     } = getHashVariables()
-    this.actions().tokens.checkIfClaimed({ linkKey, chainId, linkdropMasterAddress, campaignId })
-    this.actions().user.createSdk({ linkdropMasterAddress, chainId, linkKey, campaignId })
+    this.actions().tokens.checkIfClaimed({
+      linkKey,
+      chainId,
+      linkdropContract
+    })
+    this.actions().user.createSdk({
+      senderAddress,
+      chainId,
+      linkKey,
+      campaignId
+    })
   }
 
   componentWillReceiveProps ({ readyToClaim, alreadyClaimed }) {
@@ -45,14 +63,22 @@ class Claim extends React.Component {
       alreadyClaimed == null
     ) { return }
     const {
-      tokenAddress,
-      weiAmount,
-      tokenAmount,
-      expirationTime,
-      chainId,
-      nftAddress,
-      tokenId
+      token,
+      tokensAmount,
+      expiration,
+      nft,
+      feeToken,
+      tokenId,
+      feeAmount,
+      feeReceiver,
+      nativeTokensAmount,
+      linkdropContract,
+      linkKey,
+      signerSignature,
+      receiverAddress,
+      chainId
     } = getHashVariables()
+
     // params in url:
     // token - contract/token address,
     // amount - tokens amount,
@@ -71,15 +97,47 @@ class Claim extends React.Component {
     // token: ERC20 token address, 0x000...000 for ether - can be received from url params
     // tokenAmount: token amount in atomic values - can be received from url params
     // expirationTime: link expiration time - can be received from url params
-    if (Number(expirationTime) < (+(new Date()) / 1000)) {
+    if (Number(expiration) < (+(new Date()) / 1000)) {
       // show error page if link expired
       return this.actions().user.setErrors({ errors: ['LINK_EXPIRED'] })
     }
 
-    if (nftAddress && tokenId) {
-      return this.actions().contract.getTokenERC721Data({ nftAddress, tokenId, chainId })
+    if (nft && Number(tokenId) !== 0) {
+      // jsonRpcUrl,
+      // apiHost,
+      // token,
+      // nft,
+      // feeToken,
+      // feeReceiver,
+      // linkKey,
+      // nativeTokensAmount,
+      // tokensAmount,
+      // tokenId,
+      // feeAmount,
+      // expiration,
+      // signerSignature,
+      // receiverAddress,
+      // linkdropContract
+      return this.actions().contract.getTokenERC721Data({
+        nft,
+        tokenId,
+        chainId
+        // feeToken,
+        // feeReceiver,
+        // feeAmount,
+        // linkKey,
+        // expiration,
+        // nativeTokensAmount,
+        // signerSignature,
+        // linkdropContract
+      })
     }
-    this.actions().contract.getTokenERC20Data({ tokenAddress, weiAmount, tokenAmount, chainId })
+    this.actions().contract.getTokenERC20Data({
+      token,
+      nativeTokensAmount,
+      tokensAmount,
+      chainId
+    })
   }
 
   render () {
@@ -98,10 +156,19 @@ class Claim extends React.Component {
     // networkId,
     // account,
     // error
-    const {
+    let {
       account,
       networkId
     } = context
+    if (this.isOpera) {
+      if (!account || !networkId) {
+        if (web3Obj && web3Obj.currentProvider && web3Obj.currentProvider.publicConfigStore && web3Obj.currentProvider.publicConfigStore.getState) {
+          const data = web3Obj.currentProvider.publicConfigStore.getState()
+          account = data.selectedAddress
+          networkId = data.networkVersion
+        }
+      }
+    }
     const {
       chainId,
       linkdropMasterAddress

@@ -4,7 +4,9 @@ $whiteColor: #FFF;
 $greyColor: #999;
 $bgColor: #FCF5F1;
 $greenColor: #2BC64F;
+$doneGreenColor: #4CD964;
 $orangeColor: #FFA300;
+$violetColor: #AD00FF;
 
 /* values for claim page */
 $borderHoverGreyColor: #8C8C8C;
@@ -21,6 +23,7 @@ $dbGrey: #979797;
 $dbBlue: #0025FF;
 $greyStrokeColor: #E5E5E5;
 $darkOrangeColor: #F89D35;
+
 
 :export {
   blackColor: $blackColor;
@@ -39,4 +42,6 @@ $darkOrangeColor: #F89D35;
   dbBlue: $dbBlue;
   greyStrokeColor: $greyStrokeColor;
   darkOrangeColor: $darkOrangeColor;
+  doneGreenColor: $doneGreenColor;
+  violetColor: $violetColor;
 }

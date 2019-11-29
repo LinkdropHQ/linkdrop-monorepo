@@ -15,9 +15,9 @@ class LinkdropSDK {
   constructor ({
     senderAddress,
     factoryAddress,
-    chain = 'mainnet',
+    chain = 'mainnet', // rinkeby
     jsonRpcUrl = getJsonRpcUrl(chain),
-    apiHost = `https://${chain}.linkdrop.io`,
+    apiHost = `https://${chain}.linkdrop.io`, // http://localhost:5000
     claimHost = 'https://claim.linkdrop.io'
   }) {
     if (senderAddress == null || senderAddress === '') {
@@ -78,7 +78,7 @@ class LinkdropSDK {
     tokenId = 0,
     feeAmount = 0,
     expiration = 11111111111,
-    signingKeyOrWallet
+    signingKeyOrWallet // private key of wallet
   }) {
     return generateLinkUtils.generateLink({
       claimHost: this.claimHost,
@@ -124,7 +124,7 @@ class LinkdropSDK {
     linkdropContract,
     sender
   }) {
-    const claimParams = {
+    return claimUtils.claim({
       jsonRpcUrl: this.jsonRpcUrl,
       apiHost: this.apiHost,
       token,
@@ -141,14 +141,55 @@ class LinkdropSDK {
       receiverAddress,
       linkdropContract,
       sender
+    })
+  }
+
+  async claimAndDeploy ({
+    token,
+    nft,
+    feeToken,
+    feeReceiver,
+    linkKey,
+    nativeTokensAmount,
+    tokensAmount,
+    tokenId,
+    feeAmount,
+    expiration,
+    signerSignature,
+    receiverAddress,
+    linkdropContract,
+    sender
+  }) {
+    if (linkdropContract !== this.getProxyAddress()) {
+      throw new Error(
+        'Linkdrop contract cannot be deployed by relayer. Invalid campaign id.'
+      )
     }
-    if (linkdropContract === this.getProxyAddress()) {
-      const { isDeployed } = await this.isDeployed()
-      if (isDeployed === false) {
-        return claimUtils.claimAndDeploy(claimParams)
-      }
+    const { isDeployed } = await this.isDeployed()
+
+    if (isDeployed === true) {
+      throw new Error('Linkdrop contract is already deployed')
     }
-    return claimUtils.claim(claimParams)
+
+    return claimUtils.claimAndDeploy({
+      jsonRpcUrl: this.jsonRpcUrl,
+      apiHost: this.apiHost,
+      factory: this.factoryAddress,
+      token,
+      nft,
+      feeToken,
+      feeReceiver,
+      linkKey,
+      nativeTokensAmount,
+      tokensAmount,
+      tokenId,
+      feeAmount,
+      expiration,
+      signerSignature,
+      receiverAddress,
+      linkdropContract,
+      sender
+    })
   }
 
   async topup ({ signingKeyOrWallet, proxyAddress, nativeTokensAmount }) {

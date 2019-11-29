@@ -1,0 +1,33 @@
+.container {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  background: #FFF;
+  right: -100%;
+  z-index: 100;
+  transition: right .3s;
+}
+
+.expanded {
+  right: 0;
+}
+
+.header {
+  height: 86px;
+  display: flex;
+  align-items: center;
+  padding: 0px 30px;
+}
+
+.closeIcon {
+  cursor: pointer;
+}
+
+.content {
+  padding-top: 20px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  height: calc(100% - 86px);
+}

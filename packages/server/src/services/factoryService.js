@@ -6,17 +6,12 @@ import relayerWalletService from './relayerWalletService'
 import utilsService from './utilsService'
 import { ethers } from 'ethers'
 import logger from '../utils/logger'
+import Deploy from '../models/Deploy'
 
 const config = configs.get('server')
 
 class FactoryService {
   constructor () {
-    this.factory = new ethers.Contract(
-      config.FACTORY_ADDRESS,
-      LinkdropFactory.abi,
-      relayerWalletService.relayerWallet
-    )
-
     this.multiSend = new ethers.Contract(
       config.MULTISEND_ADDRESS,
       ['function multiSend(bytes)'],
@@ -24,11 +19,76 @@ class FactoryService {
     )
   }
 
-  async isDeployed (senderAddress, campaignId) {
-    return this.factory['isDeployed(address,uint256)'](
+  async isDeployed ({ senderAddress, campaignId, factoryAddress }) {
+    const factoryContract = new ethers.Contract(
+      factoryAddress,
+      LinkdropFactory.abi,
+      relayerWalletService.relayerWallet
+    )
+    return factoryContract['isDeployed(address,uint256)'](
       senderAddress,
       campaignId
     )
+  }
+
+  async deploy ({ senderAddress, campaignId, factoryAddress }) {
+    if (
+      this.isDeployed({ senderAddress, campaignId, factoryAddress }) === true
+    ) {
+      throw new Error('Linkdrop contract is already deployed')
+    }
+
+    const gasPrice = await relayerWalletService.getGasPrice()
+
+    const linkdropSDK = new LinkdropSDK({
+      senderAddress,
+      factoryAddress,
+      chain: relayerWalletService.chain
+    })
+
+    const linkdropContractAddress = linkdropSDK.getProxyAddress(campaignId)
+
+    const factoryContract = new ethers.Contract(
+      factoryAddress,
+      LinkdropFactory.abi,
+      relayerWalletService.relayerWallet
+    )
+
+    logger.debug(
+      `Deploying campaign ${campaignId} for ${senderAddress} at address ${linkdropContractAddress}`
+    )
+
+    const tx = await factoryContract['deployProxy(address,uint256)'](
+      senderAddress,
+      campaignId,
+      {
+        gasPrice
+      }
+    )
+
+    let deploy = await Deploy.findOne({
+      senderAddress,
+      linkdropContractAddress,
+      factoryAddress,
+      campaignId
+    })
+
+    if (!deploy) {
+      deploy = new Deploy({
+        senderAddress,
+        linkdropContractAddress,
+        campaignId,
+        factoryAddress
+      })
+    }
+
+    deploy.deployedAt = new Date().getTime()
+    await deploy.save()
+
+    logger.debug('Updated deploy data in database:')
+    logger.json(deploy)
+
+    return tx.hash
   }
 
   async claimAndDeploy ({
@@ -36,14 +96,16 @@ class FactoryService {
     receiverAddress,
     receiverSignature,
     linkdropContractAddress,
-    senderAddress
+    senderAddress,
+    factoryAddress
   }) {
     logger.json({
       linkParams,
       receiverAddress,
       receiverSignature,
       linkdropContractAddress,
-      senderAddress
+      senderAddress,
+      factoryAddress
     })
 
     const gasPrice = await relayerWalletService.getGasPrice()
@@ -59,7 +121,7 @@ class FactoryService {
 
     const deployProxyMultiSendData = utilsService.encodeDataForMultiSend(
       0, // CALL OP
-      this.factory.address,
+      factoryAddress,
       0,
       deployProxyData
     )

@@ -1,4 +1,5 @@
 import factoryService from '../services/factoryService'
+import linkdropService from '../services/linkdropService'
 
 // POST
 export const deploy = async (req, res) => {
@@ -9,6 +10,26 @@ export const deploy = async (req, res) => {
   res.json({
     success: true,
     txHash: txHash
+  })
+}
+
+// POST
+export const withdraw = async (req, res) => {
+  // claim transaction
+  const txHash = await linkdropService.withdraw(req.body)
+
+  // return tx hash in successful response
+  res.json({
+    success: true,
+    txHash: txHash
+  })
+}
+
+// POST
+export const register = async (req, res) => {
+  const success = await linkdropService.register(req.body)
+  res.json({
+    success
   })
 }
 

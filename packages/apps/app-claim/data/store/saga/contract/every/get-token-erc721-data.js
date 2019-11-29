@@ -1,7 +1,7 @@
 import { put, call } from 'redux-saga/effects'
 import { getERC721TokenData } from 'data/api/tokens'
 import { ethers } from 'ethers'
-import NFTMock from 'contracts/NFTMock.json'
+import NFTMock from '@linkdrop/contracts/build/NFTMock.json'
 import { defineJsonRpcUrl } from '@linkdrop/commons'
 import { infuraPk, jsonRpcUrlXdai } from 'app.config.js'
 
@@ -18,10 +18,10 @@ const generator = function * ({ payload }) {
   let image = +(new Date())
   try {
     yield put({ type: 'CONTRACT.SET_LOADING', payload: { loading: true } })
-    const { nftAddress, tokenId, chainId } = payload
+    const { nft, tokenId, chainId } = payload
     const actualJsonRpcUrl = defineJsonRpcUrl({ chainId, infuraPk, jsonRpcUrlXdai })
     const provider = yield new ethers.providers.JsonRpcProvider(actualJsonRpcUrl)
-    const nftContract = yield new ethers.Contract(nftAddress, NFTMock.abi, provider)
+    const nftContract = yield new ethers.Contract(nft, NFTMock.abi, provider)
     const metadataURL = yield nftContract.tokenURI(tokenId)
     const name = yield nftContract.symbol()
     if (metadataURL !== '') {
@@ -36,10 +36,10 @@ const generator = function * ({ payload }) {
     yield put({ type: 'USER.SET_STEP', payload: { step: 1 } })
   } catch (e) {
     console.error(e)
-    const { nftAddress, chainId } = payload
+    const { nft, chainId } = payload
     const actualJsonRpcUrl = defineJsonRpcUrl({ chainId, infuraPk, jsonRpcUrlXdai })
     const provider = yield new ethers.providers.JsonRpcProvider(actualJsonRpcUrl)
-    const nftContract = yield new ethers.Contract(nftAddress, NFTMock.abi, provider)
+    const nftContract = yield new ethers.Contract(nft, NFTMock.abi, provider)
     const name = yield nftContract.symbol()
     yield put({ type: 'CONTRACT.SET_SYMBOL', payload: { symbol: name } })
     yield put({ type: 'CONTRACT.SET_ICON', payload: { icon: image } })

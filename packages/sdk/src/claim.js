@@ -134,7 +134,8 @@ export const claimAndDeploy = async ({
   signerSignature,
   receiverAddress,
   linkdropContract,
-  sender
+  sender,
+  factory
 }) => {
   if (jsonRpcUrl == null || jsonRpcUrl === '') {
     throw new Error('Please provide json rpc url')
@@ -203,6 +204,10 @@ export const claimAndDeploy = async ({
     throw new Error('Please provide sender address')
   }
 
+  if (factory == null || factory === '') {
+    throw new Error('Please provide factory address')
+  }
+
   // Get provider
   const provider = new ethers.providers.JsonRpcProvider(jsonRpcUrl)
 
@@ -233,7 +238,8 @@ export const claimAndDeploy = async ({
       receiverAddress,
       receiverSignature,
       linkdropContractAddress: linkdropContract,
-      senderAddress: sender
+      senderAddress: sender,
+      factoryAddress: factory
     }
   )
 
