@@ -13,7 +13,7 @@ ethers.errors.setLogLevel('error')
 
 class LinkdropSDK {
   constructor ({
-    senderAddress, // generate on front, senderPrivateKey -> sender key (ethers wallet create random)
+    senderAddress,
     factoryAddress,
     chain = 'mainnet', // rinkeby
     jsonRpcUrl = getJsonRpcUrl(chain),
@@ -124,7 +124,7 @@ class LinkdropSDK {
     linkdropContract,
     sender
   }) {
-    const claimParams = {
+    return claimUtils.claim({
       jsonRpcUrl: this.jsonRpcUrl,
       apiHost: this.apiHost,
       token,
@@ -141,15 +141,54 @@ class LinkdropSDK {
       receiverAddress,
       linkdropContract,
       sender
+    })
+  }
+
+  async claimAndDeploy ({
+    token,
+    nft,
+    feeToken,
+    feeReceiver,
+    linkKey,
+    nativeTokensAmount,
+    tokensAmount,
+    tokenId,
+    feeAmount,
+    expiration,
+    signerSignature,
+    receiverAddress,
+    linkdropContract,
+    sender
+  }) {
+    if (linkdropContract !== this.getProxyAddress()) {
+      throw new Error(
+        'Linkdrop contract cannot be deployed by relayer. Invalid campaign id.'
+      )
+    }
+    const { isDeployed } = await this.isDeployed()
+
+    if (isDeployed === true) {
+      throw new Error('Linkdrop contract is already deployed')
     }
 
-    if (linkdropContract === this.getProxyAddress()) {
-      const { isDeployed } = await this.isDeployed()
-      if (isDeployed === false) {
-        return claimUtils.claimAndDeploy(claimParams)
-      }
-    }
-    return claimUtils.claim(claimParams)
+    return claimUtils.claimAndDeploy({
+      jsonRpcUrl: this.jsonRpcUrl,
+      apiHost: this.apiHost,
+      token,
+      nft,
+      feeToken,
+      feeReceiver,
+      linkKey,
+      nativeTokensAmount,
+      tokensAmount,
+      tokenId,
+      feeAmount,
+      expiration,
+      signerSignature,
+      receiverAddress,
+      linkdropContract,
+      sender
+    })
   }
 
   async topup ({ signingKeyOrWallet, proxyAddress, nativeTokensAmount }) {

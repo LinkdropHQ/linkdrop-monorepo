@@ -180,14 +180,13 @@ function () {
   }, {
     key: "claim",
     value: function claim(_ref3) {
-      var token, nft, feeToken, feeReceiver, linkKey, nativeTokensAmount, tokensAmount, tokenId, feeAmount, expiration, signerSignature, receiverAddress, linkdropContract, sender, claimParams, _ref4, isDeployed;
-
+      var token, nft, feeToken, feeReceiver, linkKey, nativeTokensAmount, tokensAmount, tokenId, feeAmount, expiration, signerSignature, receiverAddress, linkdropContract, sender;
       return _regenerator["default"].async(function claim$(_context3) {
         while (1) {
           switch (_context3.prev = _context3.next) {
             case 0:
               token = _ref3.token, nft = _ref3.nft, feeToken = _ref3.feeToken, feeReceiver = _ref3.feeReceiver, linkKey = _ref3.linkKey, nativeTokensAmount = _ref3.nativeTokensAmount, tokensAmount = _ref3.tokensAmount, tokenId = _ref3.tokenId, feeAmount = _ref3.feeAmount, expiration = _ref3.expiration, signerSignature = _ref3.signerSignature, receiverAddress = _ref3.receiverAddress, linkdropContract = _ref3.linkdropContract, sender = _ref3.sender;
-              claimParams = {
+              return _context3.abrupt("return", claimUtils.claim({
                 jsonRpcUrl: this.jsonRpcUrl,
                 apiHost: this.apiHost,
                 token: token,
@@ -204,31 +203,9 @@ function () {
                 receiverAddress: receiverAddress,
                 linkdropContract: linkdropContract,
                 sender: sender
-              };
+              }));
 
-              if (!(linkdropContract === this.getProxyAddress())) {
-                _context3.next = 9;
-                break;
-              }
-
-              _context3.next = 5;
-              return _regenerator["default"].awrap(this.isDeployed());
-
-            case 5:
-              _ref4 = _context3.sent;
-              isDeployed = _ref4.isDeployed;
-
-              if (!(isDeployed === false)) {
-                _context3.next = 9;
-                break;
-              }
-
-              return _context3.abrupt("return", claimUtils.claimAndDeploy(claimParams));
-
-            case 9:
-              return _context3.abrupt("return", claimUtils.claim(claimParams));
-
-            case 10:
+            case 2:
             case "end":
               return _context3.stop();
           }
@@ -236,22 +213,59 @@ function () {
       }, null, this);
     }
   }, {
-    key: "topup",
-    value: function topup(_ref5) {
-      var signingKeyOrWallet, proxyAddress, nativeTokensAmount;
-      return _regenerator["default"].async(function topup$(_context4) {
+    key: "claimAndDeploy",
+    value: function claimAndDeploy(_ref4) {
+      var token, nft, feeToken, feeReceiver, linkKey, nativeTokensAmount, tokensAmount, tokenId, feeAmount, expiration, signerSignature, receiverAddress, linkdropContract, sender, _ref5, isDeployed;
+
+      return _regenerator["default"].async(function claimAndDeploy$(_context4) {
         while (1) {
           switch (_context4.prev = _context4.next) {
             case 0:
-              signingKeyOrWallet = _ref5.signingKeyOrWallet, proxyAddress = _ref5.proxyAddress, nativeTokensAmount = _ref5.nativeTokensAmount;
-              return _context4.abrupt("return", topupAndApproveUtils.topup({
+              token = _ref4.token, nft = _ref4.nft, feeToken = _ref4.feeToken, feeReceiver = _ref4.feeReceiver, linkKey = _ref4.linkKey, nativeTokensAmount = _ref4.nativeTokensAmount, tokensAmount = _ref4.tokensAmount, tokenId = _ref4.tokenId, feeAmount = _ref4.feeAmount, expiration = _ref4.expiration, signerSignature = _ref4.signerSignature, receiverAddress = _ref4.receiverAddress, linkdropContract = _ref4.linkdropContract, sender = _ref4.sender;
+
+              if (!(linkdropContract !== this.getProxyAddress())) {
+                _context4.next = 3;
+                break;
+              }
+
+              throw new Error('Linkdrop contract cannot be deployed by relayer. Invalid campaign id.');
+
+            case 3:
+              _context4.next = 5;
+              return _regenerator["default"].awrap(this.isDeployed());
+
+            case 5:
+              _ref5 = _context4.sent;
+              isDeployed = _ref5.isDeployed;
+
+              if (!(isDeployed === true)) {
+                _context4.next = 9;
+                break;
+              }
+
+              throw new Error('Linkdrop contract is already deployed');
+
+            case 9:
+              return _context4.abrupt("return", claimUtils.claimAndDeploy({
                 jsonRpcUrl: this.jsonRpcUrl,
-                signingKeyOrWallet: signingKeyOrWallet,
-                proxyAddress: proxyAddress,
-                nativeTokensAmount: nativeTokensAmount
+                apiHost: this.apiHost,
+                token: token,
+                nft: nft,
+                feeToken: feeToken,
+                feeReceiver: feeReceiver,
+                linkKey: linkKey,
+                nativeTokensAmount: nativeTokensAmount,
+                tokensAmount: tokensAmount,
+                tokenId: tokenId,
+                feeAmount: feeAmount,
+                expiration: expiration,
+                signerSignature: signerSignature,
+                receiverAddress: receiverAddress,
+                linkdropContract: linkdropContract,
+                sender: sender
               }));
 
-            case 2:
+            case 10:
             case "end":
               return _context4.stop();
           }
@@ -259,20 +273,19 @@ function () {
       }, null, this);
     }
   }, {
-    key: "approve",
-    value: function approve(_ref6) {
-      var signingKeyOrWallet, proxyAddress, tokenAddress, tokensAmount;
-      return _regenerator["default"].async(function approve$(_context5) {
+    key: "topup",
+    value: function topup(_ref6) {
+      var signingKeyOrWallet, proxyAddress, nativeTokensAmount;
+      return _regenerator["default"].async(function topup$(_context5) {
         while (1) {
           switch (_context5.prev = _context5.next) {
             case 0:
-              signingKeyOrWallet = _ref6.signingKeyOrWallet, proxyAddress = _ref6.proxyAddress, tokenAddress = _ref6.tokenAddress, tokensAmount = _ref6.tokensAmount;
-              return _context5.abrupt("return", topupAndApproveUtils.approve({
+              signingKeyOrWallet = _ref6.signingKeyOrWallet, proxyAddress = _ref6.proxyAddress, nativeTokensAmount = _ref6.nativeTokensAmount;
+              return _context5.abrupt("return", topupAndApproveUtils.topup({
                 jsonRpcUrl: this.jsonRpcUrl,
                 signingKeyOrWallet: signingKeyOrWallet,
                 proxyAddress: proxyAddress,
-                tokenAddress: tokenAddress,
-                tokensAmount: tokensAmount
+                nativeTokensAmount: nativeTokensAmount
               }));
 
             case 2:
@@ -283,19 +296,20 @@ function () {
       }, null, this);
     }
   }, {
-    key: "approveNFT",
-    value: function approveNFT(_ref7) {
-      var signingKeyOrWallet, proxyAddress, nftAddress;
-      return _regenerator["default"].async(function approveNFT$(_context6) {
+    key: "approve",
+    value: function approve(_ref7) {
+      var signingKeyOrWallet, proxyAddress, tokenAddress, tokensAmount;
+      return _regenerator["default"].async(function approve$(_context6) {
         while (1) {
           switch (_context6.prev = _context6.next) {
             case 0:
-              signingKeyOrWallet = _ref7.signingKeyOrWallet, proxyAddress = _ref7.proxyAddress, nftAddress = _ref7.nftAddress;
-              return _context6.abrupt("return", topupAndApproveUtils.approveNFT({
+              signingKeyOrWallet = _ref7.signingKeyOrWallet, proxyAddress = _ref7.proxyAddress, tokenAddress = _ref7.tokenAddress, tokensAmount = _ref7.tokensAmount;
+              return _context6.abrupt("return", topupAndApproveUtils.approve({
                 jsonRpcUrl: this.jsonRpcUrl,
                 signingKeyOrWallet: signingKeyOrWallet,
                 proxyAddress: proxyAddress,
-                nftAddress: nftAddress
+                tokenAddress: tokenAddress,
+                tokensAmount: tokensAmount
               }));
 
             case 2:
@@ -306,21 +320,19 @@ function () {
       }, null, this);
     }
   }, {
-    key: "deployProxy",
-    value: function deployProxy(_ref8) {
-      var signingKeyOrWallet, _ref8$campaignId, campaignId, _ref8$nativeTokensAmo, nativeTokensAmount;
-
-      return _regenerator["default"].async(function deployProxy$(_context7) {
+    key: "approveNFT",
+    value: function approveNFT(_ref8) {
+      var signingKeyOrWallet, proxyAddress, nftAddress;
+      return _regenerator["default"].async(function approveNFT$(_context7) {
         while (1) {
           switch (_context7.prev = _context7.next) {
             case 0:
-              signingKeyOrWallet = _ref8.signingKeyOrWallet, _ref8$campaignId = _ref8.campaignId, campaignId = _ref8$campaignId === void 0 ? 0 : _ref8$campaignId, _ref8$nativeTokensAmo = _ref8.nativeTokensAmount, nativeTokensAmount = _ref8$nativeTokensAmo === void 0 ? 0 : _ref8$nativeTokensAmo;
-              return _context7.abrupt("return", deployUtils.deployProxy({
+              signingKeyOrWallet = _ref8.signingKeyOrWallet, proxyAddress = _ref8.proxyAddress, nftAddress = _ref8.nftAddress;
+              return _context7.abrupt("return", topupAndApproveUtils.approveNFT({
                 jsonRpcUrl: this.jsonRpcUrl,
-                factoryAddress: this.factoryAddress,
                 signingKeyOrWallet: signingKeyOrWallet,
-                campaignId: campaignId,
-                nativeTokensAmount: nativeTokensAmount
+                proxyAddress: proxyAddress,
+                nftAddress: nftAddress
               }));
 
             case 2:
@@ -331,18 +343,24 @@ function () {
       }, null, this);
     }
   }, {
-    key: "subscribeForClaimEvents",
-    value: function subscribeForClaimEvents(proxyAddress, callback) {
-      return _regenerator["default"].async(function subscribeForClaimEvents$(_context8) {
+    key: "deployProxy",
+    value: function deployProxy(_ref9) {
+      var signingKeyOrWallet, _ref9$campaignId, campaignId, _ref9$nativeTokensAmo, nativeTokensAmount;
+
+      return _regenerator["default"].async(function deployProxy$(_context8) {
         while (1) {
           switch (_context8.prev = _context8.next) {
             case 0:
-              return _context8.abrupt("return", (0, _subscribeForEvents.subscribeForClaimEvents)({
+              signingKeyOrWallet = _ref9.signingKeyOrWallet, _ref9$campaignId = _ref9.campaignId, campaignId = _ref9$campaignId === void 0 ? 0 : _ref9$campaignId, _ref9$nativeTokensAmo = _ref9.nativeTokensAmount, nativeTokensAmount = _ref9$nativeTokensAmo === void 0 ? 0 : _ref9$nativeTokensAmo;
+              return _context8.abrupt("return", deployUtils.deployProxy({
                 jsonRpcUrl: this.jsonRpcUrl,
-                proxyAddress: proxyAddress
-              }, callback));
+                factoryAddress: this.factoryAddress,
+                signingKeyOrWallet: signingKeyOrWallet,
+                campaignId: campaignId,
+                nativeTokensAmount: nativeTokensAmount
+              }));
 
-            case 1:
+            case 2:
             case "end":
               return _context8.stop();
           }
@@ -350,17 +368,16 @@ function () {
       }, null, this);
     }
   }, {
-    key: "getLinkStatus",
-    value: function getLinkStatus(linkId) {
-      return _regenerator["default"].async(function getLinkStatus$(_context9) {
+    key: "subscribeForClaimEvents",
+    value: function subscribeForClaimEvents(proxyAddress, callback) {
+      return _regenerator["default"].async(function subscribeForClaimEvents$(_context9) {
         while (1) {
           switch (_context9.prev = _context9.next) {
             case 0:
-              return _context9.abrupt("return", claimUtils.getLinkStatus({
-                apiHost: this.apiHost,
-                senderAddress: this.senderAddress,
-                linkId: linkId
-              }));
+              return _context9.abrupt("return", (0, _subscribeForEvents.subscribeForClaimEvents)({
+                jsonRpcUrl: this.jsonRpcUrl,
+                proxyAddress: proxyAddress
+              }, callback));
 
             case 1:
             case "end":
@@ -370,13 +387,13 @@ function () {
       }, null, this);
     }
   }, {
-    key: "cancelLink",
-    value: function cancelLink(linkId) {
-      return _regenerator["default"].async(function cancelLink$(_context10) {
+    key: "getLinkStatus",
+    value: function getLinkStatus(linkId) {
+      return _regenerator["default"].async(function getLinkStatus$(_context10) {
         while (1) {
           switch (_context10.prev = _context10.next) {
             case 0:
-              return _context10.abrupt("return", claimUtils.cancelLink({
+              return _context10.abrupt("return", claimUtils.getLinkStatus({
                 apiHost: this.apiHost,
                 senderAddress: this.senderAddress,
                 linkId: linkId
@@ -390,16 +407,36 @@ function () {
       }, null, this);
     }
   }, {
-    key: "isDeployed",
-    value: function isDeployed() {
-      var campaignId,
-          _args11 = arguments;
-      return _regenerator["default"].async(function isDeployed$(_context11) {
+    key: "cancelLink",
+    value: function cancelLink(linkId) {
+      return _regenerator["default"].async(function cancelLink$(_context11) {
         while (1) {
           switch (_context11.prev = _context11.next) {
             case 0:
-              campaignId = _args11.length > 0 && _args11[0] !== undefined ? _args11[0] : 0;
-              return _context11.abrupt("return", deployUtils.isDeployed({
+              return _context11.abrupt("return", claimUtils.cancelLink({
+                apiHost: this.apiHost,
+                senderAddress: this.senderAddress,
+                linkId: linkId
+              }));
+
+            case 1:
+            case "end":
+              return _context11.stop();
+          }
+        }
+      }, null, this);
+    }
+  }, {
+    key: "isDeployed",
+    value: function isDeployed() {
+      var campaignId,
+          _args12 = arguments;
+      return _regenerator["default"].async(function isDeployed$(_context12) {
+        while (1) {
+          switch (_context12.prev = _context12.next) {
+            case 0:
+              campaignId = _args12.length > 0 && _args12[0] !== undefined ? _args12[0] : 0;
+              return _context12.abrupt("return", deployUtils.isDeployed({
                 apiHost: this.apiHost,
                 senderAddress: this.senderAddress,
                 campaignId: campaignId
@@ -407,7 +444,7 @@ function () {
 
             case 2:
             case "end":
-              return _context11.stop();
+              return _context12.stop();
           }
         }
       }, null, this);
