@@ -53,6 +53,8 @@ class LinkdropSDK {
       LinkdropFactory.abi,
       this.provider
     )
+    this.claimAndDeploy = this.claimAndDeploy.bind(this)
+    this.generateLink = this.generateLink.bind(this)
   }
 
   async getVersion (campaignId) {
