@@ -2359,6 +2359,26 @@
     npmlog "^4.1.2"
     write-file-atomic "^2.3.0"
 
+"@linkdrop/contracts@^2.0.13-alpha.0":
+  version "2.0.13-alpha.0"
+  resolved "https://registry.yarnpkg.com/@linkdrop/contracts/-/contracts-2.0.13-alpha.0.tgz#c78cc6698fc4840ebdc6b81dda31e83bfee819e1"
+  integrity sha512-nRuX/GSWbiWnuBtpCiXZQZ37S8wktkWPFnuG8s18lE8gFG0vER9Uul+B+Um/mkNueGx/fJ6M+8u7ln6mRNo16Q==
+  dependencies:
+    "@linkdrop/sdk" "^2.0.13-alpha.0"
+    "@openzeppelin/contracts" "^2.4.0"
+    ethereum-waffle "2.0.16"
+    ethers "^4.0.27"
+    solc "^0.5.12"
+
+"@linkdrop/sdk@^2.0.13-alpha.0":
+  version "2.0.13-alpha.0"
+  resolved "https://registry.yarnpkg.com/@linkdrop/sdk/-/sdk-2.0.13-alpha.0.tgz#a0fdaab57a0aa5ae021aa349a73ea7319f34cf6a"
+  integrity sha512-/urx/Sn/6EuczwStOpFBitAu6rqeeZbJyWR5umSIK5/yYH7lwWVlrLzClLy7FVJYubU7yGZp5o4hbFvJPsVzcw==
+  dependencies:
+    "@linkdrop/contracts" "^2.0.13-alpha.0"
+    axios "^0.18.1"
+    ethers "^4.0.27"
+
 "@mrmlnc/readdir-enhanced@^2.2.1":
   version "2.2.1"
   resolved "https://registry.yarnpkg.com/@mrmlnc/readdir-enhanced/-/readdir-enhanced-2.2.1.tgz#524af240d1a360527b730475ecfa1344aa540dde"

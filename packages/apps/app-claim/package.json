@@ -24,7 +24,7 @@
     "@babel/preset-react": "^7.0.0",
     "@babel/register": "^7.4.4",
     "@linkdrop/commons": "^2.0.11-alpha.0",
-    "@linkdrop/sdk": "^2.0.11-alpha.0",
+    "@linkdrop/sdk": "^2.0.13-alpha.0",
     "@linkdrop/contracts": "^2.0.11-alpha.0",
     "@linkdrop/ui-kit": "^2.0.11-alpha.0",
     "babel-loader": "^8.0.5",
