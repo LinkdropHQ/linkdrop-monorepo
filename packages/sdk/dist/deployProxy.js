@@ -155,20 +155,17 @@ var deployProxy = function deployProxy(_ref2) {
 exports.deployProxy = deployProxy;
 
 var isDeployed = function isDeployed(_ref3) {
-  var apiHost, senderAddress, campaignId, response;
+  var senderAddress, campaignId, factoryAddress, jsonRpcUrl, provider, factoryContract;
   return _regenerator["default"].async(function isDeployed$(_context3) {
     while (1) {
       switch (_context3.prev = _context3.next) {
         case 0:
-          apiHost = _ref3.apiHost, senderAddress = _ref3.senderAddress, campaignId = _ref3.campaignId;
-          _context3.next = 3;
-          return _regenerator["default"].awrap(_axios["default"].get("".concat(apiHost, "/api/v1/linkdrops/isDeployed/").concat(senderAddress, "/").concat(campaignId)));
+          senderAddress = _ref3.senderAddress, campaignId = _ref3.campaignId, factoryAddress = _ref3.factoryAddress, jsonRpcUrl = _ref3.jsonRpcUrl;
+          provider = new _ethers.ethers.providers.JsonRpcProvider(jsonRpcUrl);
+          factoryContract = new _ethers.ethers.Contract(factoryAddress, _LinkdropFactory["default"].abi, provider);
+          return _context3.abrupt("return", factoryContract['isDeployed(address,uint256)'](senderAddress, campaignId));
 
-        case 3:
-          response = _context3.sent;
-          return _context3.abrupt("return", response.data);
-
-        case 5:
+        case 4:
         case "end":
           return _context3.stop();
       }
