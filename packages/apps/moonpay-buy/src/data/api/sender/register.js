@@ -1,8 +1,9 @@
 import fetch from '../fetch'
 
-export default ({ senderAddress, apiHost }) => {
+export default ({ senderAddress, apiHost, factoryAddress }) => {
   const body = JSON.stringify({
-    senderAddress
+    senderAddress,
+    factoryAddress
   })
-  return fetch(`${apiHost}/linkdrops/register`, { method: 'POST', body })
+  return fetch(`${apiHost}/api/v1/linkdrops/register`, { method: 'POST', body })
 }

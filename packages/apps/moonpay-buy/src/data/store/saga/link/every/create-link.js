@@ -1,10 +1,11 @@
-import { put, select } from 'redux-saga/effects'
+import { put, select, call } from 'redux-saga/effects'
 import { ethers } from 'ethers'
 import { BitlyClient } from 'bitly'
 const bitly = new BitlyClient('2738450834b87776fed4f9331018aeb760089928', {})
 import { register } from 'data/api/sender'
 import {
-  defaultChainId
+  defaultChainId,
+  factory
 } from 'config'
 import { defineNetworkName } from '@linkdrop/commons'
 
@@ -17,7 +18,7 @@ const generator = function * ({ payload }) {
     const sdk = yield select(generator.selectors.sdk)
     yield put({ type: 'LINK.SET_LOADING', payload: { loading: true } })
     const ethersContractZeroAddress = ethers.constants.AddressZero
-    const { success } = yield call(register, { senderAddress: wallet, apiHost: `https://${networkName}-v2.linkdrop.io` })
+    const { success } = yield call(register, { factoryAddress: factory, senderAddress: wallet, apiHost: `https://${networkName}-v2.linkdrop.io` })
     if (success) {
       const { url } = yield sdk.generateLink({
         campaignId: 0, // 0

@@ -17,20 +17,15 @@ module.exports = shipit => {
       repositoryUrl: 'git@github.com:LinkdropHQ/linkdrop-monorepo.git',
       keepReleases: 3,
       deployTo: `linkdrop/${network}-v2`,
-      servers: 'root@rinkeby.linkdrop.io'
+      servers: 'root@rinkeby.linkdrop.io',
+      branch: 'dev-v2'
     },
-    rinkeby: {
-      branch: 'dev-v2-server'
-    },
-    ropsten: {
-      branch: 'dev-v2-server'
-    },
+    rinkeby: {},
+    ropsten: {},
     mainnet: {
-      branch: 'dev-v2-server'
+      branch: 'dev-v2'
     },
-    xdai: {
-      branch: 'dev-v2-server'
-    }
+    xdai: {}
   })
 
   shipit.blTask('installDependencies', async () => {

@@ -9,6 +9,8 @@ import {
   claimHost
 } from 'config'
 
+console.log({ factory })
+
 const generator = function * ({ payload }) {
   try {
     const { wallet } = payload

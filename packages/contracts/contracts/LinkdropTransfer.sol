@@ -18,13 +18,6 @@ contract LinkdropTransfer is ILinkdrop, ReentrancyGuard {
     using SafeMath for uint;
     using Address for address payable;
 
-    struct Deploy {
-        uint time;
-        address payable initiator;
-    }
-
-    Deploy public deploy;
-
     // Owner address
     address public owner;
 
@@ -309,8 +302,6 @@ contract LinkdropTransfer is ILinkdrop, ReentrancyGuard {
         version = _version;
         chainId = _chainId;
         initialized = true;
-        deploy.time = now; //solium-disable-line security/no-block-members
-        deploy.initiator = tx.origin; //solium-disable-line security/no-tx-origin
         return true;
     }
 
@@ -373,15 +364,11 @@ contract LinkdropTransfer is ILinkdrop, ReentrancyGuard {
     }
 
     /**
-    * @dev Function to withdraw all the remaining native tokens to sender or deployer
+    * @dev Function to withdraw all remaining native tokens to sender, can only be called by sender
     * @return True if success
     */
-    function withdraw() external nonReentrant returns (bool) {
-        require(msg.sender == sender || msg.sender == deploy.initiator, "ONLY_SENDER_OR_DEPLOYER");
-        if (msg.sender == deploy.initiator) {
-            require(now - deploy.time >= 7 days, "TIMELOCK_IS_NOT_OVER"); // solium-disable-line security/no-block-members
-        }
-        msg.sender.sendValue(address(this).balance);
+    function withdraw() external onlySender nonReentrant returns (bool) {
+        sender.sendValue(address(this).balance);
         return true;
     }
 
