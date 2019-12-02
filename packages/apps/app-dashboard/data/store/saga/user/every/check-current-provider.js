@@ -13,6 +13,8 @@ const generator = function * ({ payload }) {
       return yield put({ type: 'USER.SET_LOADING', payload: { loading: false } })
     }
 
+    yield put({ type: 'USER.SET_WEB3_PROVIDER', payload: { web3Provider: provider } })
+
     const result = yield provider.eth.getAccounts()
     const chainId = yield provider.eth.getChainId()
     const address = (result || [])[0]

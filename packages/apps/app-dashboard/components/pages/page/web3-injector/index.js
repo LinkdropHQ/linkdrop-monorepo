@@ -5,15 +5,40 @@ import { Button } from 'components/common'
 import styles from './styles.module'
 import Web3Connect from 'web3connect'
 import Web3 from 'web3'
+import WalletConnectProvider from "@walletconnect/web3-provider";
+import Portis from "@portis/web3";
+import Fortmatic from "fortmatic";
+import { infuraPk, portisDappId, formaticApiKeyTestnet, formaticApiKeyMainnet } from 'app.config.js'
+
 
 @actions(({ campaigns: { items } }) => ({ items }))
 @translate('pages.main')
-class MetamaskInjector extends React.Component {
+class Web3Injector extends React.Component {
   constructor (props) {
     super(props)
     this.web3Connect = new Web3Connect.Core({
       providerOptions: {
-        disableWalletConnect: true
+        walletconnect: {
+          package: WalletConnectProvider,
+          options: {
+            infuraId: infuraPk,
+            network: "rinkeby"
+          }
+        },
+        portis: {
+          package: Portis,
+          options: {
+            id: portisDappId,
+            network: "rinkeby"
+          }
+        },
+        fortmatic: {
+          package: Fortmatic,
+          options: {
+            key: formaticApiKeyMainnet,
+            network: "rinkeby"
+          }
+        },
       }
     })
 
@@ -23,11 +48,6 @@ class MetamaskInjector extends React.Component {
   }
 
   async applyProvider (provider) {
-    // // temp hack for Nifty wallet
-    // if (!provider.selectedAddress && web3 && web3.eth && web3.eth.accounts && web3.eth.accounts[0]) {
-    //   provider.selectedAddress = web3.eth.accounts[0]
-    //   provider.networkVersion = web3.version.network
-    // }
     const web3Provider = new Web3(provider)
     if (web3Provider) {
       this.actions().user.checkCurrentProvider({ provider: web3Provider })
@@ -53,4 +73,4 @@ class MetamaskInjector extends React.Component {
   }
 }
 
-export default MetamaskInjector
+export default Web3Injector

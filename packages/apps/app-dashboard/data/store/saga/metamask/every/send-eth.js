@@ -1,4 +1,3 @@
-/* global web3 */
 import { put, select } from 'redux-saga/effects'
 import { ethers, utils } from 'ethers'
 import { factory, infuraPk, jsonRpcUrlXdai } from 'app.config.js'
@@ -10,6 +9,7 @@ const generator = function * ({ payload }) {
   try {
     yield put({ type: 'METAMASK.SET_STATUS', payload: { status: 'initial' } })
     yield put({ type: 'USER.SET_LOADING', payload: { loading: true } })
+    const web3Provider = yield select(generator.selectors.web3Provider)
     const { ethAmount, account: fromWallet, chainId } = payload
     const newWallet = ethers.Wallet.createRandom()
     const { address: wallet, privateKey } = newWallet
@@ -19,8 +19,11 @@ const generator = function * ({ payload }) {
     const oneGwei = ethers.utils.parseUnits('1', 'gwei')
     const ethValueWei = utils.parseEther(String(ethAmount))
     const campaignId = yield select(generator.selectors.campaignId)
+    console.log('here0')
     const factoryContract = yield new ethers.Contract(factory, LinkdropFactory.abi, provider)
+    console.log('here1', fromWallet, campaignId, )
     const isDeployed = yield factoryContract.isDeployed(fromWallet, campaignId)
+    console.log('here2')
     let data
     let to
     if (!isDeployed) {
@@ -28,12 +31,12 @@ const generator = function * ({ payload }) {
       to = factory
     } else {
       const proxyAddress = yield select(generator.selectors.proxyAddress)
-      const proxyContract = yield new ethers.Contract(proxyAddress, LinkdropMastercopy.abi, provider)
+      const proxyContract = yield new ethers.Contract(proxyAddress, LinkdropMastercopy.abi, web3Provider)
       data = yield proxyContract.interface.functions.addSigner.encode([wallet])
       to = proxyAddress
     }
     const promise = new Promise((resolve, reject) => {
-      web3.eth.sendTransaction({ to, from: fromWallet, gasPrice: gasPrice.add(oneGwei), value: ethValueWei, data }, (err, txHash) => {
+      web3Provider.eth.sendTransaction({ to, from: fromWallet, gasPrice: gasPrice.add(oneGwei), value: ethValueWei, data }, (err, txHash) => {
         if (err) { console.error(err); reject(err) }
         return resolve({ txHash })
       })
@@ -54,5 +57,6 @@ const generator = function * ({ payload }) {
 export default generator
 generator.selectors = {
   proxyAddress: ({ campaigns: { proxyAddress } }) => proxyAddress,
-  campaignId: ({ campaigns: { id } }) => id
+  campaignId: ({ campaigns: { id } }) => id,
+  web3Provider: ({ user: { web3Provider }}) => web3Provider
 }
