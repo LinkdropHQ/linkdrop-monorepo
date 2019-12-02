@@ -1,8 +1,7 @@
 export default {
   titles: {
-    metamaskSignIn: 'Sign in with MetaMask',
-    metamaksInstruction: 'Simply open <a href="https://metamask.io/" target="_blank">MetaMask</a> to create a campaign',
-    metamaskSupports: 'MetaMask supports:',
+    connectorSignIn: 'Sign in with Connector',
+    connectorSupports: 'MetaMask supports:',
     howToConnectWallets: 'How to connect Trezor or Ledger?',
     networkNotSupported: 'Network is not supported',
     erc20Campaign: 'ERC20 Campaign',

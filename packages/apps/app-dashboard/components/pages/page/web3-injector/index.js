@@ -8,6 +8,7 @@ import Web3 from 'web3'
 import WalletConnectProvider from "@walletconnect/web3-provider";
 import Portis from "@portis/web3";
 import Fortmatic from "fortmatic";
+import { getHashVariables, defineNetworkName } from '@linkdrop/commons'
 import { infuraPk, portisDappId, formaticApiKeyTestnet, formaticApiKeyMainnet } from 'app.config.js'
 
 
@@ -16,27 +17,29 @@ import { infuraPk, portisDappId, formaticApiKeyTestnet, formaticApiKeyMainnet } 
 class Web3Injector extends React.Component {
   constructor (props) {
     super(props)
+    const { chainId = '1' } = getHashVariables()
+    const networkName = defineNetworkName({ chainId })
     this.web3Connect = new Web3Connect.Core({
       providerOptions: {
         walletconnect: {
           package: WalletConnectProvider,
           options: {
             infuraId: infuraPk,
-            network: "rinkeby"
+            network: networkName
           }
         },
         portis: {
           package: Portis,
           options: {
             id: portisDappId,
-            network: "rinkeby"
+            network: networkName
           }
         },
         fortmatic: {
           package: Fortmatic,
           options: {
-            key: formaticApiKeyMainnet,
-            network: "rinkeby"
+            key: Number(chainId) === 1 ? formaticApiKeyMainnet : formaticApiKeyTestnet,
+            network: networkName
           }
         },
       }
@@ -57,11 +60,7 @@ class Web3Injector extends React.Component {
   render () {
     const { disabled } = this.props
     return <div className={styles.container}>
-      <h2 className={styles.title}>{this.t('titles.metamaskSignIn')}</h2>
-      <h3
-        className={styles.subtitle}
-        dangerouslySetInnerHTML={{ __html: this.t('titles.metamaksInstruction') }}
-      />
+      <h2 className={styles.title}>{this.t('titles.connectorSignIn')}</h2>
       <Button
         disabled={disabled}
         className={styles.button}
