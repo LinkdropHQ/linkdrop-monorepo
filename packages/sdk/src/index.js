@@ -165,7 +165,7 @@ class LinkdropSDK {
         'Linkdrop contract cannot be deployed by relayer. Invalid campaign id.'
       )
     }
-    const { isDeployed } = await this.isDeployed()
+    const isDeployed = await this.isDeployed()
 
     if (isDeployed === true) {
       throw new Error('Linkdrop contract is already deployed')
@@ -267,7 +267,8 @@ class LinkdropSDK {
 
   async isDeployed (campaignId = 0) {
     return deployUtils.isDeployed({
-      apiHost: this.apiHost,
+      jsonRpcUrl: this.jsonRpcUrl,
+      factoryAddress: this.factoryAddress,
       senderAddress: this.senderAddress,
       campaignId
     })

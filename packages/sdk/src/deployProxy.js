@@ -79,9 +79,20 @@ export const deployProxy = async ({
   return factoryContract.deployProxy(campaignId)
 }
 
-export const isDeployed = async ({ apiHost, senderAddress, campaignId }) => {
-  const response = await axios.get(
-    `${apiHost}/api/v1/linkdrops/isDeployed/${senderAddress}/${campaignId}`
+export const isDeployed = async ({
+  senderAddress,
+  campaignId,
+  factoryAddress,
+  jsonRpcUrl
+}) => {
+  const provider = new ethers.providers.JsonRpcProvider(jsonRpcUrl)
+  const factoryContract = new ethers.Contract(
+    factoryAddress,
+    LinkdropFactory.abi,
+    provider
   )
-  return response.data
+  return factoryContract['isDeployed(address,uint256)'](
+    senderAddress,
+    campaignId
+  )
 }
