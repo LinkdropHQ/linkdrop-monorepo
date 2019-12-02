@@ -19,11 +19,8 @@ const generator = function * ({ payload }) {
     const oneGwei = ethers.utils.parseUnits('1', 'gwei')
     const ethValueWei = utils.parseEther(String(ethAmount))
     const campaignId = yield select(generator.selectors.campaignId)
-    console.log('here0')
     const factoryContract = yield new ethers.Contract(factory, LinkdropFactory.abi, provider)
-    console.log('here1', fromWallet, campaignId, )
     const isDeployed = yield factoryContract.isDeployed(fromWallet, campaignId)
-    console.log('here2')
     let data
     let to
     if (!isDeployed) {
