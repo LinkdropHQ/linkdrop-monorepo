@@ -14,13 +14,6 @@ const generator = function * ({ payload }) {
     const { wallet } = payload
     const networkName = defineNetworkName({ chainId: defaultChainId })
     const actualJsonRpcUrl = defineJsonRpcUrl({ chainId: defaultChainId, infuraPk, jsonRpcUrlXdai })
-    console.log({
-      senderAddress: wallet,
-      factoryAddress: factory,
-      jsonRpcUrl: actualJsonRpcUrl,
-      claimHost,
-      apiHost: `https://${networkName}-v2.linkdrop.io`
-    })
     const sdk = yield initializeSdk({
       senderAddress: wallet,
       factoryAddress: factory,
@@ -31,7 +24,6 @@ const generator = function * ({ payload }) {
 
     if (sdk) {
       const proxyAddress = sdk.getProxyAddress()
-      console.log({ wallet, proxyAddress })
       yield put({ type: 'USER.SET_SDK', payload: { sdk } })
       yield put({ type: 'USER.SET_PROXY_ADDRESS', payload: { proxyAddress } })
     }
