@@ -73,6 +73,8 @@ function () {
     this.version = {};
     this.provider = new _ethers.ethers.providers.JsonRpcProvider(jsonRpcUrl);
     this.factoryContract = new _ethers.ethers.Contract(factoryAddress, _LinkdropFactory["default"].abi, this.provider);
+    this.claimAndDeploy = this.claimAndDeploy.bind(this);
+    this.generateLink = this.generateLink.bind(this);
   }
 
   (0, _createClass2["default"])(LinkdropSDK, [{
