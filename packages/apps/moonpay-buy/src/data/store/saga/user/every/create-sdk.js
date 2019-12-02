@@ -9,13 +9,18 @@ import {
   claimHost
 } from 'config'
 
-console.log({ factory })
-
 const generator = function * ({ payload }) {
   try {
     const { wallet } = payload
     const networkName = defineNetworkName({ chainId: defaultChainId })
     const actualJsonRpcUrl = defineJsonRpcUrl({ chainId: defaultChainId, infuraPk, jsonRpcUrlXdai })
+    console.log({
+      senderAddress: wallet,
+      factoryAddress: factory,
+      jsonRpcUrl: actualJsonRpcUrl,
+      claimHost,
+      apiHost: `https://${networkName}-v2.linkdrop.io`
+    })
     const sdk = yield initializeSdk({
       senderAddress: wallet,
       factoryAddress: factory,

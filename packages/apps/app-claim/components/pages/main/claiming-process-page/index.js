@@ -24,7 +24,8 @@ class ClaimingProcessPage extends React.Component {
       nativeTokensAmount,
       linkdropContract,
       linkKey,
-      signerSignature
+      signerSignature,
+      campaignId = 0
     } = getHashVariables()
     // destination: destination address - can be received from web3-react context
     // token: ERC20 token address, 0x000...000 for ether - can be received from url params
@@ -42,6 +43,7 @@ class ClaimingProcessPage extends React.Component {
       tokensAmount,
       feeAmount,
       expiration,
+      campaignId,
       signerSignature,
       receiverAddress: wallet,
       linkdropContract,
