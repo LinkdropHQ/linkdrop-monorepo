@@ -17,29 +17,20 @@ const generator = function * ({ payload }) {
       linkdropContract,
       sender,
       nft,
-      tokenId
+      tokenId,
+      campaignId
     } = payload
-
-    console.log({
-      token,
-      feeToken,
-      feeReceiver,
-      linkKey,
-      nativeTokensAmount,
-      tokensAmount,
-      feeAmount,
-      expiration,
-      signerSignature,
-      receiverAddress,
-      linkdropContract,
-      sender,
-      nft,
-      tokenId
-    })
 
     yield put({ type: 'USER.SET_LOADING', payload: { loading: true } })
     const sdk = yield select(generator.selectors.sdk)
-    const { success, errors, txHash } = yield sdk.claim({
+    const proxyAddress = yield sdk.getProxyAddress()
+    let claimMethod = sdk.claimAndDeploy
+
+    const isDeployed = yield sdk.isDeployed(campaignId)
+    if (isDeployed) {
+      claimMethod = sdk.claim
+    }
+    const { success, errors, txHash } = yield claimMethod({
       nativeTokensAmount: nativeTokensAmount || '0',
       token,
       tokensAmount: tokensAmount || '0',

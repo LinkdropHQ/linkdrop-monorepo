@@ -53,6 +53,8 @@ class LinkdropSDK {
       LinkdropFactory.abi,
       this.provider
     )
+    this.claimAndDeploy = this.claimAndDeploy.bind(this)
+    this.generateLink = this.generateLink.bind(this)
   }
 
   async getVersion (campaignId) {
@@ -165,7 +167,7 @@ class LinkdropSDK {
         'Linkdrop contract cannot be deployed by relayer. Invalid campaign id.'
       )
     }
-    const { isDeployed } = await this.isDeployed()
+    const isDeployed = await this.isDeployed()
 
     if (isDeployed === true) {
       throw new Error('Linkdrop contract is already deployed')
@@ -267,7 +269,8 @@ class LinkdropSDK {
 
   async isDeployed (campaignId = 0) {
     return deployUtils.isDeployed({
-      apiHost: this.apiHost,
+      jsonRpcUrl: this.jsonRpcUrl,
+      factoryAddress: this.factoryAddress,
       senderAddress: this.senderAddress,
       campaignId
     })

@@ -24,7 +24,6 @@ const generator = function * ({ payload }) {
 
     if (sdk) {
       const proxyAddress = sdk.getProxyAddress()
-      console.log({ wallet, proxyAddress })
       yield put({ type: 'USER.SET_SDK', payload: { sdk } })
       yield put({ type: 'USER.SET_PROXY_ADDRESS', payload: { proxyAddress } })
     }

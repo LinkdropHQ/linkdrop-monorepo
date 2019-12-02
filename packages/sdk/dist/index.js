@@ -73,6 +73,8 @@ function () {
     this.version = {};
     this.provider = new _ethers.ethers.providers.JsonRpcProvider(jsonRpcUrl);
     this.factoryContract = new _ethers.ethers.Contract(factoryAddress, _LinkdropFactory["default"].abi, this.provider);
+    this.claimAndDeploy = this.claimAndDeploy.bind(this);
+    this.generateLink = this.generateLink.bind(this);
   }
 
   (0, _createClass2["default"])(LinkdropSDK, [{
@@ -215,8 +217,7 @@ function () {
   }, {
     key: "claimAndDeploy",
     value: function claimAndDeploy(_ref4) {
-      var token, nft, feeToken, feeReceiver, linkKey, nativeTokensAmount, tokensAmount, tokenId, feeAmount, expiration, signerSignature, receiverAddress, linkdropContract, sender, _ref5, isDeployed;
-
+      var token, nft, feeToken, feeReceiver, linkKey, nativeTokensAmount, tokensAmount, tokenId, feeAmount, expiration, signerSignature, receiverAddress, linkdropContract, sender, isDeployed;
       return _regenerator["default"].async(function claimAndDeploy$(_context4) {
         while (1) {
           switch (_context4.prev = _context4.next) {
@@ -235,17 +236,16 @@ function () {
               return _regenerator["default"].awrap(this.isDeployed());
 
             case 5:
-              _ref5 = _context4.sent;
-              isDeployed = _ref5.isDeployed;
+              isDeployed = _context4.sent;
 
               if (!(isDeployed === true)) {
-                _context4.next = 9;
+                _context4.next = 8;
                 break;
               }
 
               throw new Error('Linkdrop contract is already deployed');
 
-            case 9:
+            case 8:
               return _context4.abrupt("return", claimUtils.claimAndDeploy({
                 jsonRpcUrl: this.jsonRpcUrl,
                 apiHost: this.apiHost,
@@ -266,7 +266,7 @@ function () {
                 sender: sender
               }));
 
-            case 10:
+            case 9:
             case "end":
               return _context4.stop();
           }
@@ -275,13 +275,13 @@ function () {
     }
   }, {
     key: "topup",
-    value: function topup(_ref6) {
+    value: function topup(_ref5) {
       var signingKeyOrWallet, proxyAddress, nativeTokensAmount;
       return _regenerator["default"].async(function topup$(_context5) {
         while (1) {
           switch (_context5.prev = _context5.next) {
             case 0:
-              signingKeyOrWallet = _ref6.signingKeyOrWallet, proxyAddress = _ref6.proxyAddress, nativeTokensAmount = _ref6.nativeTokensAmount;
+              signingKeyOrWallet = _ref5.signingKeyOrWallet, proxyAddress = _ref5.proxyAddress, nativeTokensAmount = _ref5.nativeTokensAmount;
               return _context5.abrupt("return", topupAndApproveUtils.topup({
                 jsonRpcUrl: this.jsonRpcUrl,
                 signingKeyOrWallet: signingKeyOrWallet,
@@ -298,13 +298,13 @@ function () {
     }
   }, {
     key: "approve",
-    value: function approve(_ref7) {
+    value: function approve(_ref6) {
       var signingKeyOrWallet, proxyAddress, tokenAddress, tokensAmount;
       return _regenerator["default"].async(function approve$(_context6) {
         while (1) {
           switch (_context6.prev = _context6.next) {
             case 0:
-              signingKeyOrWallet = _ref7.signingKeyOrWallet, proxyAddress = _ref7.proxyAddress, tokenAddress = _ref7.tokenAddress, tokensAmount = _ref7.tokensAmount;
+              signingKeyOrWallet = _ref6.signingKeyOrWallet, proxyAddress = _ref6.proxyAddress, tokenAddress = _ref6.tokenAddress, tokensAmount = _ref6.tokensAmount;
               return _context6.abrupt("return", topupAndApproveUtils.approve({
                 jsonRpcUrl: this.jsonRpcUrl,
                 signingKeyOrWallet: signingKeyOrWallet,
@@ -322,13 +322,13 @@ function () {
     }
   }, {
     key: "approveNFT",
-    value: function approveNFT(_ref8) {
+    value: function approveNFT(_ref7) {
       var signingKeyOrWallet, proxyAddress, nftAddress;
       return _regenerator["default"].async(function approveNFT$(_context7) {
         while (1) {
           switch (_context7.prev = _context7.next) {
             case 0:
-              signingKeyOrWallet = _ref8.signingKeyOrWallet, proxyAddress = _ref8.proxyAddress, nftAddress = _ref8.nftAddress;
+              signingKeyOrWallet = _ref7.signingKeyOrWallet, proxyAddress = _ref7.proxyAddress, nftAddress = _ref7.nftAddress;
               return _context7.abrupt("return", topupAndApproveUtils.approveNFT({
                 jsonRpcUrl: this.jsonRpcUrl,
                 signingKeyOrWallet: signingKeyOrWallet,
@@ -345,14 +345,14 @@ function () {
     }
   }, {
     key: "deployProxy",
-    value: function deployProxy(_ref9) {
-      var signingKeyOrWallet, _ref9$campaignId, campaignId, _ref9$nativeTokensAmo, nativeTokensAmount;
+    value: function deployProxy(_ref8) {
+      var signingKeyOrWallet, _ref8$campaignId, campaignId, _ref8$nativeTokensAmo, nativeTokensAmount;
 
       return _regenerator["default"].async(function deployProxy$(_context8) {
         while (1) {
           switch (_context8.prev = _context8.next) {
             case 0:
-              signingKeyOrWallet = _ref9.signingKeyOrWallet, _ref9$campaignId = _ref9.campaignId, campaignId = _ref9$campaignId === void 0 ? 0 : _ref9$campaignId, _ref9$nativeTokensAmo = _ref9.nativeTokensAmount, nativeTokensAmount = _ref9$nativeTokensAmo === void 0 ? 0 : _ref9$nativeTokensAmo;
+              signingKeyOrWallet = _ref8.signingKeyOrWallet, _ref8$campaignId = _ref8.campaignId, campaignId = _ref8$campaignId === void 0 ? 0 : _ref8$campaignId, _ref8$nativeTokensAmo = _ref8.nativeTokensAmount, nativeTokensAmount = _ref8$nativeTokensAmo === void 0 ? 0 : _ref8$nativeTokensAmo;
               return _context8.abrupt("return", deployUtils.deployProxy({
                 jsonRpcUrl: this.jsonRpcUrl,
                 factoryAddress: this.factoryAddress,
@@ -438,7 +438,8 @@ function () {
             case 0:
               campaignId = _args12.length > 0 && _args12[0] !== undefined ? _args12[0] : 0;
               return _context12.abrupt("return", deployUtils.isDeployed({
-                apiHost: this.apiHost,
+                jsonRpcUrl: this.jsonRpcUrl,
+                factoryAddress: this.factoryAddress,
                 senderAddress: this.senderAddress,
                 campaignId: campaignId
               }));
