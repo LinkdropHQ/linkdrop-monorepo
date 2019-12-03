@@ -2,12 +2,17 @@ export default {
   titles: {
     main: 'Generating claim link…',
     subtitle: 'Transaction is processing',
-    linkIsDone: 'Link is done!',
-    scanQR: 'Scan QR-code<br>with your phone',
-    instruction: 'To get your <span>{{amount}} {{symbol}}</span> you need<br/>to claim it in the wallet'
+    linkIsReady: 'Your <span>{{amount}} {{symbol}}</span> is ready!',
+    scan: 'Scan or copy to share',
+    instruction: 'Now claim them in your wallet',
+    needAWallet: 'You need a wallet to<br>claim tokens'
   },
   buttons: {
     claimInWallet: 'Claim in Wallet',
-    showQR: 'Show QR-Code'
+    share: 'Share via Link',
+    copy: 'Copy',
+    fortmatic: 'Use Fortmatic',
+    portis: 'Use Portis',
+    metamask: 'Connect Metamask'
   }
 }

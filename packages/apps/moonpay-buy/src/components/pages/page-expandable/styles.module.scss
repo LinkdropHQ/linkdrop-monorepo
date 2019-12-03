@@ -13,6 +13,22 @@
   right: 0;
 }
 
+.fullContent {
+  .content {
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding-top: 40px;
+  }
+
+  .header {
+    position: absolute;
+    z-index: 2;
+  }
+}
+
 .header {
   height: 86px;
   display: flex;

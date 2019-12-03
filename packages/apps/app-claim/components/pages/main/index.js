@@ -1,4 +1,3 @@
-/* global web3 */
 import React from 'react'
 import { Loading } from '@linkdrop/ui-kit'
 import { actions, translate, platform, detectBrowser } from 'decorators'
@@ -7,14 +6,9 @@ import WalletChoosePage from './wallet-choose-page'
 import ClaimingProcessPage from './claiming-process-page'
 import ErrorPage from './error-page'
 import ClaimingFinishedPage from './claiming-finished-page'
+import NeedWallet from './need-wallet'
 import { getHashVariables, defineNetworkName, capitalize } from '@linkdrop/commons'
-import { Web3Consumer } from 'web3-react'
-let web3Obj
-try {
-  web3Obj = web3
-} catch (err) {
-  console.error(err)
-}
+import Web3 from 'web3'
 
 @actions(({ user: { errors, step, loading: userLoading, readyToClaim, alreadyClaimed }, tokens: { transactionId }, contract: { loading, decimals, amount, symbol, icon } }) => ({
   userLoading,
@@ -33,7 +27,18 @@ try {
 @detectBrowser()
 @translate('pages.claim')
 class Claim extends React.Component {
-  componentDidMount () {
+  constructor (props) {
+    super(props)
+    const { web3Provider } = props
+    const currentProvider = web3Provider && new Web3(web3Provider)
+    this.state = {
+      accounts: null,
+      connectorChainId: null,
+      currentProvider
+    }
+  }
+
+  async componentDidMount () {
     const {
       linkKey,
       chainId,
@@ -52,16 +57,30 @@ class Claim extends React.Component {
       linkKey,
       campaignId
     })
+    const { currentProvider } = this.state
+    if (currentProvider) {
+      const { accounts, connectorChainId } = await this.getProviderData({ currentProvider })
+      this.setState({
+        accounts, connectorChainId
+      })
+    }
   }
 
-  componentWillReceiveProps ({ readyToClaim, alreadyClaimed }) {
-    const { readyToClaim: prevReadyToClaim } = this.props
+  componentWillReceiveProps ({ readyToClaim, alreadyClaimed, context, step }) {
+    const { readyToClaim: prevReadyToClaim, context: prevContext } = this.props
     if (
       (readyToClaim === true && prevReadyToClaim === true) ||
       readyToClaim == null ||
       readyToClaim === false ||
       alreadyClaimed == null
-    ) { return }
+    ) {
+      if (step === 2) {
+        if (context.active && context.account && !prevContext.account && !prevContext.active) {
+          this.actions().user.setStep({ step: 1 })
+        }
+      }
+      return
+    }
     const {
       token,
       tokensAmount,
@@ -121,7 +140,8 @@ class Claim extends React.Component {
       return this.actions().contract.getTokenERC721Data({
         nft,
         tokenId,
-        chainId
+        chainId,
+        name
         // feeToken,
         // feeReceiver,
         // feeAmount,
@@ -141,60 +161,33 @@ class Claim extends React.Component {
   }
 
   render () {
-    return <Web3Consumer>
-      {context => this.renderCurrentPage({ context })}
-    </Web3Consumer>
+    const { context } = this.props
+    return this.renderCurrentPage({ context })
+  }
+
+  async getProviderData ({ currentProvider }) {
+    const accounts = await currentProvider.eth.getAccounts()
+    const connectorChainId = await currentProvider.eth.getChainId()
+    return { accounts, connectorChainId }
   }
 
   renderCurrentPage ({ context }) {
-    const { decimals, amount, symbol, icon, step, userLoading, errors, alreadyClaimed } = this.props
-    // in context we can find:
-    // active,
-    // connectorName,
-    // connector,
-    // library,
-    // networkId,
-    // account,
-    // error
-    let {
-      account,
-      networkId
-    } = context
-    if (this.isOpera) {
-      if (!account || !networkId) {
-        if (web3Obj && web3Obj.currentProvider && web3Obj.currentProvider.publicConfigStore && web3Obj.currentProvider.publicConfigStore.getState) {
-          const data = web3Obj.currentProvider.publicConfigStore.getState()
-          account = data.selectedAddress
-          networkId = data.networkVersion
-        }
-      }
-    }
+    const { decimals, amount, symbol, icon, step, userLoading, errors, alreadyClaimed, web3Provider, readyToClaim, externalAccount, externalChainId } = this.props
+    const { connectorChainId } = this.state
     const {
-      chainId,
+      account = externalAccount
+    } = context
+
+    if (!readyToClaim) { return <Loading /> }
+
+    const {
+      chainId = externalChainId,
       linkdropMasterAddress
     } = getHashVariables()
     const commonData = { linkdropMasterAddress, chainId, decimals, amount, symbol, icon, wallet: account, loading: userLoading }
-    if (this.platform === 'desktop' && chainId && !account) {
-      return <ErrorPage error='NETWORK_NOT_SUPPORTED' network={capitalize({ string: defineNetworkName({ chainId }) })} />
-    }
-
-    if (this.platform === 'desktop' && !account) {
-      return <div>
-        <ErrorPage
-          error='NEED_METAMASK'
-        />
-      </div>
-    }
-    if (errors && errors.length > 0) {
-      // if some errors occured and can be found in redux store, then show error page
-      return <ErrorPage error={errors[0]} />
-    }
-    if (
-      (this.platform === 'desktop' && networkId && Number(chainId) !== Number(networkId)) ||
-      (this.platform !== 'desktop' && account && networkId && Number(chainId) !== Number(networkId))) {
-      // if network id in the link and in the web3 are different
-      return <ErrorPage error='NETWORK_NOT_SUPPORTED' network={capitalize({ string: defineNetworkName({ chainId }) })} />
-    }
+    // if (this.platform === 'desktop' && chainId && !account) {
+    //   return <ErrorPage error='NETWORK_NOT_SUPPORTED' network={capitalize({ string: defineNetworkName({ chainId }) })} />
+    // }
 
     if (alreadyClaimed) {
       // if tokens we already claimed (if wallet is totally empty).
@@ -202,6 +195,21 @@ class Claim extends React.Component {
         {...commonData}
       />
     }
+
+    if (this.platform === 'desktop' && !account) {
+      return <NeedWallet context={context} />
+    }
+    if (errors && errors.length > 0) {
+      // if some errors occured and can be found in redux store, then show error page
+      return <ErrorPage error={errors[0]} />
+    }
+    if (
+      (this.platform === 'desktop' && connectorChainId && Number(chainId) !== Number(connectorChainId)) ||
+      (this.platform !== 'desktop' && account && connectorChainId && Number(chainId) !== Number(connectorChainId))) {
+      // if network id in the link and in the web3 are different
+      return <ErrorPage error='NETWORK_NOT_SUPPORTED' network={capitalize({ string: defineNetworkName({ chainId }) })} />
+    }
+
     switch (step) {
       case 1:
         return <InitialPage
@@ -217,9 +225,11 @@ class Claim extends React.Component {
         />
       case 2:
         // page with wallet select component
-        return <WalletChoosePage onClick={_ => {
-          this.actions().user.setStep({ step: 3 })
-        }}
+        return <WalletChoosePage
+          context={context}
+          onClick={_ => {
+            this.actions().user.setStep({ step: 3 })
+          }}
         />
       case 3:
         // page with info about current wallet and button to claim tokens

@@ -31,11 +31,10 @@ class Main extends React.Component {
 
   renderModalWindow ({ showModalWindow }) {
     if (!showModalWindow) { return null }
-    return <ModalWindow>
+    return <ModalWindow onClose={_ => this.setState({ showModalWindow: false })}>
       <iframe
         frameBorder='0'
         height='100%'
-        onLoad={_ => console.log('hello')}
         src={applicationUrl}
         width='100%'
       >

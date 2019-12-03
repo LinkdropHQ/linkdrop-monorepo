@@ -1,0 +1,27 @@
+@import 'variables';
+
+.title {
+	font-size: 24px;
+	margin-bottom: 30px;
+	text-align: center;
+}
+
+.description {
+	font-size: 14px;
+	margin-bottom: 14px;
+	text-align: center;
+}
+
+.loading {
+	position: relative;
+	margin-bottom: 30px;
+	top: 0;
+	left: 0;
+	transform: translate(0, 0);
+}
+
+.link {
+  color: $textGreyColor;
+  text-align: center;
+  font-size: 14px;
+}

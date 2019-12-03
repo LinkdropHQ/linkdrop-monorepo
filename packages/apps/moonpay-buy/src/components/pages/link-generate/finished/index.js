@@ -5,7 +5,9 @@ import { Button } from 'components/common'
 import { PageExpandable } from 'components/pages'
 import QRCode from 'qrcode.react'
 import { Icons } from '@linkdrop/ui-kit'
+import { copyToClipboard } from '@linkdrop/commons'
 import variables from 'variables'
+import ClaimOptions from './claim-options'
 
 @actions(({ assets: { ethBalanceFormatted }, link: { link } }) => ({
   link,
@@ -16,31 +18,38 @@ class Finished extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      expanded: false
+      qrExpanded: false,
+      optionsExpanded: false
     }
   }
 
   render () {
-    const { expanded } = this.state
+    const { qrExpanded, optionsExpanded } = this.state
     const { link, ethBalanceFormatted } = this.props
     return <div className={styles.container}>
-      {this.renderQR({ expanded, link })}
-      <div className={styles.title}>
-        <Icons.Done fill={variables.doneGreenColor} />{this.t('titles.linkIsDone')}
-      </div>
-      <div
-        className={styles.subtitle}
+      {this.renderQR({ expanded: qrExpanded, link })}
+      <ClaimOptions
+        expanded={optionsExpanded}
+        onChange={({ expanded }) => {
+          this.setState({
+            optionsExpanded: expanded
+          })
+        }}
+        translate={this.t} />
+      <div className={styles.title}
         dangerouslySetInnerHTML={{
-          __html: this.t('titles.instruction', {
+          __html: this.t('titles.linkIsReady', {
             amount: ethBalanceFormatted || 0,
             symbol: 'ETH'
           })
         }}
       />
+      <div className={styles.subtitle}>{this.t('titles.instruction')}</div>
       <Button
         className={styles.button}
-        target='_blank'
-        href={link}
+        onClick={_ => {
+          this.setState({ optionsExpanded: true })
+        }}
       >
         {this.t('buttons.claimInWallet')}
       </Button>
@@ -48,11 +57,11 @@ class Finished extends React.Component {
         inverted
         className={styles.iconedButton}
         onClick={_ => {
-          this.setState({ expanded: true })
+          this.setState({ qrExpanded: true })
         }}
       >
         <Icons.Qr />
-        {this.t('buttons.showQR')}
+        {this.t('buttons.share')}
       </Button>
     </div>
   }
@@ -60,19 +69,25 @@ class Finished extends React.Component {
   renderQR ({ expanded, link }) {
     return <PageExpandable
       expanded={expanded}
+      fullContent
       onClose={_ => this.setState({
-        expanded: false
+        qrExpanded: false
       })}
     >
       {link && <div className={styles.qr}>
         <QRCode size={132} value={link} />
       </div>}
-      <div
-        className={styles.qrSubtitle}
-        dangerouslySetInnerHTML={{ __html: this.t('titles.scanQR') }}
-      />
+      <div className={styles.qrContent}>
+        <div className={styles.qrSubtitle}>{this.t('titles.scan')}</div>
+        <div className={styles.link}>
+          {link}
+        </div>
+      </div>
+      <Button onClick={_ => copyToClipboard({ value: link })}>{this.t('buttons.copy')}</Button>
     </PageExpandable>
   }
+
+  
 }
 
 export default Finished
