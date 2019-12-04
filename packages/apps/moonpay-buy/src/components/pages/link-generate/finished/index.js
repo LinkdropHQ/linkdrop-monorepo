@@ -10,8 +10,9 @@ import variables from 'variables'
 import DesktopClaimOptions from './desktop-claim-options'
 import MobileClaimOptions from './mobile-claim-options'
 
-@actions(({ assets: { ethBalanceFormatted }, link: { link } }) => ({
+@actions(({ assets: { ethBalanceFormatted }, link: { link, minifiedLink } }) => ({
   link,
+  minifiedLink,
   ethBalanceFormatted
 }))
 @translate('pages.linkGenerate')
@@ -26,9 +27,9 @@ class Finished extends React.Component {
 
   render () {
     const { qrExpanded, optionsExpanded } = this.state
-    const { link, ethBalanceFormatted } = this.props
+    const { link, ethBalanceFormatted, minifiedLink } = this.props
     return <div className={styles.container}>
-      {this.renderQR({ expanded: qrExpanded, link })}
+      {this.renderQR({ expanded: qrExpanded, link: minifiedLink })}
       {this.renderClaimOptions({ optionsExpanded })}
       <div className={styles.title}
         dangerouslySetInnerHTML={{

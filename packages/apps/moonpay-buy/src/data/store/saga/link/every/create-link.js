@@ -26,14 +26,14 @@ const generator = function * ({ payload }) {
         nativeTokensAmount: String(ethBalance), // atomic value
         signingKeyOrWallet: privateKey // private key of wallet
       })
-      console.log({ url })
       let finalLink = url
       if (finalLink.indexOf('localhost') === -1) {
         const shortenUrl = yield bitly.shorten(finalLink)
         finalLink = shortenUrl.url
       }
 
-      yield put({ type: 'LINK.SET_LINK', payload: { link: finalLink } })
+      yield put({ type: 'LINK.SET_LINK', payload: { link: url } })
+      yield put({ type: 'LINK.SET_MINIFIED_LINK', payload: { minifiedLink: finalLink } })
       yield put({ type: 'LINK.SET_PAGE', payload: { page: 'finished' } })
     } else {
       window.alert('Some error occured')
