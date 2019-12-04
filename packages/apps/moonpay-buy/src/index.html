@@ -20,8 +20,7 @@
         if (!document.cookie.match(/^(.*;)?\s*moonpay-fixed\s*=\s*[^;]+(.*)?$/)) {
           document.cookie =
             "moonpay-fixed=fixed; expires=Tue, 19 Jan 2038 03:14:07 UTC; path=/";
-            console.log('cookie added')
-          window.location.replace("https://buy.moonpay.io/safari_fix");
+          window.location.replace("https://buy-staging.moonpay.io/safari_fix");
         }
       }
       runMoonPaySafariFix();
@@ -29,17 +28,9 @@
 </head>
 
 <body>
-<!--   <main>
+  <main>
     <div class='application' id='application'></div>
-  </main> -->
-  <iframe
-          frameBorder='0'
-          height='100%'
-          src='http://buy-staging.moonpay.io?apiKey=pk_test_8XCxJYhz1ztZR6AenQHE0UAfxPvCyrSI&currencyCode=eth'
-          width='100%'
-        >
-          <p>Your browser does not support iframes.</p>
-        </iframe>
+  </main>
 </body>
-<!-- <script src="<%= htmlWebpackPlugin.files.chunks.main.entry %>"></script> -->
+<script src="<%= htmlWebpackPlugin.files.chunks.main.entry %>"></script>
 </html>
