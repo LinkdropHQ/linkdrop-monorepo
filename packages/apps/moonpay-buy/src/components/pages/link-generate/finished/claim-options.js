@@ -1,10 +1,12 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styles from './styles.module'
 import { Button } from 'components/common'
 import { PageExpandable } from 'components/pages'
 import connectors from 'components/application/connectors'
 import Web3Provider, { useWeb3Context, Web3Consumer } from "web3-react";
 import ClaimPage from './claim-page'
+import { getImages } from 'helpers'
+import { RetinaImage, Loading } from '@linkdrop/ui-kit'
 
 export default ({ expanded, onChange, translate }) => {
 	return <Web3Provider connectors={connectors} libraryName="ethers.js">
@@ -35,7 +37,9 @@ const Content = ({ translate }) => {
 
 
 const ConnectorsSelect = ({ context, translate }) => {
+	const [ loading, setLoading ] = useState(false)
 	return <div>
+		{loading && <Loading withOverlay />}
 		<div
 			className={styles.title}
 			dangerouslySetInnerHTML={{ __html: translate('titles.needAWallet') }}
@@ -43,26 +47,38 @@ const ConnectorsSelect = ({ context, translate }) => {
 	  <div>
 	    <Button
 	      className={styles.button}
-	      onClick={_ => context.setConnector('Fortmatic')}
+	      iconed
+	      onClick={_ => {
+	      	setLoading(true)
+	      	context.setConnector('Fortmatic')
+	      }}
 	      inverted
 	    >
-	      {translate('buttons.fortmatic')}
+	      <RetinaImage width={20} {...getImages({ src: 'fortmatic-icon' })} />
+	      <span>{translate('buttons.fortmatic')}</span>
+	    </Button>
+
+	    <Button
+	    	iconed
+	      className={styles.button}
+	      onClick={_ => {
+	      	setLoading(true)
+	      	context.setConnector('Portis')
+	      }}
+	      inverted
+	    >
+	      <RetinaImage width={20} {...getImages({ src: 'portis-icon' })} />
+	      <span>{translate('buttons.portis')}</span>
 	    </Button>
 
 	    <Button
 	      className={styles.button}
-	      onClick={_ => context.setConnector('Portis')}
-	      inverted
-	    >
-	      {translate('buttons.portis')}
-	    </Button>
-
-	    <Button
-	      className={styles.button}
+	      iconed
 	      onClick={_ => context.setConnector('MetaMask')}
 	      inverted
 	    >
-	      {translate('buttons.metamask')}
+	    	<RetinaImage width={20} {...getImages({ src: 'metamask-icon' })} />
+	      <span>{translate('buttons.metamask')}</span>
 	    </Button>
 	  </div>
 	</div>

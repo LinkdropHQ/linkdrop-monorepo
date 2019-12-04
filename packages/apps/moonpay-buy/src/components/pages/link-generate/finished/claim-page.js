@@ -20,7 +20,6 @@ class ClaimPage extends React.Component {
   async componentDidMount () {
     const { web3Provider } = this.props
     const currentProvider = web3Provider && new Web3(web3Provider)
-    console.log({ currentProvider })
     if (currentProvider) {
       const { accounts, connectorChainId } = await this.getProviderData({ currentProvider })
       this.setState({
@@ -43,7 +42,7 @@ class ClaimPage extends React.Component {
     if (!claimAddress || !claimChainId) {
       return null
     }
-    return <div className={styles.container}>
+    return <div className={styles.claimContainer}>
       <iframe
         frameBorder='0'
         height='100%'

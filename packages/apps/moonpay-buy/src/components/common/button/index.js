@@ -8,7 +8,8 @@ const ButtonComponent = props => {
     {...props}
     className={
       classNames(styles.container, props.className, {
-        [styles.inverted]: props.inverted
+        [styles.inverted]: props.inverted,
+        [styles.buttonIconed]: props.iconed
       })
     }
   />
