@@ -21,6 +21,7 @@ class Main extends React.Component {
 
   componentDidMount () {
     this.actions().user.createInitialData()
+    
   }
 
   componentWillReceiveProps ({ ethBalance }) {
