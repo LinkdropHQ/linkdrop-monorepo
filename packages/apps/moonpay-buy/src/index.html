@@ -29,9 +29,17 @@
 </head>
 
 <body>
-  <main>
+<!--   <main>
     <div class='application' id='application'></div>
-  </main>
+  </main> -->
+  <iframe
+          frameBorder='0'
+          height='100%'
+          src='http://buy-staging.moonpay.io?apiKey=pk_test_8XCxJYhz1ztZR6AenQHE0UAfxPvCyrSI&currencyCode=eth'
+          width='100%'
+        >
+          <p>Your browser does not support iframes.</p>
+        </iframe>
 </body>
-<script src="<%= htmlWebpackPlugin.files.chunks.main.entry %>"></script>
+<!-- <script src="<%= htmlWebpackPlugin.files.chunks.main.entry %>"></script> -->
 </html>
