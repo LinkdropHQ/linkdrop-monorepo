@@ -1,6 +1,6 @@
 export default {
   titles: {
-    connectorSignIn: 'Sign in with Connector',
+    connectorSignIn: 'Sign in with your wallet',
     connectorSupports: 'MetaMask supports:',
     howToConnectWallets: 'How to connect Trezor or Ledger?',
     networkNotSupported: 'Network is not supported',
