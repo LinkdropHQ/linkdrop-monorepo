@@ -1,4 +1,4 @@
-/* global MASTER_COPY, CLAIM_HOST, DEFAULT_CHAIN_ID, MOONPAY_API_KEY, JSON_RPC_URL_XDAI, INFURA_PK, FACTORY */
+/* global MASTER_COPY, CLAIM_HOST, PORTIS_DAPP_ID, FORTMATIC_API_KEY_TESTNET, DEFAULT_CHAIN_ID, MOONPAY_API_KEY, JSON_RPC_URL_XDAI, INFURA_PK, FACTORY */
 
 let config
 
@@ -15,6 +15,8 @@ const jsonRpcUrlXdai = JSON_RPC_URL_XDAI || String(config.jsonRpcUrlXdai)
 const defaultChainId = DEFAULT_CHAIN_ID || '3'
 const moonpayApiKey = MOONPAY_API_KEY || String(config.moonpayApiKey)
 const claimHost = CLAIM_HOST || String(config.claimHost)
+const portisDappId = PORTIS_DAPP_ID || String(config.portisDappId)
+const formaticApiKeyTestnet = FORTMATIC_API_KEY_TESTNET || String(config.formaticApiKeyTestnetClaim)
 
 module.exports = {
   masterCopy,
@@ -23,5 +25,7 @@ module.exports = {
   defaultChainId,
   infuraPk,
   moonpayApiKey,
-  claimHost
+  claimHost,
+  portisDappId,
+  formaticApiKeyTestnet
 }

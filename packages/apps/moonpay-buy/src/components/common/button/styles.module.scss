@@ -3,6 +3,21 @@
 .container {
   max-width: 300px;
   background: $dbBlue;
+  &.buttonIconed {
+    justify-content: start;
+    padding: 0px 20px;
+
+    &.inverted {
+		  border-color: #000;
+		  background: none;
+		  color: #000;
+		}
+
+
+    span {
+      flex: 1;
+    }
+  }
 }
 
 .inverted {

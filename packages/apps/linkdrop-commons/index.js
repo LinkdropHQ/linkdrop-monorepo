@@ -8,6 +8,7 @@ import mocks from './mocks'
 import convertFromExponents from './convert-from-exponents'
 import defineEtherscanUrl from './define-etherscan-url'
 import defineJsonRpcUrl from './define-json-rpc-url'
+import definePlatform from './define-platform'
 
 export {
   copyToClipboard,
@@ -19,5 +20,6 @@ export {
   mocks,
   convertFromExponents,
   defineEtherscanUrl,
-  defineJsonRpcUrl
+  defineJsonRpcUrl,
+  definePlatform
 }

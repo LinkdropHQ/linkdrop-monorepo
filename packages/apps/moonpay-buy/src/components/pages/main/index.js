@@ -35,7 +35,8 @@ class Main extends React.Component {
 
   shouldComponentUpdate (nextProps, nextState) {
     const { loaded } = nextState
-    if (loaded) { return false }
+    const { loaded: currentLoaded } = this.state
+    if (loaded && currentLoaded) { return false }
     return true
   }
 
@@ -47,12 +48,14 @@ class Main extends React.Component {
   render () {
     const { loaded } = this.state
     const { sdk, proxyAddress, privateKey, ethBalance } = this.props
-    if (!proxyAddress) {
-      return <Loading />
-    }
-
+    if (!proxyAddress) { return <Page>
+      <div className={styles.container}>
+        {<Loading withOverlay />}
+      </div>
+    </Page>}
     return <Page>
       <div className={styles.container}>
+        {!loaded && <Loading withOverlay />}
         <iframe
           frameBorder='0'
           height='100%'
@@ -61,7 +64,7 @@ class Main extends React.Component {
           }, _ => {
             this.applyBalanceCheck()
           })}
-          src={`https://buy-staging.moonpay.io?apiKey=${moonpayApiKey}&currencyCode=eth&walletAddress=${proxyAddress}&redirectURL=${encodeURIComponent(`${window.location.origin}/#/loading`)}`}
+          src={`https://buy-staging.moonpay.io?apiKey=${moonpayApiKey}&currencyCode=eth&walletAddress=${proxyAddress}&redirectURL=${encodeURIComponent(`${window.location.origin}/#/loading?proxyAddress=${proxyAddress}`)}`}
           width='100%'
         >
           <p>Your browser does not support iframes.</p>

@@ -5,9 +5,10 @@ import { Icons } from '@linkdrop/ui-kit'
 
 class PageExpandable extends React.Component {
   render () {
-    const { children, expanded, onClose } = this.props
+    const { children, expanded, onClose, fullContent } = this.props
     return <div className={classNames(styles.container, {
-      [styles.expanded]: expanded
+      [styles.expanded]: expanded,
+      [styles.fullContent]: fullContent
     })}
     >
       <div className={styles.header}>
@@ -15,9 +16,7 @@ class PageExpandable extends React.Component {
           <Icons.CloseArrow />
         </div>
       </div>
-      <div
-        className={styles.content}
-      >
+      <div className={styles.content}>
         {children}
       </div>
     </div>

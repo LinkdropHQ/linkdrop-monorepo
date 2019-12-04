@@ -26,10 +26,14 @@ const generator = function * ({ payload }) {
     const proxyAddress = yield sdk.getProxyAddress()
     let claimMethod = sdk.claimAndDeploy
 
+    console.log(claimMethod)
+
     const isDeployed = yield sdk.isDeployed(campaignId)
+    console.log(isDeployed)
     if (isDeployed) {
       claimMethod = sdk.claim
     }
+    console.log('here')
     const { success, errors, txHash } = yield claimMethod({
       nativeTokensAmount: nativeTokensAmount || '0',
       token,

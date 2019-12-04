@@ -53,6 +53,7 @@ module.exports = {
       path.resolve('../../../node_modules')
     ],
     alias: {
+      wallets: path.resolve(__dirname, '../../../configs/wallets.config'),
       config: path.resolve(__dirname, 'app.config'),
       contracts: path.resolve(__dirname, '../../contracts/build'),
       variables: '@linkdrop/commons/variables/index.module.scss'
@@ -111,6 +112,8 @@ module.exports = {
       MASTER_COPY: JSON.stringify(process.env.MASTER_COPY),
       MOONPAY_API_KEY: JSON.stringify(process.env.MOONPAY_API_KEY),
       CLAIM_HOST: JSON.stringify(process.env.CLAIM_HOST),
+      PORTIS_DAPP_ID: JSON.stringify(process.env.PORTIS_DAPP_ID),
+      FORTMATIC_API_KEY_TESTNET: JSON.stringify(process.env.FORTMATIC_API_KEY_TESTNET),
       'process.env': {
         NODE_ENV: JSON.stringify(process.env.NODE_ENV || 'development')
       }

@@ -6,25 +6,20 @@
 
 .subtitle {
   font-size: 18px;
-  margin-bottom: 40px;
+  margin-bottom: 50px;
   text-align: center;
-
-  span {
-    font-family: 'Inter-Medium';
-  }
 }
 
 .title {
   font-size: 24px;
-  margin-bottom: 20px;
-  display: flex;
-  align-items: center;
+  margin-bottom: 30px;
+  text-align: center;
 
-  svg {
-    margin-right: 8px;
+  span {
+    margin: 0 6px;
+    font-family: 'Inter-Medium';
   }
 }
-
 .button {
   margin-bottom: 20px;
 }
@@ -48,11 +43,39 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 20px;
+  margin-bottom: 30px;
 }
 
 .qrSubtitle {
   font-size: 16px;
   color: $greyColor;
   text-align: center;
+  position: absolute;
+  top: -10px;
+  line-height: 1;
+  padding: 0px 8px;
+  background: #FFF;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.qrContent {
+  height: 70px;
+  display: flex;
+  position: relative;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  border-top: 1px solid #DADADA;
+  border-bottom: 1px solid #DADADA;
+  margin-bottom: 20px;
+}
+
+.link {
+  width: 285px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: $dbBlue;
+  font-size: 18px;
 }

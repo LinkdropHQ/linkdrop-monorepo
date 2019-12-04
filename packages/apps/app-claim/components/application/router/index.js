@@ -3,7 +3,6 @@ import i18next from 'i18next'
 import { Switch, Route } from 'react-router'
 import { Main, Page, NotFound } from 'components/pages'
 import './styles'
-import { Web3Consumer } from 'web3-react'
 
 import { actions } from 'decorators'
 @actions(({ user }) => ({
@@ -17,10 +16,20 @@ class AppRouter extends React.Component {
   }
 
   render () {
-    const { account } = this.props
+    const { web3Provider, context, externalAccount, externalChainId } = this.props
+    
     return <Page>
       <Switch>
-        <Route path='/' render={props => <Main account={account} />} />
+        <Route
+          path='/'
+          render={props => <Main
+            {...props}
+            web3Provider={web3Provider}
+            context={context}
+            externalAccount={externalAccount}
+            externalChainId={externalChainId}
+          />
+        } />
         <Route path='*' component={NotFound} />
       </Switch>
     </Page>

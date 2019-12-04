@@ -5,22 +5,41 @@ import { ConnectedRouter } from 'connected-react-router'
 import { history } from 'data/store'
 import { Loading } from '@linkdrop/ui-kit'
 import AppRouter from '../router'
+import { getHashVariables } from '@linkdrop/commons'
 
 export default function RouterProvider () {
   const context = useWeb3Context()
 
+  const { externalAccount, externalChainId } = getHashVariables()
+  if (externalAccount, externalChainId) {
+    return <ConnectedRouter history={history}>
+      <Router history={history}>
+        <AppRouter
+          web3Provider={null}
+          context={context}
+          externalAccount={externalAccount}
+          externalChainId={externalChainId}
+        />
+      </Router>
+    </ConnectedRouter>
+  }
+
   useEffect(() => {
-    context.setFirstValidConnector(['MetaMask', 'Infura'])
+    context.setFirstValidConnector(['MetaMask', 'Network'])
   }, [])
 
   if (!context.active && !context.error) {
     return <Loading />
   } else if (context.error) {
-    return <div>error: {context.error.code} (line: {context.error.line}, col: {context.error.column})</div>
+    return <ConnectedRouter history={history}>
+      <Router history={history}>
+        <AppRouter web3Provider={null} context={context} />
+      </Router>
+    </ConnectedRouter>
   } else {
     return <ConnectedRouter history={history}>
       <Router history={history}>
-        <AppRouter account={context.account} />
+        <AppRouter web3Provider={context.library._web3Provider} context={context} />
       </Router>
     </ConnectedRouter>
   }

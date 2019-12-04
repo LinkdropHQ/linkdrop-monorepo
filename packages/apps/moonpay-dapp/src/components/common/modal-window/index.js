@@ -1,9 +1,13 @@
 import React from 'react'
 import styles from './styles.module'
+import { CrossIcon } from 'components/common'
 
-const ModalWindowComponent = props => {
+const ModalWindowComponent = ({ children, onClose }) => {
   return <div className={styles.container}>
-    {props.children}
+  	<div className={styles.closeButton} onClick={_ => onClose && onClose()}>
+  		<CrossIcon />
+  	</div>
+    {children}
   </div>
 }
 

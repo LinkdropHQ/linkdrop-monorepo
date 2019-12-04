@@ -26,6 +26,7 @@ const generator = function * ({ payload }) {
         nativeTokensAmount: String(ethBalance), // atomic value
         signingKeyOrWallet: privateKey // private key of wallet
       })
+      console.log({ url })
       let finalLink = url
       if (finalLink.indexOf('localhost') === -1) {
         const shortenUrl = yield bitly.shorten(finalLink)

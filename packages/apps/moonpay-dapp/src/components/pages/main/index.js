@@ -4,6 +4,7 @@ import { ModalWindow, Button } from 'components/common'
 import { Page } from 'components/pages'
 import { translate } from 'decorators'
 import { applicationUrl } from 'config'
+import { getHashVariables } from '@linkdrop/commons'
 
 @translate('pages.main')
 class Main extends React.Component {
@@ -31,12 +32,13 @@ class Main extends React.Component {
 
   renderModalWindow ({ showModalWindow }) {
     if (!showModalWindow) { return null }
-    return <ModalWindow>
+    const { link } = getHashVariables()
+
+    return <ModalWindow onClose={_ => this.setState({ showModalWindow: false })}>
       <iframe
         frameBorder='0'
         height='100%'
-        onLoad={_ => console.log('hello')}
-        src={applicationUrl}
+        src={`${applicationUrl}?link=${link}`}
         width='100%'
       >
         <p>Your browser does not support iframes.</p>
