@@ -6175,14 +6175,14 @@ caniuse-api@^1.5.2:
     lodash.uniq "^4.5.0"
 
 caniuse-db@^1.0.30000529, caniuse-db@^1.0.30000634, caniuse-db@^1.0.30000639:
-  version "1.0.30001013"
-  resolved "https://registry.yarnpkg.com/caniuse-db/-/caniuse-db-1.0.30001013.tgz#7fde3c19efcdb7d9f8d24185e219e586933d31b0"
-  integrity sha512-wvXRZ9Ov0rwDEN2Eqir2OGHMEGS1roQvc90DejA5mbsLGUws8H339GZYxXm2CTT2PT3DhpxLPq7FrYp6XcEWkg==
+  version "1.0.30001015"
+  resolved "https://registry.yarnpkg.com/caniuse-db/-/caniuse-db-1.0.30001015.tgz#9f1b4fa158c747dcc04b15f9c5359ddcf0390d90"
+  integrity sha512-+Fqdu7tOxSD0HDs922QPxseHlwnUzdjLC1Oq32HZ1/LWrMfYNt8JaUWnoiIAR+G4fRzM3tdgc4Lrqo5Nx76UsQ==
 
 caniuse-lite@^1.0.30000844, caniuse-lite@^1.0.30000989, caniuse-lite@^1.0.30001012:
-  version "1.0.30001013"
-  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001013.tgz#da2440d4d266a17d40eb79bd19c0c8cc1d029c72"
-  integrity sha512-hOAXaWKuq/UVFgYawxIOdPdyMQdYcwOCDOjnZcKn7wCgFUrhP7smuNZjGLuJlPSgE6aRA4cRJ+bGSrhtEt7ZAg==
+  version "1.0.30001015"
+  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001015.tgz#15a7ddf66aba786a71d99626bc8f2b91c6f0f5f0"
+  integrity sha512-/xL2AbW/XWHNu1gnIrO8UitBGoFthcsDgU9VLK1/dpsoxbaD5LscHozKze05R6WLsBvLhqv78dAPozMFQBYLbQ==
 
 capture-exit@^2.0.0:
   version "2.0.0"
@@ -10285,9 +10285,9 @@ formidable@^1.0.17:
   integrity sha512-Fs9VRguL0gqGHkXS5GQiMCr1VhZBxz0JnJs4JmMp/2jL18Fmbzvv7vOFRU+U8TBkHEE/CX1qDXzJplVULgsLeg==
 
 fortmatic@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/fortmatic/-/fortmatic-1.0.0.tgz#44d557168ea0afcd80777fb0b2a84a6ce06cea37"
-  integrity sha512-EQB50lszlh+9nLmNNHoNWHaoclVn631RBZeG15bir65BNvqWjFaRtVPsV3eBTqTjEhoYzZit5quXHhqawvTd3Q==
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/fortmatic/-/fortmatic-1.0.1.tgz#ecb2c6777cd25658befe5e86c5eeddcb6c4db472"
+  integrity sha512-D48g0talOofK6AdwppO2VL/rRjLZb69Qf6fBR1lYUZ2rqMCM8WbBqoEDgFgJyjO1YV7XCJGbm+mW0/y2RxxbEg==
   dependencies:
     "@babel/runtime" "7.3.4"
 
@@ -15030,9 +15030,9 @@ node-pre-gyp@^0.12.0:
     tar "^4"
 
 node-releases@^1.1.29, node-releases@^1.1.41:
-  version "1.1.41"
-  resolved "https://registry.yarnpkg.com/node-releases/-/node-releases-1.1.41.tgz#57674a82a37f812d18e3b26118aefaf53a00afed"
-  integrity sha512-+IctMa7wIs8Cfsa8iYzeaLTFwv5Y4r5jZud+4AnfymzeEXKBCavFX0KBgzVaPVqf0ywa6PrO8/b+bPqdwjGBSg==
+  version "1.1.42"
+  resolved "https://registry.yarnpkg.com/node-releases/-/node-releases-1.1.42.tgz#a999f6a62f8746981f6da90627a8d2fc090bbad7"
+  integrity sha512-OQ/ESmUqGawI2PRX+XIRao44qWYBBfN54ImQYdWVTQqUckuejOg76ysSqDBK8NG3zwySRVnX36JwDQ6x+9GxzA==
   dependencies:
     semver "^6.3.0"
 

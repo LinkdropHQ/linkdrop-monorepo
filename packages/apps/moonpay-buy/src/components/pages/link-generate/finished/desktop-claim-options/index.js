@@ -4,7 +4,7 @@ import { Button } from 'components/common'
 import { PageExpandable } from 'components/pages'
 import connectors from 'components/application/connectors'
 import Web3Provider, { useWeb3Context, Web3Consumer } from "web3-react";
-import ClaimPage from './claim-page'
+import DesktopClaimPage from '../desktop-claim'
 import { getImages } from 'helpers'
 import { RetinaImage, Loading } from '@linkdrop/ui-kit'
 
@@ -22,14 +22,13 @@ export default ({ expanded, onChange, translate }) => {
 
 const Content = ({ translate }) => {
 	const context = useWeb3Context();
-  console.log(context);
 
   if (context.error) {
     return <div>Error Occured!</div>
   }
 
   if (context.library) {
-  	return <ClaimPage web3Provider={context.library._web3Provider}/>
+  	return <DesktopClaimPage web3Provider={context.library._web3Provider}/>
   }
 
   return <ConnectorsSelect context={context} translate={translate} />

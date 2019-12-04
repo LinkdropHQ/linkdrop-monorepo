@@ -46,7 +46,7 @@ class ClaimPage extends React.Component {
       <iframe
         frameBorder='0'
         height='100%'
-        src={`${link}&externalAccount=${claimAddress}&externalChainId=${claimChainId}`}
+        src={`${link}&externalAccount=${claimAddress}&externalChainId=${claimChainId}&hideLayout=true`}
         width='100%'
       >
         <p>Your browser does not support iframes.</p>

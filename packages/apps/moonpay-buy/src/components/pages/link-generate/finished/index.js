@@ -5,9 +5,10 @@ import { Button } from 'components/common'
 import { PageExpandable } from 'components/pages'
 import QRCode from 'qrcode.react'
 import { Icons } from '@linkdrop/ui-kit'
-import { copyToClipboard } from '@linkdrop/commons'
+import { copyToClipboard, definePlatform } from '@linkdrop/commons'
 import variables from 'variables'
-import ClaimOptions from './claim-options'
+import DesktopClaimOptions from './desktop-claim-options'
+import MobileClaimOptions from './mobile-claim-options'
 
 @actions(({ assets: { ethBalanceFormatted }, link: { link } }) => ({
   link,
@@ -28,14 +29,7 @@ class Finished extends React.Component {
     const { link, ethBalanceFormatted } = this.props
     return <div className={styles.container}>
       {this.renderQR({ expanded: qrExpanded, link })}
-      <ClaimOptions
-        expanded={optionsExpanded}
-        onChange={({ expanded }) => {
-          this.setState({
-            optionsExpanded: expanded
-          })
-        }}
-        translate={this.t} />
+      {this.renderClaimOptions({ optionsExpanded })}
       <div className={styles.title}
         dangerouslySetInnerHTML={{
           __html: this.t('titles.linkIsReady', {
@@ -64,6 +58,21 @@ class Finished extends React.Component {
         {this.t('buttons.share')}
       </Button>
     </div>
+  }
+
+  renderClaimOptions ({ optionsExpanded }) {
+    const platform = definePlatform()
+    const commonProps = {
+      expanded: optionsExpanded,
+      onChange: ({ expanded }) => {
+        this.setState({
+          optionsExpanded: expanded
+        })
+      },
+      translate: this.t
+    }
+    if (platform === 'desktop') { return <DesktopClaimOptions {...commonProps} /> }
+    return <MobileClaimOptions {...commonProps} />
   }
 
   renderQR ({ expanded, link }) {

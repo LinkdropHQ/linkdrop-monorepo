@@ -5,7 +5,8 @@ export default {
     linkIsReady: 'Your <span>{{amount}} {{symbol}}</span> is ready!',
     scan: 'Scan or copy to share',
     instruction: 'Now claim them in your wallet',
-    needAWallet: 'You need a wallet to<br>claim tokens'
+    needAWallet: 'You need a wallet to<br>claim tokens',
+    haveAnotherWallet: 'Have another wallet?'
   },
   buttons: {
     claimInWallet: 'Claim in Wallet',
@@ -13,6 +14,7 @@ export default {
     copy: 'Copy',
     fortmatic: 'Use Fortmatic',
     portis: 'Use Portis',
-    metamask: 'Connect Metamask'
+    metamask: 'Connect Metamask',
+    useWallet: 'Use {{title}}'
   }
 }

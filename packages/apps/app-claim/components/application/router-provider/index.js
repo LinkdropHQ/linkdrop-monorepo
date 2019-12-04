@@ -23,9 +23,6 @@ export default function RouterProvider () {
       </Router>
     </ConnectedRouter>
   }
-  
-
-
 
   useEffect(() => {
     context.setFirstValidConnector(['MetaMask', 'Network'])
