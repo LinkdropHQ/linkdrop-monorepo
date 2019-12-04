@@ -33,12 +33,12 @@ class Main extends React.Component {
   renderModalWindow ({ showModalWindow }) {
     if (!showModalWindow) { return null }
     const { link } = getHashVariables()
-
+    const src = this.defineIframeAddress({ link })
     return <ModalWindow onClose={_ => this.setState({ showModalWindow: false })}>
       <iframe
         frameBorder='0'
         height='100%'
-        src={this.defineIframeAddress({ link })}
+        src={src}
         width='100%'
       >
         <p>Your browser does not support iframes.</p>
