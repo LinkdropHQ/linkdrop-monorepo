@@ -50,7 +50,7 @@ class Main extends React.Component {
     const { sdk, proxyAddress, privateKey, ethBalance } = this.props
     if (!proxyAddress) { return <Page>
       <div className={styles.container}>
-        {<Loading withOverlay />}
+        <Loading withOverlay />
       </div>
     </Page>}
     return <Page>

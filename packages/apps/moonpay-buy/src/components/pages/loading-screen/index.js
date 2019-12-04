@@ -15,14 +15,14 @@ class LoadingScreen extends React.Component {
   render () {
   	const etherscanHost = defineEtherscanUrl({ chainId: '3' })
   	const { proxyAddress: proxyAddressFromUrl } = getHashVariables()
-  	const { title = this.t('titles.processing'), proxyAddress = proxyAddressFromUrl } = this.props
+  	const { title = this.t('titles.processing'), proxyAddress } = this.props
 
     return <Page>
 	    <div>
 	      <Loading size='small' className={styles.loading}/>
 	      <div className={styles.title}>{title}</div>
 	      <div className={styles.description} dangerouslySetInnerHTML={{ __html: this.t('texts.description') }}/>
-	    	<a target='_blank' href={`${etherscanHost}address/${proxyAddress}`} className={styles.link}>{this.t('texts.details')}</a>
+	    	<a target='_blank' href={`${etherscanHost}address/${proxyAddress || proxyAddressFromUrl}`} className={styles.link}>{this.t('texts.details')}</a>
 	    </div>
     </Page>
   }

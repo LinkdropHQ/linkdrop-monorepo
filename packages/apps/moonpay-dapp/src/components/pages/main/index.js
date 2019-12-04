@@ -38,12 +38,17 @@ class Main extends React.Component {
       <iframe
         frameBorder='0'
         height='100%'
-        src={`${applicationUrl}?link=${link}`}
+        src={this.defineIframeAddress({ link })}
         width='100%'
       >
         <p>Your browser does not support iframes.</p>
       </iframe>
     </ModalWindow>
+  }
+
+  defineIframeAddress ({ link }) {
+    if (!link) { return applicationUrl }
+    return `${applicationUrl}?link=${link}`
   }
 }
 
