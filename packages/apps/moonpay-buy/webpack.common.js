@@ -101,7 +101,8 @@ module.exports = {
       inject: false,
       hash: true,
       template: './src/index.html',
-      filename: 'index.html'
+      filename: 'index.html',
+      environment: process.env.NODE_ENV
     }),
     new webpack.HotModuleReplacementPlugin(),
     new webpack.DefinePlugin({

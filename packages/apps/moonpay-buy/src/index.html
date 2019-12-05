@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>Get Tokens | Powered by Linkdrop.io</title>
+  <title>Get Tokens | Powered by Linkdrop.io | <%= htmlWebpackPlugin.options.environment %></title>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" href="favicon.png">
@@ -17,11 +17,12 @@
         if (isChrome) {
           return;
         }
-        console.log(!document.cookie.match(/^(.*;)?\s*moonpay-fixed\s*=\s*[^;]+(.*)?$/), window.location)
         if (!document.cookie.match(/^(.*;)?\s*moonpay-fixed\s*=\s*[^;]+(.*)?$/)) {
           document.cookie =
             "moonpay-fixed=fixed; expires=Tue, 19 Jan 2038 03:14:07 UTC; path=/";
           window.location.replace("https://buy-staging.moonpay.io/safari_fix");
+        } else {
+
         }
       }
       runMoonPaySafariFix();
