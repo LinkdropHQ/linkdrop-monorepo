@@ -39,6 +39,7 @@
     "cross-env": "5.0.5",
     "css-loader": "^0.28.0",
     "ethereum-waffle": "^2.0.12",
+    "ethereumjs-abi": "^0.6.8",
     "ethers": "^4.0.27",
     "express": "^4.16.4",
     "fortmatic": "^1.0.0",
