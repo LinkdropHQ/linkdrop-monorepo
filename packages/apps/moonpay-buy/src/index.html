@@ -20,8 +20,7 @@
         if (!document.cookie.match(/^(.*;)?\s*moonpay-fixed\s*=\s*[^;]+(.*)?$/)) {
           document.cookie =
             "moonpay-fixed=fixed; expires=Tue, 19 Jan 2038 03:14:07 UTC; path=/";
-            console.log('cookie added')
-          window.location.replace("https://buy.moonpay.io/safari_fix");
+          window.location.replace("https://buy-staging.moonpay.io/safari_fix");
         }
       }
       runMoonPaySafariFix();
