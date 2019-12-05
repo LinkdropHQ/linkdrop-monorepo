@@ -5728,9 +5728,9 @@ browserslist@^3.2.6:
     electron-to-chromium "^1.3.47"
 
 browserslist@^4.6.0, browserslist@^4.8.0:
-  version "4.8.1"
-  resolved "https://registry.yarnpkg.com/browserslist/-/browserslist-4.8.1.tgz#df0f50cc4b3255322fae60ae82a946baae69f8c6"
-  integrity sha512-X/lIDboA5bvFg9SOhHN7OBgHHlaZQWcwTXBLBGgrB8+6Iy1dL0wmUfHRe7OdETRTuD2d6f5JPa7iTEcbVyVf6Q==
+  version "4.8.2"
+  resolved "https://registry.yarnpkg.com/browserslist/-/browserslist-4.8.2.tgz#b45720ad5fbc8713b7253c20766f701c9a694289"
+  integrity sha512-+M4oeaTplPm/f1pXDw84YohEv7B1i/2Aisei8s4s6k3QsoSHa7i5sz8u/cGQkkatCPxMASKxPualR4wwYgVboA==
   dependencies:
     caniuse-lite "^1.0.30001015"
     electron-to-chromium "^1.3.322"
@@ -21996,9 +21996,9 @@ web3@^1.2.2:
     web3-utils "1.2.4"
 
 web3connect@^1.0.0-beta.13:
-  version "1.0.0-beta.24"
-  resolved "https://registry.yarnpkg.com/web3connect/-/web3connect-1.0.0-beta.24.tgz#d751df7388325c36dc1bde59624695209281d532"
-  integrity sha512-O5jL6m2hga3VpYMgdZsxpoZyTVEQ4iQDtGqJTlHTqdLcRBRBkR6HlCG/kmg2yw4urzohLcEjxXysbNtu/TcnYw==
+  version "1.0.0-beta.25"
+  resolved "https://registry.yarnpkg.com/web3connect/-/web3connect-1.0.0-beta.25.tgz#b8c49715a2e2dcd580423654f5dd3b432dcb4a9c"
+  integrity sha512-LXfOlsgijX7ep2DcGsE2aoMwek8nHceJJQ6BF4jILdGezYKhpn4RllJOOJ6PTvcNrWDJDtPleoDqoVzHbKMv1w==
   dependencies:
     prop-types "^15.7.2"
     react "^16.8.6"
