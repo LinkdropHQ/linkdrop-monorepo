@@ -15,10 +15,10 @@ const generator = function * ({ payload }) {
     const provider = yield new ethers.providers.JsonRpcProvider(actualJsonRpcUrl)
     const gasPrice = yield provider.getGasPrice()
     const oneGwei = ethers.utils.parseUnits('1', 'gwei')
-    const tokenContract = yield web3Obj.eth.contract(TokenMock.abi).at(tokenAddress)
+    const tokenContract = yield new web3Provider.eth.Contract(TokenMock.abi, tokenAddress)
     const proxyAddress = yield select(generator.selectors.proxyAddress)
     const amountFormatted = utils.parseUnits(String(tokenAmount), decimals)
-    const approveData = yield tokenContract.approve.getData(proxyAddress, String(amountFormatted), { from: fromWallet })
+    const approveData = yield tokenContract.methods.approve(proxyAddress, String(amountFormatted)).encodeABI()
     const promise = new Promise((resolve, reject) => {
       web3Provider.eth.sendTransaction({ to: tokenAddress, gasPrice: gasPrice.add(oneGwei), from: fromWallet, value: 0, data: approveData }, result => resolve({ result }))
     })
