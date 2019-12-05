@@ -20,6 +20,12 @@ const generator = function * ({ payload }) {
       symbol = Number(chainId) === 100 ? 'xDAI' : 'ETH'
       icon = getImages({ src: 'ether' }).imageRetina
     } else if (tokenAddress.toLowerCase() === '0x89d24a6b4ccb1b6faa2625fe562bdd9a23260359') {
+      // SAI token has problem with fetching decimals
+      decimals = 18
+      symbol = 'SAI'
+      icon = getImages({ src: 'sai' }).imageRetina
+      
+    } else if (tokenAddress.toLowerCase() === '0x6b175474e89094c44da98b954eedeac495271d0f') {
       // DAI token has problem with fetching decimals
       decimals = 18
       symbol = 'DAI'
