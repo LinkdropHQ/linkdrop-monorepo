@@ -1,30 +1,24 @@
-/* global web3 */
 import { put, select } from 'redux-saga/effects'
 import { mocks, defineJsonRpcUrl } from '@linkdrop/commons'
 import { ethers } from 'ethers'
 import NFTMock from 'contracts/NFTMock.json'
 import { infuraPk, jsonRpcUrlXdai } from 'app.config.js'
 
-let web3Obj
-try {
-  web3Obj = web3
-} catch (e) {
-  web3Obj = new mocks.Web3Mock()
-}
 const generator = function * ({ payload }) {
   try {
     yield put({ type: 'METAMASK.SET_STATUS', payload: { status: 'initial' } })
     const { account: fromWallet, chainId } = payload
+    const web3Provider = yield select(generator.selectors.web3Provider)
     const tokenAddress = yield select(generator.selectors.address)
     const actualJsonRpcUrl = defineJsonRpcUrl({ chainId, infuraPk, jsonRpcUrlXdai })
     const provider = yield new ethers.providers.JsonRpcProvider(actualJsonRpcUrl)
     const gasPrice = yield provider.getGasPrice()
     const oneGwei = ethers.utils.parseUnits('1', 'gwei')
-    const tokenContract = yield web3Obj.eth.contract(NFTMock.abi).at(tokenAddress)
+    const tokenContract = yield new web3Provider.eth.Contract(NFTMock.abi, tokenAddress)
     const proxyAddress = yield select(generator.selectors.proxyAddress)
-    const approveData = yield tokenContract.setApprovalForAll.getData(proxyAddress, true)
+    const approveData = yield tokenContract.methods.setApprovalForAll(proxyAddress, true).encodeABI()
     const promise = new Promise((resolve, reject) => {
-      web3Obj.eth.sendTransaction({ to: tokenAddress, gasPrice: gasPrice.add(oneGwei), from: fromWallet, value: 0, data: approveData }, result => resolve({ result }))
+      web3Provider.eth.sendTransaction({ to: tokenAddress, gasPrice: gasPrice.add(oneGwei), from: fromWallet, value: 0, data: approveData }, result => resolve({ result }))
     })
     const { result } = yield promise
     if (String(result) === 'null') {
@@ -41,5 +35,6 @@ generator.selectors = {
   tokenIds: ({ campaigns: { tokenIds } }) => tokenIds,
   address: ({ tokens: { address } }) => address,
   decimals: ({ tokens: { decimals } }) => decimals,
-  chainId: ({ user: { chainId } }) => chainId
+  chainId: ({ user: { chainId } }) => chainId,
+  web3Provider: ({ user: { web3Provider }}) => web3Provider
 }
