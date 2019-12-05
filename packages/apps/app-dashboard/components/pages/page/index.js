@@ -1,42 +1,31 @@
-/* global web3 */
 import React from 'react'
 import styles from './styles.module'
 import { Aside, Header } from 'components/common'
 import { translate, actions } from 'decorators'
 import { Scrollbars } from 'react-custom-scrollbars'
-import MetamaskInjector from './metamask-injector'
+import Web3Injector from './web3-injector'
 import { Loading } from '@linkdrop/ui-kit'
 import NetworkNotSupported from './network-not-supported'
 import { defineNetworkName } from '@linkdrop/commons'
-import Web3 from 'web3'
 const ls = window.localStorage
 
-let web3Provider
-try {
-  web3Provider = new Web3(web3.currentProvider)
-} catch (e) {
-  web3Provider = null
-}
-
-@actions(({ user: { currentAddress, chainId, loading, step } }) => ({ loading, currentAddress, chainId, step }))
+@actions(({ user: { currentAddress, chainId, loading, step, web3Provider } }) => ({ loading, currentAddress, chainId, step, web3Provider }))
 @translate('pages.page')
 class Page extends React.Component {
   componentDidMount () {
+    const { web3Provider } = this.props
     if (web3Provider) {
       this.actions().user.checkCurrentProvider({ provider: web3Provider })
     }
   }
 
   defineContent ({ currentAddress }) {
-    const { chainId, loading } = this.props
+    const { chainId, loading, web3Provider } = this.props
     if (!web3Provider) {
-      return <MetamaskInjector disabled />
+      return <Web3Injector />
     }
     if (currentAddress === null && loading) {
       return <Loading />
-    }
-    if (!currentAddress) {
-      return <MetamaskInjector />
     }
     if (!defineNetworkName({ chainId })) {
       return <NetworkNotSupported />

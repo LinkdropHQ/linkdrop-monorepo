@@ -1,4 +1,4 @@
-/* global MASTER_COPY, JSON_RPC_URL_XDAI, INFURA_PK, FACTORY, CLAIM_HOST */
+/* global MASTER_COPY, PORTIS_DAPP_ID, FORMATIC_API_KEY_TESTNET, FORMATIC_API_KEY_MAINNET, JSON_RPC_URL_XDAI, INFURA_PK, FACTORY, CLAIM_HOST */
 let config
 
 try {
@@ -12,11 +12,17 @@ const factory = FACTORY || String(config.factory)
 const claimHost = CLAIM_HOST || String(config.claimHost)
 const infuraPk = INFURA_PK || String(config.infuraPk)
 const jsonRpcUrlXdai = JSON_RPC_URL_XDAI || String(config.jsonRpcUrlXdai)
+const portisDappId = PORTIS_DAPP_ID || String(config.portisDappId)
+const formaticApiKeyTestnet = FORMATIC_API_KEY_TESTNET || String(config.formaticApiKeyTestnetDashboard)
+const formaticApiKeyMainnet = FORMATIC_API_KEY_MAINNET || String(config.formaticApiKeyMainnetDashboard)
 
 module.exports = {
   claimHost,
   masterCopy,
   factory,
   infuraPk,
-  jsonRpcUrlXdai
+  jsonRpcUrlXdai,
+  portisDappId,
+  formaticApiKeyTestnet,
+  formaticApiKeyMainnet
 }
