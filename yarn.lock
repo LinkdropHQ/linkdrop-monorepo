@@ -1370,6 +1370,11 @@
     "@ethersproject/constants" ">=5.0.0-beta.128"
     "@ethersproject/logger" ">=5.0.0-beta.129"
 
+"@ethvault/iframe-provider-polyfill@^0.1.6":
+  version "0.1.6"
+  resolved "https://registry.yarnpkg.com/@ethvault/iframe-provider-polyfill/-/iframe-provider-polyfill-0.1.6.tgz#3322a22aca47064fd969bb23df43b24481e7c360"
+  integrity sha512-jUX0BGqTKtj2hSJLPYVKarr2lz30Suuk5ryFT7wfLMNuwWTkIeOb0/a/xyQ1POWVMKjvc8MM1kGCYhBCTZzsWQ==
+
 "@evocateur/libnpmaccess@^3.1.2":
   version "3.1.2"
   resolved "https://registry.yarnpkg.com/@evocateur/libnpmaccess/-/libnpmaccess-3.1.2.tgz#ecf7f6ce6b004e9f942b098d92200be4a4b1c845"
