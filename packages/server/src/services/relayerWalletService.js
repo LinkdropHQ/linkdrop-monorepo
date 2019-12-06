@@ -1,5 +1,5 @@
 import config from '../../config/config.json'
-
+const terminalSDK = require('@terminal-packages/sdk')
 const {
   JSON_RPC_URL,
   RELAYER_PRIVATE_KEY,
@@ -24,7 +24,14 @@ if (CHAIN == null || CHAIN === '') {
 
 class RelayerWalletService {
   constructor () {
-    this.provider = new ethers.providers.JsonRpcProvider(JSON_RPC_URL)
+    this.provider = new ethers.providers.Web3Provider(
+      new terminalSDK.TerminalHttpProvider({
+        host: JSON_RPC_URL,
+        apiKey: config.TERMINAL_API_KEY,
+        projectId: config.TERMINAL_PROJECT_ID,
+        source: terminalSDK.SourceType.Infura
+      })
+    )
     this.relayerWallet = new ethers.Wallet(RELAYER_PRIVATE_KEY, this.provider)
     this.chain = CHAIN
   }

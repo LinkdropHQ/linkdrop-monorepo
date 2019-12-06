@@ -7,7 +7,8 @@ export default () => {
     MONGO_URI || 'mongodb://localhost:27017/linkdrop_db',
     {
       useNewUrlParser: true,
-      useCreateIndex: true
+      useCreateIndex: true,
+      useUnifiedTopology: true
     }
   )
 }
