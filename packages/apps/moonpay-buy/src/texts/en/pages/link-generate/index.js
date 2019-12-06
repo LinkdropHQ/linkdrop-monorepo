@@ -6,7 +6,8 @@ export default {
     scan: 'Scan or copy to share',
     instruction: 'Now claim them in your wallet',
     needAWallet: 'You need a wallet to<br>claim tokens',
-    haveAnotherWallet: 'Have another wallet?'
+    haveAnotherWallet: 'Have another wallet?',
+    haveAnother: 'Have another wallet?'
   },
   buttons: {
     claimInWallet: 'Claim in Wallet',

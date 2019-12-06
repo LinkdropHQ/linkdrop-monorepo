@@ -27,6 +27,7 @@ const generator = function * ({ payload }) {
         signingKeyOrWallet: privateKey // private key of wallet
       })
       let finalLink = url
+      console.log({ finalLink })
       if (finalLink.indexOf('localhost') === -1) {
         const shortenUrl = yield bitly.shorten(finalLink)
         finalLink = shortenUrl.url
