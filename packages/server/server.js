@@ -5,11 +5,23 @@ const express = require('express')
 const app = express()
 const cors = require('cors')
 const buildRouter = require('./src/routes')
+const morgan = require('morgan')
 
 // Apply middlewares
 app.use(express.urlencoded({ extended: false }))
 app.use(express.json())
 app.use(cors())
+
+morgan.token('body', function (req, res) {
+  return JSON.stringify(req.body, null, 2)
+})
+
+app.use(
+  morgan(
+    ':method :url :status :res[content-length] - :response-time ms \n:body',
+    { stream: logger.stream }
+  )
+)
 
 // connect to database
 connectDB()
