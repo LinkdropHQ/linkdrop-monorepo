@@ -2,20 +2,11 @@
 <html>
 
 <head>
-  <title>Get Tokens | Powered by Linkdrop.io | <%= htmlWebpackPlugin.options.applicationUrl %></title>
+  <title>Get Tokens | Powered by Linkdrop.io</title>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" href="favicon.png">
   <link rel="stylesheet" href="<%=htmlWebpackPlugin.files.chunks.main.css %>">
-  <script type="text/javascript">
-  	function startApp () {
-  		const applicationUrl = "<%= htmlWebpackPlugin.options.applicationUrl %>";
-	  	const prevPage = document.referrer;
-	  	if (prevPage === applicationUrl) { return }
-	  	window.location.href = applicationUrl
-  	}
-  	startApp()
-  </script>
 </head>
 
 <body>

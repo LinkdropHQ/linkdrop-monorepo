@@ -101,8 +101,7 @@ module.exports = {
       inject: false,
       hash: true,
       template: './src/index.html',
-      filename: 'index.html',
-      parentUrl: 
+      filename: 'index.html'
     }),
     new webpack.HotModuleReplacementPlugin(),
     new webpack.DefinePlugin({
@@ -114,7 +113,6 @@ module.exports = {
       MOONPAY_API_KEY: JSON.stringify(process.env.MOONPAY_API_KEY),
       CLAIM_HOST: JSON.stringify(process.env.CLAIM_HOST),
       PORTIS_DAPP_ID: JSON.stringify(process.env.PORTIS_DAPP_ID),
-      PARENT_URL: JSON.stringify(process.env.PARENT_URL),
       FORTMATIC_API_KEY_TESTNET: JSON.stringify(process.env.FORTMATIC_API_KEY_TESTNET),
       'process.env': {
         NODE_ENV: JSON.stringify(process.env.NODE_ENV || 'development')
