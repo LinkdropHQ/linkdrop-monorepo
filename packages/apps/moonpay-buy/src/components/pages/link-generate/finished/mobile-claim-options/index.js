@@ -23,8 +23,8 @@ class MobileClaimOptions extends React.Component {
 		const { currentWallet } = this.state
 		
 		const currentUrl = getParentHost()
-		const redirectUrl = `${currentUrl}/#/?link=${encodeURIComponent(link)}`
-		console.log({ redirectUrl: encodeURIComponent(link) })
+		// const redirectUrl = `${currentUrl}/#/?link=${encodeURIComponent(link)}`
+		const redirectUrl = link
 		const walletData = getWalletData({ wallet: currentWallet })
 		const walletLink = getWalletLink({ wallet: currentWallet, platform: this.platform, currentUrl: redirectUrl })
 		return <PageExpandable

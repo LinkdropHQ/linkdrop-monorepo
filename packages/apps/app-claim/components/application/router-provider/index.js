@@ -31,6 +31,7 @@ export default function RouterProvider () {
   if (!context.active && !context.error) {
     return <Loading />
   } else if (context.error) {
+    console.log({ err: context.error })
     return <ConnectedRouter history={history}>
       <Router history={history}>
         <AppRouter web3Provider={null} context={context} />
