@@ -24,6 +24,7 @@ const Content = ({ translate }) => {
 	const context = useWeb3Context();
 
   if (context.error) {
+  	console.log(context.error)
     return <div>Error Occured!</div>
   }
 

@@ -3,7 +3,7 @@ import { infuraPk, portisDappId, formaticApiKeyTestnet } from 'config'
 import FortmaticApi from 'fortmatic'
 import PortisApi from '@portis/web3'
 import { getHashVariables, defineNetworkName } from '@linkdrop/commons'
-const { chainId } = getHashVariables()
+const { chainId = '3' } = getHashVariables()
 const networkName = defineNetworkName({ chainId })
 
 const {
