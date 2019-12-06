@@ -28,6 +28,8 @@ export default function RouterProvider () {
     context.setFirstValidConnector(['MetaMask', 'Network'])
   }, [])
 
+  window.alert(`context.active: ${context.active}`)
+
   if (!context.active && !context.error) {
     return <Loading />
   } else if (context.error) {
