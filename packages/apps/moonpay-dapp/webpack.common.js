@@ -94,7 +94,8 @@ module.exports = {
       inject: false,
       hash: true,
       template: './src/index.html',
-      filename: 'index.html'
+      filename: 'index.html',
+      applicationUrl: process.env.APPLICATION_URL
     }),
     new webpack.HotModuleReplacementPlugin(),
     new webpack.DefinePlugin({
