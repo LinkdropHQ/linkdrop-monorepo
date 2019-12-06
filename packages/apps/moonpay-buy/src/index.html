@@ -12,7 +12,7 @@
           return;
         }
 
-        if (document.referrer.indexOf('localhost') > -1 || document.referrer.indexOf("moonpay.linkdrop.io") > -1) {
+        if (document.location.ancestorOrigins && document.location.ancestorOrigins[0]) {
         	return
         }
 
