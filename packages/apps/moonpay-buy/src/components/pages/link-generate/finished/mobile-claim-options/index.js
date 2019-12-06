@@ -26,8 +26,8 @@ class MobileClaimOptions extends React.Component {
 		const { currentWallet, showSlider } = this.state
 		
 		const currentUrl = getParentHost()
-		const redirectUrl = `${currentUrl}/#/?link=${encodeURIComponent(link)}`
-		// const redirectUrl = `${link}&w=${currentWallet}`
+		// const redirectUrl = `${currentUrl}/#/?link=${encodeURIComponent(link)}`
+		const redirectUrl = `${link}&w=${currentWallet}`
 		return <div className={classNames(styles.container, {
 			[styles.sliderShow]: showSlider,
       [styles.sliderHide]: showSlider === false
