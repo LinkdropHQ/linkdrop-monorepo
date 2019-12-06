@@ -1,5 +1,6 @@
-import connectDB from './src/models/connectDB'
-import logger from './src/utils/logger'
+require('newrelic')
+const logger = require('./src/utils/logger').default
+const connectDB = require('./config/db').default
 const express = require('express')
 const app = express()
 const cors = require('cors')

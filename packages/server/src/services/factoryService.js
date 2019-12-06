@@ -1,5 +1,5 @@
 import LinkdropSDK from '../../../sdk/src/index'
-import configs from '../../../../configs'
+
 import Linkdrop from '../../../contracts/build/ILinkdrop'
 import LinkdropFactory from '../../../contracts/build/LinkdropFactory'
 import relayerWalletService from './relayerWalletService'
@@ -7,8 +7,7 @@ import utilsService from './utilsService'
 import { ethers } from 'ethers'
 import logger from '../utils/logger'
 import Deploy from '../models/Deploy'
-
-const config = configs.get('server')
+import config from '../../config/config.json'
 
 class FactoryService {
   constructor () {
