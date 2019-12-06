@@ -5,20 +5,22 @@ import { Page } from 'components/pages'
 import { translate } from 'decorators'
 import { applicationUrl } from 'config'
 import { getHashVariables } from '@linkdrop/commons'
+import { Loading } from '@linkdrop/ui-kit'
 
 @translate('pages.main')
 class Main extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      showModalWindow: false
+      showModalWindow: false,
+      loaded: false
     }
   }
 
   render () {
-    const { showModalWindow } = this.state
+    const { showModalWindow, loaded } = this.state
     return <Page>
-      {this.renderModalWindow({ showModalWindow })}
+      {this.renderModalWindow({ showModalWindow, loaded })}
       <div className={styles.container}>
         <Button onClick={_ => this.setState({
           showModalWindow: true
@@ -30,14 +32,18 @@ class Main extends React.Component {
     </Page>
   }
 
-  renderModalWindow ({ showModalWindow }) {
+  renderModalWindow ({ showModalWindow, loaded }) {
     if (!showModalWindow) { return null }
     const { link } = getHashVariables()
     const src = this.defineIframeAddress({ link })
     return <ModalWindow onClose={_ => this.setState({ showModalWindow: false })}>
+      {!loaded && <Loading withOverlay />}
       <iframe
         frameBorder='0'
         height='100%'
+        onLoad={_ => this.setState({
+          loaded: true
+        })}
         src={src}
         width='100%'
       >
