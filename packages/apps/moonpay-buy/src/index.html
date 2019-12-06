@@ -12,6 +12,10 @@
           return;
         }
 
+        if (document.referrer.indexOf('localhost') > -1 || document.referrer.indexOf("moonpay.linkdrop.io") > -1) {
+        	return
+        }
+
         var isChrome = navigator.userAgent.indexOf('Chrome') > -1;
 
         if (isChrome) {
@@ -19,8 +23,7 @@
         }
 
         if (
-          !document.cookie.match(/^(.*;)?\s*moonpay-fixed\s*=\s*[^;]+(.*)?$/)
-        ) {
+          !document.cookie.match(/^(.*;)?\s*moonpay-fixed\s*=\s*[^;]+(.*)?$/)) {
           document.cookie =
             'moonpay-fixed=fixed; expires=Tue, 19 Jan 2038 03:14:07 UTC; path=/';
           window.location.replace('https://buy-staging.moonpay.io/safari_fix');
