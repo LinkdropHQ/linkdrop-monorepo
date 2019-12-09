@@ -29,11 +29,13 @@
   },
   "dependencies": {
     "@linkdrop/sdk": "^2.0.12-alpha.0",
+    "@terminal-packages/sdk": "^1.1.0",
     "cli-table": "^0.3.1",
     "cors": "^2.8.5",
     "express-async-handler": "^1.1.4",
     "mongoose": "^5.7.5",
     "util": "^0.12.1",
+    "web3-react": "^5.0.5",
     "winston": "^3.2.1"
   },
   "gitHead": "414d0e9ecca3fab72be5820c3046207b0b5415b2"

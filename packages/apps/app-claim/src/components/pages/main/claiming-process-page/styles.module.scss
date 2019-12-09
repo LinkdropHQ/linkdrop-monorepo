@@ -1,0 +1,30 @@
+@import "variables";
+
+.title {
+  font-size: 24px;
+  margin-bottom: 30px;
+  font-family: 'Inter-Medium';
+}
+
+.subtitle {
+  font-size: 18px;
+  margin-bottom: 30px;
+}
+
+.description {
+  font-size: 14px;
+  margin-bottom: 8px;
+
+  a {
+    color: $blackColor;
+  }
+}
+
+.loading {
+  margin-bottom: 40px;
+}
+
+.descriptionHidden {
+  visibility: hidden;
+  opacity: 0;
+}

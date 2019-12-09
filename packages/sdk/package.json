@@ -11,8 +11,10 @@
   },
   "dependencies": {
     "@linkdrop/contracts": "^2.0.15-alpha.0",
+    "@terminal-packages/sdk": "^1.1.0",
     "axios": "^0.18.1",
-    "ethers": "^4.0.27"
+    "ethers": "^4.0.27",
+    "web3-react": "^5.0.5"
   },
   "gitHead": "414d0e9ecca3fab72be5820c3046207b0b5415b2"
 }

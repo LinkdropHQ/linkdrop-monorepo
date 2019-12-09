@@ -6,12 +6,14 @@
   "private": true,
   "dependencies": {
     "@linkdrop/sdk": "^2.0.12-alpha.0",
+    "@terminal-packages/sdk": "^1.1.0",
     "axios": "^0.18.0",
     "csvtojson": "^2.0.8",
     "fast-csv": "^2.4.1",
     "ora": "^3.4.0",
     "query-string": "^6.4.2",
-    "terminal-kit": "^1.28.0"
+    "terminal-kit": "^1.28.0",
+    "web3-react": "^5.0.5"
   },
   "babel": {
     "extends": "../babel.config.js"

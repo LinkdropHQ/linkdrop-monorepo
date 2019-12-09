@@ -1,0 +1,37 @@
+@import "variables";
+
+.title {
+  margin-bottom: 30px;
+  font-family: 'Inter-Medium';
+  font-size: 24px;
+}
+
+.description {
+  margin-bottom: 40px;
+  font-size: 18px;
+}
+
+.alert {
+  margin-bottom: 40px;
+}
+
+.instructions {
+  width: 100%;
+  text-align: left;
+  font-size: 14px;
+
+  span {
+    font-family: 'Inter-Bold';
+  }
+
+  a {
+    color: $blackColor;
+  }
+
+  div {
+    margin-bottom: 12px;
+    &:last-child {
+      margin-bottom: 0px;
+    }
+  }
+}

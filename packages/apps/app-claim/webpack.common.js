@@ -1,6 +1,8 @@
 const webpack = require('webpack')
 const path = require('path')
 const autoprefixer = require('autoprefixer')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
+const config = require('../../../configs/app.config.json')
 
 const CSSModuleLoader = {
   loader: 'css-loader',
@@ -38,17 +40,18 @@ module.exports = {
   entry: [
     'webpack/hot/dev-server',
     '@babel/polyfill',
-    './index.js'
+    './src/index.js'
   ],
   output: {
     filename: 'bundle.js',
-    path: path.resolve(__dirname, 'assets/scripts')
+    path: path.resolve(__dirname, 'dist')
   },
   context: __dirname,
   resolve: {
     extensions: ['.js', '.jsx', '.json', '.scss', '.css', '*'],
     modules: [
       path.resolve('./'),
+      path.resolve('./src'),
       path.resolve('./node_modules'),
       path.resolve('../../../node_modules')
     ],
@@ -97,8 +100,19 @@ module.exports = {
       loader: 'url-loader?limit=100000'
     }]
   },
+  node: {
+    fs: 'empty'
+  },
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
+    new HtmlWebpackPlugin({
+      inject: false,
+      hash: true,
+      template: './src/index.html',
+      filename: 'index.html',
+      terminalProjectId: process.env.TERMINAL_PROJECT_ID || config.terminalProjectId,
+      terminalApiKey: process.env.TERMINAL_API_KEY || config.terminalApiKey
+    }),
     new webpack.DefinePlugin({
       MASTER_COPY: JSON.stringify(process.env.MASTER_COPY),
       FACTORY: JSON.stringify(process.env.FACTORY),
@@ -112,6 +126,8 @@ module.exports = {
       PORTIS_DAPP_ID: JSON.stringify(process.env.PORTIS_DAPP_ID),
       FORMATIC_API_KEY_TESTNET: JSON.stringify(process.env.FORMATIC_API_KEY_TESTNET),
       FORMATIC_API_KEY_MAINNET: JSON.stringify(process.env.FORMATIC_API_KEY_MAINNET),
+      TERMINAL_PROJECT_ID: JSON.stringify(process.env.TERMINAL_PROJECT_ID),
+      TERMINAL_API_KEY: JSON.stringify(process.env.TERMINAL_API_KEY),
       'process.env': {
         NODE_ENV: JSON.stringify(process.env.NODE_ENV || 'development')
       }
