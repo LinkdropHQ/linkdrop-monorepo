@@ -60,9 +60,9 @@ const generator = function * ({ payload }) {
       const assetsFormatted = yield all(assets.map(({ token_id: tokenId, asset_contract: { address, symbol }, name }) => getTokenData({ provider, tokenId, address, name })))
       const assetsMerged = assetsFormatted.reduce((sum, { tokenId, address, symbol, name, image }) => {
         if (sum[address]) {
-          sum[address] = { ...sum[address], ids: [...sum[address].ids, tokenId], images: { ...sum[address].images, [tokenId]: image } }
+          sum[address] = { ...sum[address], names: { ...sum[address].names, [tokenId]: name }, ids: [...sum[address].ids, tokenId], images: { ...sum[address].images, [tokenId]: image } }
         } else {
-          sum[address] = { address, symbol, name, ids: [tokenId], images: { [tokenId]: image } }
+          sum[address] = { address, symbol, names: { [tokenId]: name }, ids: [tokenId], images: { [tokenId]: image } }
         }
         return sum
       }, {})
