@@ -1,0 +1,91 @@
+@import "variables";
+
+.container {
+  position: relative;
+}
+
+.subtitle {
+  font-size: 18px;
+  margin-bottom: 50px;
+  text-align: center;
+}
+
+.clearData {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  top: 0;
+  left: 0;
+  cursor: pointer;
+}
+
+.title {
+  font-size: 24px;
+  margin-bottom: 30px;
+  text-align: center;
+
+  span {
+    margin: 0 6px;
+    font-family: 'Inter-Medium';
+  }
+}
+
+.button {
+  margin-bottom: 20px;
+}
+
+.iconedButton {
+  position: relative;
+
+  svg {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+}
+
+.qr {
+  width: 150px;
+  height: 150px;
+  border: 1px solid $dbBlue;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 30px;
+}
+
+.qrSubtitle {
+  font-size: 16px;
+  color: $greyColor;
+  text-align: center;
+  position: absolute;
+  top: -10px;
+  line-height: 1;
+  padding: 0px 8px;
+  background: #FFF;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.qrContent {
+  height: 70px;
+  display: flex;
+  position: relative;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  border-top: 1px solid #DADADA;
+  border-bottom: 1px solid #DADADA;
+  margin-bottom: 20px;
+}
+
+.link {
+  width: 285px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: $dbBlue;
+  font-size: 18px;
+}
