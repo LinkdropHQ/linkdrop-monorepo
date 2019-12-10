@@ -87,10 +87,19 @@ class Main extends React.Component {
         type: 'debitcard-hosted-dialog',
         dest: `ethereum:${proxyAddress}`,
         destCurrency: "ETH",
-        sourceAmount: 1.0
-        // paymentMethod: 'google-pay'
+        sourceAmount: 10.0,
+        paymentMethod: 'google-pay'
       }
     });
+    widget.on('ready', function(e) {
+      console.log("ready", e );
+    })
+    widget.on('error', function(e) {
+      console.log("error", e );
+    })
+    widget.onExit = function (e) {
+      console.log("exit", e);
+    }
     widget.open();
     return null
   }

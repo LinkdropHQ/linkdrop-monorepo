@@ -3,7 +3,7 @@ import createSagaMiddleware from 'redux-saga'
 import { connectRouter, routerMiddleware } from 'connected-react-router'
 import saga from './saga'
 import { createBrowserHistory } from 'history'
-import { user, link, assets } from './reducers'
+import { user, link, assets, deeplinks } from './reducers'
 const sagaMiddleware = createSagaMiddleware()
 export const history = createBrowserHistory()
 
@@ -13,6 +13,7 @@ export default () => {
       user,
       link,
       assets,
+      deeplinks,
       router: connectRouter(history)
     }),
     {},

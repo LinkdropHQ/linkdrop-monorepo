@@ -24,6 +24,7 @@ class AppRouter extends React.Component {
   }
 
   defineMainPage ({ link }) {
+    console.log({ link })
     if (link) { return MobileClaimPage }
     return Main
   }
