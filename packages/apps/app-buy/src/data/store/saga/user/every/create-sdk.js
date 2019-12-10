@@ -23,11 +23,11 @@ const generator = function * ({ payload }) {
       claimHost,
       apiHost: `https://${networkName}-v2.linkdrop.io`
     })
-
     if (sdk) {
       const proxyAddress = sdk.getProxyAddress()
       yield put({ type: 'USER.SET_SDK', payload: { sdk } })
       const link = yield select(generator.selectors.link)
+      const { link: linkFromUrl } = getHashVariables()
       if (link) {
         const {
           linkKey,
@@ -39,7 +39,6 @@ const generator = function * ({ payload }) {
         const linkdropContractInstance = yield new ethers.Contract(linkdropContract, Linkdrop.abi, provider)
         try {
           const claimed = yield linkdropContractInstance.isClaimedLink(linkId)
-          console.log({ claimed })
           if (claimed) {
             yield put({ type: 'LINK.SET_LINK', payload: { link: null } })
             yield put({ type: 'LINK.SET_MINIFIED_LINK', payload: { minifiedLink: null } })
@@ -52,9 +51,11 @@ const generator = function * ({ payload }) {
             })
             yield put({ type: 'LINK.SET_PAGE', payload: { page: 'process' } })
           } else {
+            if (linkFromUrl) { return }
             window.location = '/#/link-generate'
           }
         } catch (e) {
+          if (linkFromUrl) { return }
           window.location = '/#/link-generate'
         }
       }

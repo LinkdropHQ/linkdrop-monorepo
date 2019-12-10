@@ -187,7 +187,7 @@ class Claim extends React.Component {
 
   renderCurrentPage ({ context }) {
     const { decimals, amount, symbol, icon, step, userLoading, errors, alreadyClaimed, web3Provider, readyToClaim, externalAccount, externalChainId } = this.props
-    const { connectorChainId } = this.state
+    const { connectorChainId, accounts } = this.state
     const {
       account = externalAccount
     } = context
@@ -217,10 +217,12 @@ class Claim extends React.Component {
       // if some errors occured and can be found in redux store, then show error page
       return <ErrorPage error={errors[0]} />
     }
+    console.log({ connectorChainId, context, account, accounts })
     if (
       (this.platform === 'desktop' && connectorChainId && Number(chainId) !== Number(connectorChainId)) ||
       (this.platform !== 'desktop' && account && connectorChainId && Number(chainId) !== Number(connectorChainId))) {
       // if network id in the link and in the web3 are different
+      console.log({ connectorChainId })
       return <ErrorPage error='NETWORK_NOT_SUPPORTED' network={capitalize({ string: defineNetworkName({ chainId }) })} />
     }
 

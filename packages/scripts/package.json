@@ -7,6 +7,8 @@
   "dependencies": {
     "@linkdrop/sdk": "^2.0.12-alpha.0",
     "@terminal-packages/sdk": "^1.1.0",
+    "@web3-react/fortmatic-connector": "^6.0.0-beta.19",
+    "@web3-react/portis-connector": "^6.0.0-beta.19",
     "axios": "^0.18.0",
     "csvtojson": "^2.0.8",
     "fast-csv": "^2.4.1",

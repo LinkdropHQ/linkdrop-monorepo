@@ -10,7 +10,7 @@ import { getHashVariables } from '@linkdrop/commons'
 export default function RouterProvider () {
   const context = useWeb3Context()
 
-  const { externalAccount, externalChainId } = getHashVariables()
+  const { externalAccount, externalChainId, connector } = getHashVariables()
   if (externalAccount, externalChainId) {
     return <ConnectedRouter history={history}>
       <Router history={history}>
@@ -25,7 +25,7 @@ export default function RouterProvider () {
   }
 
   useEffect(() => {
-    context.setFirstValidConnector(['MetaMask', 'Network'])
+    context.setFirstValidConnector(defineConnectors({ connector }))
   }, [])
 
   console.log(`context.active: ${context.active}`)
@@ -46,4 +46,11 @@ export default function RouterProvider () {
       </Router>
     </ConnectedRouter>
   }
+}
+
+const defineConnectors = ({ connector }) => {
+  if (connector) {
+    return [connector, 'Network']
+  }
+  return ['MetaMask', 'Network']
 }

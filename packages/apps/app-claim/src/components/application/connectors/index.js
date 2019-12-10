@@ -1,18 +1,16 @@
 import { Connectors } from 'web3-react'
 import { infuraPk, portisDappId, formaticApiKeyTestnet, formaticApiKeyMainnet } from 'app.config.js'
 import WalletConnectApi from '@walletconnect/web3-subprovider'
-import FortmaticApi from 'fortmatic'
-import PortisApi from '@portis/web3'
 import { getHashVariables, defineNetworkName } from '@linkdrop/commons'
+import { FortmaticConnector } from "@web3-react/fortmatic-connector"
+import { PortisConnector } from "@web3-react/portis-connector"
 const { chainId } = getHashVariables()
 const networkName = defineNetworkName({ chainId })
 
 const {
   InjectedConnector,
   NetworkOnlyConnector,
-  WalletConnectConnector,
-  FortmaticConnector,
-  PortisConnector
+  WalletConnectConnector
 } = Connectors
 
 const MetaMask = new InjectedConnector({
@@ -39,15 +37,14 @@ const WalletConnect = new WalletConnectConnector({
 })
 
 const Fortmatic = new FortmaticConnector({
-  api: FortmaticApi,
   apiKey: Number(chainId) === 1 ? formaticApiKeyMainnet : formaticApiKeyTestnet,
-  logoutOnDeactivation: true
+  logoutOnDeactivation: true,
+  chainId: Number(chainId)
 })
 
 const Portis = new PortisConnector({
-  api: PortisApi,
   dAppId: portisDappId,
-  network: networkName
+  networks: [Number(chainId)]
 })
 
 const connectors = {

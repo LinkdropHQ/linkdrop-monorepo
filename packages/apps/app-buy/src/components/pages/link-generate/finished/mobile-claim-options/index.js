@@ -5,11 +5,12 @@ import { PageExpandable } from 'components/pages'
 import { Button } from 'components/common'
 import { RetinaImage } from '@linkdrop/ui-kit'
 import { getWalletData, getWalletLink, getImages, getParentHost } from 'helpers'
+import { capitalize } from '@linkdrop/commons'
 import wallets from 'wallets'
 import Slider from './slider'
 import classNames from 'classnames'
 
-@actions(({ link: { link } }) => ({ link }))
+@actions(({ deeplinks: { coinbaseLink }, link: { link } }) => ({ link, coinbaseLink }))
 @platform()
 @translate('pages.linkGenerate')
 class MobileClaimOptions extends React.Component {
@@ -21,8 +22,15 @@ class MobileClaimOptions extends React.Component {
 		}
 	}
 
+  componentDidMount () {
+    const { link } = this.props
+    const currentUrl = getParentHost()
+    const redirectUrl = `${currentUrl}/#/?link=${encodeURIComponent(`${link}&hideLayout=true`)}`
+    this.actions().deeplinks.getCoinbaseLink({ url: redirectUrl })
+  }
+
 	render () {
-		const { onChange, expanded, link } = this.props
+		const { onChange, expanded, link, coinbaseLink } = this.props
 		const { currentWallet, showSlider } = this.state
 		
 		const currentUrl = getParentHost()
@@ -43,14 +51,14 @@ class MobileClaimOptions extends React.Component {
 				/>
 				<div className={styles.content}>
 					{this.renderWalletIcon({ wallet: currentWallet })}
-					{this.defineButton({ wallet: currentWallet, coinbaseLink: null, redirectUrl })}
+					{this.defineButton({ link, wallet: currentWallet, coinbaseLink, redirectUrl })}
 					{this.renderSlider({ wallet: currentWallet })}
 				</div>
 			</PageExpandable>
 		</div>
 	}
 
-	defineButton ({ coinbaseLink, wallet, redirectUrl }) {
+	defineButton ({ coinbaseLink, wallet, redirectUrl, link }) {
     if (this.platform === 'desktop') { return null }
 
     if (wallet !== 'fortmatic' && wallet !== 'portis') {
@@ -60,8 +68,9 @@ class MobileClaimOptions extends React.Component {
         {this.t('buttons.useWallet', { title: buttonTitle })}
       </Button>
     }
-    return null
-    return this.renderConnectorButton({ context, loading, connector: capitalize({ string: wallet }) })
+    return <Button href={`${link}&hideLayout=true&connector=${capitalize({ string: wallet })}`} className={styles.button}>
+      {this.t('buttons.useWallet', { title: capitalize({ string: wallet }) })}
+    </Button>
   }
 
 	renderSlider ({ wallet }) {
@@ -97,7 +106,7 @@ class MobileClaimOptions extends React.Component {
         imageId = 'opera-touch'
       }
     }
-    return <RetinaImage width={60} {...getImages({ src: imageId })} />
+    return <RetinaImage width={80} {...getImages({ src: imageId })} />
   }
 
 
