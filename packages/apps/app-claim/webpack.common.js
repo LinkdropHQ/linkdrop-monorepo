@@ -2,7 +2,12 @@ const webpack = require('webpack')
 const path = require('path')
 const autoprefixer = require('autoprefixer')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
-const config = require('../../../configs/app.config.json')
+let config = {}
+try {
+  config = require('../../../configs/app.config.json')
+} catch (err) {
+  console.log(err)
+}
 
 const CSSModuleLoader = {
   loader: 'css-loader',
