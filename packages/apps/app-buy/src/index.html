@@ -4,6 +4,7 @@
 <head>
   <title>Get Tokens | Powered by Linkdrop.io</title>
   <meta charset="UTF-8">
+  <script type="text/javascript" src="https://js.stripe.com/v3/"></script>
   <script src="https://verify.sendwyre.com/js/verify-module-init-beta.js"></script>
   <script type="text/javascript">
       function runMoonPaySafariFix() {
@@ -42,6 +43,7 @@
 <body>
   <main>
     <div class='application' id='application'></div>
+    <div id="wyre-dropin-widget-container"></div>
   </main>
 </body>
 <script src="<%= htmlWebpackPlugin.files.chunks.main.entry %>"></script>

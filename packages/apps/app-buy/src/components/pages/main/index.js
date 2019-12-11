@@ -84,7 +84,7 @@ class Main extends React.Component {
       env: 'test',
       accountId: sendWyreAccountId,
       operation: {
-        type: 'debitcard-hosted-dialog',
+        type: 'debitcard',
         dest: `ethereum:${proxyAddress}`,
         destCurrency: "ETH",
         sourceAmount: 10.0,
