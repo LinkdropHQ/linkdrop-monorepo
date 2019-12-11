@@ -19,9 +19,8 @@ class ClaimPage extends React.Component {
 
   async componentDidMount () {
     const { web3Provider } = this.props
-    const currentProvider = web3Provider && new Web3(web3Provider)
-    if (currentProvider) {
-      const { accounts, connectorChainId } = await this.getProviderData({ currentProvider })
+    if (web3Provider) {
+      const { accounts, connectorChainId } = await this.getProviderData({ currentProvider: web3Provider })
       this.setState({
         claimAddress: accounts[0],
         claimChainId: connectorChainId
