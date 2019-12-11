@@ -14,21 +14,24 @@ const defineSymbol = function * ({ tokenContract, address }) {
   }
 }
 
-const getTokenData = function * ({ tokenId, address, name, provider }) {
+const getTokenData = function * ({ tokenId, address, name, provider, imagePreview }) {
   const tokenContract = yield new ethers.Contract(address, NFTMock.abi, provider)
   const symbol = yield defineSymbol({ tokenContract, address })
   let metadataURL = ''
-  let image = ''
+  let image = address.toLowerCase() === '0xc94edae65cd0e07c17e7e1b6afb46589297313ae' ? imagePreview : ''
   try {
-    if (tokenContract.tokenURI) {
-      metadataURL = yield tokenContract.tokenURI(tokenId)
-    }
-    if (metadataURL !== '') {
-      const data = yield call(getERC721TokenData, { erc721URL: metadataURL })
-      if (data) {
-        image = data.image
+    if (image.length === 0) {
+      if (tokenContract.tokenURI) {
+        metadataURL = yield tokenContract.tokenURI(tokenId)
+      }
+      if (metadataURL !== '') {
+        const data = yield call(getERC721TokenData, { erc721URL: metadataURL })
+        if (data) {
+          image = data.image
+        }
       }
     }
+
     return {
       tokenId,
       address,
@@ -57,7 +60,7 @@ const generator = function * ({ payload }) {
     if (assets) {
       const actualJsonRpcUrl = defineJsonRpcUrl({ chainId, infuraPk, jsonRpcUrlXdai })
       const provider = yield new ethers.providers.JsonRpcProvider(actualJsonRpcUrl)
-      const assetsFormatted = yield all(assets.map(({ token_id: tokenId, asset_contract: { address, symbol }, name }) => getTokenData({ provider, tokenId, address, name })))
+      const assetsFormatted = yield all(assets.map(({ image_preview_url: imagePreview, token_id: tokenId, asset_contract: { address, symbol }, name }) => getTokenData({ imagePreview, provider, tokenId, address, name })))
       const assetsMerged = assetsFormatted.reduce((sum, { tokenId, address, symbol, name, image }) => {
         if (sum[address]) {
           sum[address] = { ...sum[address], names: { ...sum[address].names, [tokenId]: name }, ids: [...sum[address].ids, tokenId], images: { ...sum[address].images, [tokenId]: image } }
