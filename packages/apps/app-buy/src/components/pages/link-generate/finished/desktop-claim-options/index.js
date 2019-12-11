@@ -3,13 +3,22 @@ import styles from './styles.module'
 import { Button } from 'components/common'
 import { PageExpandable } from 'components/pages'
 import connectors from 'components/application/connectors'
-import Web3Provider, { useWeb3Context, Web3Consumer } from "web3-react";
+import {
+  Web3ReactProvider,
+  useWeb3React
+} from "@web3-react/core";
+import Web3 from 'web3'
+
 import DesktopClaimPage from '../desktop-claim'
 import { getImages } from 'helpers'
 import { RetinaImage, Loading } from '@linkdrop/ui-kit'
 
+function getLibrary(provider) {
+  return new Web3(provider);
+}
+
 export default ({ expanded, onChange, translate }) => {
-	return <Web3Provider connectors={connectors} libraryName="ethers.js">
+	return <Web3ReactProvider getLibrary={getLibrary}>
 		<PageExpandable
 		  expanded={expanded}
 		  fullContent
@@ -17,19 +26,30 @@ export default ({ expanded, onChange, translate }) => {
 		>
 			<Content translate={translate} />
 		</PageExpandable>
-	</Web3Provider>
+	</Web3ReactProvider>
 }
 
 const Content = ({ translate }) => {
-	const context = useWeb3Context();
+	const context = useWeb3React();
+  const {
+    connector,
+    library,
+    chainId,
+    account,
+    activate,
+    deactivate,
+    active,
+    error
+  } = context;
 
-  if (context.error) {
-  	console.log(context.error)
+
+  if (error) {
+  	console.log(error)
     return <div>Error Occured!</div>
   }
 
-  if (context.library) {
-  	return <DesktopClaimPage web3Provider={context.library._web3Provider}/>
+  if (library) {
+  	return <DesktopClaimPage web3Provider={library}/>
   }
 
   return <ConnectorsSelect context={context} translate={translate} />
@@ -50,7 +70,7 @@ const ConnectorsSelect = ({ context, translate }) => {
 	      iconed
 	      onClick={_ => {
 	      	setLoading(true)
-	      	context.setConnector('Fortmatic')
+	      	context.activate(connectors['Fortmatic'])
 	      }}
 	      inverted
 	    >
@@ -63,7 +83,7 @@ const ConnectorsSelect = ({ context, translate }) => {
 	      className={styles.button}
 	      onClick={_ => {
 	      	setLoading(true)
-	      	context.setConnector('Portis')
+	      	context.activate(connectors['Portis'])
 	      }}
 	      inverted
 	    >
@@ -74,7 +94,7 @@ const ConnectorsSelect = ({ context, translate }) => {
 	    <Button
 	      className={styles.button}
 	      iconed
-	      onClick={_ => context.setConnector('MetaMask')}
+	      onClick={_ => context.activate(connectors['MetaMask'])}
 	      inverted
 	    >
 	    	<RetinaImage width={20} {...getImages({ src: 'metamask-icon' })} />

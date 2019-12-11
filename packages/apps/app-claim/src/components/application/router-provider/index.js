@@ -1,5 +1,8 @@
 import React, { useEffect } from 'react'
-import { useWeb3Context } from 'web3-react'
+import {
+  useWeb3React
+} from "@web3-react/core"
+import connectors from '../connectors'
 import { Router } from 'react-router'
 import { ConnectedRouter } from 'connected-react-router'
 import { history } from 'data/store'
@@ -8,8 +11,7 @@ import AppRouter from '../router'
 import { getHashVariables } from '@linkdrop/commons'
 
 export default function RouterProvider () {
-  const context = useWeb3Context()
-
+  const context = useWeb3React()
   const { externalAccount, externalChainId, connector } = getHashVariables()
   if (externalAccount, externalChainId) {
     return <ConnectedRouter history={history}>
@@ -25,7 +27,7 @@ export default function RouterProvider () {
   }
 
   useEffect(() => {
-    context.setFirstValidConnector(defineConnectors({ connector }))
+    context.activate(defineConnectors({ connector }))
   }, [])
 
   console.log(`context.active: ${context.active}`)
@@ -49,8 +51,12 @@ export default function RouterProvider () {
 }
 
 const defineConnectors = ({ connector }) => {
+  // if (connector) {
+  //   return [connector, 'Network']
+  // }
+  // return ['MetaMask', 'Network']
   if (connector) {
-    return [connector, 'Network']
+    return connectors[connector]
   }
-  return ['MetaMask', 'Network']
+  return connectors['Metamask']
 }

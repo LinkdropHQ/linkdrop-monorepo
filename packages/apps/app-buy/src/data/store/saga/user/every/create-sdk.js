@@ -25,6 +25,7 @@ const generator = function * ({ payload }) {
     })
     if (sdk) {
       const proxyAddress = sdk.getProxyAddress()
+      console.log({ proxyAddress })
       yield put({ type: 'USER.SET_SDK', payload: { sdk } })
       const link = yield select(generator.selectors.link)
       const { link: linkFromUrl } = getHashVariables()

@@ -1,0 +1,11 @@
+.fakeButton {
+	position: fixed;
+  z-index: 100000;
+  bottom: 0px;
+  padding: 16px;
+  background: #FFF;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

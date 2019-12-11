@@ -2,8 +2,9 @@
 import React from 'react'
 import styles from './styles.module'
 import { Page } from 'components/pages'
-import { actions } from 'decorators'
+import { actions, translate } from 'decorators'
 import { Loading } from '@linkdrop/ui-kit'
+import { Button } from 'components/common'
 import { moonpayApiKey, sendWyreAccountId } from 'config'
 
 @actions(({ assets: { ethBalance }, link: { link, claimed }, user: { proxyAddress, privateKey, sdk } }) => ({
@@ -14,6 +15,7 @@ import { moonpayApiKey, sendWyreAccountId } from 'config'
   link,
   claimed
 }))
+@translate('pages.main')
 class Main extends React.Component {
   constructor (props) {
     super(props)
@@ -50,7 +52,9 @@ class Main extends React.Component {
 
   applyBalanceCheck () {
     if (window.balanceCheck) { window.clearInterval(window.balanceCheck) }
-    window.balanceCheck = window.setInterval(_ => this.actions().assets.checkBalance(), 3000)
+    window.balanceCheck = window.setInterval(_ => {
+      this.actions().assets.checkBalance()
+    }, 3000)
   }
 
   render () {
@@ -80,6 +84,8 @@ class Main extends React.Component {
   }
 
   renderSendWyre ({ proxyAddress }) {
+    const { link } = this.props
+    if (link) { return null }
     const widget = new Wyre({
       env: 'test',
       accountId: sendWyreAccountId,
@@ -87,21 +93,24 @@ class Main extends React.Component {
         type: 'debitcard',
         dest: `ethereum:${proxyAddress}`,
         destCurrency: "ETH",
-        sourceAmount: 10.0,
+        sourceAmount: 290.0,
         paymentMethod: 'google-pay'
       }
     });
-    widget.on('ready', function(e) {
-      console.log("ready", e );
+    widget.on('ready', _ => {
+      this.setState({
+        loaded: true
+      })
     })
-    widget.on('error', function(e) {
-      console.log("error", e );
-    })
-    widget.onExit = function (e) {
-      console.log("exit", e);
-    }
+  
     widget.open();
-    return null
+    return <div className={styles.fakeButton}><Button onClick={_ => {
+      {/*window.setTimeout(_ => this.applyBalanceCheck(), 3000)*/}
+      window.location.href = '/#/loading'
+      widget.close()
+    }}>
+      {this.t('buttons.buy')}
+    </Button></div>
   }
 
   defineIframeSrc ({ application, moonpayApiKey, proxyAddress }) {

@@ -3,6 +3,7 @@ import { Alert, Icons, Button, RetinaImage, Loading } from '@linkdrop/ui-kit'
 import { translate } from 'decorators'
 import classNames from 'classnames'
 import { getImages, capitalize } from 'helpers'
+import connectors from 'components/application/connectors'
 
 import styles from './styles.module'
 import commonStyles from '../styles.module'
@@ -28,7 +29,7 @@ class NeewWallet extends React.Component {
         <div className={styles.divider}>{this.t('titles.divider')}</div>
         {false && <Button
           inverted className={styles.button}
-          onClick={_ => context.setConnector('Metamask')}
+          onClick={_ => context.activate(connectors['Metamask'])}
         >
           {this.t('buttons.metamask')}
         </Button>}
@@ -48,7 +49,7 @@ class NeewWallet extends React.Component {
         this.setState({
           loading: true
         }, _ => {
-          context.setConnector(capitalize({ string: connector }))
+          context.activate(connectors[capitalize({ string: connector })])
         })
       }}
     >
