@@ -10,6 +10,7 @@ const generator = function * ({ payload }) {
     const ethBalance = yield provider.getBalance(proxyAddress)
     const balanceAmount = Number(ethBalance)
     if (balanceAmount > 0) {
+      console.log({ balanceAmount })
       yield put({
         type: 'ASSETS.SET_ETH_BALANCE',
         payload: {

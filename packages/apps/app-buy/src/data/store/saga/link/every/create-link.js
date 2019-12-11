@@ -14,6 +14,7 @@ const generator = function * ({ payload }) {
   try {
     const networkName = defineNetworkName({ chainId: defaultChainId })
     const ethBalance = yield select(generator.selectors.ethBalance)
+    const application = yield select(generator.selectors.application)
     const ethBalanceFormatted = yield select(generator.selectors.ethBalanceFormatted)
     const privateKey = yield select(generator.selectors.privateKey)
     const wallet = yield select(generator.selectors.wallet)
@@ -21,7 +22,7 @@ const generator = function * ({ payload }) {
     yield put({ type: 'LINK.SET_LOADING', payload: { loading: true } })
     const ethersContractZeroAddress = ethers.constants.AddressZero
     const { success } = yield call(register, { factoryAddress: factory, senderAddress: wallet, apiHost: `https://${networkName}-v2.linkdrop.io` })
-    if (success) {
+    if (success || application === 'sendwyre') {
       const { url } = yield sdk.generateLink({
         campaignId: 0, // 0
         token: ethersContractZeroAddress,
@@ -56,6 +57,7 @@ generator.selectors = {
   ethBalance: ({ assets: { ethBalance } }) => ethBalance,
   ethBalanceFormatted: ({ assets: { ethBalanceFormatted } }) => ethBalanceFormatted,
   sdk: ({ user: { sdk } }) => sdk,
+  application: ({ user: { application } }) => application,
   wallet: ({ user: { wallet } }) => wallet,
   privateKey: ({ user: { privateKey } }) => privateKey
 }
