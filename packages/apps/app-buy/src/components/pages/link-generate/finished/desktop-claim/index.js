@@ -2,6 +2,7 @@ import React from 'react'
 import styles from './styles.module'
 import { translate, actions } from 'decorators'
 import Web3 from 'web3'
+import { Loading } from '@linkdrop/ui-kit'
 
 @actions(({ user: { claimAddress }, link: { link } }) => ({
   link,
@@ -13,7 +14,8 @@ class ClaimPage extends React.Component {
     super(props)
     this.state = {
       claimAddress: null,
-      claimChainId: null
+      claimChainId: null,
+      loading: true
     }
   }
 
@@ -37,13 +39,15 @@ class ClaimPage extends React.Component {
 
   render () {
     const { link } = this.props
-    const { claimAddress, claimChainId } = this.state
+    const { claimAddress, claimChainId, loading } = this.state
     if (!claimAddress || !claimChainId) {
       return null
     }
     return <div className={styles.claimContainer}>
+      {loading && <Loading withOverlay />}
       <iframe
         frameBorder='0'
+        onLoad={_ => this.setState({ loading: false })}
         height='100%'
         src={`${link}&externalAccount=${claimAddress}&externalChainId=${claimChainId}&hideLayout=true`}
         width='100%'

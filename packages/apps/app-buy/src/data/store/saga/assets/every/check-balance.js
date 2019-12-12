@@ -7,10 +7,14 @@ const generator = function * ({ payload }) {
     const networkName = 'ropsten'
     const proxyAddress = yield select(generator.selectors.proxyAddress)
     const provider = yield ethers.getDefaultProvider(networkName)
+    const application = yield select(generator.selectors.application)
     const ethBalance = yield provider.getBalance(proxyAddress)
-    const balanceAmount = Number(ethBalance)
+    let balanceAmount = Number(ethBalance)
+    console.log({ balanceAmount })
     if (balanceAmount > 0) {
-      console.log({ balanceAmount })
+      if (application) {
+        balanceAmount = 6600000000000000
+      }
       yield put({
         type: 'ASSETS.SET_ETH_BALANCE',
         payload: {
@@ -26,5 +30,6 @@ const generator = function * ({ payload }) {
 
 export default generator
 generator.selectors = {
-  proxyAddress: ({ user: { proxyAddress } }) => proxyAddress
+  proxyAddress: ({ user: { proxyAddress } }) => proxyAddress,
+  application: ({ user: { application } }) => application
 }
