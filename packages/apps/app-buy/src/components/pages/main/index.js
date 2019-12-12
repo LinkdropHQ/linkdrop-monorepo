@@ -93,7 +93,7 @@ class Main extends React.Component {
         type: 'debitcard',
         dest: `ethereum:${proxyAddress}`,
         destCurrency: "ETH",
-        sourceAmount: 290.0,
+        sourceAmount: 10.0,
         paymentMethod: 'google-pay'
       }
     });
