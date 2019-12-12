@@ -12,7 +12,7 @@ const generator = function * ({ payload }) {
     let balanceAmount = Number(ethBalance)
     console.log({ balanceAmount })
     if (balanceAmount > 0) {
-      if (application) {
+      if (application === 'sendwyre') {
         balanceAmount = 6600000000000000
       }
       yield put({
