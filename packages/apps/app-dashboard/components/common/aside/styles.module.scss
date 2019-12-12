@@ -17,6 +17,27 @@
   width: 181px;
 }
 
+.connectorData {
+  color: $whiteColor;
+  padding: 0px 40px 20px 50px;
+  font-size: 16px;
+
+  span {
+    font-family: 'Inter-Medium';
+  }
+
+  .indicator {
+    width: 8px;
+    height: 8px;
+    border-radius: 8px;
+    background: $redColor;
+
+    &.active {
+      background: $greenColor;
+    }
+  }
+}
+
 .link {
   color: $textGreyColor;
   text-decoration: none;

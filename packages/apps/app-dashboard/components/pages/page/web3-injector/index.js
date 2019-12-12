@@ -4,6 +4,7 @@ import { actions, translate } from 'decorators'
 import { Button } from 'components/common'
 import styles from './styles.module'
 import Web3Connect from 'web3connect'
+console.log({ Web3Connect })
 import Web3 from 'web3'
 import WalletConnectProvider from "@walletconnect/web3-provider";
 import Portis from "@portis/web3";
@@ -47,15 +48,16 @@ class Web3Injector extends React.Component {
       }
     })
 
-    this.web3Connect.on('connect', provider => {
+    this.web3Connect.on('connect', provider => {      
       this.applyProvider(provider)
     })
   }
 
   async applyProvider (provider) {
+    const { name } = Web3Connect.getProviderInfo(provider)
     const web3Provider = new Web3(provider)
     if (web3Provider) {
-      this.actions().user.checkCurrentProvider({ provider: web3Provider })
+      this.actions().user.checkCurrentProvider({ provider: web3Provider, name })
     }
   }
 

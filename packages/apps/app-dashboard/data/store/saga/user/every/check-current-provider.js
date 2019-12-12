@@ -7,12 +7,14 @@ import { defineNetworkName, defineJsonRpcUrl } from '@linkdrop/commons'
 const generator = function * ({ payload }) {
   try {
     yield put({ type: 'USER.SET_LOADING', payload: { loading: true } })
-    const { provider } = payload
+    const { provider, name } = payload
+    console.log({ name })
     if (!provider) {
       return yield put({ type: 'USER.SET_LOADING', payload: { loading: false } })
     }
 
     yield put({ type: 'USER.SET_WEB3_PROVIDER', payload: { web3Provider: provider } })
+    yield put({ type: 'USER.SET_WEB3_PROVIDER_NAME', payload: { web3ProviderName: name } })
 
     const result = yield provider.eth.getAccounts()
     const chainId = yield provider.eth.getChainId()
