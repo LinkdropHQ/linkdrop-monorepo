@@ -4,7 +4,6 @@ import { actions, translate } from 'decorators'
 import { Button } from 'components/common'
 import styles from './styles.module'
 import Web3Connect from 'web3connect'
-console.log({ Web3Connect })
 import Web3 from 'web3'
 import WalletConnectProvider from "@walletconnect/web3-provider";
 import Portis from "@portis/web3";
