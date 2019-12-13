@@ -1,8 +1,9 @@
-import { put } from 'redux-saga/effects'
+import { put, select } from 'redux-saga/effects'
 import TokenMock from 'contracts/TokenMock.json'
 import { ethers } from 'ethers'
 import { infuraPk, jsonRpcUrlXdai } from 'app.config.js'
 import { defineJsonRpcUrl } from '@linkdrop/commons'
+import getCurrentTokenBalance from './get-current-token-balance'
 
 const defineSymbol = function * ({ tokenContract, tokenAddress }) {
   try {
@@ -20,6 +21,7 @@ const generator = function * ({ payload }) {
   try {
     yield put({ type: 'USER.SET_LOADING', payload: { loading: true } })
     const { tokenAddress, chainId } = payload
+    const currentAddress = yield select(generator.selectors.currentAddress)
     // 0x85d1f0d5ea43e6f31d4f6d1f302405373e095722
     yield put({ type: 'TOKENS.SET_TOKEN_ADDRESS', payload: { address: tokenAddress } })
     yield put({ type: 'TOKENS.SET_TOKEN_TYPE', payload: { tokenType: 'erc20' } })
@@ -27,6 +29,13 @@ const generator = function * ({ payload }) {
     const provider = yield new ethers.providers.JsonRpcProvider(actualJsonRpcUrl)
     const tokenContract = yield new ethers.Contract(tokenAddress, TokenMock.abi, provider)
     const decimals = yield tokenContract.decimals()
+    const { tokenBalance, tokenBalanceFormatted } = yield getCurrentTokenBalance({ payload: { decimals, contract: tokenContract, account: currentAddress } })
+    yield put({
+      type: 'TOKENS.SET_CURRENT_TOKEN_BALANCE',
+      payload: {
+        currentTokenBalance: Math.round(tokenBalanceFormatted * 100) / 100
+      }
+    })
     const symbol = yield defineSymbol({ tokenAddress, tokenContract })
     yield put({ type: 'TOKENS.SET_TOKEN_DECIMALS', payload: { decimals } })
     yield put({ type: 'TOKENS.SET_TOKEN_SYMBOL', payload: { symbol } })
@@ -38,3 +47,6 @@ const generator = function * ({ payload }) {
 }
 
 export default generator
+generator.selectors = {
+  currentAddress: ({ user: { currentAddress } }) => currentAddress
+}

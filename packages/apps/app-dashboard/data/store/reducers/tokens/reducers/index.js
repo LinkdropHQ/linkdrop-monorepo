@@ -8,6 +8,8 @@ import setEthBalance from './set-eth-balance'
 import setERC20Balance from './set-erc20-balance'
 import setERC721IsApproved from './set-erc721-is-approved'
 import setLoading from './set-loading'
+import setCurrentEthBalance from './set-current-eth-balance'
+import setCurrentTokenBalance from './set-current-token-balance'
 
 export default {
   setAssets,
@@ -19,5 +21,7 @@ export default {
   setEthBalance,
   setLoading,
   setERC20Balance,
-  setERC721IsApproved
+  setERC721IsApproved,
+  setCurrentEthBalance,
+  setCurrentTokenBalance
 }

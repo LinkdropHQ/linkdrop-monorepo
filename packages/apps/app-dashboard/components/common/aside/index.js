@@ -67,6 +67,11 @@ class Aside extends React.Component {
       />
       <span>{web3ProviderName}</span> connected
       <div>{currentAddressFormatted}</div>
+      <div className={styles.logout} onClick={_ => window.location.reload()}>
+        <span>
+          {this.t('logout')}
+        </span>
+      </div>
     </div>
   }
 

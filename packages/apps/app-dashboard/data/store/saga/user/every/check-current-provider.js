@@ -8,7 +8,6 @@ const generator = function * ({ payload }) {
   try {
     yield put({ type: 'USER.SET_LOADING', payload: { loading: true } })
     const { provider, name } = payload
-    console.log({ name })
     if (!provider) {
       return yield put({ type: 'USER.SET_LOADING', payload: { loading: false } })
     }

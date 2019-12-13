@@ -20,7 +20,6 @@ class Web3Injector extends React.Component {
     super(props)
     const { chainId = '1' } = getHashVariables()
     const networkName = defineNetworkName({ chainId })
-    console.log({ chainId, networkName })
     this.web3Connect = new Web3Connect.Core({
       network: networkName,
       providerOptions: {

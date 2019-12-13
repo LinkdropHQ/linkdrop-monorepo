@@ -1,12 +1,21 @@
 import { put, call, select } from 'redux-saga/effects'
 import { getItems } from 'data/api/tokens'
 import { defineNetworkName } from '@linkdrop/commons'
+import getCurrentEthBalance from './get-current-eth-balance'
 
 const generator = function * ({ payload }) {
   try {
     const { currentAddress } = payload
     const chainId = yield select(generator.selectors.chainId)
     const networkName = defineNetworkName({ chainId })
+    const { ethBalanceFormatted } = yield getCurrentEthBalance({ payload: { account: currentAddress, chainId } })
+    yield put({
+      type: 'TOKENS.SET_CURRENT_ETH_BALANCE',
+      payload: {
+        currentEthBalance: Math.round(ethBalanceFormatted * 100) / 100
+      }
+    })
+
     const { status = 0, result = [], message } = yield call(getItems, { address: currentAddress, networkName })
     if (status && status === '1' && message === 'OK') {
       const erc20Assets = result.filter(asset => {

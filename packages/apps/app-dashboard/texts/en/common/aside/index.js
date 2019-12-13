@@ -7,5 +7,6 @@ export default {
   create: 'Create',
   analytics: 'Analytics',
   settings: 'Settings',
-  soon: 'Soon'
+  soon: 'Soon',
+  logout: 'Log Out'
 }
