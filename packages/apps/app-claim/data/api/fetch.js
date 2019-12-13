@@ -2,11 +2,11 @@
 
 export default (url, options = {}, parseOptions = {}) => {
   const _url = (options == null || options.method === 'get' || options.method == null) ? formatUrl(url) : url
-
+  const headers = parseOptions.disableHeaders ? {} : { ...DEFAULT_OPTIONS.headers, ...((options || {}).headers || {}) }
   return fetch(_url, {
     ...DEFAULT_OPTIONS,
     ...options,
-    headers: { ...DEFAULT_OPTIONS.headers, ...((options || {}).headers || {}) }
+    headers
   }).then(response => {
     if (!response.ok && options.showErrors) { return response.status }
     return parseOptions.notJSON ? response : response.json()
