@@ -12,7 +12,9 @@ const initialState = {
   erc20Balance: null,
   ethBalance: null,
   erc20BalanceFormatted: null,
-  erc721IsApproved: null
+  erc721IsApproved: null,
+  currentEthBalance: null,
+  currentTokenBalance: null
 }
 
 export default (state = initialState, action = {}) => {
@@ -33,5 +35,7 @@ const ACTIONS = {
   'TOKENS.SET_ETH_BALANCE': reducers.setEthBalance,
   'TOKENS.SET_ERC20_BALANCE': reducers.setERC20Balance,
   'TOKENS.SET_ERC721_IS_APPROVED': reducers.setERC721IsApproved,
-  'TOKENS.SET_LOADING': reducers.setLoading
+  'TOKENS.SET_LOADING': reducers.setLoading,
+  'TOKENS.SET_CURRENT_ETH_BALANCE': reducers.setCurrentEthBalance,
+  'TOKENS.SET_CURRENT_TOKEN_BALANCE': reducers.setCurrentTokenBalance
 }

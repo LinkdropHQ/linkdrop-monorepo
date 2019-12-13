@@ -10,11 +10,45 @@
   flex-direction: column;
 }
 
+.logout {
+  cursor: pointer;
+}
+
 .logo {
   cursor: pointer;
   display: block;
   margin: 0 auto 50px 50px;
   width: 181px;
+}
+
+.connectorData {
+  
+  font-size: 16px;
+  max-width: 170px;
+  margin: 0 auto 20px;
+  padding-bottom: 20px;
+  position: relative;
+  border-bottom: 1px solid $dbGrey;
+  color: $textGreyColor;
+
+  span {
+    color: $whiteColor;
+    font-family: 'Inter-Medium';
+  }
+
+  .indicator {
+    width: 8px;
+    height: 8px;
+    position: absolute;
+    top: 6px;
+    left: -16px;
+    border-radius: 8px;
+    background: $redColor;
+
+    &.active {
+      background: $greenColor;
+    }
+  }
 }
 
 .link {
@@ -89,8 +123,8 @@
 
 .footerMenu {
   display: flex;
-  margin-bottom: 20px;
-  padding: 0px 50px;
+  max-width: 170px;
+  margin: 0 auto 20px;
   justify-content: space-between;
 }
 
@@ -99,7 +133,8 @@
 }
 
 .copyright {
-  padding: 0px 50px;
+  max-width: 170px;
+  margin: 0 auto;
 }
 
 .copyright, .menu, .dashboard {

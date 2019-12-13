@@ -17,6 +17,8 @@ export default {
     oneLinkContents: '{{tokenAmount}} {{tokenSymbol}}',
     // step1
     receiverWallet: 'Receiver wallet:',
+    etherBalance: 'Ether Balance: ',
+    balance: 'Balance: ', 
     tokenAddress: 'Token Address',
     tokenAddressPlaceholder: '0x Address',
     selectNft: 'Select tokens to distribute',

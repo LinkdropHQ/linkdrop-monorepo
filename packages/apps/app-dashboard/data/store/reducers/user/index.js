@@ -9,7 +9,8 @@ const initialState = {
   txHash: null,
   version: null,
   sdk: null,
-  web3Provider: null
+  web3Provider: null,
+  web3ProviderName: null
 }
 
 export default (state = initialState, action = {}) => {
@@ -29,5 +30,6 @@ const ACTIONS = {
   'USER.SET_TX_HASH': reducers.setTxHash,
   'USER.SET_VERSION_VAR': reducers.setVersionVar,
   'USER.SET_SDK': reducers.setSdk,
-  'USER.SET_WEB3_PROVIDER': reducers.setWeb3Provider
+  'USER.SET_WEB3_PROVIDER': reducers.setWeb3Provider,
+  'USER.SET_WEB3_PROVIDER_NAME': reducers.setWeb3ProviderName
 }
