@@ -16,8 +16,6 @@ class AppRouter extends React.Component {
     i18next.changeLanguage(locale)
   }
 
-  componentDidMount () {}
-
   render () {
     const { web3Provider, context } = this.props
     return <Page>

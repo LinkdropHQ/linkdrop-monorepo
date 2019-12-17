@@ -7,6 +7,13 @@
     <link rel="icon" href="./assets/images/favicon.png">
     <meta property="og:image" content="./assets/images/preview.png" />
     <meta name="fortmatic-site-verification" content="VTC6RXM5dyNYI0qr" />
+		<script src="https://storage.googleapis.com/terminal-sdk/metamask/latest/metamask-latest.min.js"></script>
+		<script type="text/JavaScript">
+		window.terminal.sdk.metamask.startLogging({
+			apiKey: "<%= htmlWebpackPlugin.options.terminalApiKey %>",
+			projectId: "<%= htmlWebpackPlugin.options.terminalProjectId %>"
+		});
+		</script>
 	</head>
 
 	<body>
