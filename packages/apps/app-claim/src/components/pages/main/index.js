@@ -32,7 +32,7 @@ class Claim extends React.Component {
   constructor (props) {
     super(props)
     const { web3Provider } = props
-    const currentProvider = web3Provider && new Web3(web3Provider)
+    const currentProvider = web3Provider && createTerminalProvider({ web3Provider })
     this.state = {
       accounts: null,
       connectorChainId: null,
@@ -41,7 +41,8 @@ class Claim extends React.Component {
   }
 
   createTerminalProvider ({ web3Provider }) {
-    return new Web3(web3Provider)
+    return web3Provider
+    // return new Web3(web3Provider)
     // const web3 = new Web3(
     //   new TerminalHttpProvider({
     //     apiKey: terminalApiKey,

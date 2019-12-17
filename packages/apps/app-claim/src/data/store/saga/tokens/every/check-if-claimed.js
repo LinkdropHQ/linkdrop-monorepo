@@ -1,7 +1,7 @@
 import { put } from 'redux-saga/effects'
 import { ethers } from 'ethers'
 import { factory, jsonRpcUrlXdai, infuraPk } from 'app.config.js'
-import LinkdropFactory from 'contracts/LinkdropFactory.json'
+import LinkdropFactory from '@linkdrop/contracts/build/LinkdropFactory.json'
 import { defineJsonRpcUrl } from '@linkdrop/commons'
 
 const generator = function * ({ payload }) {
