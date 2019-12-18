@@ -42,13 +42,12 @@ const postCSSLoader = {
 }
 
 module.exports = {
-  entry: [
-    'webpack/hot/dev-server',
-    '@babel/polyfill',
-    './src/index.js'
-  ],
+  entry: {
+    vendor: ['webpack/hot/dev-server', '@babel/polyfill', 'react', 'react-dom', 'redux'],
+    main: './src/index.js'
+  },
   output: {
-    filename: 'bundle.js',
+    filename: '[name].js',
     path: path.resolve(__dirname, 'dist')
   },
   context: __dirname,

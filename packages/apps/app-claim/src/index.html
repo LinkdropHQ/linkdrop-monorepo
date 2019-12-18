@@ -19,5 +19,7 @@
 	<body>
 		<div class='application' id='application'></div>
 	</body>
-	<script src="<%= htmlWebpackPlugin.files.chunks.main.entry %>"></script>
+	<% for (var chunk in htmlWebpackPlugin.files.chunks) { %>
+		<script src="<%= htmlWebpackPlugin.files.chunks[chunk].entry %>"></script>
+	<% } %>
 </html>
