@@ -7,8 +7,10 @@ import ClaimingProcessPage from './claiming-process-page'
 import ErrorPage from './error-page'
 import ClaimingFinishedPage from './claiming-finished-page'
 import NeedWallet from './need-wallet'
+import { terminalApiKey, terminalProjectId } from 'app.config.js'
 import { getHashVariables, defineNetworkName, capitalize } from '@linkdrop/commons'
 import Web3 from 'web3'
+import { TerminalHttpProvider, SourceType } from '@terminal-packages/sdk'
 
 @actions(({ user: { errors, step, loading: userLoading, readyToClaim, alreadyClaimed }, tokens: { transactionId }, contract: { loading, decimals, amount, symbol, icon } }) => ({
   userLoading,
@@ -30,12 +32,25 @@ class Claim extends React.Component {
   constructor (props) {
     super(props)
     const { web3Provider } = props
-    const currentProvider = web3Provider && new Web3(web3Provider)
+    const currentProvider = web3Provider && createTerminalProvider({ web3Provider })
     this.state = {
       accounts: null,
       connectorChainId: null,
       currentProvider
     }
+  }
+
+  createTerminalProvider ({ web3Provider }) {
+    return web3Provider
+    // return new Web3(web3Provider)
+    // const web3 = new Web3(
+    //   new TerminalHttpProvider({
+    //     apiKey: terminalApiKey,
+    //     projectId: terminalProjectId,
+    //     source: SourceType.Terminal,
+    //     customHttpProvider: web3Provider
+    //   })
+    // );
   }
 
   async componentDidMount () {

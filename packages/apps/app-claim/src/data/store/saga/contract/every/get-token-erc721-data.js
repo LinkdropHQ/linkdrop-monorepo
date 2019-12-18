@@ -1,7 +1,7 @@
 import { put, call } from 'redux-saga/effects'
 import { getERC721TokenData } from 'data/api/tokens'
 import { ethers } from 'ethers'
-import NFTMock from 'contracts/NFTMock.json'
+import NFTMock from '@linkdrop/contracts/build/NFTMock.json'
 import { defineJsonRpcUrl } from '@linkdrop/commons'
 import { infuraPk, jsonRpcUrlXdai } from 'app.config.js'
 

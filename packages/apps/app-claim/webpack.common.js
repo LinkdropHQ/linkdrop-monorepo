@@ -1,6 +1,13 @@
 const webpack = require('webpack')
 const path = require('path')
 const autoprefixer = require('autoprefixer')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
+let config = {}
+try {
+  config = require('../../../configs/app.config.json')
+} catch (err) {
+  console.log(err)
+}
 
 const CSSModuleLoader = {
   loader: 'css-loader',
@@ -35,20 +42,20 @@ const postCSSLoader = {
 }
 
 module.exports = {
-  entry: [
-    'webpack/hot/dev-server',
-    '@babel/polyfill',
-    './index.js'
-  ],
+  entry: {
+    vendor: ['webpack/hot/dev-server', '@babel/polyfill', 'react', 'react-dom', 'redux'],
+    main: './src/index.js'
+  },
   output: {
-    filename: 'bundle.js',
-    path: path.resolve(__dirname, 'assets/scripts')
+    filename: '[name].js',
+    path: path.resolve(__dirname, 'dist')
   },
   context: __dirname,
   resolve: {
     extensions: ['.js', '.jsx', '.json', '.scss', '.css', '*'],
     modules: [
       path.resolve('./'),
+      path.resolve('./src'),
       path.resolve('./node_modules'),
       path.resolve('../../../node_modules')
     ],
@@ -57,7 +64,6 @@ module.exports = {
       dapps: path.resolve(__dirname, '../../../configs/dapps.config'),
       config: path.resolve(__dirname, '../../../configs/app.config'),
       'config-claim': path.resolve(__dirname, '../../../configs/claim.config'),
-      contracts: path.resolve(__dirname, '../../contracts/build'),
       variables: path.resolve(__dirname, '../linkdrop-commons/variables/index.module.scss')
     }
   },
@@ -98,8 +104,19 @@ module.exports = {
       loader: 'url-loader?limit=100000'
     }]
   },
+  node: {
+    fs: 'empty'
+  },
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
+    new HtmlWebpackPlugin({
+      inject: false,
+      hash: true,
+      template: './src/index.html',
+      filename: 'index.html',
+      terminalProjectId: process.env.TERMINAL_PROJECT_ID || config.terminalProjectId,
+      terminalApiKey: process.env.TERMINAL_API_KEY || config.terminalApiKey
+    }),
     new webpack.DefinePlugin({
       MASTER_COPY: JSON.stringify(process.env.MASTER_COPY),
       FACTORY: JSON.stringify(process.env.FACTORY),
