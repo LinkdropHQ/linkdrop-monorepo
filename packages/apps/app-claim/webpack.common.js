@@ -2,12 +2,15 @@ const webpack = require('webpack')
 const path = require('path')
 const autoprefixer = require('autoprefixer')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+
 let config = {}
 try {
   config = require('../../../configs/app.config.json')
 } catch (err) {
   console.log(err)
 }
+
 
 const CSSModuleLoader = {
   loader: 'css-loader',
@@ -86,7 +89,7 @@ module.exports = {
       test: /\.(scss|css)$/,
       exclude: /\.module\.scss$/,
       use: [
-        'style-loader',
+        process.env.NODE_ENV === 'production' ? MiniCssExtractPlugin.loader : 'style-loader',
         CSSLoader,
         'sass-loader',
         postCSSLoader
@@ -94,7 +97,7 @@ module.exports = {
     }, {
       test: /\.module\.scss$/,
       use: [
-        'style-loader',
+        process.env.NODE_ENV === 'production' ? MiniCssExtractPlugin.loader : 'style-loader',
         CSSModuleLoader,
         'sass-loader',
         postCSSLoader
@@ -109,6 +112,9 @@ module.exports = {
   },
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
+    new MiniCssExtractPlugin({
+      filename: 'style.[hash].css'
+    }),
     new HtmlWebpackPlugin({
       inject: false,
       hash: true,
