@@ -6,6 +6,7 @@ import { ConnectedRouter } from 'connected-react-router'
 import { history } from 'data/store'
 import { Loading } from '@linkdrop/ui-kit'
 import AppRouter from '../router'
+import { getHashVariables } from '@linkdrop/commons'
 
 export default function RouterProvider () {
   const context = useWeb3React()
