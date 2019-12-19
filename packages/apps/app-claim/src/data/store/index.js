@@ -1,6 +1,5 @@
 import { createStore, combineReducers, applyMiddleware, compose } from 'redux'
 import createSagaMiddleware from 'redux-saga'
-import thunk from 'redux-thunk'
 import { connectRouter, routerMiddleware } from 'connected-react-router'
 import saga from './saga'
 import { createBrowserHistory } from 'history'
@@ -19,7 +18,6 @@ export default () => {
     }),
     {},
     compose(
-      applyMiddleware(thunk),
       applyMiddleware(sagaMiddleware),
       applyMiddleware(routerMiddleware(history))
     )

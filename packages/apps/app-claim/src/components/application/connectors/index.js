@@ -1,5 +1,4 @@
 import { infuraPk, portisDappId, formaticApiKeyTestnet, formaticApiKeyMainnet } from 'app.config.js'
-import WalletConnectApi from '@walletconnect/web3-subprovider'
 import { getHashVariables, defineNetworkName } from '@linkdrop/commons'
 
 import { NetworkConnector } from "@web3-react/network-connector";

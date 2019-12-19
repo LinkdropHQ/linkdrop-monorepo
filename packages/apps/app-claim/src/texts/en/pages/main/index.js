@@ -9,6 +9,7 @@ export default {
     seeDetails: 'See details on <a target="_blank" href={{transactionLink}}>Etherscan</a>',
     seeDetailsBlockscout: 'See details on <a target="_blank" href={{transactionLink}}>Blockscout</a>',
     tokensClaimed: '<span>{{tokens}}</span> claimed',
+    claimFailed: 'Claiming Failed',
     howToClaim: 'How to claim tokens to {{wallet}}',
     agreeWithTerms: 'By claiming you agree to the <a target="_blank" href={{href}}>Terms & Privacy</a>'
   },
