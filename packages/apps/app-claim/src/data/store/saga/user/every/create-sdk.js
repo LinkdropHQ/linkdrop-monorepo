@@ -16,7 +16,7 @@ const web3 = new Web3(Web3.givenProvider)
 
 const generator = function * ({ payload }) {
   try {
-    const { linkdropMasterAddress, chainId, linkKey, campaignId } = payload
+    const { linkdropMasterAddress, chainId, linkKey, campaignId, currentProvider } = payload
     const networkName = defineNetworkName({ chainId })
     const actualJsonRpcUrl = defineJsonRpcUrl({ chainId, infuraPk, jsonRpcUrlXdai })
     const provider = yield new ethers.providers.JsonRpcProvider(actualJsonRpcUrl)
@@ -35,8 +35,8 @@ const generator = function * ({ payload }) {
     const contractWeb3 = yield new web3.eth.Contract(LinkdropMastercopy.abi, address)
     const contractEthers = new ethers.Contract(address, LinkdropMastercopy.abi, provider)
     const initialBlock = getInitialBlock({ chainId })
-    yield put({ type: '*CONTRACT.GET_PAST_EVENTS', payload: { networkName, linkId, contract: contractWeb3, initialBlock } })
-    yield put({ type: '*CONTRACT.SUBSCRIBE_TO_CLAIM_EVENT', payload: { networkName, linkId, contract: contractEthers, initialBlock } })
+    yield put({ type: '*CONTRACT.GET_PAST_EVENTS', payload: { networkName, linkId, contract: contractWeb3, initialBlock, provider } })
+    yield put({ type: '*CONTRACT.SUBSCRIBE_TO_CLAIM_EVENT', payload: { networkName, linkId, contract: contractEthers, initialBlock, provider } })
     if (coinbaseLink) {
       yield put({ type: 'DEEPLINKS.SET_COINBASE_LINK', payload: { coinbaseLink } })
     }

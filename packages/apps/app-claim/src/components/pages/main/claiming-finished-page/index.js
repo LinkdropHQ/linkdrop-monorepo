@@ -7,15 +7,25 @@ import { getDappData } from 'helpers'
 import { getHashVariables, defineEtherscanUrl } from '@linkdrop/commons'
 import classNames from 'classnames'
 
-@actions(({ tokens: { transactionId } }) => ({ transactionId }))
+@actions(({ tokens: { transactionId, transactionStatus } }) => ({ transactionId, transactionStatus }))
 @translate('pages.main')
 class ClaimingFinishedPage extends React.Component {
   render () {
     const { chainId, dappId } = getHashVariables()
-    const { transactionId, amount, symbol } = this.props
+    const { transactionId, amount, symbol, transactionStatus } = this.props
     return <div className={commonStyles.container}>
-      <Alert icon={<Icons.Check />} className={styles.alert} />
-      <div className={styles.title} dangerouslySetInnerHTML={{ __html: this.t('titles.tokensClaimed', { tokens: `${amount || ''} ${symbol || ''}` }) }} />
+      <Alert
+        icon={transactionStatus === 'failed' ? <Icons.Exclamation /> : <Icons.Check />}
+        className={styles.alert}
+      />
+      <div
+        className={styles.title}
+        dangerouslySetInnerHTML={{
+          __html: this.t(transactionStatus === 'failed' ? 'titles.claimFailed' : 'titles.tokensClaimed', {
+            tokens: `${amount || ''} ${symbol || ''}`
+          })
+        }}
+      />
       <div
         className={classNames(styles.description, {
           [styles.descriptionHidden]: !transactionId
@@ -26,11 +36,12 @@ class ClaimingFinishedPage extends React.Component {
           })
         }}
       />
-      {this.renderDappButton({ dappId, transactionId })}
+      {this.renderDappButton({ dappId, transactionId, transactionStatus })}
     </div>
   }
 
-  renderDappButton ({ dappId, transactionId }) {
+  renderDappButton ({ dappId, transactionId, transactionStatus }) {
+    if (transactionStatus === 'failed') { return null }
     const dappData = getDappData({ dappId })
     if (!dappData) { return null }
     return <Button

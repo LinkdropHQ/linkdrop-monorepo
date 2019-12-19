@@ -30,5 +30,4 @@ const ACTIONS = {
   'USER.SET_READY_TO_CLAIM': reducers.setReadyToClaim,
   'USER.SET_ALREADY_CLAIMED': reducers.setAlreadyClaimed,
   'USER.SET_SDK': reducers.setSdk
-
 }
