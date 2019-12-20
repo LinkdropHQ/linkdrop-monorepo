@@ -18,11 +18,14 @@ const generator = function * ({ payload }) {
 
     const { status = 0, result = [], message } = yield call(getItems, { address: currentAddress, networkName })
     if (status && status === '1' && message === 'OK') {
-      const erc20Assets = result.filter(asset => asset.type === 'ERC-20').map(item => ({
-        ...item,
-        decimals: defineDecimals({ decimals: item.decimals }),
-        address: item.contractAddress
-      }))
+      const erc20Assets = result.filter(asset => asset.type === 'ERC-20').map(item => {
+        return {
+          ...item,
+          symbol: defineSymbol({ item, chainId }),
+          decimals: defineDecimals({ decimals: item.decimals }),
+          address: item.contractAddress
+        }
+      })
       yield put({ type: 'TOKENS.SET_ASSETS', payload: { assets: erc20Assets } })
     }
   } catch (e) {
@@ -38,4 +41,11 @@ generator.selectors = {
 const defineDecimals = ({ decimals }) => {
   if (!decimals || decimals.length === 0) { return 0 }
   return Number(decimals)
+}
+
+const defineSymbol = ({ item, chainId }) => {
+  if (Number(chainId) === 1 && item.contractAddress.toLowerCase() === '0x89d24a6b4ccb1b6faa2625fe562bdd9a23260359') {
+    return 'SAI'
+  }
+  return item.symbol
 }
