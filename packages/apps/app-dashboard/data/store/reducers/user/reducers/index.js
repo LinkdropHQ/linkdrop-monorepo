@@ -7,6 +7,7 @@ import setTxHash from './set-tx-hash'
 import setVersionVar from './set-version-var'
 import setSdk from './set-sdk'
 import setWeb3Provider from './set-web3-provider'
+import setWeb3ProviderName from './set-web3-provider-name'
 
 export default {
   setLoading,
@@ -17,5 +18,6 @@ export default {
   setTxHash,
   setVersionVar,
   setSdk,
-  setWeb3Provider
+  setWeb3Provider,
+  setWeb3ProviderName
 }

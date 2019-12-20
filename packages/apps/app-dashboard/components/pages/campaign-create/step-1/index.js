@@ -10,7 +10,37 @@ import Immutable from 'immutable'
 import wallets from 'wallets'
 import { TokenAddressInput, LinksContent, NextButton, AddEthField, EthTexts } from 'components/pages/common'
 
-@actions(({ user: { chainId, currentAddress, loading, privateKey }, campaigns: { items, proxyAddress, links }, tokens: { assets, symbol } }) => ({ assets, privateKey, chainId, symbol, loading, proxyAddress, currentAddress, items, links }))
+@actions(({
+  user: {
+    chainId,
+    currentAddress,
+    loading,
+    privateKey
+  },
+  campaigns: {
+    items,
+    proxyAddress,
+    links
+  },
+  tokens: {
+    assets,
+    symbol,
+    currentEthBalance,
+    currentTokenBalance
+  }
+}) => ({
+  assets,
+  privateKey,
+  chainId,
+  symbol,
+  loading,
+  proxyAddress,
+  currentAddress,
+  items,
+  links,
+  currentEthBalance,
+  currentTokenBalance
+}))
 @translate('pages.campaignCreate')
 class Step1 extends React.Component {
   constructor (props) {
@@ -71,7 +101,7 @@ class Step1 extends React.Component {
 
   render () {
     const { tokenSymbol, ethAmount, linksAmount, tokenAmount, wallet, addEth, tokenAddress, options } = this.state
-    const { symbol, loading, chainId, privateKey, proxyAddress } = this.props
+    const { symbol, loading, currentEthBalance, currentTokenBalance, chainId, privateKey, proxyAddress } = this.props
     const tokenType = this.defineTokenType({ tokenSymbol })
     return <div className={classNames(styles.container, { [styles.customTokenEnabled]: tokenSymbol === 'ERC20' })}>
       {loading && <PageLoader />}
@@ -98,6 +128,10 @@ class Step1 extends React.Component {
                 }
               }}
             />
+            <div className={styles.currentBalance}>
+              {currentTokenBalance !== null && tokenType === 'erc20' && <div>{this.t('titles.balance')} {currentTokenBalance} {tokenType === 'erc20' ? symbol : tokenSymbol}</div>}
+              <div>{this.t('titles.etherBalance')} {currentEthBalance} {this.t('titles.eth')}</div>
+            </div>
           </div>
           {this.renderTokenInputs({ ethAmount, tokenType, tokenAddress, symbol, tokenSymbol, tokenAmount, addEth })}
           <div className={styles.linksAmount}>

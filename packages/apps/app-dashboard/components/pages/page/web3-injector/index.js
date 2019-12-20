@@ -19,7 +19,6 @@ class Web3Injector extends React.Component {
     super(props)
     const { chainId = '1' } = getHashVariables()
     const networkName = defineNetworkName({ chainId })
-    console.log({ chainId, networkName })
     this.web3Connect = new Web3Connect.Core({
       network: networkName,
       providerOptions: {
@@ -47,15 +46,16 @@ class Web3Injector extends React.Component {
       }
     })
 
-    this.web3Connect.on('connect', provider => {
+    this.web3Connect.on('connect', provider => {      
       this.applyProvider(provider)
     })
   }
 
   async applyProvider (provider) {
+    const { name } = Web3Connect.getProviderInfo(provider)
     const web3Provider = new Web3(provider)
     if (web3Provider) {
-      this.actions().user.checkCurrentProvider({ provider: web3Provider })
+      this.actions().user.checkCurrentProvider({ provider: web3Provider, name })
     }
   }
 

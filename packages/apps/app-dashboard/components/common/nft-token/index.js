@@ -29,7 +29,7 @@ class NFTToken extends React.Component {
       id,
       address,
       symbol,
-      name,
+      names,
       images
     } = this.props
     const { selected, imageErrored } = this.state
@@ -41,7 +41,7 @@ class NFTToken extends React.Component {
         {this.renderImage({ image: images[id], imageErrored })}
       </div>
       <div className={styles.title}>
-        {name} {this.renderId({ id })}
+        {names[id]} {this.renderId({ id })}
       </div>
       <Checkbox className={styles.checkbox} onChange={({ value }) => this.onSelect({ value })} checked={selected} />
     </div>

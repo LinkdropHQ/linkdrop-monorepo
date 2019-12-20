@@ -28,7 +28,7 @@ const generator = function * ({ payload }) {
       to = factory
     } else {
       const proxyAddress = yield select(generator.selectors.proxyAddress)
-      const proxyContract = yield new ethers.Contract(proxyAddress, LinkdropMastercopy.abi, web3Provider)
+      const proxyContract = yield new ethers.Contract(proxyAddress, LinkdropMastercopy.abi, provider)
       data = yield proxyContract.interface.functions.addSigner.encode([wallet])
       to = proxyAddress
     }
