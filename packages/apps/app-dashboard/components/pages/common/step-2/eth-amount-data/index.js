@@ -5,7 +5,19 @@ import { convertFromExponents } from '@linkdrop/commons'
 import { multiply, bignumber } from 'mathjs'
 import { defineDefaultSymbol } from 'helpers'
 
-@actions(({ user: { chainId } }) => ({ chainId }))
+@actions(({
+  user: {
+    chainId
+  },
+  campaigns: {
+    ethAmount,
+    linksAmount
+  }
+}) => ({
+  chainId,
+  linksAmount,
+  ethAmount
+}))
 @translate('pages.campaignCreate')
 class EthAmountData extends React.Component {
   constructor (props) {
