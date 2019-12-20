@@ -19,17 +19,12 @@ const generator = function * ({ payload }) {
       decimals = 18
       symbol = Number(chainId) === 100 ? 'xDAI' : 'ETH'
       icon = getImages({ src: 'ether' }).imageRetina
-<<<<<<< HEAD:packages/apps/app-claim/src/data/store/saga/contract/every/get-token-erc20-data.js
     } else if (tokenAddress.toLowerCase() === '0x89d24a6b4ccb1b6faa2625fe562bdd9a23260359') {
       // SAI token has problem with fetching decimals
       decimals = 18
       symbol = 'SAI'
       icon = getImages({ src: 'sai' }).imageRetina
-      
     } else if (tokenAddress.toLowerCase() === '0x6b175474e89094c44da98b954eedeac495271d0f') {
-=======
-    } else if (tokenAddress.toLowerCase() === '0x89d24a6b4ccb1b6faa2625fe562bdd9a23260359' || tokenAddress.toLowerCase() === '0x6b175474e89094c44da98b954eedeac495271d0f') {
->>>>>>> 5fd145cd349eeaa1b0e1ab11725c6bdfd3fd6247:packages/apps/app-claim/data/store/saga/contract/every/get-token-erc20-data.js
       // DAI token has problem with fetching decimals
       decimals = 18
       symbol = 'DAI'
