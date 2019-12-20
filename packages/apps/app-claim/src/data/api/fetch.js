@@ -6,7 +6,7 @@ export default (url, options = {}, parseOptions = {}) => {
   return fetch(_url, {
     ...DEFAULT_OPTIONS,
     ...options,
-    headers: { ...DEFAULT_OPTIONS.headers, ...((options || {}).headers || {}) }
+    headers: { ...(!options.disableDefaults ? DEFAULT_OPTIONS.headers : {}), ...((options || {}).headers || {}) }
   }).then(response => {
     if (!response.ok && options.showErrors) { return response.status }
     return parseOptions.notJSON ? response : response.json()

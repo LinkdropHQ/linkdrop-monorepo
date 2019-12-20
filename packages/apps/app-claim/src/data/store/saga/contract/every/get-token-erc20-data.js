@@ -24,7 +24,6 @@ const generator = function * ({ payload }) {
       decimals = 18
       symbol = 'SAI'
       icon = getImages({ src: 'sai' }).imageRetina
-      
     } else if (tokenAddress.toLowerCase() === '0x6b175474e89094c44da98b954eedeac495271d0f') {
       // DAI token has problem with fetching decimals
       decimals = 18
