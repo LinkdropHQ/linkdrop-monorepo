@@ -9,6 +9,7 @@ import commonStyles from '../styles.module'
 import Slider from './slider'
 import CommonInstruction from './common-instruction'
 import DeepLinkInstruction from './deep-link-instruction'
+import connectors from 'components/application/connectors'
 
 @actions(({ user: { walletType }, deeplinks: { coinbaseLink } }) => ({ walletType, coinbaseLink }))
 @translate('pages.main')
@@ -150,7 +151,7 @@ class WalletChoosePage extends React.Component {
         this.setState({
           loading: true
         }, _ => {
-          context.setConnector(connector)
+          context.activate(connectors[connector])
         })
       }}
     >
