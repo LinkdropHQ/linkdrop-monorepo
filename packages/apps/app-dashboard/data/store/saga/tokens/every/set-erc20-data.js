@@ -9,6 +9,7 @@ const generator = function * ({ payload }) {
   try {
     yield put({ type: 'USER.SET_LOADING', payload: { loading: true } })
     const { tokenSymbol,  } = payload
+    const currentAddress = yield select(generator.selectors.currentAddress)
     // 0x85d1f0d5ea43e6f31d4f6d1f302405373e095722
     const assets = yield select(generator.selectors.assets)
     const chainId = yield select(generator.selectors.chainId)
@@ -37,5 +38,6 @@ const generator = function * ({ payload }) {
 export default generator
 generator.selectors = {
   assets: ({ tokens: { assets } }) => assets,
-  chainId: ({ user: { chainId } }) => chainId
+  chainId: ({ user: { chainId } }) => chainId,
+  currentAddress: ({ user: { currentAddress } }) => currentAddress
 }
