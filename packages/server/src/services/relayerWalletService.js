@@ -1,8 +1,8 @@
-import config from '../../config/config.json'
-const terminalSDK = require('@terminal-packages/sdk')
+import configs from '../../../../configs'
+const config = configs.get('server')
 const {
-  JSON_RPC_URL,
-  RELAYER_PRIVATE_KEY,
+  jsonRpcUrl,
+  relayerPrivateKey,
   DEFAULT_GAS_PRICE,
   MAX_GAS_PRICE,
   CHAIN
@@ -10,11 +10,12 @@ const {
 const ethers = require('ethers')
 ethers.errors.setLogLevel('error')
 
-if (JSON_RPC_URL == null || JSON_RPC_URL === '') {
+// #TODO move to special function
+if (jsonRpcUrl == null || jsonRpcUrl === '') {
   throw new Error('Please provide json rpc url')
 }
 
-if (RELAYER_PRIVATE_KEY == null || RELAYER_PRIVATE_KEY === '') {
+if (relayerPrivateKey == null || relayerPrivateKey === '') {
   throw new Error('Please provide relayer private key')
 }
 
@@ -24,15 +25,8 @@ if (CHAIN == null || CHAIN === '') {
 
 class RelayerWalletService {
   constructor () {
-    this.provider = new ethers.providers.Web3Provider(
-      new terminalSDK.TerminalHttpProvider({
-        host: JSON_RPC_URL,
-        apiKey: config.TERMINAL_API_KEY,
-        projectId: config.TERMINAL_PROJECT_ID,
-        source: terminalSDK.SourceType.Infura
-      })
-    )
-    this.relayerWallet = new ethers.Wallet(RELAYER_PRIVATE_KEY, this.provider)
+    this.provider = new ethers.providers.JsonRpcProvider(jsonRpcUrl)
+    this.relayerWallet = new ethers.Wallet(relayerPrivateKey, this.provider)
     this.chain = CHAIN
   }
 
