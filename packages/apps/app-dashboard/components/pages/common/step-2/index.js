@@ -167,11 +167,11 @@ class Step2 extends React.Component {
                   {this.t('titles.oneLinkContainsTitle')}
                 </h3>
                 <div className={styles.dataContent}>
-                  <LinkContents ethAmount={ethAmount} tokenAmount={tokenAmount} tokenSymbol={tokenSymbol} />
+                  <LinkContents />
                 </div>
 
               </div>
-              <EthAmountData ethAmount={ethAmount} linksAmount={linksAmount} tokenAmount={tokenAmount} />
+              <EthAmountData />
             </div>
           </div>
           <div className={styles.serviceFee}>{this.t('texts._18')}</div>

@@ -20,7 +20,7 @@ server.config.json
 scripts.config.json
 
 packages/apps/app-claim/node_modules/
-packages/apps/app-claim/assets/scripts/
+packages/apps/app-claim/dist/
 
 packages/apps/app-demo/node_modules/
 packages/apps/app-demo/assets/scripts/

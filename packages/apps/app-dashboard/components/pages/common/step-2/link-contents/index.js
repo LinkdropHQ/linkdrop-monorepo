@@ -4,7 +4,21 @@ import styles from '../styles.module'
 import { convertFromExponents } from '@linkdrop/commons'
 import { defineDefaultSymbol } from 'helpers'
 
-@actions(({ user: { chainId } }) => ({ chainId }))
+@actions(({
+  user: {
+    chainId
+  },
+  campaigns: {
+    ethAmount,
+    tokenAmount,
+    tokenSymbol
+  }
+}) => ({
+  chainId,
+  ethAmount,
+  tokenAmount,
+  tokenSymbol
+}))
 @translate('pages.campaignCreate')
 class LinkContents extends React.Component {
   constructor (props) {

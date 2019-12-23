@@ -7,11 +7,25 @@ import { getImages } from 'helpers'
 import classNames from 'classnames'
 import { withRouter } from 'react-router'
 
-@actions(({ user: { currentAddress, chainId }, campaigns: { items } }) => ({ currentAddress, items, chainId }))
+@actions(({
+  user: {
+    currentAddress,
+    chainId,
+    web3ProviderName
+  },
+  campaigns: {
+    items
+  }
+}) => ({
+  currentAddress,
+  items,
+  chainId,
+  web3ProviderName
+}))
 @translate('common.aside')
 class Aside extends React.Component {
   render () {
-    const { currentAddress, items, chainId } = this.props
+    const { currentAddress, items, chainId, web3ProviderName } = this.props
     return <aside className={styles.container}>
       <div className={styles.mainBlock}>
         <div className={styles.logo}>
@@ -26,6 +40,7 @@ class Aside extends React.Component {
         {this.renderCreateButton({ currentAddress })}
       </div>
       <div className={styles.footer}>
+        {this.renderConnectorData({ web3ProviderName, currentAddress })}
         <div className={styles.footerMenu}>
           <a target='_blank' href='https://www.notion.so/Terms-and-Privacy-dfa7d9b85698491d9926cbfe3c9a0a58' className={styles.link}>{this.t('legal')}</a>
           <a target='_blank' href='https://linkdrop.io/contact' className={styles.link}>{this.t('contactUs')}</a>
@@ -35,6 +50,29 @@ class Aside extends React.Component {
         </div>
       </div>
     </aside>
+  }
+
+  renderConnectorData ({ web3ProviderName, currentAddress }) {
+    if (!currentAddress) {
+      return <div className={styles.connectorData}>
+        <div className={styles.indicator}/>
+        Not connected
+      </div>
+    }
+    const currentAddressFormatted = `${(currentAddress || '').slice(0, 9)}...${(currentAddress || '').slice(-8)}`
+    return <div className={styles.connectorData}>
+      <div className={classNames(styles.indicator, {
+        [styles.active]: currentAddress.length > 0
+      })}
+      />
+      <span>{web3ProviderName}</span> connected
+      <div>{currentAddressFormatted}</div>
+      <div className={styles.logout} onClick={_ => window.location.reload()}>
+        <span>
+          {this.t('logout')}
+        </span>
+      </div>
+    </div>
   }
 
   renderCreateButton ({ currentAddress }) {

@@ -17,6 +17,15 @@
   }
 }
 
+.currentBalance {
+  min-height: 36px;
+  display: flex;
+  color: $dbBlue;
+  justify-content: space-between;
+  padding: 0 10px;
+  align-items: center;
+}
+
 .title {
   font-size: 24px;
   margin: 0 0 40px;
