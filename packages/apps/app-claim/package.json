@@ -24,7 +24,7 @@
     "@babel/preset-react": "^7.0.0",
     "@babel/register": "^7.4.4",
     "@linkdrop/commons": "^2.0.12-alpha.0",
-    "@linkdrop/contracts": "^2.0.12-alpha.0",
+    "@linkdrop/contracts": "^2.0.17-alpha.0",
     "@linkdrop/sdk": "^2.0.17-alpha.0",
     "@linkdrop/ui-kit": "^2.0.12-alpha.0",
     "@portis/web3": "^2.0.0-beta.54",
@@ -39,7 +39,6 @@
     "core-js": "2.6.5",
     "cross-env": "5.0.5",
     "css-loader": "^0.28.0",
-    "ethereum-waffle": "^2.0.16",
     "ethereumjs-vm": "^4.1.1",
     "ethers": "^4.0.27",
     "express": "^4.16.4",
@@ -101,12 +100,7 @@
   "standard": {
     "parser": "babel-eslint"
   },
-  "browserslist": [
-    ">1%",
-    "last 4 versions",
-    "Firefox ESR",
-    "not ie < 9"
-  ],
+  "browserslist": [">1%", "last 4 versions", "Firefox ESR", "not ie < 9"],
   "babel": {
     "extends": "../../../babel.config.js"
   }

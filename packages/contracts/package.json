@@ -13,9 +13,8 @@
   "dependencies": {
     "@linkdrop/sdk": "^2.0.17-alpha.0",
     "@openzeppelin/contracts": "^2.4.0",
-    "ethereum-waffle": "2.0.16",
     "ethers": "^4.0.27",
-    "solc": "^0.5.12"
+    "solc": "0.5.12"
   },
   "devDependencies": {
     "@babel/cli": "^7.2.3",
@@ -25,6 +24,7 @@
     "@babel/preset-env": "^7.4.0",
     "@babel/register": "^7.4.0",
     "chai": "^4.2.0",
+    "ethereum-waffle": "2.0.16",
     "mocha": "^6.2.2"
   },
   "standard": {
