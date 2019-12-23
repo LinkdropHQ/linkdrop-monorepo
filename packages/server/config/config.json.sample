@@ -1,0 +1,16 @@
+{
+    "CHAIN": "ropsten",
+    "MONGO_URI": "mongodb://localhost:27017/linkdrop_ropsten",
+    "JSON_RPC_URL": "https://ropsten.infura.io",
+    "RELAYER_PRIVATE_KEY": "",
+    "MULTISEND_ADDRESS": "0x3E6B20fDBBefF2cdB9717E653d78691457bB4fb6",
+    "DEFAULT_GAS_PRICE": "auto",
+    "TRANSACTION_LOOP_TIME": 10000,
+    "TRANSACTION_RETRY_TIMEOUT": 60000,
+    "GWEI_ADDED_ON_RETRY": "1",
+    "MAX_GAS_PRICE": "30",
+    "COINBASE_DEEP_LINKING_SERVER": "",
+    "COINBASE_DEEP_LINKING_USERNAME": "",
+    "COINBASE_DEEP_LINKING_PASSWORD": "",
+    "NEW_RELIC_LICENSE_KEY": ""
+}

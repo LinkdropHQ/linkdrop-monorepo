@@ -1,6 +1,5 @@
 import axios from 'axios'
-import configs from '../../../../configs'
-const config = configs.get('server')
+import config from '../../config/config.json'
 
 export const fetchCoinbaseDeepLink = async ({ url }) => {
   console.log({ url })

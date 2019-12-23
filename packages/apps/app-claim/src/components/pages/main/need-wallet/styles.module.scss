@@ -1,0 +1,47 @@
+@import "variables";
+
+.title {
+  font-size: 24px;
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.alert {
+  margin-bottom: 30px;
+}
+
+.button {
+  max-width: 300px;
+  margin-bottom: 20px;
+
+  &.buttonIconed {
+    justify-content: start;
+    padding: 0px 20px;
+
+    .buttonTitle {
+      flex: 1;
+    }
+  }
+}
+
+.divider {
+ margin-bottom: 20px;
+ text-align: center;
+ width: 100%;
+ text-transform: uppercase;
+ font-family: 'Inter-Medium';
+}
+
+.instructions {
+  font-size: 14px;
+  width: 100%;
+  text-align: left;
+
+  div {
+    margin-bottom: 6px;
+
+    a {
+      color: $blackColor;
+    }
+  }
+}

@@ -1,9 +1,9 @@
 import logger from '../utils/logger'
 import Operation from '../models/Operation'
 import relayerWalletService from './relayerWalletService'
-import configs from '../../../../configs'
-const ethers = require('ethers')
-const config = configs.get('server')
+import config from '../../config/config.json'
+import { ethers } from 'ethers'
+
 const {
   TRANSACTION_LOOP_TIME,
   TRANSACTION_RETRY_TIMEOUT,
