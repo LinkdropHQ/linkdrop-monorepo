@@ -17,7 +17,7 @@ class LinkdropSDK {
     factoryAddress,
     chain = 'mainnet', // rinkeby
     jsonRpcUrl = getJsonRpcUrl(chain),
-    apiHost = `https://${chain}.linkdrop.io`, // http://localhost:5000
+    apiHost = `https://${chain}.linkdrop.io`,
     claimHost = 'https://claim.linkdrop.io'
   }) {
     if (senderAddress == null || senderAddress === '') {
