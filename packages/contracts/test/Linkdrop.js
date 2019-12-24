@@ -176,6 +176,7 @@ describe('Linkdrop tests', () => {
     await expect(
       factory.checkClaimParams(
         link.linkParams,
+        link.signerSignature,
         receiverAddress,
         receiverSignature,
         sender.address,
@@ -185,7 +186,9 @@ describe('Linkdrop tests', () => {
   })
 
   it("should verify link signer's signature", async () => {
-    expect(await proxy.verifySignerSignature(link.linkParams)).to.be.true
+    expect(
+      await proxy.verifySignerSignature(link.linkParams, link.signerSignature)
+    ).to.be.true
   })
 
   it("should verify receiver's signature", async () => {
@@ -236,6 +239,7 @@ describe('Linkdrop tests', () => {
     await expect(
       factory.checkClaimParams(
         link.linkParams,
+        link.signerSignature,
         receiverAddress,
         receiverSignature,
         sender.address,
@@ -265,9 +269,15 @@ describe('Linkdrop tests', () => {
     receiverSignature = await signReceiverAddress(link.linkKey, receiverAddress)
 
     await expect(
-      proxy.claim(link.linkParams, receiverAddress, receiverSignature, {
-        gasLimit: 500000
-      })
+      proxy.claim(
+        link.linkParams,
+        link.signerSignature,
+        receiverAddress,
+        receiverSignature,
+        {
+          gasLimit: 500000
+        }
+      )
     ).to.be.revertedWith('INSUFFICIENT_TOKENS_ALLOWANCE')
   })
 
@@ -293,6 +303,7 @@ describe('Linkdrop tests', () => {
     await expect(
       factory.claim(
         link.linkParams,
+        link.signerSignature,
         receiverAddress,
         receiverSignature,
         sender.address,
@@ -324,9 +335,15 @@ describe('Linkdrop tests', () => {
     receiverSignature = await signReceiverAddress(link.linkKey, receiverAddress)
 
     await expect(
-      proxy.claim(link.linkParams, receiverAddress, receiverSignature, {
-        gasLimit: 500000
-      })
+      proxy.claim(
+        link.linkParams,
+        link.signerSignature,
+        receiverAddress,
+        receiverSignature,
+        {
+          gasLimit: 500000
+        }
+      )
     ).to.be.revertedWith('INVALID_SIGNER_SIGNATURE')
   })
 
@@ -350,9 +367,15 @@ describe('Linkdrop tests', () => {
     receiverSignature = await signReceiverAddress(link.linkKey, receiverAddress)
 
     await expect(
-      proxy.claim(link.linkParams, receiverAddress, receiverSignature, {
-        gasLimit: 500000
-      })
+      proxy.claim(
+        link.linkParams,
+        link.signerSignature,
+        receiverAddress,
+        receiverSignature,
+        {
+          gasLimit: 500000
+        }
+      )
     ).to.be.revertedWith('INVALID_SIGNER_SIGNATURE')
   })
 
@@ -377,9 +400,15 @@ describe('Linkdrop tests', () => {
 
     const senderBalanceBefore = await tokenInstance.balanceOf(sender.address)
 
-    await proxy.claim(link.linkParams, receiverAddress, receiverSignature, {
-      gasLimit: 800000
-    })
+    await proxy.claim(
+      link.linkParams,
+      link.signerSignature,
+      receiverAddress,
+      receiverSignature,
+      {
+        gasLimit: 800000
+      }
+    )
 
     const senderBalanceAfter = await tokenInstance.balanceOf(sender.address)
     expect(senderBalanceAfter).to.eq(senderBalanceBefore.sub(tokensAmount))
@@ -399,9 +428,15 @@ describe('Linkdrop tests', () => {
 
   it('should fail to claim link twice', async () => {
     await expect(
-      proxy.claim(link.linkParams, receiverAddress, receiverSignature, {
-        gasLimit: 500000
-      })
+      proxy.claim(
+        link.linkParams,
+        link.signerSignature,
+        receiverAddress,
+        receiverSignature,
+        {
+          gasLimit: 500000
+        }
+      )
     ).to.be.revertedWith('LINK_CLAIMED')
   })
 
@@ -425,9 +460,15 @@ describe('Linkdrop tests', () => {
     receiverSignature = await signReceiverAddress(link.linkKey, receiverAddress)
 
     await expect(
-      proxy.claim(link.linkParams, receiverAddress, receiverSignature, {
-        gasLimit: 800000
-      })
+      proxy.claim(
+        link.linkParams,
+        link.signerSignature,
+        receiverAddress,
+        receiverSignature,
+        {
+          gasLimit: 800000
+        }
+      )
     ).to.be.revertedWith('INSUFFICIENT_TOKENS')
   })
 
@@ -452,9 +493,15 @@ describe('Linkdrop tests', () => {
     receiverSignature = await signReceiverAddress(link.linkKey, receiverAddress)
 
     await expect(
-      proxy.claim(link.linkParams, receiverAddress, receiverSignature, {
-        gasLimit: 500000
-      })
+      proxy.claim(
+        link.linkParams,
+        link.signerSignature,
+        receiverAddress,
+        receiverSignature,
+        {
+          gasLimit: 500000
+        }
+      )
     ).to.be.revertedWith('INVALID_SIGNER_SIGNATURE')
   })
 
@@ -495,9 +542,15 @@ describe('Linkdrop tests', () => {
     )
 
     await expect(
-      proxy.claim(link.linkParams, receiverAddress, receiverSignature, {
-        gasLimit: 500000
-      })
+      proxy.claim(
+        link.linkParams,
+        link.signerSignature,
+        receiverAddress,
+        receiverSignature,
+        {
+          gasLimit: 500000
+        }
+      )
     ).to.be.revertedWith('INVALID_RECEIVER_SIGNATURE')
   })
 
@@ -523,9 +576,15 @@ describe('Linkdrop tests', () => {
     await proxy.cancel(link.linkId, { gasLimit: 100000 })
 
     await expect(
-      proxy.claim(link.linkParams, receiverAddress, receiverSignature, {
-        gasLimit: 500000
-      })
+      proxy.claim(
+        link.linkParams,
+        link.signerSignature,
+        receiverAddress,
+        receiverSignature,
+        {
+          gasLimit: 500000
+        }
+      )
     ).to.be.revertedWith('LINK_CANCELED')
   })
 
@@ -562,9 +621,15 @@ describe('Linkdrop tests', () => {
     receiverSignature = await signReceiverAddress(link.linkKey, receiverAddress)
 
     await expect(
-      proxy.claim(link.linkParams, receiverAddress, receiverSignature, {
-        gasLimit: 500000
-      })
+      proxy.claim(
+        link.linkParams,
+        link.signerSignature,
+        receiverAddress,
+        receiverSignature,
+        {
+          gasLimit: 500000
+        }
+      )
     ).to.emit(proxy, 'Claimed')
   })
 
@@ -605,9 +670,15 @@ describe('Linkdrop tests', () => {
       sender.address
     )
 
-    await proxy.claim(link.linkParams, receiverAddress, receiverSignature, {
-      gasLimit: 500000
-    })
+    await proxy.claim(
+      link.linkParams,
+      link.signerSignature,
+      receiverAddress,
+      receiverSignature,
+      {
+        gasLimit: 500000
+      }
+    )
 
     const proxyEthBalanceAfter = await provider.getBalance(proxy.address)
     expect(proxyEthBalanceAfter).to.eq(
@@ -648,6 +719,7 @@ describe('Linkdrop tests', () => {
     await expect(
       factory.checkClaimParams(
         link.linkParams,
+        link.signerSignature,
         receiverAddress,
         receiverSignature,
         sender.address,
@@ -678,9 +750,15 @@ describe('Linkdrop tests', () => {
 
     const nftOwnerBefore = await nftInstance.ownerOf(tokenId)
 
-    await proxy.claim(link.linkParams, receiverAddress, receiverSignature, {
-      gasLimit: 500000
-    })
+    await proxy.claim(
+      link.linkParams,
+      link.signerSignature,
+      receiverAddress,
+      receiverSignature,
+      {
+        gasLimit: 500000
+      }
+    )
 
     const nftOwnerAfter = await nftInstance.ownerOf(tokenId)
     expect(nftOwnerAfter).to.not.eq(nftOwnerBefore)
@@ -707,9 +785,15 @@ describe('Linkdrop tests', () => {
     receiverSignature = await signReceiverAddress(link.linkKey, receiverAddress)
 
     await expect(
-      proxy.claim(link.linkParams, receiverAddress, receiverSignature, {
-        gasLimit: 500000
-      })
+      proxy.claim(
+        link.linkParams,
+        link.signerSignature,
+        receiverAddress,
+        receiverSignature,
+        {
+          gasLimit: 500000
+        }
+      )
     ).to.be.revertedWith('SENDER_DOES_NOT_OWN_NFT')
   })
 
@@ -735,9 +819,15 @@ describe('Linkdrop tests', () => {
     receiverSignature = await signReceiverAddress(link.linkKey, receiverAddress)
 
     await expect(
-      proxy.claim(link.linkParams, receiverAddress, receiverSignature, {
-        gasLimit: 500000
-      })
+      proxy.claim(
+        link.linkParams,
+        link.signerSignature,
+        receiverAddress,
+        receiverSignature,
+        {
+          gasLimit: 500000
+        }
+      )
     ).to.be.revertedWith('INSUFFICIENT_FEE_TOKENS_ALLOWANCE')
   })
 
@@ -774,9 +864,15 @@ describe('Linkdrop tests', () => {
       receiverAddress
     )
 
-    await proxy.claim(link.linkParams, receiverAddress, receiverSignature, {
-      gasLimit: 500000
-    })
+    await proxy.claim(
+      link.linkParams,
+      link.signerSignature,
+      receiverAddress,
+      receiverSignature,
+      {
+        gasLimit: 500000
+      }
+    )
 
     const receiverNativeBalanceAfter = await provider.getBalance(
       receiverAddress
@@ -852,9 +948,15 @@ describe('Linkdrop tests', () => {
       receiverAddress
     )
 
-    await proxy.claim(link.linkParams, receiverAddress, receiverSignature, {
-      gasLimit: 500000
-    })
+    await proxy.claim(
+      link.linkParams,
+      link.signerSignature,
+      receiverAddress,
+      receiverSignature,
+      {
+        gasLimit: 500000
+      }
+    )
 
     const receiverNativeBalanceAfter = await provider.getBalance(
       receiverAddress

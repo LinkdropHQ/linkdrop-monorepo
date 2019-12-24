@@ -5,10 +5,7 @@
   "main": "index.js",
   "repository": "https://github.com/LinkdropProtocol/linkdrop-monorepo.git",
   "license": "MIT",
-  "workspaces": [
-    "packages/*",
-    "packages/apps/*"
-  ],
+  "workspaces": ["packages/*", "packages/apps/*"],
   "scripts": {
     "test": "cd packages/contracts/ && mocha --require @babel/polyfill --require @babel/register",
     "compile-contracts": "cd packages/contracts && npx waffle .waffle",

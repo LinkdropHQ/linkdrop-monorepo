@@ -24,7 +24,7 @@
     "@babel/preset-env": "^7.4.0",
     "@babel/register": "^7.4.0",
     "chai": "^4.2.0",
-    "ethereum-waffle": "2.0.16",
+    "ethereum-waffle": "^2.3.0-istanbul.0",
     "mocha": "^6.2.2"
   },
   "standard": {

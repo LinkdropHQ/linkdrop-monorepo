@@ -14,12 +14,13 @@ interface ILinkdrop {
         uint tokenId;
         uint feeAmount;
         uint expiration;
-        bytes signerSignature;
+        bytes data;
     }
 
     function verifySignerSignature
     (
-        LinkParams calldata _linkParams
+        LinkParams calldata _linkParams,
+        bytes calldata _signerSignature
     )
     external view returns (bool);
 
@@ -34,6 +35,7 @@ interface ILinkdrop {
     function checkClaimParams
     (
         LinkParams calldata _linkParams,
+        bytes calldata _signerSignature,
         address payable _receiver,
         bytes calldata _receiverSignature
     )
@@ -42,6 +44,7 @@ interface ILinkdrop {
     function claim
     (
         LinkParams calldata _linkParams,
+        bytes calldata _signerSignature,
         address payable _receiver,
         bytes calldata _receiverSignature
     )

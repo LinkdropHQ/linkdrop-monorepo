@@ -18,6 +18,7 @@ export class LinkParams {
     tokenId,
     feeAmount,
     expiration,
+    data,
     signerSignature
   }) {
     this.token = token
@@ -30,6 +31,7 @@ export class LinkParams {
     this.tokenId = tokenId
     this.feeAmount = feeAmount
     this.expiration = expiration
+    this.data = data
     this.signerSignature = signerSignature
   }
 }
@@ -100,6 +102,7 @@ const signLink = async ({
   tokenId,
   feeAmount,
   expiration,
+  data,
   version,
   chainId,
   linkdropContract,
@@ -109,7 +112,7 @@ const signLink = async ({
     signingKeyOrWallet = new ethers.Wallet(signingKeyOrWallet)
   }
 
-  const messageHash = ethers.utils.solidityKeccak256(
+  const encoded = ethers.utils.defaultAbiCoder.encode(
     [
       'address', // token
       'address', // nft
@@ -121,6 +124,7 @@ const signLink = async ({
       'uint', // tokenId
       'uint', // feeAmount
       'uint', // expiration
+      'bytes', // data
       'uint', // version
       'uint', // chainId
       'address' // linkdropContract
@@ -136,11 +140,14 @@ const signLink = async ({
       tokenId,
       feeAmount,
       expiration,
+      data,
       version,
       chainId,
       linkdropContract
     ]
   )
+
+  const messageHash = ethers.utils.keccak256(encoded)
   const messageHashToSign = ethers.utils.arrayify(messageHash)
   const signature = await signingKeyOrWallet.signMessage(messageHashToSign)
   return signature
@@ -155,7 +162,8 @@ export const createLink = async ({
   tokensAmount = 0,
   tokenId = 0,
   feeAmount = 0,
-  expiration,
+  expiration = 11111111111,
+  data = '0x',
   version,
   chainId,
   linkdropContract,
@@ -164,9 +172,10 @@ export const createLink = async ({
   if (
     token === AddressZero &&
     nft === AddressZero &&
-    nativeTokensAmount === 0
+    nativeTokensAmount === 0 &&
+    data === '0x'
   ) {
-    throw new Error('Invalid params. No token chosen.')
+    throw new Error('Invalid params. No token or data chosen.')
   }
   if (expiration == null || expiration === '') {
     throw new Error('Please provide link expiration timestamp')
@@ -202,6 +211,7 @@ export const createLink = async ({
     tokenId,
     feeAmount,
     expiration,
+    data,
     version,
     chainId,
     linkdropContract,
@@ -219,6 +229,7 @@ export const createLink = async ({
     tokenId,
     feeAmount,
     expiration,
+    data,
     signerSignature
   })
 

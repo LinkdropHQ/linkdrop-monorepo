@@ -80,6 +80,7 @@ class LinkdropSDK {
     tokenId = 0,
     feeAmount = 0,
     expiration = 11111111111,
+    data = '0x',
     signingKeyOrWallet // private key of wallet
   }) {
     return generateLinkUtils.generateLink({
@@ -96,6 +97,7 @@ class LinkdropSDK {
       tokenId,
       feeAmount,
       expiration,
+      data,
       version: this.version[campaignId] || (await this.getVersion(campaignId)),
       chainId: this.chainId,
       signingKeyOrWallet

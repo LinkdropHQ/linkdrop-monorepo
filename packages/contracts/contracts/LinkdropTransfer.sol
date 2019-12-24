@@ -46,13 +46,46 @@ contract LinkdropTransfer is ILinkdrop, ReentrancyGuard {
     bool internal _paused;
 
     /**
+    * @dev Function to get link params hash
+    * @param _linkParams Link params struct
+    * @return Link params hash
+    */
+    function getLinkParamsHash
+    (
+        ILinkdrop.LinkParams memory _linkParams
+    )
+    public pure
+    returns (bytes32) 
+    {
+        return keccak256
+        (
+            abi.encodePacked
+            (
+                _linkParams.token,
+                _linkParams.nft,
+                _linkParams.feeToken,
+                _linkParams.feeReceiver,
+                _linkParams.linkId,
+                _linkParams.nativeTokensAmount,
+                _linkParams.tokensAmount,
+                _linkParams.tokenId,
+                _linkParams.feeAmount,
+                _linkParams.expiration,
+                _linkParams.data
+            )
+        );
+    }
+
+    /**
     * @dev Function to verify linkdrop signer's signature
     * @param _linkParams Link params struct
+    * @param _signerSignature ECDSA signature of linkdrop signer
     * @return True if signed with valid signer's private key
     */
     function verifySignerSignature
     (
-        ILinkdrop.LinkParams memory _linkParams
+        ILinkdrop.LinkParams memory _linkParams,
+        bytes memory _signerSignature
     )
     public view
     returns (bool)
@@ -63,23 +96,14 @@ contract LinkdropTransfer is ILinkdrop, ReentrancyGuard {
             (
                 abi.encodePacked
                 (
-                    _linkParams.token,
-                    _linkParams.nft,
-                    _linkParams.feeToken,
-                    _linkParams.feeReceiver,
-                    _linkParams.linkId,
-                    _linkParams.nativeTokensAmount,
-                    _linkParams.tokensAmount,
-                    _linkParams.tokenId,
-                    _linkParams.feeAmount,
-                    _linkParams.expiration,
+                    getLinkParamsHash(_linkParams),
                     version,
                     chainId,
                     address(this)
                 )
             )
         );
-        address signer = ECDSA.recover(prefixedHash, _linkParams.signerSignature);
+        address signer = ECDSA.recover(prefixedHash, _signerSignature);
         return isSigner[signer];
     }
 
@@ -107,6 +131,7 @@ contract LinkdropTransfer is ILinkdrop, ReentrancyGuard {
     /**
     * @dev Function to verify claim params
     * @param _linkParams Link params struct
+    * @param _signerSignature ECDSA signature of linkdrop signer
     * @param _receiver Linkdrop receiver address
     * @param _receiverSignature ECDSA signature of linkdrop receiver
     * @return True if success
@@ -114,6 +139,7 @@ contract LinkdropTransfer is ILinkdrop, ReentrancyGuard {
     function checkClaimParams
     (
         ILinkdrop.LinkParams memory _linkParams,
+        bytes memory _signerSignature,
         address payable _receiver,
         bytes memory _receiverSignature
     )
@@ -179,7 +205,7 @@ contract LinkdropTransfer is ILinkdrop, ReentrancyGuard {
         }
 
         // Verify that link params are signed by valid signing key
-        require(verifySignerSignature(_linkParams), "INVALID_SIGNER_SIGNATURE");
+        require(verifySignerSignature(_linkParams, _signerSignature), "INVALID_SIGNER_SIGNATURE");
 
         // Verify that receiver address is signed by ephemeral link key
         require
@@ -194,6 +220,7 @@ contract LinkdropTransfer is ILinkdrop, ReentrancyGuard {
     /**
     * @dev Function to claim linkdrop. Can only be called when contract is not paused
     * @param _linkParams Link params struct
+    * @param _signerSignature ECDSA signature of linkdrop signer
     * @param _receiver Linkdrop receiver address
     * @param _receiverSignature ECDSA signature of linkdrop receiver
     * @return True if success
@@ -201,6 +228,7 @@ contract LinkdropTransfer is ILinkdrop, ReentrancyGuard {
     function claim
     (
         ILinkdrop.LinkParams memory _linkParams,
+        bytes memory _signerSignature,
         address payable _receiver,
         bytes memory _receiverSignature
     )
@@ -215,6 +243,7 @@ contract LinkdropTransfer is ILinkdrop, ReentrancyGuard {
             checkClaimParams
             (
                 _linkParams,
+                _signerSignature,
                 _receiver,
                 _receiverSignature
             ),
