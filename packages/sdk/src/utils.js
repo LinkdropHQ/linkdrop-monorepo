@@ -18,8 +18,7 @@ export class LinkParams {
     tokenId,
     feeAmount,
     expiration,
-    data,
-    signerSignature
+    data
   }) {
     this.token = token
     this.nft = nft
@@ -32,7 +31,6 @@ export class LinkParams {
     this.feeAmount = feeAmount
     this.expiration = expiration
     this.data = data
-    this.signerSignature = signerSignature
   }
 }
 
@@ -112,7 +110,7 @@ const signLink = async ({
     signingKeyOrWallet = new ethers.Wallet(signingKeyOrWallet)
   }
 
-  const encoded = ethers.utils.defaultAbiCoder.encode(
+  const linkParamsHash = ethers.utils.solidityKeccak256(
     [
       'address', // token
       'address', // nft
@@ -124,10 +122,7 @@ const signLink = async ({
       'uint', // tokenId
       'uint', // feeAmount
       'uint', // expiration
-      'bytes', // data
-      'uint', // version
-      'uint', // chainId
-      'address' // linkdropContract
+      'bytes' // data
     ],
     [
       token,
@@ -140,14 +135,19 @@ const signLink = async ({
       tokenId,
       feeAmount,
       expiration,
-      data,
-      version,
-      chainId,
-      linkdropContract
+      data
     ]
   )
 
-  const messageHash = ethers.utils.keccak256(encoded)
+  const messageHash = ethers.utils.solidityKeccak256(
+    [
+      'bytes32', // linkParamsHash
+      'uint', // version
+      'uint', // chainId
+      'address' // linkdropContract
+    ],
+    [linkParamsHash, version, chainId, linkdropContract]
+  )
   const messageHashToSign = ethers.utils.arrayify(messageHash)
   const signature = await signingKeyOrWallet.signMessage(messageHashToSign)
   return signature
@@ -175,7 +175,7 @@ export const createLink = async ({
     nativeTokensAmount === 0 &&
     data === '0x'
   ) {
-    throw new Error('Invalid params. No token or data chosen.')
+    throw new Error('Invalid params. No token or data chosen')
   }
   if (expiration == null || expiration === '') {
     throw new Error('Please provide link expiration timestamp')
@@ -229,8 +229,7 @@ export const createLink = async ({
     tokenId,
     feeAmount,
     expiration,
-    data,
-    signerSignature
+    data
   })
 
   return {

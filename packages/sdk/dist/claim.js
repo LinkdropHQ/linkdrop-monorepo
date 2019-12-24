@@ -25,13 +25,13 @@ function () {
   var _ref2 = (0, _asyncToGenerator2["default"])(
   /*#__PURE__*/
   _regenerator["default"].mark(function _callee(_ref) {
-    var jsonRpcUrl, apiHost, token, nft, feeToken, feeReceiver, linkKey, nativeTokensAmount, tokensAmount, tokenId, feeAmount, expiration, signerSignature, receiverAddress, linkdropContract, provider, receiverSignature, linkId, linkParams, response, _response$data, error, errors, success, txHash;
+    var jsonRpcUrl, apiHost, token, nft, feeToken, feeReceiver, linkKey, nativeTokensAmount, tokensAmount, tokenId, feeAmount, expiration, data, signerSignature, receiverAddress, linkdropContract, provider, receiverSignature, linkId, linkParams, response, _response$data, error, errors, success, txHash;
 
     return _regenerator["default"].wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
-            jsonRpcUrl = _ref.jsonRpcUrl, apiHost = _ref.apiHost, token = _ref.token, nft = _ref.nft, feeToken = _ref.feeToken, feeReceiver = _ref.feeReceiver, linkKey = _ref.linkKey, nativeTokensAmount = _ref.nativeTokensAmount, tokensAmount = _ref.tokensAmount, tokenId = _ref.tokenId, feeAmount = _ref.feeAmount, expiration = _ref.expiration, signerSignature = _ref.signerSignature, receiverAddress = _ref.receiverAddress, linkdropContract = _ref.linkdropContract;
+            jsonRpcUrl = _ref.jsonRpcUrl, apiHost = _ref.apiHost, token = _ref.token, nft = _ref.nft, feeToken = _ref.feeToken, feeReceiver = _ref.feeReceiver, linkKey = _ref.linkKey, nativeTokensAmount = _ref.nativeTokensAmount, tokensAmount = _ref.tokensAmount, tokenId = _ref.tokenId, feeAmount = _ref.feeAmount, expiration = _ref.expiration, data = _ref.data, signerSignature = _ref.signerSignature, receiverAddress = _ref.receiverAddress, linkdropContract = _ref.linkdropContract;
 
             if (!(jsonRpcUrl == null || jsonRpcUrl === '')) {
               _context.next = 3;
@@ -137,37 +137,45 @@ function () {
             throw new Error('Please provide link expiration timestamp');
 
           case 27:
-            if (!(signerSignature == null || signerSignature === '')) {
+            if (!(data == null || data === '')) {
               _context.next = 29;
+              break;
+            }
+
+            throw new Error('Please provide callback data');
+
+          case 29:
+            if (!(signerSignature == null || signerSignature === '')) {
+              _context.next = 31;
               break;
             }
 
             throw new Error('Please provide linkdropMaster signature');
 
-          case 29:
+          case 31:
             if (!(receiverAddress == null || receiverAddress === '')) {
-              _context.next = 31;
+              _context.next = 33;
               break;
             }
 
             throw new Error('Please provide receiver address');
 
-          case 31:
+          case 33:
             if (!(linkdropContract == null || linkdropContract === '')) {
-              _context.next = 33;
+              _context.next = 35;
               break;
             }
 
             throw new Error('Please provide linkdrop contract address');
 
-          case 33:
+          case 35:
             // Get provider
             provider = new _ethers.ethers.providers.JsonRpcProvider(jsonRpcUrl); // Get receiver signature
 
-            _context.next = 36;
+            _context.next = 38;
             return (0, _utils.signReceiverAddress)(linkKey, receiverAddress);
 
-          case 36:
+          case 38:
             receiverSignature = _context.sent;
             // Get linkId from linkKey
             linkId = new _ethers.ethers.Wallet(linkKey, provider).address;
@@ -182,17 +190,18 @@ function () {
               tokenId: tokenId,
               feeAmount: feeAmount,
               expiration: expiration,
-              signerSignature: signerSignature
+              data: data
             });
-            _context.next = 41;
+            _context.next = 43;
             return _axios["default"].post("".concat(apiHost, "/api/v1/linkdrops/claim"), {
               linkParams: linkParams,
+              signerSignature: signerSignature,
               receiverAddress: receiverAddress,
               receiverSignature: receiverSignature,
               linkdropContractAddress: linkdropContract
             });
 
-          case 41:
+          case 43:
             response = _context.sent;
             _response$data = response.data, error = _response$data.error, errors = _response$data.errors, success = _response$data.success, txHash = _response$data.txHash;
             return _context.abrupt("return", {
@@ -202,7 +211,7 @@ function () {
               txHash: txHash
             });
 
-          case 44:
+          case 46:
           case "end":
             return _context.stop();
         }
@@ -223,13 +232,13 @@ function () {
   var _ref4 = (0, _asyncToGenerator2["default"])(
   /*#__PURE__*/
   _regenerator["default"].mark(function _callee2(_ref3) {
-    var jsonRpcUrl, apiHost, token, nft, feeToken, feeReceiver, linkKey, nativeTokensAmount, tokensAmount, tokenId, feeAmount, expiration, signerSignature, receiverAddress, linkdropContract, sender, factory, provider, receiverSignature, linkId, linkParams, response, _response$data2, error, errors, success, txHash;
+    var jsonRpcUrl, apiHost, token, nft, feeToken, feeReceiver, linkKey, nativeTokensAmount, tokensAmount, tokenId, feeAmount, expiration, data, signerSignature, receiverAddress, linkdropContract, sender, factory, provider, receiverSignature, linkId, linkParams, response, _response$data2, error, errors, success, txHash;
 
     return _regenerator["default"].wrap(function _callee2$(_context2) {
       while (1) {
         switch (_context2.prev = _context2.next) {
           case 0:
-            jsonRpcUrl = _ref3.jsonRpcUrl, apiHost = _ref3.apiHost, token = _ref3.token, nft = _ref3.nft, feeToken = _ref3.feeToken, feeReceiver = _ref3.feeReceiver, linkKey = _ref3.linkKey, nativeTokensAmount = _ref3.nativeTokensAmount, tokensAmount = _ref3.tokensAmount, tokenId = _ref3.tokenId, feeAmount = _ref3.feeAmount, expiration = _ref3.expiration, signerSignature = _ref3.signerSignature, receiverAddress = _ref3.receiverAddress, linkdropContract = _ref3.linkdropContract, sender = _ref3.sender, factory = _ref3.factory;
+            jsonRpcUrl = _ref3.jsonRpcUrl, apiHost = _ref3.apiHost, token = _ref3.token, nft = _ref3.nft, feeToken = _ref3.feeToken, feeReceiver = _ref3.feeReceiver, linkKey = _ref3.linkKey, nativeTokensAmount = _ref3.nativeTokensAmount, tokensAmount = _ref3.tokensAmount, tokenId = _ref3.tokenId, feeAmount = _ref3.feeAmount, expiration = _ref3.expiration, data = _ref3.data, signerSignature = _ref3.signerSignature, receiverAddress = _ref3.receiverAddress, linkdropContract = _ref3.linkdropContract, sender = _ref3.sender, factory = _ref3.factory;
 
             if (!(jsonRpcUrl == null || jsonRpcUrl === '')) {
               _context2.next = 3;
@@ -335,53 +344,61 @@ function () {
             throw new Error('Please provide link expiration timestamp');
 
           case 27:
-            if (!(signerSignature == null || signerSignature === '')) {
+            if (!(data == null || data === '')) {
               _context2.next = 29;
+              break;
+            }
+
+            throw new Error('Please provide link callback data');
+
+          case 29:
+            if (!(signerSignature == null || signerSignature === '')) {
+              _context2.next = 31;
               break;
             }
 
             throw new Error('Please provide linkdropMaster signature');
 
-          case 29:
+          case 31:
             if (!(receiverAddress == null || receiverAddress === '')) {
-              _context2.next = 31;
+              _context2.next = 33;
               break;
             }
 
             throw new Error('Please provide receiver address');
 
-          case 31:
+          case 33:
             if (!(linkdropContract == null || linkdropContract === '')) {
-              _context2.next = 33;
+              _context2.next = 35;
               break;
             }
 
             throw new Error('Please provide linkdrop contract address');
 
-          case 33:
+          case 35:
             if (!(sender == null || sender === '')) {
-              _context2.next = 35;
+              _context2.next = 37;
               break;
             }
 
             throw new Error('Please provide sender address');
 
-          case 35:
+          case 37:
             if (!(factory == null || factory === '')) {
-              _context2.next = 37;
+              _context2.next = 39;
               break;
             }
 
             throw new Error('Please provide factory address');
 
-          case 37:
+          case 39:
             // Get provider
             provider = new _ethers.ethers.providers.JsonRpcProvider(jsonRpcUrl); // Get receiver signature
 
-            _context2.next = 40;
+            _context2.next = 42;
             return (0, _utils.signReceiverAddress)(linkKey, receiverAddress);
 
-          case 40:
+          case 42:
             receiverSignature = _context2.sent;
             // Get linkId from linkKey
             linkId = new _ethers.ethers.Wallet(linkKey, provider).address;
@@ -396,11 +413,12 @@ function () {
               tokenId: tokenId,
               feeAmount: feeAmount,
               expiration: expiration,
-              signerSignature: signerSignature
+              data: data
             });
-            _context2.next = 45;
+            _context2.next = 47;
             return _axios["default"].post("".concat(apiHost, "/api/v1/linkdrops/claimAndDeploy"), {
               linkParams: linkParams,
+              signerSignature: signerSignature,
               receiverAddress: receiverAddress,
               receiverSignature: receiverSignature,
               linkdropContractAddress: linkdropContract,
@@ -408,7 +426,7 @@ function () {
               factoryAddress: factory
             });
 
-          case 45:
+          case 47:
             response = _context2.sent;
             _response$data2 = response.data, error = _response$data2.error, errors = _response$data2.errors, success = _response$data2.success, txHash = _response$data2.txHash;
             return _context2.abrupt("return", {
@@ -418,7 +436,7 @@ function () {
               txHash: txHash
             });
 
-          case 48:
+          case 50:
           case "end":
             return _context2.stop();
         }

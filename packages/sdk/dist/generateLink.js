@@ -23,13 +23,13 @@ function () {
   var _ref2 = (0, _asyncToGenerator2["default"])(
   /*#__PURE__*/
   _regenerator["default"].mark(function _callee(_ref) {
-    var claimHost, factory, sender, campaignId, token, nft, feeToken, feeReceiver, nativeTokensAmount, tokensAmount, tokenId, feeAmount, expiration, version, chainId, signingKeyOrWallet, linkdropContract, _ref3, linkKey, linkId, linkParams, signerSignature, url;
+    var claimHost, factory, sender, campaignId, token, nft, feeToken, feeReceiver, nativeTokensAmount, tokensAmount, tokenId, feeAmount, expiration, data, version, chainId, signingKeyOrWallet, linkdropContract, _ref3, linkKey, linkId, linkParams, signerSignature, url;
 
     return _regenerator["default"].wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
-            claimHost = _ref.claimHost, factory = _ref.factory, sender = _ref.sender, campaignId = _ref.campaignId, token = _ref.token, nft = _ref.nft, feeToken = _ref.feeToken, feeReceiver = _ref.feeReceiver, nativeTokensAmount = _ref.nativeTokensAmount, tokensAmount = _ref.tokensAmount, tokenId = _ref.tokenId, feeAmount = _ref.feeAmount, expiration = _ref.expiration, version = _ref.version, chainId = _ref.chainId, signingKeyOrWallet = _ref.signingKeyOrWallet;
+            claimHost = _ref.claimHost, factory = _ref.factory, sender = _ref.sender, campaignId = _ref.campaignId, token = _ref.token, nft = _ref.nft, feeToken = _ref.feeToken, feeReceiver = _ref.feeReceiver, nativeTokensAmount = _ref.nativeTokensAmount, tokensAmount = _ref.tokensAmount, tokenId = _ref.tokenId, feeAmount = _ref.feeAmount, expiration = _ref.expiration, data = _ref.data, version = _ref.version, chainId = _ref.chainId, signingKeyOrWallet = _ref.signingKeyOrWallet;
 
             if (!(claimHost == null || claimHost === '')) {
               _context.next = 3;
@@ -75,6 +75,7 @@ function () {
               tokenId: tokenId,
               feeAmount: feeAmount,
               expiration: expiration,
+              data: data,
               version: version,
               chainId: chainId,
               linkdropContract: linkdropContract,
@@ -88,7 +89,7 @@ function () {
             linkParams = _ref3.linkParams;
             signerSignature = _ref3.signerSignature;
             // Construct url
-            url = "".concat(claimHost, "/#/receive?token=").concat(token, "&nft=").concat(nft, "&feeToken=").concat(feeToken, "&feeReceiver=").concat(feeReceiver, "&linkKey=").concat(linkKey, "&nativeTokensAmount=").concat(nativeTokensAmount, "&tokensAmount=").concat(tokensAmount, "&tokenId=").concat(tokenId, "&feeAmount=").concat(feeAmount, "&expiration=").concat(expiration, "&signerSignature=").concat(signerSignature, "&linkdropContract=").concat(linkdropContract, "&sender=").concat(sender);
+            url = "".concat(claimHost, "/#/receive?token=").concat(token, "&nft=").concat(nft, "&feeToken=").concat(feeToken, "&feeReceiver=").concat(feeReceiver, "&linkKey=").concat(linkKey, "&nativeTokensAmount=").concat(nativeTokensAmount, "&tokensAmount=").concat(tokensAmount, "&tokenId=").concat(tokenId, "&feeAmount=").concat(feeAmount, "&expiration=").concat(expiration, "&data=").concat(data, "&signerSignature=").concat(signerSignature, "&linkdropContract=").concat(linkdropContract, "&sender=").concat(sender);
 
             if (String(chainId) !== '1') {
               url = "".concat(url, "&chainId=").concat(chainId);

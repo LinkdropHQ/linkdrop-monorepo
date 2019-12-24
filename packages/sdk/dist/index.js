@@ -52,7 +52,6 @@ function () {
         _ref$claimHost = _ref.claimHost,
         claimHost = _ref$claimHost === void 0 ? 'https://claim.linkdrop.io' : _ref$claimHost;
     (0, _classCallCheck2["default"])(this, LinkdropSDK);
-    console.log('Adf');
 
     if (senderAddress == null || senderAddress === '') {
       throw new Error('Please provide sender address');
@@ -124,13 +123,13 @@ function () {
       var _generateLink = (0, _asyncToGenerator2["default"])(
       /*#__PURE__*/
       _regenerator["default"].mark(function _callee2(_ref2) {
-        var _ref2$campaignId, campaignId, _ref2$token, token, _ref2$nft, nft, _ref2$feeToken, feeToken, _ref2$feeReceiver, feeReceiver, _ref2$nativeTokensAmo, nativeTokensAmount, _ref2$tokensAmount, tokensAmount, _ref2$tokenId, tokenId, _ref2$feeAmount, feeAmount, _ref2$expiration, expiration, signingKeyOrWallet;
+        var _ref2$campaignId, campaignId, _ref2$token, token, _ref2$nft, nft, _ref2$feeToken, feeToken, _ref2$feeReceiver, feeReceiver, _ref2$nativeTokensAmo, nativeTokensAmount, _ref2$tokensAmount, tokensAmount, _ref2$tokenId, tokenId, _ref2$feeAmount, feeAmount, _ref2$expiration, expiration, _ref2$data, data, signingKeyOrWallet;
 
         return _regenerator["default"].wrap(function _callee2$(_context2) {
           while (1) {
             switch (_context2.prev = _context2.next) {
               case 0:
-                _ref2$campaignId = _ref2.campaignId, campaignId = _ref2$campaignId === void 0 ? 0 : _ref2$campaignId, _ref2$token = _ref2.token, token = _ref2$token === void 0 ? _constants.AddressZero : _ref2$token, _ref2$nft = _ref2.nft, nft = _ref2$nft === void 0 ? _constants.AddressZero : _ref2$nft, _ref2$feeToken = _ref2.feeToken, feeToken = _ref2$feeToken === void 0 ? _constants.AddressZero : _ref2$feeToken, _ref2$feeReceiver = _ref2.feeReceiver, feeReceiver = _ref2$feeReceiver === void 0 ? _constants.AddressZero : _ref2$feeReceiver, _ref2$nativeTokensAmo = _ref2.nativeTokensAmount, nativeTokensAmount = _ref2$nativeTokensAmo === void 0 ? 0 : _ref2$nativeTokensAmo, _ref2$tokensAmount = _ref2.tokensAmount, tokensAmount = _ref2$tokensAmount === void 0 ? 0 : _ref2$tokensAmount, _ref2$tokenId = _ref2.tokenId, tokenId = _ref2$tokenId === void 0 ? 0 : _ref2$tokenId, _ref2$feeAmount = _ref2.feeAmount, feeAmount = _ref2$feeAmount === void 0 ? 0 : _ref2$feeAmount, _ref2$expiration = _ref2.expiration, expiration = _ref2$expiration === void 0 ? 11111111111 : _ref2$expiration, signingKeyOrWallet = _ref2.signingKeyOrWallet;
+                _ref2$campaignId = _ref2.campaignId, campaignId = _ref2$campaignId === void 0 ? 0 : _ref2$campaignId, _ref2$token = _ref2.token, token = _ref2$token === void 0 ? _constants.AddressZero : _ref2$token, _ref2$nft = _ref2.nft, nft = _ref2$nft === void 0 ? _constants.AddressZero : _ref2$nft, _ref2$feeToken = _ref2.feeToken, feeToken = _ref2$feeToken === void 0 ? _constants.AddressZero : _ref2$feeToken, _ref2$feeReceiver = _ref2.feeReceiver, feeReceiver = _ref2$feeReceiver === void 0 ? _constants.AddressZero : _ref2$feeReceiver, _ref2$nativeTokensAmo = _ref2.nativeTokensAmount, nativeTokensAmount = _ref2$nativeTokensAmo === void 0 ? 0 : _ref2$nativeTokensAmo, _ref2$tokensAmount = _ref2.tokensAmount, tokensAmount = _ref2$tokensAmount === void 0 ? 0 : _ref2$tokensAmount, _ref2$tokenId = _ref2.tokenId, tokenId = _ref2$tokenId === void 0 ? 0 : _ref2$tokenId, _ref2$feeAmount = _ref2.feeAmount, feeAmount = _ref2$feeAmount === void 0 ? 0 : _ref2$feeAmount, _ref2$expiration = _ref2.expiration, expiration = _ref2$expiration === void 0 ? 11111111111 : _ref2$expiration, _ref2$data = _ref2.data, data = _ref2$data === void 0 ? '0x' : _ref2$data, signingKeyOrWallet = _ref2.signingKeyOrWallet;
                 _context2.t0 = generateLinkUtils;
                 _context2.t1 = this.claimHost;
                 _context2.t2 = this.factoryAddress;
@@ -145,24 +144,25 @@ function () {
                 _context2.t11 = tokenId;
                 _context2.t12 = feeAmount;
                 _context2.t13 = expiration;
-                _context2.t14 = this.version[campaignId];
+                _context2.t14 = data;
+                _context2.t15 = this.version[campaignId];
 
-                if (_context2.t14) {
-                  _context2.next = 20;
+                if (_context2.t15) {
+                  _context2.next = 21;
                   break;
                 }
 
-                _context2.next = 19;
+                _context2.next = 20;
                 return this.getVersion(campaignId);
 
-              case 19:
-                _context2.t14 = _context2.sent;
-
               case 20:
-                _context2.t15 = _context2.t14;
-                _context2.t16 = this.chainId;
-                _context2.t17 = signingKeyOrWallet;
-                _context2.t18 = {
+                _context2.t15 = _context2.sent;
+
+              case 21:
+                _context2.t16 = _context2.t15;
+                _context2.t17 = this.chainId;
+                _context2.t18 = signingKeyOrWallet;
+                _context2.t19 = {
                   claimHost: _context2.t1,
                   factory: _context2.t2,
                   sender: _context2.t3,
@@ -176,13 +176,14 @@ function () {
                   tokenId: _context2.t11,
                   feeAmount: _context2.t12,
                   expiration: _context2.t13,
-                  version: _context2.t15,
-                  chainId: _context2.t16,
-                  signingKeyOrWallet: _context2.t17
+                  data: _context2.t14,
+                  version: _context2.t16,
+                  chainId: _context2.t17,
+                  signingKeyOrWallet: _context2.t18
                 };
-                return _context2.abrupt("return", _context2.t0.generateLink.call(_context2.t0, _context2.t18));
+                return _context2.abrupt("return", _context2.t0.generateLink.call(_context2.t0, _context2.t19));
 
-              case 25:
+              case 26:
               case "end":
                 return _context2.stop();
             }
@@ -208,12 +209,12 @@ function () {
       var _claim = (0, _asyncToGenerator2["default"])(
       /*#__PURE__*/
       _regenerator["default"].mark(function _callee3(_ref3) {
-        var token, nft, feeToken, feeReceiver, linkKey, nativeTokensAmount, tokensAmount, tokenId, feeAmount, expiration, signerSignature, receiverAddress, linkdropContract, sender;
+        var token, nft, feeToken, feeReceiver, linkKey, nativeTokensAmount, tokensAmount, tokenId, feeAmount, expiration, data, signerSignature, receiverAddress, linkdropContract, sender;
         return _regenerator["default"].wrap(function _callee3$(_context3) {
           while (1) {
             switch (_context3.prev = _context3.next) {
               case 0:
-                token = _ref3.token, nft = _ref3.nft, feeToken = _ref3.feeToken, feeReceiver = _ref3.feeReceiver, linkKey = _ref3.linkKey, nativeTokensAmount = _ref3.nativeTokensAmount, tokensAmount = _ref3.tokensAmount, tokenId = _ref3.tokenId, feeAmount = _ref3.feeAmount, expiration = _ref3.expiration, signerSignature = _ref3.signerSignature, receiverAddress = _ref3.receiverAddress, linkdropContract = _ref3.linkdropContract, sender = _ref3.sender;
+                token = _ref3.token, nft = _ref3.nft, feeToken = _ref3.feeToken, feeReceiver = _ref3.feeReceiver, linkKey = _ref3.linkKey, nativeTokensAmount = _ref3.nativeTokensAmount, tokensAmount = _ref3.tokensAmount, tokenId = _ref3.tokenId, feeAmount = _ref3.feeAmount, expiration = _ref3.expiration, data = _ref3.data, signerSignature = _ref3.signerSignature, receiverAddress = _ref3.receiverAddress, linkdropContract = _ref3.linkdropContract, sender = _ref3.sender;
                 return _context3.abrupt("return", claimUtils.claim({
                   jsonRpcUrl: this.jsonRpcUrl,
                   apiHost: this.apiHost,
@@ -227,6 +228,7 @@ function () {
                   tokenId: tokenId,
                   feeAmount: feeAmount,
                   expiration: expiration,
+                  data: data,
                   signerSignature: signerSignature,
                   receiverAddress: receiverAddress,
                   linkdropContract: linkdropContract,
@@ -253,12 +255,12 @@ function () {
       var _claimAndDeploy = (0, _asyncToGenerator2["default"])(
       /*#__PURE__*/
       _regenerator["default"].mark(function _callee4(_ref4) {
-        var token, nft, feeToken, feeReceiver, linkKey, nativeTokensAmount, tokensAmount, tokenId, feeAmount, expiration, signerSignature, receiverAddress, linkdropContract, sender, isDeployed;
+        var token, nft, feeToken, feeReceiver, linkKey, nativeTokensAmount, tokensAmount, tokenId, feeAmount, expiration, data, signerSignature, receiverAddress, linkdropContract, sender, isDeployed;
         return _regenerator["default"].wrap(function _callee4$(_context4) {
           while (1) {
             switch (_context4.prev = _context4.next) {
               case 0:
-                token = _ref4.token, nft = _ref4.nft, feeToken = _ref4.feeToken, feeReceiver = _ref4.feeReceiver, linkKey = _ref4.linkKey, nativeTokensAmount = _ref4.nativeTokensAmount, tokensAmount = _ref4.tokensAmount, tokenId = _ref4.tokenId, feeAmount = _ref4.feeAmount, expiration = _ref4.expiration, signerSignature = _ref4.signerSignature, receiverAddress = _ref4.receiverAddress, linkdropContract = _ref4.linkdropContract, sender = _ref4.sender;
+                token = _ref4.token, nft = _ref4.nft, feeToken = _ref4.feeToken, feeReceiver = _ref4.feeReceiver, linkKey = _ref4.linkKey, nativeTokensAmount = _ref4.nativeTokensAmount, tokensAmount = _ref4.tokensAmount, tokenId = _ref4.tokenId, feeAmount = _ref4.feeAmount, expiration = _ref4.expiration, data = _ref4.data, signerSignature = _ref4.signerSignature, receiverAddress = _ref4.receiverAddress, linkdropContract = _ref4.linkdropContract, sender = _ref4.sender;
 
                 if (!(linkdropContract !== this.getProxyAddress())) {
                   _context4.next = 3;
@@ -296,6 +298,7 @@ function () {
                   tokenId: tokenId,
                   feeAmount: feeAmount,
                   expiration: expiration,
+                  data: data,
                   signerSignature: signerSignature,
                   receiverAddress: receiverAddress,
                   linkdropContract: linkdropContract,
