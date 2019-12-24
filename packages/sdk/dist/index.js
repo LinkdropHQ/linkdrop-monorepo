@@ -209,12 +209,13 @@ function () {
       var _claim = (0, _asyncToGenerator2["default"])(
       /*#__PURE__*/
       _regenerator["default"].mark(function _callee3(_ref3) {
-        var token, nft, feeToken, feeReceiver, linkKey, nativeTokensAmount, tokensAmount, tokenId, feeAmount, expiration, data, signerSignature, receiverAddress, linkdropContract, sender;
+        var token, nft, feeToken, feeReceiver, linkKey, nativeTokensAmount, tokensAmount, tokenId, feeAmount, expiration, _ref3$data, data, signerSignature, receiverAddress, linkdropContract, sender;
+
         return _regenerator["default"].wrap(function _callee3$(_context3) {
           while (1) {
             switch (_context3.prev = _context3.next) {
               case 0:
-                token = _ref3.token, nft = _ref3.nft, feeToken = _ref3.feeToken, feeReceiver = _ref3.feeReceiver, linkKey = _ref3.linkKey, nativeTokensAmount = _ref3.nativeTokensAmount, tokensAmount = _ref3.tokensAmount, tokenId = _ref3.tokenId, feeAmount = _ref3.feeAmount, expiration = _ref3.expiration, data = _ref3.data, signerSignature = _ref3.signerSignature, receiverAddress = _ref3.receiverAddress, linkdropContract = _ref3.linkdropContract, sender = _ref3.sender;
+                token = _ref3.token, nft = _ref3.nft, feeToken = _ref3.feeToken, feeReceiver = _ref3.feeReceiver, linkKey = _ref3.linkKey, nativeTokensAmount = _ref3.nativeTokensAmount, tokensAmount = _ref3.tokensAmount, tokenId = _ref3.tokenId, feeAmount = _ref3.feeAmount, expiration = _ref3.expiration, _ref3$data = _ref3.data, data = _ref3$data === void 0 ? '0x' : _ref3$data, signerSignature = _ref3.signerSignature, receiverAddress = _ref3.receiverAddress, linkdropContract = _ref3.linkdropContract, sender = _ref3.sender;
                 return _context3.abrupt("return", claimUtils.claim({
                   jsonRpcUrl: this.jsonRpcUrl,
                   apiHost: this.apiHost,
@@ -255,12 +256,13 @@ function () {
       var _claimAndDeploy = (0, _asyncToGenerator2["default"])(
       /*#__PURE__*/
       _regenerator["default"].mark(function _callee4(_ref4) {
-        var token, nft, feeToken, feeReceiver, linkKey, nativeTokensAmount, tokensAmount, tokenId, feeAmount, expiration, data, signerSignature, receiverAddress, linkdropContract, sender, isDeployed;
+        var token, nft, feeToken, feeReceiver, linkKey, nativeTokensAmount, tokensAmount, tokenId, feeAmount, expiration, _ref4$data, data, signerSignature, receiverAddress, linkdropContract, sender, isDeployed;
+
         return _regenerator["default"].wrap(function _callee4$(_context4) {
           while (1) {
             switch (_context4.prev = _context4.next) {
               case 0:
-                token = _ref4.token, nft = _ref4.nft, feeToken = _ref4.feeToken, feeReceiver = _ref4.feeReceiver, linkKey = _ref4.linkKey, nativeTokensAmount = _ref4.nativeTokensAmount, tokensAmount = _ref4.tokensAmount, tokenId = _ref4.tokenId, feeAmount = _ref4.feeAmount, expiration = _ref4.expiration, data = _ref4.data, signerSignature = _ref4.signerSignature, receiverAddress = _ref4.receiverAddress, linkdropContract = _ref4.linkdropContract, sender = _ref4.sender;
+                token = _ref4.token, nft = _ref4.nft, feeToken = _ref4.feeToken, feeReceiver = _ref4.feeReceiver, linkKey = _ref4.linkKey, nativeTokensAmount = _ref4.nativeTokensAmount, tokensAmount = _ref4.tokensAmount, tokenId = _ref4.tokenId, feeAmount = _ref4.feeAmount, expiration = _ref4.expiration, _ref4$data = _ref4.data, data = _ref4$data === void 0 ? '0x' : _ref4$data, signerSignature = _ref4.signerSignature, receiverAddress = _ref4.receiverAddress, linkdropContract = _ref4.linkdropContract, sender = _ref4.sender;
 
                 if (!(linkdropContract !== this.getProxyAddress())) {
                   _context4.next = 3;
