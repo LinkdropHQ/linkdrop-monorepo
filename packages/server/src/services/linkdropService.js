@@ -10,6 +10,7 @@ import logger from '../utils/logger'
 class LinkdropService {
   async checkClaimParams ({
     linkParams,
+    signerSignature,
     receiverAddress,
     receiverSignature,
     linkdropContractAddress
@@ -21,6 +22,7 @@ class LinkdropService {
     )
     return linkdropContract.checkClaimParams(
       linkParams,
+      signerSignature,
       receiverAddress,
       receiverSignature
     )
@@ -28,6 +30,7 @@ class LinkdropService {
 
   async claim ({
     linkParams,
+    signerSignature,
     receiverAddress,
     receiverSignature,
     linkdropContractAddress
@@ -42,6 +45,7 @@ class LinkdropService {
 
     return linkdropContract.claim(
       linkParams,
+      signerSignature,
       receiverAddress,
       receiverSignature,
       { gasPrice }

@@ -2534,12 +2534,31 @@
     ethers "^4.0.27"
     solc "^0.5.12"
 
+"@linkdrop/contracts@^2.0.18-alpha.0":
+  version "2.0.18-alpha.0"
+  resolved "https://registry.yarnpkg.com/@linkdrop/contracts/-/contracts-2.0.18-alpha.0.tgz#84d6d075b1688d551d89fa9fa6f11bc273933378"
+  integrity sha512-I9llyT6hTXy9+0HYSB09kY65MgqKc/dqLh6iMtW3ZdRSJvwKHG0dq7iL68NkQlVfvH1VjcvqWIAPYnlpQUU1Tg==
+  dependencies:
+    "@linkdrop/sdk" "^2.0.18-alpha.0"
+    "@openzeppelin/contracts" "^2.4.0"
+    ethers "^4.0.27"
+    solc "0.5.12"
+
 "@linkdrop/sdk@^2.0.12-alpha.0":
   version "2.0.12-alpha.0"
   resolved "https://registry.yarnpkg.com/@linkdrop/sdk/-/sdk-2.0.12-alpha.0.tgz#3ea6f978e4a0c308244ccd78d4fe77c7af3b2f9a"
   integrity sha512-ey8qCILe/toiTBjvy6PvQt1CEifT7y539xsr1pX6yy8jddVbVkSzPjNiMqcGW+UUvN73CA85fq5tW5yz/JCitA==
   dependencies:
     "@linkdrop/contracts" "^2.0.12-alpha.0"
+    axios "^0.18.1"
+    ethers "^4.0.27"
+
+"@linkdrop/sdk@^2.0.18-alpha.0":
+  version "2.0.18-alpha.0"
+  resolved "https://registry.yarnpkg.com/@linkdrop/sdk/-/sdk-2.0.18-alpha.0.tgz#180e3dff35ce17df5334950526633f210e3f54b1"
+  integrity sha512-DMk/jyNSZK+cRXAvIeFf7AmhXcCs0gV0HO/vNRdMCLxRxCsa7jiRkzaSUi29bjmrK3NErk0Mz1NVyWEqw/lBGg==
+  dependencies:
+    "@linkdrop/contracts" "^2.0.18-alpha.0"
     axios "^0.18.1"
     ethers "^4.0.27"
 

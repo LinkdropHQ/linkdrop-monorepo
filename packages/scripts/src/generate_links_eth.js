@@ -57,7 +57,8 @@ export const generate = async () => {
     const proxyBalance = await provider.getBalance(proxyAddress)
 
     // check that proxy address is deployed
-    if (String(CAMPAIGN_ID) !== '0') await deployProxyIfNeeded(spinner)
+    // if (String(CAMPAIGN_ID) !== '0')
+    await deployProxyIfNeeded(spinner)
 
     if (proxyBalance.lt(cost)) {
       // Transfer ethers
