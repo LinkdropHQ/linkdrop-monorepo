@@ -18,7 +18,8 @@ const {
   FACTORY_ADDRESS,
   LINKS_NUMBER,
   CAMPAIGN_ID,
-  FEE_AMOUNT
+  FEE_AMOUNT,
+  CALLBACK_DATA
 } = config
 
 const nativeTokensAmount = ethers.utils.bigNumberify(
@@ -105,7 +106,8 @@ export const generate = async () => {
         signingKeyOrWallet: sender.privateKey,
         nativeTokensAmount: NATIVE_TOKENS_AMOUNT,
         campaignId: CAMPAIGN_ID,
-        feeAmount: FEE_AMOUNT
+        feeAmount: FEE_AMOUNT,
+        data: CALLBACK_DATA
       })
 
       const link = { i, linkId, linkKey, signerSignature, url }
