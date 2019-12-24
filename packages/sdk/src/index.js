@@ -1,4 +1,4 @@
-import { computeProxyAddress } from './utils'
+import { computeProxyAddress, encodeTransaction, encodeParams } from './utils'
 import * as generateLinkUtils from './generateLink'
 import * as claimUtils from './claim'
 import * as deployUtils from './deployProxy'
@@ -280,6 +280,14 @@ class LinkdropSDK {
       senderAddress: this.senderAddress,
       campaignId
     })
+  }
+
+  encodeParams (abi, method, params = []) {
+    return encodeParams(abi, method, params)
+  }
+
+  encodeTransaction (to, value = 0, data = '0x') {
+    return encodeTransaction(to, value, data)
   }
 }
 

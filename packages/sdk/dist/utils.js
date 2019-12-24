@@ -5,7 +5,9 @@ var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefau
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.generateAccount = exports.signReceiverAddress = exports.createLink = exports.computeProxyAddress = exports.computeBytecode = exports.buildCreate2Address = exports.LinkParams = void 0;
+exports.encodeTransaction = exports.encodeParams = exports.generateAccount = exports.signReceiverAddress = exports.createLink = exports.computeProxyAddress = exports.computeBytecode = exports.buildCreate2Address = exports.LinkParams = void 0;
+
+var _toConsumableArray2 = _interopRequireDefault(require("@babel/runtime/helpers/toConsumableArray"));
 
 var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"));
 
@@ -341,3 +343,16 @@ var generateAccount = function generateAccount() {
 };
 
 exports.generateAccount = generateAccount;
+
+var encodeParams = function encodeParams(abi, method, params) {
+  return new _ethers.ethers.utils.Interface(abi).functions[method].encode((0, _toConsumableArray2["default"])(params));
+};
+
+exports.encodeParams = encodeParams;
+
+var encodeTransaction = function encodeTransaction(to, value, data) {
+  var transactionWrapper = new _ethers.ethers.utils.Interface(['function execute(address to, uint256 value, bytes data)']);
+  return transactionWrapper.functions.execute.encode([to, value, data]).substr(10);
+};
+
+exports.encodeTransaction = encodeTransaction;

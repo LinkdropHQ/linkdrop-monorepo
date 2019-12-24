@@ -577,6 +577,19 @@ function () {
 
       return isDeployed;
     }()
+  }, {
+    key: "encodeParams",
+    value: function encodeParams(abi, method) {
+      var params = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : [];
+      return (0, _utils.encodeParams)(abi, method, params);
+    }
+  }, {
+    key: "encodeTransaction",
+    value: function encodeTransaction(to) {
+      var value = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
+      var data = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : '0x';
+      return (0, _utils.encodeTransaction)(to, value, data);
+    }
   }]);
   return LinkdropSDK;
 }();

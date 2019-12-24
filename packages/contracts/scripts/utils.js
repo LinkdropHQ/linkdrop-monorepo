@@ -211,7 +211,7 @@ export const encodeParams = (abi, method, params) => {
   return new ethers.utils.Interface(abi).functions[method].encode([...params])
 }
 
-export const encodeCallbackTransaction = (to, value, data) => {
+export const encodeTransaction = (to, value, data) => {
   const transactionWrapper = new ethers.utils.Interface([
     'function execute(address to, uint256 value, bytes data)'
   ])

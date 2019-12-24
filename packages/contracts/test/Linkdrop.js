@@ -23,7 +23,7 @@ import {
   signReceiverAddress,
   computeBytecode,
   LinkParams,
-  encodeCallbackTransaction,
+  encodeTransaction,
   encodeParams
 } from '../scripts/utils'
 
@@ -424,7 +424,7 @@ describe('Linkdrop tests', () => {
 
     const randomAddress = ethers.Wallet.createRandom().address
     const value = 1 // 1 wei
-    const callbackData = encodeCallbackTransaction(randomAddress, value, '0x')
+    const callbackData = encodeTransaction(randomAddress, value, '0x')
 
     link = await createLink({
       token: tokenInstance.address,
