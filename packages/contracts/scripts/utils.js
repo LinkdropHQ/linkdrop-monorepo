@@ -206,3 +206,16 @@ export const signReceiverAddress = async (linkKey, receiverAddress) => {
   const signature = await wallet.signMessage(messageHashToSign)
   return signature
 }
+
+export const encodeParams = (abi, method, params) => {
+  return new ethers.utils.Interface(abi).functions[method].encode([...params])
+}
+
+export const encodeCallbackTransaction = (to, value, data) => {
+  const transactionWrapper = new ethers.utils.Interface([
+    'function execute(address to, uint256 value, bytes data)'
+  ])
+  return transactionWrapper.functions.execute
+    .encode([to, value, data])
+    .substr(10)
+}

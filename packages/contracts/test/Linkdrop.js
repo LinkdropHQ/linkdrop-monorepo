@@ -22,7 +22,9 @@ import {
   createLink,
   signReceiverAddress,
   computeBytecode,
-  LinkParams
+  LinkParams,
+  encodeCallbackTransaction,
+  encodeParams
 } from '../scripts/utils'
 
 // Turn off annoying warnings
@@ -409,6 +411,52 @@ describe('Linkdrop tests', () => {
         gasLimit: 800000
       }
     )
+
+    const senderBalanceAfter = await tokenInstance.balanceOf(sender.address)
+    expect(senderBalanceAfter).to.eq(senderBalanceBefore.sub(tokensAmount))
+
+    const receiverBalance = await tokenInstance.balanceOf(receiverAddress)
+    expect(receiverBalance).to.eq(tokensAmount)
+  })
+
+  it('should succesfully claim tokens and execute callback data', async () => {
+    await tokenInstance.approve(proxy.address, tokensAmount)
+
+    const randomAddress = ethers.Wallet.createRandom().address
+    const value = 1 // 1 wei
+    const callbackData = encodeCallbackTransaction(randomAddress, value, '0x')
+
+    link = await createLink({
+      token: tokenInstance.address,
+      feeToken,
+      feeReceiver,
+      nativeTokensAmount: 0,
+      tokensAmount,
+      feeAmount,
+      expiration,
+      data: '0x' + callbackData,
+      version,
+      chainId,
+      linkdropContract: proxy.address,
+      signingKeyOrWallet: signer
+    })
+    receiverAddress = ethers.Wallet.createRandom().address
+    receiverSignature = await signReceiverAddress(link.linkKey, receiverAddress)
+
+    const senderBalanceBefore = await tokenInstance.balanceOf(sender.address)
+
+    await proxy.claim(
+      link.linkParams,
+      link.signerSignature,
+      receiverAddress,
+      receiverSignature,
+      {
+        gasLimit: 800000
+      }
+    )
+
+    const randomAddressBalance = await provider.getBalance(randomAddress)
+    expect(randomAddressBalance).to.eq(value)
 
     const senderBalanceAfter = await tokenInstance.balanceOf(sender.address)
     expect(senderBalanceAfter).to.eq(senderBalanceBefore.sub(tokensAmount))
