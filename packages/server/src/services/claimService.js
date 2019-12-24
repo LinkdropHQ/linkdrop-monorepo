@@ -44,6 +44,9 @@ class ClaimService {
     if (!params.linkParams) {
       throw new BadRequestError('Please provide link params argument')
     }
+    if (!params.signerSignature) {
+      throw new BadRequestError('Please provide signerSignature argument')
+    }
     if (!params.receiverAddress) {
       throw new BadRequestError('Please provide receiverAddress argument')
     }
