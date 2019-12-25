@@ -1,5 +1,6 @@
 import React from 'react'
 import { Alert, Icons, Button } from '@linkdrop/ui-kit'
+import { Input } from 'components/common'
 import { translate, actions } from 'decorators'
 import styles from './styles.module'
 import commonStyles from '../styles.module'
@@ -7,13 +8,37 @@ import { getDappData } from 'helpers'
 import { getHashVariables, defineEtherscanUrl } from '@linkdrop/commons'
 import classNames from 'classnames'
 
-@actions(({ tokens: { transactionId, transactionStatus } }) => ({ transactionId, transactionStatus }))
+@actions(({
+  tokens: {
+    transactionId,
+    transactionStatus
+  },
+  user: {
+    loading,
+    sendDataStatus
+  }
+}) => ({
+  transactionId,
+  transactionStatus,
+  loading,
+  sendDataStatus
+}))
 @translate('pages.main')
 class ClaimingFinishedPage extends React.Component {
+  constructor (props) {
+    super(props)
+    this.state = {
+      formShow: false,
+      email: ''
+    }
+  }
   render () {
-    const { chainId, dappId } = getHashVariables()
-    const { transactionId, amount, symbol, transactionStatus } = this.props
-    return <div className={commonStyles.container}>
+    const { chainId, dappId, hideSubscribe } = getHashVariables()
+    const { formShow, email } = this.state
+    const { transactionId, amount, symbol, transactionStatus, loading, sendDataStatus } = this.props
+    return <div className={classNames(commonStyles.container, {
+      [styles.formShow]: formShow
+    })}>
       <Alert
         icon={transactionStatus === 'failed' ? <Icons.Exclamation /> : <Icons.Check />}
         className={styles.alert}
@@ -37,6 +62,7 @@ class ClaimingFinishedPage extends React.Component {
         }}
       />
       {this.renderDappButton({ dappId, transactionId, transactionStatus })}
+      {this.renderSubscribeForm({ hideSubscribe, email, loading, sendDataStatus })}
     </div>
   }
 
@@ -53,6 +79,40 @@ class ClaimingFinishedPage extends React.Component {
     >
       {this.t('buttons.goTo', { dapp: dappData.name })}
     </Button>
+  }
+
+
+  renderSubscribeForm ({ hideSubscribe, email, loading, sendDataStatus }) {
+    if (hideSubscribe) { return null }
+    return <div className={classNames(styles.form, {
+      [styles.formLoading]: loading,
+      [styles.formFinished]: sendDataStatus === 'success'
+    })}>
+      <div className={classNames(styles.formOverlay, styles.formLoadingOverlay)} />
+      <div className={classNames(styles.formOverlay, styles.formSuccessOverlay)}>{this.t('titles.subscribed')}</div>
+      <div className={styles.formTitle} onClick={_ => this.setState({ formShow: true })}>
+        {this.t('titles.formTitle')}
+      </div>
+
+      <div className={styles.formContent}>
+        <div className={styles.formInput}>
+          <Input
+            value={email}
+            placeholder={this.t('titles.yourEmail')}
+            className={styles.input}
+            onChange={({ value }) => this.setState({ email: value })}
+          />
+          <div
+            className={styles.formButton}
+            onClick={_ => {
+              this.actions().user.saveData({ email })
+            }}
+          >
+           <Icons.ContinueArrow />
+          </div>
+        </div>
+      </div>
+    </div>
   }
 }
 

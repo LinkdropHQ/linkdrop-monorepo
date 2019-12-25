@@ -29,9 +29,188 @@
 .button {
   max-width: 300px;
   min-width: 300px;
+  background: $dbBlue;
+  margin-bottom: 30px;
   transform: translateY(32px);
 
   &.disableTranslateX {
     transform: translateY(0px)
+  }
+}
+
+.form {
+  position: relative;
+  width: 100%;
+  max-width: 300px;
+  margin: 0 auto;
+  transform: translateY(32px);
+  text-align: center;
+  min-height: 50px;
+}
+
+.formLoading {
+  .formLoadingOverlay {
+    display: block;
+  }
+}
+
+.formFinished {
+  .formSuccessOverlay {
+    display: block;
+  }
+}
+
+.formOverlay {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 100;
+  display: none;
+  border-radius: 5px;
+}
+
+.formLoadingOverlay {
+  background: rgba(255, 255, 255, .7);
+}
+
+.formSuccessOverlay {
+  background: $successColor;
+  border: 1px solid $dbGrey;
+  font-family: 'Inter-Medium';
+  font-size: 20px;
+  text-align: center;
+  line-height: 50px;
+  color: #FFF;
+}
+
+.formContent {
+  left: 100%;
+  opacity: 0;
+  z-index: 1;
+  width: 100%;
+  top: 0px;
+  position: absolute;
+}
+
+.formTitle {
+  font-size: 18px;
+  cursor: pointer;
+  transition: all .3s;
+  z-index: 2;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  text-align: center;
+  left: 0;
+}
+
+.formShow .formTitle {
+  animation: titleOut .5s forwards;
+}
+
+.formShow .formContent {
+  animation: formIn .5s forwards;
+}
+
+.formHide .formTitle {
+  animation: titleIn .5s forwards;
+}
+
+.formHide .formContent {
+  animation: formOut .5s forwards;
+}
+
+.input {
+  width: 300px;
+  padding-right: 50px;
+}
+
+.formInput {
+  position: relative;
+}
+
+.formButton {
+  position: absolute;
+  right: 7px;
+  top: 7px;
+  width: 36px;
+  border-radius: 5px;
+  cursor: pointer;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: $dbBlue;
+}
+
+@keyframes titleOut {
+  0% {
+    left: 0%;
+    opacity: 1;
+  }
+
+  80% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 0;
+    display: none;
+    left: -100%;
+    z-index: 1;
+  }
+}
+
+@keyframes formIn {
+  0% {
+    left: 100%;
+    opacity: 0;
+  }
+
+  80% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 1;
+    display: block;
+    left: 0%;
+    z-index: 2;
+  }
+}
+
+@keyframes titleIn {
+  0% {
+    opacity: 0;
+    display: none;
+    left: -100%;
+    z-index: 1;
+  }
+
+  80% {
+    opacity: 1;
+  }
+
+  100% {
+    left: 0%;
+    opacity: 1;
+  }
+}
+
+@keyframes formOut {
+  0% {
+    opacity: 1;
+    display: block;
+    left: 0%;
+    z-index: 2;
+  }
+
+  80% {
+    opacity: 0;
+  }
+
+  100% {
+    left: 100%;
+    opacity: 0;
   }
 }

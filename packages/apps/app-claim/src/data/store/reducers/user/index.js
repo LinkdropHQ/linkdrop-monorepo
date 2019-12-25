@@ -9,7 +9,8 @@ const initialState = {
   walletType: null,
   readyToClaim: false,
   alreadyClaimed: false,
-  sdk: null
+  sdk: null,
+  sendDataStatus: null
 }
 
 export default (state = initialState, action = {}) => {
@@ -29,5 +30,6 @@ const ACTIONS = {
   'USER.SET_WALLET_TYPE': reducers.setWalletType,
   'USER.SET_READY_TO_CLAIM': reducers.setReadyToClaim,
   'USER.SET_ALREADY_CLAIMED': reducers.setAlreadyClaimed,
-  'USER.SET_SDK': reducers.setSdk
+  'USER.SET_SDK': reducers.setSdk,
+  'USER.SET_SEND_DATA_STATUS': reducers.setSendDataStatus
 }
