@@ -48,7 +48,7 @@ export const generate = async () => {
 
     const proxyAddress = linkdropSDK.getProxyAddress(CAMPAIGN_ID)
 
-    let cost = WEI_AMOUNT.mul(LINKS_NUMBER)
+    const cost = WEI_AMOUNT.mul(LINKS_NUMBER)
 
     let amountToSend
 
@@ -93,10 +93,10 @@ export const generate = async () => {
     term.bold(`Tx Hash: ^g${tx.hash}\n`)
 
     // Generate links
-    let links = []
+    const links = []
 
     for (let i = 0; i < LINKS_NUMBER; i++) {
-      let {
+      const {
         url,
         linkId,
         linkKey,
@@ -110,7 +110,7 @@ export const generate = async () => {
         campaignId: CAMPAIGN_ID
       })
 
-      let link = { i, linkId, linkKey, linkdropSignerSignature, url }
+      const link = { i, linkId, linkKey, linkdropSignerSignature, url }
       links.push(link)
     }
 
