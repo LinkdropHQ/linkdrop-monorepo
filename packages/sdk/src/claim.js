@@ -17,6 +17,7 @@ export const claim = async ({
   tokenId,
   feeAmount,
   expiration,
+  data,
   signerSignature,
   receiverAddress,
   linkdropContract
@@ -72,6 +73,10 @@ export const claim = async ({
     throw new Error('Please provide link expiration timestamp')
   }
 
+  if (data == null || data === '') {
+    throw new Error('Please provide callback data')
+  }
+
   if (signerSignature == null || signerSignature === '') {
     throw new Error('Please provide linkdropMaster signature')
   }
@@ -104,11 +109,12 @@ export const claim = async ({
     tokenId,
     feeAmount,
     expiration,
-    signerSignature
+    data
   })
 
   const response = await axios.post(`${apiHost}/api/v1/linkdrops/claim`, {
     linkParams,
+    signerSignature,
     receiverAddress,
     receiverSignature,
     linkdropContractAddress: linkdropContract
@@ -131,6 +137,7 @@ export const claimAndDeploy = async ({
   tokenId,
   feeAmount,
   expiration,
+  data,
   signerSignature,
   receiverAddress,
   linkdropContract,
@@ -188,6 +195,10 @@ export const claimAndDeploy = async ({
     throw new Error('Please provide link expiration timestamp')
   }
 
+  if (data == null || data === '') {
+    throw new Error('Please provide link callback data')
+  }
+
   if (signerSignature == null || signerSignature === '') {
     throw new Error('Please provide linkdropMaster signature')
   }
@@ -228,13 +239,14 @@ export const claimAndDeploy = async ({
     tokenId,
     feeAmount,
     expiration,
-    signerSignature
+    data
   })
 
   const response = await axios.post(
     `${apiHost}/api/v1/linkdrops/claimAndDeploy`,
     {
       linkParams,
+      signerSignature,
       receiverAddress,
       receiverSignature,
       linkdropContractAddress: linkdropContract,

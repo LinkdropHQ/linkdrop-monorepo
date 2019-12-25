@@ -1,4 +1,4 @@
-import { computeProxyAddress } from './utils'
+import { computeProxyAddress, encodeTransaction, encodeParams } from './utils'
 import * as generateLinkUtils from './generateLink'
 import * as claimUtils from './claim'
 import * as deployUtils from './deployProxy'
@@ -80,6 +80,7 @@ class LinkdropSDK {
     tokenId = 0,
     feeAmount = 0,
     expiration = 11111111111,
+    data = '0x',
     signingKeyOrWallet // private key of wallet
   }) {
     return generateLinkUtils.generateLink({
@@ -96,6 +97,7 @@ class LinkdropSDK {
       tokenId,
       feeAmount,
       expiration,
+      data,
       version: this.version[campaignId] || (await this.getVersion(campaignId)),
       chainId: this.chainId,
       signingKeyOrWallet
@@ -121,6 +123,7 @@ class LinkdropSDK {
     tokenId,
     feeAmount,
     expiration,
+    data = '0x',
     signerSignature,
     receiverAddress,
     linkdropContract,
@@ -139,6 +142,7 @@ class LinkdropSDK {
       tokenId,
       feeAmount,
       expiration,
+      data,
       signerSignature,
       receiverAddress,
       linkdropContract,
@@ -157,6 +161,7 @@ class LinkdropSDK {
     tokenId,
     feeAmount,
     expiration,
+    data = '0x',
     signerSignature,
     receiverAddress,
     linkdropContract,
@@ -187,6 +192,7 @@ class LinkdropSDK {
       tokenId,
       feeAmount,
       expiration,
+      data,
       signerSignature,
       receiverAddress,
       linkdropContract,
@@ -274,6 +280,14 @@ class LinkdropSDK {
       senderAddress: this.senderAddress,
       campaignId
     })
+  }
+
+  encodeParams (abi, method, params = []) {
+    return encodeParams(abi, method, params)
+  }
+
+  encodeTransaction (to, value = 0, data = '0x') {
+    return encodeTransaction(to, value, data)
   }
 }
 

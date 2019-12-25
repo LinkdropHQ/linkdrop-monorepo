@@ -18,7 +18,8 @@ const {
   FACTORY_ADDRESS,
   LINKS_NUMBER,
   CAMPAIGN_ID,
-  FEE_AMOUNT
+  FEE_AMOUNT,
+  CALLBACK_DATA
 } = config
 
 const nativeTokensAmount = ethers.utils.bigNumberify(
@@ -56,7 +57,8 @@ export const generate = async () => {
     const proxyBalance = await provider.getBalance(proxyAddress)
 
     // check that proxy address is deployed
-    if (String(CAMPAIGN_ID) !== '0') await deployProxyIfNeeded(spinner)
+    // if (String(CAMPAIGN_ID) !== '0')
+    await deployProxyIfNeeded(spinner)
 
     if (proxyBalance.lt(cost)) {
       // Transfer ethers
@@ -105,7 +107,8 @@ export const generate = async () => {
         signingKeyOrWallet: sender.privateKey,
         nativeTokensAmount: NATIVE_TOKENS_AMOUNT,
         campaignId: CAMPAIGN_ID,
-        feeAmount: FEE_AMOUNT
+        feeAmount: FEE_AMOUNT,
+        data: CALLBACK_DATA
       })
 
       const link = { i, linkId, linkKey, signerSignature, url }

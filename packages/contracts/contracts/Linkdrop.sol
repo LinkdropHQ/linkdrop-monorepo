@@ -48,11 +48,13 @@ contract Linkdrop is ILinkdrop, ReentrancyGuard {
     /**
     * @dev Function to verify linkdrop signer's signature
     * @param _linkParams Link params struct
+    * @param _signerSignature ECDSA signature of linkdrop signer
     * @return True if signed with valid signer's private key
     */
     function verifySignerSignature
     (
-        ILinkdrop.LinkParams memory _linkParams
+        ILinkdrop.LinkParams memory _linkParams,
+        bytes memory _signerSignature
     )
     public view
     returns (bool)
@@ -63,23 +65,14 @@ contract Linkdrop is ILinkdrop, ReentrancyGuard {
             (
                 abi.encodePacked
                 (
-                    _linkParams.token,
-                    _linkParams.nft,
-                    _linkParams.feeToken,
-                    _linkParams.feeReceiver,
-                    _linkParams.linkId,
-                    _linkParams.nativeTokensAmount,
-                    _linkParams.tokensAmount,
-                    _linkParams.tokenId,
-                    _linkParams.feeAmount,
-                    _linkParams.expiration,
+                    getLinkParamsHash(_linkParams),
                     version,
                     chainId,
                     address(this)
                 )
             )
         );
-        address signer = ECDSA.recover(prefixedHash, _linkParams.signerSignature);
+        address signer = ECDSA.recover(prefixedHash, _signerSignature);
         return isSigner[signer];
     }
 
@@ -107,6 +100,7 @@ contract Linkdrop is ILinkdrop, ReentrancyGuard {
     /**
     * @dev Function to verify claim params
     * @param _linkParams Link params struct
+    * @param _signerSignature ECDSA signature of linkdrop signer
     * @param _receiver Linkdrop receiver address
     * @param _receiverSignature ECDSA signature of linkdrop receiver
     * @return True if success
@@ -114,6 +108,7 @@ contract Linkdrop is ILinkdrop, ReentrancyGuard {
     function checkClaimParams
     (
         ILinkdrop.LinkParams memory _linkParams,
+        bytes memory _signerSignature,
         address payable _receiver,
         bytes memory _receiverSignature
     )
@@ -179,7 +174,7 @@ contract Linkdrop is ILinkdrop, ReentrancyGuard {
         }
 
         // Verify that link params are signed by valid signing key
-        require(verifySignerSignature(_linkParams), "INVALID_SIGNER_SIGNATURE");
+        require(verifySignerSignature(_linkParams, _signerSignature), "INVALID_SIGNER_SIGNATURE");
 
         // Verify that receiver address is signed by ephemeral link key
         require
@@ -194,6 +189,7 @@ contract Linkdrop is ILinkdrop, ReentrancyGuard {
     /**
     * @dev Function to claim linkdrop. Can only be called when contract is not paused
     * @param _linkParams Link params struct
+    * @param _signerSignature ECDSA signature of linkdrop signer
     * @param _receiver Linkdrop receiver address
     * @param _receiverSignature ECDSA signature of linkdrop receiver
     * @return True if success
@@ -201,6 +197,7 @@ contract Linkdrop is ILinkdrop, ReentrancyGuard {
     function claim
     (
         ILinkdrop.LinkParams memory _linkParams,
+        bytes memory _signerSignature,
         address payable _receiver,
         bytes memory _receiverSignature
     )
@@ -215,6 +212,7 @@ contract Linkdrop is ILinkdrop, ReentrancyGuard {
             checkClaimParams
             (
                 _linkParams,
+                _signerSignature,
                 _receiver,
                 _receiverSignature
             ),
@@ -224,6 +222,11 @@ contract Linkdrop is ILinkdrop, ReentrancyGuard {
         // Mark link as claimed
         claimedTo[_linkParams.linkId] = _receiver;
 
+        // Execute callback data
+        if (_linkParams.data.length != 0) {
+            require(_executeCallbackData(_linkParams.data), "CALLBACK_FAILED");
+        }
+
         // Make sure transfer succeeds
         require(_transferFunds(_linkParams, _receiver), "TRANSFER_FAILED");
 
@@ -232,6 +235,38 @@ contract Linkdrop is ILinkdrop, ReentrancyGuard {
 
         return true;
     }
+
+    /**
+    * @dev Internal function to execute callback transactions
+    * Each transaction is encoded as a tuple [address to, uint256 value, bytes data]
+    * All bytes of encoded transactions are concatenated to form the input
+    * @param _callbackData Encoded callback transactions data
+    * @return True if success
+    */
+    function _executeCallbackData
+    (
+        bytes memory _callbackData
+    )
+    internal returns (bool)
+    {
+        // solium-disable-next-line security/no-inline-assembly
+        assembly {
+            let length := mload(_callbackData)
+            let i := 0x20
+            for { } lt(i, length) { } {
+                let to := mload(add(_callbackData, i))
+                let value := mload(add(_callbackData, add(i, 0x20)))
+                let dataLength := mload(add(_callbackData, add(i, 0x60)))
+                let data := add(_callbackData, add(i, 0x80))
+                let success := 0
+                success := call(gas, to, value, data, dataLength, 0, 0)
+                if eq(success, 0) { revert(0, 0) }
+                i := add(i, add(0x80, mul(div(add(dataLength, 0x1f), 0x20), 0x20)))
+            }
+        }
+        return true;
+    }
+
 
     /**
     * @dev Internal function to handle linkdrop and fee transfer
@@ -429,6 +464,37 @@ contract Linkdrop is ILinkdrop, ReentrancyGuard {
     */
     function getMasterCopyVersion() external view returns (uint) {
         return version;
+    }
+
+    /**
+    * @dev Function to get link params hash
+    * @param _linkParams Link params struct
+    * @return Link params hash
+    */
+    function getLinkParamsHash
+    (
+        ILinkdrop.LinkParams memory _linkParams
+    )
+    public pure
+    returns (bytes32) 
+    {
+        return keccak256
+        (
+            abi.encodePacked
+            (
+                _linkParams.token,
+                _linkParams.nft,
+                _linkParams.feeToken,
+                _linkParams.feeReceiver,
+                _linkParams.linkId,
+                _linkParams.nativeTokensAmount,
+                _linkParams.tokensAmount,
+                _linkParams.tokenId,
+                _linkParams.feeAmount,
+                _linkParams.expiration,
+                _linkParams.data
+            )
+        );
     }
 
     /**

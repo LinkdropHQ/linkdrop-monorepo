@@ -44,6 +44,7 @@ const claim = async () => {
       tokenId,
       feeAmount,
       expiration,
+      data,
       signerSignature,
       linkdropContract,
       sender: senderAddress
@@ -70,6 +71,7 @@ const claim = async () => {
       tokenId,
       feeAmount,
       expiration,
+      data,
       signerSignature,
       receiverAddress: RECEIVER_ADDRESS,
       linkdropContract,

@@ -5,10 +5,7 @@
   "main": "index.js",
   "repository": "https://github.com/LinkdropProtocol/linkdrop-monorepo.git",
   "license": "MIT",
-  "workspaces": [
-    "packages/*",
-    "packages/apps/*"
-  ],
+  "workspaces": ["packages/*", "packages/apps/*"],
   "scripts": {
     "test": "cd packages/contracts/ && mocha --require @babel/polyfill --require @babel/register",
     "compile-contracts": "cd packages/contracts && npx waffle .waffle",
@@ -24,12 +21,10 @@
     "claim-eth": "npx babel-node packages/scripts/src/claim_eth.js",
     "claim-erc20": "npx babel-node packages/scripts/src/claim_erc20.js",
     "claim-erc721": "npx babel-node packages/scripts/src/claim_erc721.js",
-    "add-relayer": "npx babel-node packages/scripts/src/add_relayer.js",
     "server": "npx babel-node packages/server/server.js",
     "dev:server": "nodemon --exec npx babel-node packages/server/server.js",
-    "setup-linkdrop": "yarn compile-contracts && yarn deploy-mastercopy && yarn deploy-factory",
-    "setup-tokens": "yarn deploy-erc20 && yarn deploy-erc721",
-    "setup-linkdrop-erc721": "yarn deploy-mastercopy && yarn deploy-factory && yarn generate-links-erc721",
+    "deploy-linkdrop-contracts": "yarn compile-contracts && yarn deploy-mastercopy-transfer && yarn deploy-mastercopy && yarn deploy-factory",
+    "deploy-tokens": "yarn deploy-erc20 && yarn deploy-erc721",
     "set-mastercopy": "npx babel-node packages/scripts/src/set_mastercopy.js",
     "update-mastercopy": "yarn deploy-mastercopy && yarn set-mastercopy",
     "test:demo": "NODE_ENV=test-demo NODE_PATH=./packages/apps/app-demo mocha packages/apps/app-demo/test/**/*.js  --compilers js:@babel/register --require ignore-styles --recursive",

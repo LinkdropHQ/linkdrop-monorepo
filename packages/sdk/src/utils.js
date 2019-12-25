@@ -18,7 +18,7 @@ export class LinkParams {
     tokenId,
     feeAmount,
     expiration,
-    signerSignature
+    data
   }) {
     this.token = token
     this.nft = nft
@@ -30,7 +30,7 @@ export class LinkParams {
     this.tokenId = tokenId
     this.feeAmount = feeAmount
     this.expiration = expiration
-    this.signerSignature = signerSignature
+    this.data = data
   }
 }
 
@@ -100,6 +100,7 @@ const signLink = async ({
   tokenId,
   feeAmount,
   expiration,
+  data,
   version,
   chainId,
   linkdropContract,
@@ -109,7 +110,7 @@ const signLink = async ({
     signingKeyOrWallet = new ethers.Wallet(signingKeyOrWallet)
   }
 
-  const messageHash = ethers.utils.solidityKeccak256(
+  const linkParamsHash = ethers.utils.solidityKeccak256(
     [
       'address', // token
       'address', // nft
@@ -121,9 +122,7 @@ const signLink = async ({
       'uint', // tokenId
       'uint', // feeAmount
       'uint', // expiration
-      'uint', // version
-      'uint', // chainId
-      'address' // linkdropContract
+      'bytes' // data
     ],
     [
       token,
@@ -136,10 +135,18 @@ const signLink = async ({
       tokenId,
       feeAmount,
       expiration,
-      version,
-      chainId,
-      linkdropContract
+      data
     ]
+  )
+
+  const messageHash = ethers.utils.solidityKeccak256(
+    [
+      'bytes32', // linkParamsHash
+      'uint', // version
+      'uint', // chainId
+      'address' // linkdropContract
+    ],
+    [linkParamsHash, version, chainId, linkdropContract]
   )
   const messageHashToSign = ethers.utils.arrayify(messageHash)
   const signature = await signingKeyOrWallet.signMessage(messageHashToSign)
@@ -155,7 +162,8 @@ export const createLink = async ({
   tokensAmount = 0,
   tokenId = 0,
   feeAmount = 0,
-  expiration,
+  expiration = 11111111111,
+  data = '0x',
   version,
   chainId,
   linkdropContract,
@@ -164,9 +172,10 @@ export const createLink = async ({
   if (
     token === AddressZero &&
     nft === AddressZero &&
-    nativeTokensAmount === 0
+    nativeTokensAmount === 0 &&
+    data === '0x'
   ) {
-    throw new Error('Invalid params. No token chosen.')
+    throw new Error('Invalid params. No token or data chosen')
   }
   if (expiration == null || expiration === '') {
     throw new Error('Please provide link expiration timestamp')
@@ -202,6 +211,7 @@ export const createLink = async ({
     tokenId,
     feeAmount,
     expiration,
+    data,
     version,
     chainId,
     linkdropContract,
@@ -219,7 +229,7 @@ export const createLink = async ({
     tokenId,
     feeAmount,
     expiration,
-    signerSignature
+    data
   })
 
   return {
@@ -256,4 +266,17 @@ export const generateAccount = () => {
   const address = wallet.getChecksumAddressString()
   const privateKey = wallet.getPrivateKeyString()
   return { address, privateKey }
+}
+
+export const encodeParams = (abi, method, params) => {
+  return new ethers.utils.Interface(abi).functions[method].encode([...params])
+}
+
+export const encodeTransaction = (to, value, data) => {
+  const transactionWrapper = new ethers.utils.Interface([
+    'function execute(address to, uint256 value, bytes data)'
+  ])
+  return transactionWrapper.functions.execute
+    .encode([to, value, data])
+    .substr(10)
 }

@@ -13,7 +13,7 @@ export class LinkParams {
     tokenId,
     feeAmount,
     expiration,
-    signerSignature
+    data
   }) {
     this.token = token
     this.nft = nft
@@ -25,7 +25,7 @@ export class LinkParams {
     this.tokenId = tokenId
     this.feeAmount = feeAmount
     this.expiration = expiration
-    this.signerSignature = signerSignature
+    this.data = data
   }
 }
 
@@ -81,6 +81,7 @@ export const signLink = async ({
   tokenId,
   feeAmount,
   expiration,
+  data,
   version,
   chainId,
   linkdropContract,
@@ -90,7 +91,7 @@ export const signLink = async ({
     signingKeyOrWallet = new ethers.Wallet(signingKeyOrWallet)
   }
 
-  const messageHash = ethers.utils.solidityKeccak256(
+  const linkParamsHash = ethers.utils.solidityKeccak256(
     [
       'address', // token
       'address', // nft
@@ -102,9 +103,7 @@ export const signLink = async ({
       'uint', // tokenId
       'uint', // feeAmount
       'uint', // expiration
-      'uint', // version
-      'uint', // chainId
-      'address' // linkdropContract
+      'bytes' // data
     ],
     [
       token,
@@ -117,13 +116,23 @@ export const signLink = async ({
       tokenId,
       feeAmount,
       expiration,
-      version,
-      chainId,
-      linkdropContract
+      data
     ]
   )
+
+  const messageHash = ethers.utils.solidityKeccak256(
+    [
+      'bytes32', // linkParamsHash
+      'uint', // version
+      'uint', // chainId
+      'address' // linkdropContract
+    ],
+    [linkParamsHash, version, chainId, linkdropContract]
+  )
+
   const messageHashToSign = ethers.utils.arrayify(messageHash)
   const signature = await signingKeyOrWallet.signMessage(messageHashToSign)
+
   return signature
 }
 
@@ -138,6 +147,7 @@ export const createLink = async ({
   tokenId = 0,
   feeAmount = 0,
   expiration,
+  data = '0x',
   version,
   chainId,
   linkdropContract,
@@ -157,6 +167,7 @@ export const createLink = async ({
     tokenId,
     feeAmount,
     expiration,
+    data,
     version,
     chainId,
     linkdropContract,
@@ -174,7 +185,7 @@ export const createLink = async ({
     tokenId,
     feeAmount,
     expiration,
-    signerSignature
+    data
   })
 
   return {
@@ -194,4 +205,17 @@ export const signReceiverAddress = async (linkKey, receiverAddress) => {
   const messageHashToSign = ethers.utils.arrayify(messageHash)
   const signature = await wallet.signMessage(messageHashToSign)
   return signature
+}
+
+export const encodeParams = (abi, method, params) => {
+  return new ethers.utils.Interface(abi).functions[method].encode([...params])
+}
+
+export const encodeTransaction = (to, value, data) => {
+  const transactionWrapper = new ethers.utils.Interface([
+    'function execute(address to, uint256 value, bytes data)'
+  ])
+  return transactionWrapper.functions.execute
+    .encode([to, value, data])
+    .substr(10)
 }
