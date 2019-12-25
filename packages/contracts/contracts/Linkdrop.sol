@@ -116,13 +116,6 @@ contract Linkdrop is ILinkdrop, ReentrancyGuard {
     whenNotPaused
     returns (bool)
     {
-        require
-        (
-            !(_linkParams.token == address(0) &&
-            _linkParams.nft == address(0) &&
-            _linkParams.nativeTokensAmount == 0),
-            "NO_TOKEN_CHOSEN"
-        );
 
         // If tokens are being claimed
         if (_linkParams.tokensAmount > 0) {
