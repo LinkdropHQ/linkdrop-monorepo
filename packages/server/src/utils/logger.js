@@ -17,7 +17,7 @@ const logger = createLogger({
 
 logger.table = (obj, logLevel = 'debug') => {
   const table = new Table()
-  for (let key in obj) {
+  for (const key in obj) {
     if (key !== '_id' && key !== '__v') {
       table.push([key, obj[key]])
     }
@@ -29,4 +29,9 @@ logger.json = (obj, logLevel = 'debug') => {
   logger[logLevel](JSON.stringify(obj, null, 2))
 }
 
+logger.stream = {
+  write: function (message, encoding) {
+    logger.info(message)
+  }
+}
 export default logger

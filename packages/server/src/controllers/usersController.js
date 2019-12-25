@@ -14,10 +14,12 @@ export const create = async (req, res) => {
 
   const user = new User({ email, address, data })
 
-  logger.debug('Saving user to database:')
+  logger.debug('Trying to save user to database:')
   logger.json(user)
 
   await user.save()
+
+  logger.debug('Successfully saved user to database.')
 
   // return user in successful response
   res.json({
