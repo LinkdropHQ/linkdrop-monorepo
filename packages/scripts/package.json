@@ -16,5 +16,8 @@
   "babel": {
     "extends": "../babel.config.js"
   },
-  "gitHead": "414d0e9ecca3fab72be5820c3046207b0b5415b2"
+  "gitHead": "414d0e9ecca3fab72be5820c3046207b0b5415b2",
+  "devDependencies": {
+    "artillery": "^1.6.0-29"
+  }
 }
