@@ -7,6 +7,7 @@ import commonStyles from '../styles.module'
 import { getDappData } from 'helpers'
 import { getHashVariables, defineEtherscanUrl } from '@linkdrop/commons'
 import classNames from 'classnames'
+import FakeCheckbox from './fake-checkbox.png'
 
 @actions(({
   tokens: {
@@ -62,7 +63,7 @@ class ClaimingFinishedPage extends React.Component {
         }}
       />
       {this.renderDappButton({ dappId, transactionId, transactionStatus })}
-      {this.renderSubscribeForm({ hideSubscribe, email, loading, sendDataStatus })}
+      {this.renderSubscribeForm({ hideSubscribe, email, loading, sendDataStatus, transactionId })}
     </div>
   }
 
@@ -72,7 +73,7 @@ class ClaimingFinishedPage extends React.Component {
     if (!dappData) { return null }
     return <Button
       className={classNames(styles.button, {
-        [styles.disableTranslateX]: !transactionId
+        [styles.disableTranslateY]: !transactionId
       })}
       target='_blank'
       href={dappData.link}
@@ -82,16 +83,19 @@ class ClaimingFinishedPage extends React.Component {
   }
 
 
-  renderSubscribeForm ({ hideSubscribe, email, loading, sendDataStatus }) {
+  renderSubscribeForm ({ hideSubscribe, email, loading, sendDataStatus, transactionId }) {
     if (hideSubscribe) { return null }
     return <div className={classNames(styles.form, {
       [styles.formLoading]: loading,
-      [styles.formFinished]: sendDataStatus === 'success'
+      [styles.formFinished]: sendDataStatus === 'success',
+      [styles.formFailed]: sendDataStatus === 'failed',
+      [styles.disableTranslateY]: !transactionId
     })}>
       <div className={classNames(styles.formOverlay, styles.formLoadingOverlay)} />
       <div className={classNames(styles.formOverlay, styles.formSuccessOverlay)}>{this.t('titles.subscribed')}</div>
+      <div className={classNames(styles.formOverlay, styles.formFailedOverlay)}>{this.t('titles.failed')}</div>
       <div className={styles.formTitle} onClick={_ => this.setState({ formShow: true })}>
-        {this.t('titles.formTitle')}
+        {this.t('titles.formTitle')} <Icons.ExpandArrowIcon />
       </div>
 
       <div className={styles.formContent}>
@@ -110,6 +114,9 @@ class ClaimingFinishedPage extends React.Component {
           >
            <Icons.ContinueArrow />
           </div>
+        </div>
+        <div className={styles.fakeCheckbox}>
+          <img src={FakeCheckbox} /> {this.t('titles.fakeCheckbox')}
         </div>
       </div>
     </div>

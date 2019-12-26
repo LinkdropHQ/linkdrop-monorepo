@@ -14,7 +14,9 @@ export default {
     formTitle: 'Subscribe for new giveaways',
     agreeWithTerms: 'By claiming you agree to the <a target="_blank" href={{href}}>Terms & Privacy</a>',
     yourEmail: 'Your Email',
-    subscribed: 'Subscribed!'
+    subscribed: 'Subscribed!',
+    failed: 'Failed!',
+    fakeCheckbox: 'Let me know about new giveaways'
   },
   buttons: {
     useWallet: 'Use {{wallet}}',

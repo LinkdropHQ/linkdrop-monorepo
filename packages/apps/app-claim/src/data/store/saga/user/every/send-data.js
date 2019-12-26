@@ -12,8 +12,8 @@ const generator = function * ({ payload }) {
     const chainId = yield select(generator.selectors.chainId)
     const networkName = defineNetworkName({ chainId: chainId || linkChainId })
     yield delay(2000)
-    const result = yield call(sendData, { email, address: ethers.constants.AddressZero, networkName })
-    yield put({ type: 'USER.SET_SEND_DATA_STATUS', payload: { sendDataStatus: 'success' } })
+    const { success } = yield call(sendData, { email, address: ethers.constants.AddressZero, networkName })
+    yield put({ type: 'USER.SET_SEND_DATA_STATUS', payload: { sendDataStatus: success ? 'success' : 'failed' } })
     yield put({ type: 'USER.SET_LOADING', payload: { loading: false } })
   } catch (e) {
     console.error(e)

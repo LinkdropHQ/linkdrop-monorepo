@@ -32,10 +32,6 @@
   background: $dbBlue;
   margin-bottom: 30px;
   transform: translateY(32px);
-
-  &.disableTranslateX {
-    transform: translateY(0px)
-  }
 }
 
 .form {
@@ -60,6 +56,24 @@
   }
 }
 
+.formFailed {
+  .formFailedOverlay {
+    display: block;
+  }
+}
+
+.fakeCheckbox {
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  img {
+    max-width: 20px;
+    margin-right: 6px;
+  }
+}
+
 .formOverlay {
   position: absolute;
   width: 100%;
@@ -73,14 +87,22 @@
   background: rgba(255, 255, 255, .7);
 }
 
-.formSuccessOverlay {
-  background: $successColor;
+.formSuccessOverlay,
+.formFailedOverlay {
   border: 1px solid $dbGrey;
   font-family: 'Inter-Medium';
   font-size: 20px;
   text-align: center;
   line-height: 50px;
   color: #FFF;
+}
+
+.formSuccessOverlay {
+  background: $successColor;
+}
+
+.formFailedOverlay {
+  background: $redColor;
 }
 
 .formContent {
@@ -127,6 +149,7 @@
 
 .formInput {
   position: relative;
+  margin-bottom: 15px;
 }
 
 .formButton {
@@ -141,6 +164,10 @@
   align-items: center;
   justify-content: center;
   background: $dbBlue;
+}
+
+.disableTranslateY {
+  transform: translateY(0px)
 }
 
 @keyframes titleOut {
