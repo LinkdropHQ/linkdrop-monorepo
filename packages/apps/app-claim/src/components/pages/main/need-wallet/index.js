@@ -6,6 +6,7 @@ import { getImages, capitalize } from 'helpers'
 import connectors from 'components/application/connectors'
 import styles from './styles.module'
 import commonStyles from '../styles.module'
+import { getHashVariables } from '@linkdrop/commons'
 
 @translate('pages.needWallet')
 class NeewWallet extends React.Component {
@@ -19,13 +20,14 @@ class NeewWallet extends React.Component {
   render () {
     const { context } = this.props
     const { loading } = this.state
+    const { w = 'trust' } = getHashVariables()
     return <div className={commonStyles.container}>
       {loading && <Loading withOverlay />}
       <Alert className={styles.alert} icon={<Icons.Exclamation />} />
       <div className={styles.title} dangerouslySetInnerHTML={{ __html: this.t('titles.main') }} />
       <div className={styles.content}>
-        {this.renderButton({ connector: 'fortmatic', context })}
-        {this.renderButton({ connector: 'portis', context })}
+        {w !== 'portis' && this.renderButton({ connector: 'fortmatic', context })}
+        {w !== 'fortmatic' && this.renderButton({ connector: 'portis', context })}
         <div className={styles.divider}>{this.t('titles.divider')}</div>
         {false && <Button
           inverted className={styles.button}
