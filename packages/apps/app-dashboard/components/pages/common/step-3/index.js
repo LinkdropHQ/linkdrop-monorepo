@@ -7,6 +7,7 @@ import config from 'config-dashboard'
 import { multiply, add, bignumber, subtract } from 'mathjs'
 import EthSummaryBlock from './eth-summary-block'
 import { defineDefaultSymbol } from 'helpers'
+import { linksLimit } from 'app.config.js'
 
 @actions(({
   user: {
@@ -59,7 +60,7 @@ class Step3 extends React.Component {
     }
   }
 
-  componentWillReceiveProps ({ metamaskStatus, errors, ethBalanceFormatted, erc20BalanceFormatted }) {
+  componentWillReceiveProps ({ linksAmount, metamaskStatus, errors, ethBalanceFormatted, erc20BalanceFormatted }) {
     const {
       metamaskStatus: prevMetamaskStatus,
       errors: prevErrors,
@@ -89,6 +90,10 @@ class Step3 extends React.Component {
         loading: false
       }, _ => {
         this.intervalEthCheck && window.clearInterval(this.intervalEthCheck)
+        // if links amount >= 1000 -> go to script page
+        if (linksAmount >= linksLimit) {
+          return window.setTimeout(_ => this.actions().campaigns.save({ links: [] }), config.nextStepTimeout)
+        }
         window.setTimeout(_ => this.actions().user.setStep({ step: 4 }), config.nextStepTimeout)
       })
     }

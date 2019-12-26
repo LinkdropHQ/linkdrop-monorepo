@@ -1,11 +1,12 @@
 import { put, select } from 'redux-saga/effects'
 const ls = (typeof window === 'undefined' ? {} : window).localStorage
+import { linksLimit } from 'app.config.js'
 
 const generator = function * ({ payload }) {
   try {
-    yield put({ type: 'USER.SET_LOADING', payload: { loading: true } })
-    yield put({ type: 'USER.SET_STEP', payload: { step: 5 } })
     const { links } = payload
+    yield put({ type: 'USER.SET_LOADING', payload: { loading: true } })
+    yield put({ type: 'USER.SET_STEP', payload: { step: links.length < linksLimit ? 5 : 6 } })
     const chainId = yield select(generator.selectors.chainId)
     const currentAddress = yield select(generator.selectors.currentAddress)
     const privateKey = yield select(generator.selectors.privateKey)
@@ -42,6 +43,7 @@ const generator = function * ({ payload }) {
       tokenAddress,
       tokenDecimals
     }
+    console.log({ newCampaign })
     const campaigns = yield select(generator.selectors.campaigns)
     const campaignsUpdated = campaigns.concat(newCampaign)
     yield put({ type: 'CAMPAIGNS.SET_ITEMS', payload: { items: campaignsUpdated } })

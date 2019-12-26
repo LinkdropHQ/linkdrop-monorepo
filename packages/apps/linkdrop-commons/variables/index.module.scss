@@ -23,6 +23,7 @@ $dbGrey: #979797;
 $dbBlue: #0025FF;
 $greyStrokeColor: #E5E5E5;
 $darkOrangeColor: #F89D35;
+$dbBlueOpacity: rgba(0, 37, 255, .2);
 
 :export {
   blackColor: $blackColor;
@@ -43,4 +44,5 @@ $darkOrangeColor: #F89D35;
   darkOrangeColor: $darkOrangeColor;
   redColor: $redColor;
   successColor: $successColor;
+  dbBlueOpacity: $dbBlueOpacity;
 }
