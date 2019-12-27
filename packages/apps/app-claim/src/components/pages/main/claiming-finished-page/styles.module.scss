@@ -145,6 +145,13 @@
 .input {
   width: 300px;
   padding-right: 50px;
+  text-decoration: none;
+  text-transform: lowercase;
+  -webkit-appearance: none;
+
+  &::placeholder {
+    text-transform: none;
+  }
 }
 
 .formInput {

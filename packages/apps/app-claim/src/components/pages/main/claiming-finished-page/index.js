@@ -36,7 +36,7 @@ class ClaimingFinishedPage extends React.Component {
   render () {
     const { chainId, dappId, hideSubscribe } = getHashVariables()
     const { formShow, email } = this.state
-    const { transactionId, amount, symbol, transactionStatus, loading, sendDataStatus } = this.props
+    const { transactionId, amount, wallet, symbol, transactionStatus, loading, sendDataStatus } = this.props
     return <div className={classNames(commonStyles.container, {
       [styles.formShow]: formShow
     })}>
@@ -63,7 +63,7 @@ class ClaimingFinishedPage extends React.Component {
         }}
       />
       {this.renderDappButton({ dappId, transactionId, transactionStatus })}
-      {this.renderSubscribeForm({ hideSubscribe, email, loading, sendDataStatus, transactionId })}
+      {this.renderSubscribeForm({ hideSubscribe, wallet, email, loading, sendDataStatus, transactionId })}
     </div>
   }
 
@@ -83,7 +83,7 @@ class ClaimingFinishedPage extends React.Component {
   }
 
 
-  renderSubscribeForm ({ hideSubscribe, email, loading, sendDataStatus, transactionId }) {
+  renderSubscribeForm ({ hideSubscribe, email, loading, sendDataStatus, transactionId, wallet }) {
     if (hideSubscribe) { return null }
     return <div className={classNames(styles.form, {
       [styles.formLoading]: loading,
@@ -102,6 +102,7 @@ class ClaimingFinishedPage extends React.Component {
         <div className={styles.formInput}>
           <Input
             value={email}
+            type='email'
             placeholder={this.t('titles.yourEmail')}
             className={styles.input}
             onChange={({ value }) => this.setState({ email: value })}
@@ -109,7 +110,7 @@ class ClaimingFinishedPage extends React.Component {
           <div
             className={styles.formButton}
             onClick={_ => {
-              this.actions().user.saveData({ email })
+              this.actions().user.saveData({ email, account: wallet })
             }}
           >
            <Icons.ContinueArrow />
