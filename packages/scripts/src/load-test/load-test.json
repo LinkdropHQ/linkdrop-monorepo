@@ -4,8 +4,8 @@
     "phases": [
       {
         "name": "Active claim phase",
-        "duration": 200,
-        "arrivalRate": 50
+        "duration": 120,
+        "arrivalRate": 10
       }
     ],
     "payload": {
