@@ -19,13 +19,14 @@ const generator = function * ({ payload }) {
       weiAmount,
       tokenAddress: ethersContractZeroAddress,
       tokenAmount: 0,
+      wallet: defaultWallet,
       expirationTime: configs.expirationTime,
       campaignId
     })
 
     yield delay(10)
     const links = yield select(generator.selectors.links)
-    const linksUpdated = links.concat(`${link.url}&w=${defaultWallet}`)
+    const linksUpdated = links.concat(defaultWallet)
     yield put({ type: 'CAMPAIGNS.SET_LINKS', payload: { links: linksUpdated } })
     yield put({ type: 'USER.SET_LOADING', payload: { loading: false } })
   } catch (e) {

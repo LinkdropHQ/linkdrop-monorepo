@@ -13,13 +13,14 @@ class Step6 extends React.Component {
   render () {
     const { items, current, campaignToCheck, loading } = this.props
     const currentCampaign = items.find(item => item.id === (campaignToCheck || current)) || {}
-    const { ethAmount, currentAddress, privateKey, linksAmount, tokenDecimals, chainId, tokenAddress, tokenAmount, campaignId } = currentCampaign
+    const { ethAmount, defaultWallet, currentAddress, privateKey, linksAmount, tokenDecimals, chainId, tokenAddress, tokenAmount, campaignId } = currentCampaign
     const networkName = defineNetworkName({ chainId })
     const weiAmount = utils.parseEther(convertFromExponents(ethAmount || 0))
     const tokenAmountFormatted = utils.parseUnits(
       String(tokenAmount || 0),
       tokenDecimals || 0
     )
+    console.log({ defaultWallet })
     return <div className={styles.container}>
       <div className={styles.title}>{this.t('titles.useTerminalApp')}</div>
       <div className={styles.instruction}>
