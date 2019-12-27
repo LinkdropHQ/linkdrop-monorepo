@@ -85,22 +85,23 @@ export default {
     payAttention: 'Pay attention to correctly fill all the fields. tokenAmount should be provided in atomic value.',
     terminalApp: 'If you\'re not familiar with how to use the Terminal app, contact with your technical teammates to help',
     haveAQuestion: 'Have a question — send us a message via Intercom',
-    scriptInstruction: 'To generation more than 1000 links at a time',
-    scriptDescription: 'This script will deploy the linkdrop proxy contract for your campaign and top it up with the required ETH amount for covering fee costs as well as approve your ERC20 tokens.',
+    scriptInstruction: 'To generation more than {{linksLimit}} links at a time',
+    scriptDescription: 'This script will deploy the linkdrop proxy contract for your campaign and top it up with the required ETH amount for covering fee costs as well as approve your ERC20 tokens.',
+    sendViaIntercom: 'Have a question — send us a message via <span>Intercom</span>',
     codeBlockScript: `{
-  "jsonRpcUrl": "https://mainnet.infura.io",
-  "CHAIN": "mainnet",
-  "chainId": "1",
-  "API_HOST": "https://mainnet.linkdrop.io",
+  "jsonRpcUrl": "https://{{networkName}}.infura.io",
+  "CHAIN": "{{networkName}}",
+  "chainId": "{{chainId}}",
+  "API_HOST": "https://{{networkName}}.linkdrop.io",
   "version": "1",
   "linkdropMasterPrivateKey": "$YOUR_PRIVATE_KEY",
   "masterCopy": "0x6a86aA5D394741b4464C785BD7Bf3D4c4bD87a6E",
-  "weiAmount": "0",
-  "tokenAddress": "0xc770eefad204b5180df6a14ee197d99d808ee52d",
-  "tokenAmount": "100", // $ TOKENS AMOUNT PER LINK IN ATOMIC VALUE
-  "linksNumber": "40000",
-  "CAMPAIGN_ID": "1",
-  "FACTORY_ADDRESS": "0xBa051891B752ecE3670671812486fe8dd34CC1c8"
+  "weiAmount": "{{weiAmount}}",
+  "tokenAddress": "{{tokenAddress}}",
+  "tokenAmount": "{{tokenAmount}}", // $ TOKENS AMOUNT PER LINK IN ATOMIC VALUE
+  "linksNumber": "{{linksAmount}}",
+  "CAMPAIGN_ID": "{{campaignId}}",
+  "FACTORY_ADDRESS": "{{factory}}"
 }
 `,
     codeBlockErc20: `// installation: yarn add @linkdrop/sdk

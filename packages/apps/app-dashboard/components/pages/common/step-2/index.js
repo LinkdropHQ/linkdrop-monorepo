@@ -118,9 +118,6 @@ class Step2 extends React.Component {
           loading: false
         }, _ => {
           this.intervalCheck && window.clearInterval(this.intervalCheck)
-          if (linksAmount >= linksLimit) {
-            return window.setTimeout(_ => this.actions().campaigns.save({ links: [] }), config.nextStepTimeout)
-          }
           window.setTimeout(_ => this.actions().user.setStep({ step: 3 }), config.nextStepTimeout)
         })
       }
@@ -130,9 +127,6 @@ class Step2 extends React.Component {
           loading: false
         }, _ => {
           this.intervalCheck && window.clearInterval(this.intervalCheck)
-          if (linksAmount >= linksLimit) {
-            return window.setTimeout(_ => this.actions().campaigns.save({ links: [] }), config.nextStepTimeout)
-          }
           window.setTimeout(_ => this.actions().user.setStep({ step: 3 }), config.nextStepTimeout)
         })
       }

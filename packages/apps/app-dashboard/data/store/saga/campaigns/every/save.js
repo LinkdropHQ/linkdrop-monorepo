@@ -6,7 +6,7 @@ const generator = function * ({ payload }) {
   try {
     const { links } = payload
     yield put({ type: 'USER.SET_LOADING', payload: { loading: true } })
-    yield put({ type: 'USER.SET_STEP', payload: { step: links.length < linksLimit ? 5 : 6 } })
+    yield put({ type: 'USER.SET_STEP', payload: { step: links.length === 0 ? 6 : 5 } })
     const chainId = yield select(generator.selectors.chainId)
     const currentAddress = yield select(generator.selectors.currentAddress)
     const privateKey = yield select(generator.selectors.privateKey)
