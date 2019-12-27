@@ -33,7 +33,7 @@
     "build:sdk": "babel packages/sdk/src -d packages/sdk/dist",
     "retry-transaction": "npx babel-node packages/server/tasks/retry_transaction.js",
     "retry-operation": "npx babel-node packages/server/tasks/retry_operation.js",
-    "load-test": "npx babel-node packages/scripts/src/load-test/parse-claim-params && npx artillery run packages/scripts/src/load-test/load-test.json -o load-test-res.json"
+    "load-test": "cd packages/scripts && yarn load-test"
   },
   "standard": {
     "parser": "babel-eslint"

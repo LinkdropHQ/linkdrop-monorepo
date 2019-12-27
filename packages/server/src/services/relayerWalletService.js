@@ -36,10 +36,6 @@ class RelayerWalletService {
     this.relayerWallet = new AutoNonceWallet(relayerPrivateKey, this.provider)
   }
 
-  async getNonce () {
-    return this.provider.getTransactionCount(this.relayerWallet.address)
-  }
-
   async getGasPrice () {
     let gasPrice
 

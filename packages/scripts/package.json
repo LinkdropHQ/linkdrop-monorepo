@@ -4,6 +4,9 @@
   "main": "index.js",
   "license": "MIT",
   "private": true,
+  "scripts": {
+    "load-test": "npx artillery run src/load-test/load-test.json -o src/load-test/load-test-res.json"
+  },
   "dependencies": {
     "@linkdrop/sdk": "^1.0.88",
     "axios": "^0.18.0",
