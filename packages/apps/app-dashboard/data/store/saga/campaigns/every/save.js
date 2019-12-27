@@ -43,7 +43,6 @@ const generator = function * ({ payload }) {
       tokenAddress,
       tokenDecimals
     }
-    console.log({ newCampaign })
     const campaigns = yield select(generator.selectors.campaigns)
     const campaignsUpdated = campaigns.concat(newCampaign)
     yield put({ type: 'CAMPAIGNS.SET_ITEMS', payload: { items: campaignsUpdated } })

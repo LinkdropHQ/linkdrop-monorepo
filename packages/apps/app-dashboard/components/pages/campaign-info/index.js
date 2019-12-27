@@ -22,7 +22,6 @@ class CampaignInfo extends React.Component {
     const { id } = params
     const currentItem = items.find(item => Number(item.id) === Number(id))
     const { links, linksAmount } = currentItem
-    console.log({ currentItem })
     return <div className={styles.container}>
       {this.renderContent({ id, links, linksAmount })}
     </div>
