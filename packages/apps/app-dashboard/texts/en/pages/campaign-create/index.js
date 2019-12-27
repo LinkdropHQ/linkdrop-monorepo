@@ -67,10 +67,10 @@ export default {
 
     // step6
     useTerminalApp: 'Use Terminal App',
-    cloneLinkdropMonorepo: '1. Clone Linkdrop Monorepo',
-    fillInConfig: '2. Fill in <span>config/config.json</span> from the root with the following params:',
-    generateLinks: '3. Generate links by running <span>yarn generate</span> from the root',
-    csvFile: '4. The generated <span>CSV file</span> will be located in <span>output/linkdrop.csv</span>',
+    cloneLinkdropMonorepo: '1. Clone Repo',
+    installDependencies: '2. Install dependencies',
+    setupConfig: '3. Setup linkdrop config params',
+    generateLinks: '4. Generate links',
   },
   texts: {
     _3: 'It’s created once and will work for the next campaigns.',
@@ -82,8 +82,10 @@ export default {
     _16: '<span>{{eth}} {{symbol}}</span> — to distribute',
     _17: '<span>{{eth}} {{symbol}}</span> — service fee',
     _18: 'By service fees, we cover Gas costs for links distribution and our operation costs.',
-    payAttention: 'Pay attention to correctly fill all the fields. tokenAmount should be provided in atomic value.',
+    fillInConfig: 'Fill in <span>config/config.json</span> file with the following parameters:',
+    payAttention: 'Pay attention to correctly fill all the fields. TOKENS_AMOUNT should be provided in atomic value.',
     terminalApp: 'If you are not familiar with how to use the Terminal app, contact your technical teammates for help',
+    generateLinks: 'Run <span>yarn generate</span> to generate links with the specified config params. The generated <span>CSV file</span> will be located in <span>output/linkdrop.csv</span> file',
     haveAQuestion: 'Have a question — send us a message via Intercom',
     scriptInstruction: 'To generate more than {{linksLimit}} links at a time',
     scriptDescription: 'This script will deploy the linkdrop proxy contract for your campaign and top it up with the required ETH amount for covering fee costs as well as approve your ERC20 tokens.',
