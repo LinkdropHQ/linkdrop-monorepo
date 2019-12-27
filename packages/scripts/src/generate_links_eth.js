@@ -27,6 +27,7 @@ const LINKDROP_MASTER_WALLET = getLinkdropMasterWallet()
 const CAMPAIGN_ID = getInt('CAMPAIGN_ID')
 const FACTORY_ADDRESS = getString('FACTORY_ADDRESS')
 const GAS_FEE = ethers.utils.parseUnits('0.002')
+const DEFAULT_WALLET = getString('DEFAULT_WALLET')
 
 WEI_AMOUNT = ethers.utils.bigNumberify(WEI_AMOUNT.toString())
 
@@ -48,7 +49,7 @@ export const generate = async () => {
 
     const proxyAddress = linkdropSDK.getProxyAddress(CAMPAIGN_ID)
 
-    let cost = WEI_AMOUNT.mul(LINKS_NUMBER)
+    const cost = WEI_AMOUNT.mul(LINKS_NUMBER)
 
     let amountToSend
 
@@ -93,10 +94,10 @@ export const generate = async () => {
     term.bold(`Tx Hash: ^g${tx.hash}\n`)
 
     // Generate links
-    let links = []
+    const links = []
 
     for (let i = 0; i < LINKS_NUMBER; i++) {
-      let {
+      const {
         url,
         linkId,
         linkKey,
@@ -107,10 +108,11 @@ export const generate = async () => {
         tokenAddress: ethers.constants.AddressZero,
         tokenAmount: 0,
         expirationTime: EXPIRATION_TIME,
-        campaignId: CAMPAIGN_ID
+        campaignId: CAMPAIGN_ID,
+        wallet: DEFAULT_WALLET
       })
 
-      let link = { i, linkId, linkKey, linkdropSignerSignature, url }
+      const link = { i, linkId, linkKey, linkdropSignerSignature, url }
       links.push(link)
     }
 

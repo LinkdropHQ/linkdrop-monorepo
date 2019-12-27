@@ -5,7 +5,7 @@
     "chainId": "4",
     "version": "2",
     "linkdropMasterPrivateKey": "",
-    "masterCopy": "0x2f9Df93ebF334443c5719f01000f777749a3f99c",
+    "masterCopy": "0x6a86aA5D394741b4464C785BD7Bf3D4c4bD87a6E",
     "receiverAddress": "",
     "weiAmount": "10",
     "tokenAddress": "",
@@ -14,7 +14,7 @@
     "nftAddress": "",
     "nftIds": "[0,1,2,3]",
     "CAMPAIGN_ID": "0",
-    "FACTORY_ADDRESS": "0x5AbdfcF089573C4E588E7278277E104E45B0fDa9",
-    "RELAYER_ADDRESS: ""
-   
+    "FACTORY_ADDRESS": "0xBa051891B752ecE3670671812486fe8dd34CC1c8",
+    "RELAYER_ADDRESS: "0x0d783a73d0D9f32ec545237286702ba18cb4704d",
+    "DEFAULT_WALLET":"portis"
 }

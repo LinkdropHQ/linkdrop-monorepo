@@ -5,10 +5,7 @@
   "main": "index.js",
   "repository": "https://github.com/LinkdropProtocol/linkdrop-monorepo.git",
   "license": "MIT",
-  "workspaces": [
-    "packages/*",
-    "packages/apps/*"
-  ],
+  "workspaces": ["packages/*", "packages/apps/*"],
   "scripts": {
     "test": "cd packages/contracts/ && mocha --require @babel/polyfill --require @babel/register",
     "compile-contracts": "cd packages/contracts && npx waffle .waffle",
@@ -35,7 +32,8 @@
     "test:claim": "NODE_ENV=test-claim NODE_PATH=./packages/apps/app-claim mocha packages/apps/app-claim/test/**/*.js  --compilers js:@babel/register --require ignore-styles --recursive",
     "build:sdk": "babel packages/sdk/src -d packages/sdk/dist",
     "retry-transaction": "npx babel-node packages/server/tasks/retry_transaction.js",
-    "retry-operation": "npx babel-node packages/server/tasks/retry_operation.js"
+    "retry-operation": "npx babel-node packages/server/tasks/retry_operation.js",
+    "load-test": "cd packages/scripts && yarn load-test"
   },
   "standard": {
     "parser": "babel-eslint"

@@ -40,6 +40,9 @@ const routes = {
       controller: 'utilsController',
       method: 'getCoinbaseDeepLink'
     }
+  },
+  '/users/': {
+    post: { controller: 'usersController', method: 'create' }
   }
 }
 

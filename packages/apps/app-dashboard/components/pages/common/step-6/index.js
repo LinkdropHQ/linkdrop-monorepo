@@ -20,7 +20,6 @@ class Step6 extends React.Component {
       String(tokenAmount || 0),
       tokenDecimals || 0
     )
-    console.log({ defaultWallet })
     return <div className={styles.container}>
       <div className={styles.title}>{this.t('titles.useTerminalApp')}</div>
       <div className={styles.instruction}>
@@ -32,9 +31,7 @@ class Step6 extends React.Component {
 
       <div className={styles.content}>
         <div className={styles.subtitle}>{this.t('titles.cloneLinkdropMonorepo')}</div>
-        <xmp className={classNames(styles.styleBlock, styles.codeBlock, styles.marginBottom50)}>
-          git clone git@github.com:LinkdropHQ/linkdrop-monorepo.git
-        </xmp>
+        <xmp className={classNames(styles.styleBlock, styles.codeBlock, styles.marginBottom50)} dangerouslySetInnerHTML={{ __html: 'git clone https://github.com/LinkdropHQ/generate-links.git' }}/>
 
         <div
           className={styles.subtitle}
@@ -44,16 +41,14 @@ class Step6 extends React.Component {
         <xmp className={classNames(styles.styleBlock, styles.codeBlock)}>
           {this.t('texts.codeBlockScript', {
             linksAmount,
-            chainId,
-            privateKey,
             masterCopy,
-            linkdropSigner: privateKey,
             weiAmount: ethAmount ? weiAmount : 0,
             tokenAddress: tokenAddress || ethers.constants.AddressZero,
             tokenAmount: tokenAmount ? tokenAmountFormatted : 0,
             campaignId,
-            networkName,
-            factory
+            factory,
+            masterAddress: currentAddress,
+            signingKey: privateKey
           })}
         </xmp>
 

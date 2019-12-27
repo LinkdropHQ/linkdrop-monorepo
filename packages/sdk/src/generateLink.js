@@ -14,7 +14,8 @@ export const generateLink = async ({
   tokenAmount,
   expirationTime,
   version,
-  campaignId
+  campaignId,
+  wallet
 }) => {
   if (factoryAddress === null || factoryAddress === '') {
     throw new Error('Please provide factory address')
@@ -29,11 +30,11 @@ export const generateLink = async ({
   }
 
   if (linkdropMasterAddress === null || linkdropMasterAddress === '') {
-    throw new Error(`Please provide linkdrop master's address`)
+    throw new Error("Please provide linkdrop master's address")
   }
 
   if (signingKeyOrWallet === null || signingKeyOrWallet === '') {
-    throw new Error(`Please provide signing key or wallet`)
+    throw new Error('Please provide signing key or wallet')
   }
 
   if (weiAmount === null || weiAmount === '') {
@@ -85,7 +86,11 @@ export const generateLink = async ({
   })
 
   // Construct link
-  const url = `${claimHost}/#/receive?weiAmount=${weiAmount}&tokenAddress=${tokenAddress}&tokenAmount=${tokenAmount}&expirationTime=${expirationTime}&version=${version}&chainId=${chainId}&linkKey=${linkKey}&linkdropMasterAddress=${linkdropMasterAddress}&linkdropSignerSignature=${linkdropSignerSignature}&campaignId=${campaignId}`
+  let url = `${claimHost}/#/receive?weiAmount=${weiAmount}&tokenAddress=${tokenAddress}&tokenAmount=${tokenAmount}&expirationTime=${expirationTime}&version=${version}&chainId=${chainId}&linkKey=${linkKey}&linkdropMasterAddress=${linkdropMasterAddress}&linkdropSignerSignature=${linkdropSignerSignature}&campaignId=${campaignId}`
+
+  if (wallet) {
+    url = `${url}&w=${wallet}`
+  }
 
   return { url, linkId, linkKey, linkdropSignerSignature }
 }
@@ -101,7 +106,8 @@ export const generateLinkERC721 = async ({
   tokenId,
   expirationTime,
   version,
-  campaignId
+  campaignId,
+  wallet
 }) => {
   if (factoryAddress === null || factoryAddress === '') {
     throw new Error('Please provide factory address')
@@ -176,7 +182,11 @@ export const generateLinkERC721 = async ({
   })
 
   // Construct link
-  const url = `${claimHost}/#/receive?weiAmount=${weiAmount}&nftAddress=${nftAddress}&tokenId=${tokenId}&expirationTime=${expirationTime}&version=${version}&chainId=${chainId}&linkKey=${linkKey}&linkdropMasterAddress=${linkdropMasterAddress}&linkdropSignerSignature=${linkdropSignerSignature}&campaignId=${campaignId}`
+  let url = `${claimHost}/#/receive?weiAmount=${weiAmount}&nftAddress=${nftAddress}&tokenId=${tokenId}&expirationTime=${expirationTime}&version=${version}&chainId=${chainId}&linkKey=${linkKey}&linkdropMasterAddress=${linkdropMasterAddress}&linkdropSignerSignature=${linkdropSignerSignature}&campaignId=${campaignId}`
+
+  if (wallet) {
+    url = `${url}&w=${wallet}`
+  }
 
   return { url, linkId, linkKey, linkdropSignerSignature }
 }
