@@ -6,6 +6,7 @@ import setWalletType from './set-wallet-type'
 import setReadyToClaim from './set-ready-to-claim'
 import setAlreadyClaimed from './set-already-claimed'
 import setSdk from './set-sdk'
+import setSendDataStatus from './set-send-data-status'
 
 export default {
   changeLocale,
@@ -15,5 +16,6 @@ export default {
   setWalletType,
   setReadyToClaim,
   setAlreadyClaimed,
-  setSdk
+  setSdk,
+  setSendDataStatus
 }

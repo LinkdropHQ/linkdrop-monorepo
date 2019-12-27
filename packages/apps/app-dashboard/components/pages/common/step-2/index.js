@@ -8,6 +8,7 @@ import ApproveSummary from './approve-summary'
 import NextButton from './next-button'
 import config from 'config-dashboard'
 import { defineDefaultSymbol } from 'helpers'
+import { linksLimit } from 'app.config.js'
 
 @actions(({
   user: {
@@ -61,7 +62,7 @@ class Step2 extends React.Component {
     }
   }
 
-  componentWillReceiveProps ({ erc721IsApproved, metamaskStatus, errors, ethBalanceFormatted, erc20BalanceFormatted }) {
+  componentWillReceiveProps ({ linksAmount, erc721IsApproved, metamaskStatus, errors, ethBalanceFormatted, erc20BalanceFormatted }) {
     const {
       metamaskStatus: prevMetamaskStatus,
       errors: prevErrors,
@@ -104,6 +105,10 @@ class Step2 extends React.Component {
           loading: false
         }, _ => {
           this.intervalCheck && window.clearInterval(this.intervalCheck)
+          // if links amount > 1000 -> go to script page
+          if (linksAmount >= linksLimit) {
+            return window.setTimeout(_ => this.actions().campaigns.save({ links: [] }), config.nextStepTimeout)
+          }
           window.setTimeout(_ => this.actions().user.setStep({ step: 4 }), config.nextStepTimeout)
         })
       }

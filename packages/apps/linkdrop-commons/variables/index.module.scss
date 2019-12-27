@@ -10,6 +10,7 @@ $redColor: #FF2D55;
 /* values for claim page */
 $borderHoverGreyColor: #8C8C8C;
 $bgHoverGreyColor: rgba(140, 140, 140, 0.2);
+$successColor: #4CD964;
 
 /* values for linkdrop ui kit */
 $textGreyColor: #979797;
@@ -22,6 +23,7 @@ $dbGrey: #979797;
 $dbBlue: #0025FF;
 $greyStrokeColor: #E5E5E5;
 $darkOrangeColor: #F89D35;
+$dbBlueOpacity: rgba(0, 37, 255, .2);
 
 :export {
   blackColor: $blackColor;
@@ -41,4 +43,6 @@ $darkOrangeColor: #F89D35;
   greyStrokeColor: $greyStrokeColor;
   darkOrangeColor: $darkOrangeColor;
   redColor: $redColor;
+  successColor: $successColor;
+  dbBlueOpacity: $dbBlueOpacity;
 }

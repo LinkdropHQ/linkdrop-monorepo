@@ -2,7 +2,7 @@ import React from 'react'
 import { actions, translate } from 'decorators'
 import styles from './styles.module'
 import Step1 from './step-1'
-import { Step2, Step3, Step4, Step5 } from 'components/pages/common'
+import { Step2, Step3, Step4, Step5, Step6 } from 'components/pages/common'
 
 @actions(({ campaigns: { items, proxyAddress }, user: { step, privateKey, currentAddress } }) => ({ items, proxyAddress, currentAddress, step, privateKey }))
 @translate('pages.campaignCreate')
@@ -34,6 +34,8 @@ class CampaignCreate extends React.Component {
         return <Step4 />
       case 5:
         return <Step5 />
+      case 6:
+        return <Step6 />
       default:
         return <Step1 />
     }

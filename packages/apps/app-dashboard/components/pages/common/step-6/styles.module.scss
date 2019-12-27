@@ -1,0 +1,66 @@
+@import "variables";
+
+.container {
+  border: 1px solid $greyStrokeColor;
+  background: $whiteColor;
+  color: $blackColor;
+  padding: 40px;
+  border-radius: 5px;
+  width: 100%;
+  margin-bottom: 40px;
+  position: relative;
+}
+
+.title {
+	font-size: 24px;
+	margin-bottom: 40px;
+}
+
+.instruction {
+	font-size: 16px;
+	color: $textGreyColor;
+	margin-bottom: 30px;
+}
+
+.subtitle {
+	font-size: 16px;
+	margin-bottom: 10px;
+
+	span {
+		font-family: 'Inter-Bold';
+	}
+}
+
+.content {
+	max-width: 610px;
+	margin-bottom: 50px;
+}
+
+.text {
+	margin-bottom: 50px;
+
+	span {
+		color: $dbBlue;
+	}
+}
+
+.styleBlock {
+	background: $dbBlueOpacity;
+	padding: 16px 20px;
+	border-radius: 5px;
+	color: $dbBlue;
+	max-width: 670px;	
+	margin-bottom: 50px;
+	font-size: 13px;
+}
+
+.codeBlock {
+	background: $blackColor;
+	color: $whiteColor;
+	margin-top: 0px;
+	margin-bottom: 20px;
+}
+
+.marginBottom50 {
+	margin-bottom: 50px!important;
+}
