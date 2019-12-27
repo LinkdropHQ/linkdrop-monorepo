@@ -32,11 +32,14 @@ class Step6 extends React.Component {
       <div className={styles.content}>
         <div className={styles.subtitle}>{this.t('titles.cloneLinkdropMonorepo')}</div>
         <xmp className={classNames(styles.styleBlock, styles.codeBlock, styles.marginBottom50)} dangerouslySetInnerHTML={{ __html: 'git clone https://github.com/LinkdropHQ/generate-links.git' }}/>
+        <div className={styles.subtitle}>{this.t('titles.installDependencies')}</div>
+        <xmp className={classNames(styles.styleBlock, styles.codeBlock, styles.marginBottom50)} dangerouslySetInnerHTML={{ __html: 'yarn install' }}/>
 
         <div
           className={styles.subtitle}
-          dangerouslySetInnerHTML={{ __html: this.t('titles.fillInConfig') }}
+          dangerouslySetInnerHTML={{ __html: this.t('titles.setupConfig') }}
         />
+        <div className={styles.text} dangerouslySetInnerHTML={{ __html: this.t('texts.fillInConfig') }}/>
 
         <xmp className={classNames(styles.styleBlock, styles.codeBlock)}>
           {this.t('texts.codeBlockScript', {
@@ -58,11 +61,7 @@ class Step6 extends React.Component {
         </div>
 
         <div className={styles.subtitle} dangerouslySetInnerHTML={{ __html: this.t('titles.generateLinks') }} />
-        <div className={styles.text}>
-          {this.t('texts.scriptDescription')}
-        </div>
-
-        <div className={styles.subtitle} dangerouslySetInnerHTML={{ __html: this.t('titles.csvFile') }} />
+        <div className={styles.text} dangerouslySetInnerHTML={{ __html: this.t('texts.generateLinks') }} />
       </div>
       <div className={styles.text} dangerouslySetInnerHTML={{ __html: this.t('texts.sendViaIntercom') }}/>
     </div>
