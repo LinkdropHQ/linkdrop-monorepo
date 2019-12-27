@@ -68,9 +68,9 @@ export default {
     // step6
     useTerminalApp: 'Use Terminal App',
     cloneLinkdropMonorepo: '1. Clone Linkdrop Monorepo',
-    fillInConfig: '2. Fill in <span>configs/scripts.config.json</span> from the root with the following params:',
-    generateLinks: '3. Generate links by running <span>yarn generate-links-erc20</span> from the root',
-    csvFile: '4. The generated <span>CSV file</span> will be located in <span>scripts/output/linkdrop_erc20.csv</span>',
+    fillInConfig: '2. Fill in <span>config/config.json</span> from the root with the following params:',
+    generateLinks: '3. Generate links by running <span>yarn generate</span> from the root',
+    csvFile: '4. The generated <span>CSV file</span> will be located in <span>output/linkdrop.csv</span>',
   },
   texts: {
     _3: 'It’s created once and will work for the next campaigns.',
@@ -83,23 +83,20 @@ export default {
     _17: '<span>{{eth}} {{symbol}}</span> — service fee',
     _18: 'By service fees, we cover Gas costs for links distribution and our operation costs.',
     payAttention: 'Pay attention to correctly fill all the fields. tokenAmount should be provided in atomic value.',
-    terminalApp: 'If you\'re not familiar with how to use the Terminal app, contact with your technical teammates to help',
+    terminalApp: 'If you are not familiar with how to use the Terminal app, contact your technical teammates for help',
     haveAQuestion: 'Have a question — send us a message via Intercom',
-    scriptInstruction: 'To generation more than {{linksLimit}} links at a time',
+    scriptInstruction: 'To generate more than {{linksLimit}} links at a time',
     scriptDescription: 'This script will deploy the linkdrop proxy contract for your campaign and top it up with the required ETH amount for covering fee costs as well as approve your ERC20 tokens.',
     sendViaIntercom: 'Have a question — send us a message via <span>Intercom</span>',
     codeBlockScript: `{
-  "jsonRpcUrl": "https://{{networkName}}.infura.io",
-  "CHAIN": "{{networkName}}",
-  "chainId": "{{chainId}}",
-  "API_HOST": "https://{{networkName}}.linkdrop.io",
-  "version": "1",
-  "linkdropMasterPrivateKey": "$YOUR_PRIVATE_KEY",
-  "masterCopy": "0x6a86aA5D394741b4464C785BD7Bf3D4c4bD87a6E",
-  "weiAmount": "{{weiAmount}}",
-  "tokenAddress": "{{tokenAddress}}",
-  "tokenAmount": "{{tokenAmount}}", // $ TOKENS AMOUNT PER LINK IN ATOMIC VALUE
-  "linksNumber": "{{linksAmount}}",
+  "LINKDROP_MASTER_ADDRESS": "{{masterAddress}}",
+  "SIGNING_KEY": {{signingKey}},
+  "WEI_AMOUNT": "{{weiAmount}}",
+  "CHAIN": "{{chain}}",
+  "TOKEN_ADDRESS": "{{tokenAddress}}",
+  "TOKENS_AMOUNT": "{{tokenAmount}}", // $ TOKENS AMOUNT PER LINK IN ATOMIC VALUE
+  "LINKS_NUMBER": "{{linksAmount}}",
+  "EXPIRATION_TIME": "10000000000",
   "CAMPAIGN_ID": "{{campaignId}}",
   "FACTORY_ADDRESS": "{{factory}}"
 }

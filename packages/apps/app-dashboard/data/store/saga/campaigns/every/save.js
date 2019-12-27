@@ -73,7 +73,7 @@ generator.selectors = {
       tokenType,
       date,
       id,
-      defaultWallet,
+      defaultWallet = 'trust',
       proxyAddress
     }
   }) => ({
