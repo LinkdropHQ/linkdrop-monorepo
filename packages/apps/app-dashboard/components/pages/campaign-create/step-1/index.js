@@ -72,7 +72,7 @@ class Step1 extends React.Component {
 
   createWalletOptions () {
     return (['trust', 'coinbase', 'opera', 'status', 'imtoken', 'gowallet', 'buntoy', 'tokenpocket', 'fortmatic', 'portis']).map(wallet => {
-      const label = `${wallets[wallet].name}`
+      const label = wallets[wallet].name
       return {
         label: wallet === 'trust' ? `Default: ${label}` : label,
         value: wallet
