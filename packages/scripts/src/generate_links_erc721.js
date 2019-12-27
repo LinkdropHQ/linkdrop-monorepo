@@ -31,6 +31,7 @@ const PROVIDER = getProvider()
 const LINKDROP_MASTER_WALLET = getLinkdropMasterWallet()
 const CAMPAIGN_ID = getInt('CAMPAIGN_ID')
 const FACTORY_ADDRESS = getString('FACTORY_ADDRESS')
+const DEFAULT_WALLET = getString('DEFAULT_WALLET')
 
 const GAS_FEE = ethers.utils.parseUnits('0.002')
 
@@ -86,7 +87,7 @@ export const generate = async () => {
 
     if (WEI_AMOUNT.gt(0)) {
       // Transfer ethers
-      let cost = WEI_AMOUNT.mul(tokenIds.length)
+      const cost = WEI_AMOUNT.mul(tokenIds.length)
       let amountToSend
 
       const tokenSymbol = 'ETH'
@@ -126,10 +127,10 @@ export const generate = async () => {
     term.bold(`Tx Hash: ^g${tx.hash}\n`)
 
     // Generate links
-    let links = []
+    const links = []
 
     for (let i = 0; i < tokenIds.length; i++) {
-      let {
+      const {
         url,
         linkId,
         linkKey,
@@ -140,10 +141,11 @@ export const generate = async () => {
         nftAddress: NFT_ADDRESS,
         tokenId: tokenIds[i],
         expirationTime: EXPIRATION_TIME,
-        campaignId: CAMPAIGN_ID
+        campaignId: CAMPAIGN_ID,
+        wallet: DEFAULT_WALLET
       })
 
-      let link = { i, linkId, linkKey, linkdropSignerSignature, url }
+      const link = { i, linkId, linkKey, linkdropSignerSignature, url }
       links.push(link)
     }
 

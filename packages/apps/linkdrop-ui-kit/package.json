@@ -1,6 +1,6 @@
 {
   "name": "@linkdrop/ui-kit",
-  "version": "1.0.88",
+  "version": "1.1.2",
   "private": true,
   "description": "Kit for UI components",
   "main": "index.js",
@@ -24,7 +24,7 @@
     "@babel/preset-env": "^7.4.2",
     "@babel/preset-react": "^7.0.0",
     "@babel/register": "^7.4.0",
-    "@linkdrop/sdk": "^1.0.88",
+    "@linkdrop/sdk": "^1.1.2",
     "@storybook/addon-info": "^5.0.10",
     "autoprefixer": "^9.5.1",
     "babel-eslint": "^8.2.3",

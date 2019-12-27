@@ -13,28 +13,14 @@ module.exports = shipit => {
   shipit.initConfig({
     default: {
       repositoryUrl: 'git@github.com:LinkdropHQ/linkdrop-monorepo.git',
-      keepReleases: 3
+      keepReleases: 3,
+      deployTo: `linkdrop/${network}`,
+      servers: 'root@rinkeby.linkdrop.io'
     },
-    rinkeby: {
-      deployTo: 'linkdrop/rinkeby',
-      servers: 'root@rinkeby.linkdrop.io',
-      branch: 'dev'
-    },
-    ropsten: {
-      deployTo: 'linkdrop/ropsten',
-      servers: 'root@rinkeby.linkdrop.io',
-      branch: 'dev'
-    },
-    mainnet: {
-      deployTo: 'linkdrop/mainnet',
-      servers: 'root@rinkeby.linkdrop.io',
-      branch: 'dev'
-    },
-    xdai: {
-      deployTo: 'linkdrop/xdai',
-      servers: 'root@rinkeby.linkdrop.io',
-      branch: 'dev'
-    }
+    rinkeby: { branch: 'dev' },
+    ropsten: { branch: 'dev' },
+    mainnet: { branch: 'dev' },
+    xdai: { branch: 'dev' }
   })
 
   shipit.blTask('installDependencies', async () => {
@@ -58,9 +44,7 @@ module.exports = shipit => {
   shipit.blTask('stopApp', async () => {
     try {
       await shipit.remote(
-        `cd ${
-          shipit.releasePath
-        } && pm2 stop ${PM2_APP_NAME} && pm2 delete ${PM2_APP_NAME}`
+        `cd ${shipit.releasePath} && pm2 stop ${PM2_APP_NAME} && pm2 delete ${PM2_APP_NAME}`
       )
       shipit.log('Stopped app process')
     } catch (err) {
@@ -70,9 +54,7 @@ module.exports = shipit => {
 
   shipit.blTask('startApp', async () => {
     await shipit.remote(
-      `cd ${
-        shipit.releasePath
-      } && CUSTOM_PORT=${CUSTOM_PORT} pm2 start --name ${PM2_APP_NAME} npm -- run server`
+      `cd ${shipit.releasePath} && CUSTOM_PORT=${CUSTOM_PORT} pm2 start --name ${PM2_APP_NAME} npm -- run server`
     )
     shipit.log('Started app process')
   })
