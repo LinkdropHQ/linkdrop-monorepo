@@ -26,6 +26,10 @@ class User {
   createSdk ({ linkdropMasterAddress, chainId, linkKey, campaignId }) {
     this.actions.dispatch({ type: '*USER.CREATE_SDK', payload: { linkdropMasterAddress, chainId, linkKey, campaignId } })
   }
+
+  saveData ({ email, account }) {
+    this.actions.dispatch({ type: '*USER.SEND_DATA', payload: { email, account } })
+  }
 }
 
 export default User

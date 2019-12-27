@@ -1,0 +1,10 @@
+@import 'variables';
+
+.container {
+	width: 300px;
+	border: 1px solid $dbGrey;
+
+	&::placeholder {
+		color: $dbGrey;
+	}
+}
