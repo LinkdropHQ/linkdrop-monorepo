@@ -63,7 +63,14 @@ export default {
     howToClaimPreview: 'How claim page will look like<br>for receivers — <a target="_blank" href={{href}}>Preview<a/>',
     faq: 'FAQ',
     visitHelpCenter: 'Have a question — visit <a target="_blank" href={{href}}>Help Center</a><br>or send us a message via Intercom',
-    campaignId: 'Campaign ID: <span>{{campaignId}}</span>'
+    campaignId: 'Campaign ID: <span>{{campaignId}}</span>',
+
+    // step6
+    useTerminalApp: 'Use Terminal App',
+    cloneLinkdropMonorepo: '1. Clone Linkdrop Monorepo',
+    fillInConfig: '2. Fill in <span>configs/scripts.config.json</span> from the root with the following params:',
+    generateLinks: '3. Generate links by running <span>yarn generate-links-erc20</span> from the root',
+    csvFile: '4. The generated <span>CSV file</span> will be located in <span>scripts/output/linkdrop_erc20.csv</span>',
   },
   texts: {
     _3: 'It’s created once and will work for the next campaigns.',
@@ -75,6 +82,28 @@ export default {
     _16: '<span>{{eth}} {{symbol}}</span> — to distribute',
     _17: '<span>{{eth}} {{symbol}}</span> — service fee',
     _18: 'By service fees, we cover Gas costs for links distribution and our operation costs.',
+    payAttention: 'Pay attention to correctly fill all the fields. tokenAmount should be provided in atomic value.',
+    terminalApp: 'If you\'re not familiar with how to use the Terminal app, contact with your technical teammates to help',
+    haveAQuestion: 'Have a question — send us a message via Intercom',
+    scriptInstruction: 'To generation more than {{linksLimit}} links at a time',
+    scriptDescription: 'This script will deploy the linkdrop proxy contract for your campaign and top it up with the required ETH amount for covering fee costs as well as approve your ERC20 tokens.',
+    sendViaIntercom: 'Have a question — send us a message via <span>Intercom</span>',
+    codeBlockScript: `{
+  "jsonRpcUrl": "https://{{networkName}}.infura.io",
+  "CHAIN": "{{networkName}}",
+  "chainId": "{{chainId}}",
+  "API_HOST": "https://{{networkName}}.linkdrop.io",
+  "version": "1",
+  "linkdropMasterPrivateKey": "$YOUR_PRIVATE_KEY",
+  "masterCopy": "0x6a86aA5D394741b4464C785BD7Bf3D4c4bD87a6E",
+  "weiAmount": "{{weiAmount}}",
+  "tokenAddress": "{{tokenAddress}}",
+  "tokenAmount": "{{tokenAmount}}", // $ TOKENS AMOUNT PER LINK IN ATOMIC VALUE
+  "linksNumber": "{{linksAmount}}",
+  "CAMPAIGN_ID": "{{campaignId}}",
+  "FACTORY_ADDRESS": "{{factory}}"
+}
+`,
     codeBlockErc20: `// installation: yarn add @linkdrop/sdk
 // import library
 const LinkdropSDK = require('@linkdrop/sdk')

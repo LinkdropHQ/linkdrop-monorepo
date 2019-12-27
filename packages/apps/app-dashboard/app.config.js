@@ -15,6 +15,7 @@ const jsonRpcUrlXdai = JSON_RPC_URL_XDAI || String(config.jsonRpcUrlXdai)
 const portisDappId = PORTIS_DAPP_ID || String(config.portisDappId)
 const formaticApiKeyTestnet = FORMATIC_API_KEY_TESTNET || String(config.formaticApiKeyTestnetDashboard)
 const formaticApiKeyMainnet = FORMATIC_API_KEY_MAINNET || String(config.formaticApiKeyMainnetDashboard)
+const linksLimit = config.linksLimit || 1000
 
 module.exports = {
   claimHost,
@@ -24,5 +25,6 @@ module.exports = {
   jsonRpcUrlXdai,
   portisDappId,
   formaticApiKeyTestnet,
-  formaticApiKeyMainnet
+  formaticApiKeyMainnet,
+  linksLimit
 }

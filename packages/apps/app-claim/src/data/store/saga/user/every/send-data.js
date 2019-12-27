@@ -7,12 +7,12 @@ import { ethers } from 'ethers'
 const generator = function * ({ payload }) {
   try {
     yield put({ type: 'USER.SET_LOADING', payload: { loading: true } })
-    const { email, address } = payload
+    const { email, account } = payload
     const { chainId: linkChainId } = getHashVariables()
     const chainId = yield select(generator.selectors.chainId)
     const networkName = defineNetworkName({ chainId: chainId || linkChainId })
     yield delay(2000)
-    const { success } = yield call(sendData, { email, address: ethers.constants.AddressZero, networkName })
+    const { success } = yield call(sendData, { email, address: account || null, networkName })
     yield put({ type: 'USER.SET_SEND_DATA_STATUS', payload: { sendDataStatus: success ? 'success' : 'failed' } })
     yield put({ type: 'USER.SET_LOADING', payload: { loading: false } })
   } catch (e) {
