@@ -26,13 +26,13 @@ function () {
   var _ref2 = (0, _asyncToGenerator2["default"])(
   /*#__PURE__*/
   _regenerator["default"].mark(function _callee(_ref) {
-    var factoryAddress, chainId, claimHost, linkdropMasterAddress, signingKeyOrWallet, weiAmount, tokenAddress, tokenAmount, expirationTime, version, campaignId, linkdropSigner, proxyAddress, _ref3, linkKey, linkId, linkdropSignerSignature, url;
+    var factoryAddress, chainId, claimHost, linkdropMasterAddress, signingKeyOrWallet, weiAmount, tokenAddress, tokenAmount, expirationTime, version, campaignId, wallet, linkdropSigner, proxyAddress, _ref3, linkKey, linkId, linkdropSignerSignature, url;
 
     return _regenerator["default"].wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
-            factoryAddress = _ref.factoryAddress, chainId = _ref.chainId, claimHost = _ref.claimHost, linkdropMasterAddress = _ref.linkdropMasterAddress, signingKeyOrWallet = _ref.signingKeyOrWallet, weiAmount = _ref.weiAmount, tokenAddress = _ref.tokenAddress, tokenAmount = _ref.tokenAmount, expirationTime = _ref.expirationTime, version = _ref.version, campaignId = _ref.campaignId;
+            factoryAddress = _ref.factoryAddress, chainId = _ref.chainId, claimHost = _ref.claimHost, linkdropMasterAddress = _ref.linkdropMasterAddress, signingKeyOrWallet = _ref.signingKeyOrWallet, weiAmount = _ref.weiAmount, tokenAddress = _ref.tokenAddress, tokenAmount = _ref.tokenAmount, expirationTime = _ref.expirationTime, version = _ref.version, campaignId = _ref.campaignId, wallet = _ref.wallet;
 
             if (!(factoryAddress === null || factoryAddress === '')) {
               _context.next = 3;
@@ -71,7 +71,7 @@ function () {
               break;
             }
 
-            throw new Error("Please provide signing key or wallet");
+            throw new Error('Please provide signing key or wallet');
 
           case 11:
             if (!(weiAmount === null || weiAmount === '')) {
@@ -148,6 +148,11 @@ function () {
             linkdropSignerSignature = _ref3.linkdropSignerSignature;
             // Construct link
             url = "".concat(claimHost, "/#/receive?weiAmount=").concat(weiAmount, "&tokenAddress=").concat(tokenAddress, "&tokenAmount=").concat(tokenAmount, "&expirationTime=").concat(expirationTime, "&version=").concat(version, "&chainId=").concat(chainId, "&linkKey=").concat(linkKey, "&linkdropMasterAddress=").concat(linkdropMasterAddress, "&linkdropSignerSignature=").concat(linkdropSignerSignature, "&campaignId=").concat(campaignId);
+
+            if (wallet) {
+              url = "".concat(url, "&w=").concat(wallet);
+            }
+
             return _context.abrupt("return", {
               url: url,
               linkId: linkId,
@@ -155,7 +160,7 @@ function () {
               linkdropSignerSignature: linkdropSignerSignature
             });
 
-          case 33:
+          case 34:
           case "end":
             return _context.stop();
         }
@@ -176,13 +181,13 @@ function () {
   var _ref5 = (0, _asyncToGenerator2["default"])(
   /*#__PURE__*/
   _regenerator["default"].mark(function _callee2(_ref4) {
-    var factoryAddress, chainId, claimHost, linkdropMasterAddress, signingKeyOrWallet, weiAmount, nftAddress, tokenId, expirationTime, version, campaignId, linkdropSigner, proxyAddress, _ref6, linkKey, linkId, linkdropSignerSignature, url;
+    var factoryAddress, chainId, claimHost, linkdropMasterAddress, signingKeyOrWallet, weiAmount, nftAddress, tokenId, expirationTime, version, campaignId, wallet, linkdropSigner, proxyAddress, _ref6, linkKey, linkId, linkdropSignerSignature, url;
 
     return _regenerator["default"].wrap(function _callee2$(_context2) {
       while (1) {
         switch (_context2.prev = _context2.next) {
           case 0:
-            factoryAddress = _ref4.factoryAddress, chainId = _ref4.chainId, claimHost = _ref4.claimHost, linkdropMasterAddress = _ref4.linkdropMasterAddress, signingKeyOrWallet = _ref4.signingKeyOrWallet, weiAmount = _ref4.weiAmount, nftAddress = _ref4.nftAddress, tokenId = _ref4.tokenId, expirationTime = _ref4.expirationTime, version = _ref4.version, campaignId = _ref4.campaignId;
+            factoryAddress = _ref4.factoryAddress, chainId = _ref4.chainId, claimHost = _ref4.claimHost, linkdropMasterAddress = _ref4.linkdropMasterAddress, signingKeyOrWallet = _ref4.signingKeyOrWallet, weiAmount = _ref4.weiAmount, nftAddress = _ref4.nftAddress, tokenId = _ref4.tokenId, expirationTime = _ref4.expirationTime, version = _ref4.version, campaignId = _ref4.campaignId, wallet = _ref4.wallet;
 
             if (!(factoryAddress === null || factoryAddress === '')) {
               _context2.next = 3;
@@ -298,6 +303,11 @@ function () {
             linkdropSignerSignature = _ref6.linkdropSignerSignature;
             // Construct link
             url = "".concat(claimHost, "/#/receive?weiAmount=").concat(weiAmount, "&nftAddress=").concat(nftAddress, "&tokenId=").concat(tokenId, "&expirationTime=").concat(expirationTime, "&version=").concat(version, "&chainId=").concat(chainId, "&linkKey=").concat(linkKey, "&linkdropMasterAddress=").concat(linkdropMasterAddress, "&linkdropSignerSignature=").concat(linkdropSignerSignature, "&campaignId=").concat(campaignId);
+
+            if (wallet) {
+              url = "".concat(url, "&w=").concat(wallet);
+            }
+
             return _context2.abrupt("return", {
               url: url,
               linkId: linkId,
@@ -305,7 +315,7 @@ function () {
               linkdropSignerSignature: linkdropSignerSignature
             });
 
-          case 33:
+          case 34:
           case "end":
             return _context2.stop();
         }

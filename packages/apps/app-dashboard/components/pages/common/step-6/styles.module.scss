@@ -37,10 +37,10 @@
 }
 
 .text {
-	margin-bottom: 50px;
+	margin-bottom: 20px;
 
 	span {
-		color: $dbBlue;
+		font-family: 'Inter-Bold';
 	}
 }
 
@@ -59,6 +59,7 @@
 	color: $whiteColor;
 	margin-top: 0px;
 	margin-bottom: 20px;
+	overflow-y: scroll; 
 }
 
 .marginBottom50 {

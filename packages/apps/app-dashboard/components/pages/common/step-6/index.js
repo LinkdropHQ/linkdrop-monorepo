@@ -13,7 +13,7 @@ class Step6 extends React.Component {
   render () {
     const { items, current, campaignToCheck, loading } = this.props
     const currentCampaign = items.find(item => item.id === (campaignToCheck || current)) || {}
-    const { ethAmount, currentAddress, privateKey, linksAmount, tokenDecimals, chainId, tokenAddress, tokenAmount, campaignId } = currentCampaign
+    const { ethAmount, defaultWallet, currentAddress, privateKey, linksAmount, tokenDecimals, chainId, tokenAddress, tokenAmount, campaignId } = currentCampaign
     const networkName = defineNetworkName({ chainId })
     const weiAmount = utils.parseEther(convertFromExponents(ethAmount || 0))
     const tokenAmountFormatted = utils.parseUnits(
@@ -31,28 +31,28 @@ class Step6 extends React.Component {
 
       <div className={styles.content}>
         <div className={styles.subtitle}>{this.t('titles.cloneLinkdropMonorepo')}</div>
-        <xmp className={classNames(styles.styleBlock, styles.codeBlock, styles.marginBottom50)}>
-          git clone git@github.com:LinkdropHQ/linkdrop-monorepo.git
-        </xmp>
+        <xmp className={classNames(styles.styleBlock, styles.codeBlock, styles.marginBottom50)} dangerouslySetInnerHTML={{ __html: 'git clone https://github.com/LinkdropHQ/generate-links.git' }}/>
+        <div className={styles.subtitle}>{this.t('titles.installDependencies')}</div>
+        <xmp className={classNames(styles.styleBlock, styles.codeBlock, styles.marginBottom50)} dangerouslySetInnerHTML={{ __html: 'yarn install' }}/>
 
         <div
           className={styles.subtitle}
-          dangerouslySetInnerHTML={{ __html: this.t('titles.fillInConfig') }}
+          dangerouslySetInnerHTML={{ __html: this.t('titles.setupConfig') }}
         />
+        <div className={styles.text} dangerouslySetInnerHTML={{ __html: this.t('texts.fillInConfig') }}/>
 
         <xmp className={classNames(styles.styleBlock, styles.codeBlock)}>
           {this.t('texts.codeBlockScript', {
             linksAmount,
-            chainId,
-            privateKey,
+            chain: networkName,
             masterCopy,
-            linkdropSigner: privateKey,
             weiAmount: ethAmount ? weiAmount : 0,
             tokenAddress: tokenAddress || ethers.constants.AddressZero,
             tokenAmount: tokenAmount ? tokenAmountFormatted : 0,
             campaignId,
-            networkName,
-            factory
+            factory,
+            masterAddress: currentAddress,
+            signingKey: privateKey
           })}
         </xmp>
 
@@ -61,11 +61,7 @@ class Step6 extends React.Component {
         </div>
 
         <div className={styles.subtitle} dangerouslySetInnerHTML={{ __html: this.t('titles.generateLinks') }} />
-        <div className={styles.text}>
-          {this.t('texts.scriptDescription')}
-        </div>
-
-        <div className={styles.subtitle} dangerouslySetInnerHTML={{ __html: this.t('titles.csvFile') }} />
+        <div className={styles.text} dangerouslySetInnerHTML={{ __html: this.t('texts.generateLinks') }} />
       </div>
       <div className={styles.text} dangerouslySetInnerHTML={{ __html: this.t('texts.sendViaIntercom') }}/>
     </div>
