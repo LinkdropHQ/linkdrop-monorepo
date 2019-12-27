@@ -92,6 +92,7 @@ export default {
   "LINKDROP_MASTER_ADDRESS": "{{masterAddress}}",
   "SIGNING_KEY": {{signingKey}},
   "WEI_AMOUNT": "{{weiAmount}}",
+  "CHAIN": "{{chain}}",
   "TOKEN_ADDRESS": "{{tokenAddress}}",
   "TOKENS_AMOUNT": "{{tokenAmount}}", // $ TOKENS AMOUNT PER LINK IN ATOMIC VALUE
   "LINKS_NUMBER": "{{linksAmount}}",

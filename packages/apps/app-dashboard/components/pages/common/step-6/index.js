@@ -41,6 +41,7 @@ class Step6 extends React.Component {
         <xmp className={classNames(styles.styleBlock, styles.codeBlock)}>
           {this.t('texts.codeBlockScript', {
             linksAmount,
+            chain: networkName,
             masterCopy,
             weiAmount: ethAmount ? weiAmount : 0,
             tokenAddress: tokenAddress || ethers.constants.AddressZero,
