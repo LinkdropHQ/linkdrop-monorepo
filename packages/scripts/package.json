@@ -1,6 +1,6 @@
 {
   "name": "@linkdrop/scripts",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "main": "index.js",
   "license": "MIT",
   "private": true,
@@ -8,7 +8,7 @@
     "load-test": "npx artillery run src/load-test/load-test.json -o src/load-test/load-test-res.json"
   },
   "dependencies": {
-    "@linkdrop/sdk": "^1.1.1",
+    "@linkdrop/sdk": "^1.1.2",
     "axios": "^0.18.0",
     "csvtojson": "^2.0.8",
     "fast-csv": "^2.4.1",
