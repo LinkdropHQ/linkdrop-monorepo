@@ -56,11 +56,11 @@ class Step6 extends React.Component {
           })}
         </xmp>
 
-        <div className={styles.styleBlock}>
-          {this.t('texts.payAttention')}
-        </div>
-
         <div className={styles.subtitle} dangerouslySetInnerHTML={{ __html: this.t('titles.generateLinks') }} />
+        <div className={styles.text} dangerouslySetInnerHTML={{ __html: this.t('texts.run') }} />
+        <xmp className={classNames(styles.styleBlock, styles.codeBlock)}>
+          {this.t('texts.yarnGenerate')}
+        </xmp>
         <div className={styles.text} dangerouslySetInnerHTML={{ __html: this.t('texts.generateLinks') }} />
       </div>
       <div className={styles.text} dangerouslySetInnerHTML={{ __html: this.t('texts.sendViaIntercom') }}/>
