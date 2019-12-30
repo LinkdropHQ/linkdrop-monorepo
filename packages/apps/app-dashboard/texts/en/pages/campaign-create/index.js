@@ -33,7 +33,7 @@ export default {
     ethPerLink: '{{eth}} {{symbol}} per link',
     ethHold: 'Will be stored in Linkdrop Contract',
     approveTokens: 'Approve permission to spend <span>{{tokenAmount}} {{tokenSymbol}}</span> for generating links',
-    sendEthToGenerate: 'You wil send <span>{{ethAmount}} {{symbol}}</span> to start generate links',
+    sendEthToGenerate: 'You will send <span>{{ethAmount}} {{symbol}}</span> to start generate links',
     etherToDistribute: '<span>{{ethAmount}} {{symbol}}</span> — to distribute',
     serviceFeeToDistribute: '<span>{{ethAmount}} {{symbol}}</span> — service fee',
 
@@ -63,7 +63,14 @@ export default {
     howToClaimPreview: 'How claim page will look like<br>for receivers — <a target="_blank" href={{href}}>Preview<a/>',
     faq: 'FAQ',
     visitHelpCenter: 'Have a question — visit <a target="_blank" href={{href}}>Help Center</a><br>or send us a message via Intercom',
-    campaignId: 'Campaign ID: <span>{{campaignId}}</span>'
+    campaignId: 'Campaign ID: <span>{{campaignId}}</span>',
+
+    // step6
+    useTerminalApp: 'Use Terminal App',
+    cloneLinkdropMonorepo: '1. Clone Repo',
+    installDependencies: '2. Install dependencies',
+    setupConfig: '3. Setup linkdrop config params',
+    generateLinks: '4. Generate links',
   },
   texts: {
     _3: 'It’s created once and will work for the next campaigns.',
@@ -75,6 +82,29 @@ export default {
     _16: '<span>{{eth}} {{symbol}}</span> — to distribute',
     _17: '<span>{{eth}} {{symbol}}</span> — service fee',
     _18: 'By service fees, we cover Gas costs for links distribution and our operation costs.',
+    fillInConfig: 'Fill in <span>config/config.json</span> file with the following parameters:',
+    payAttention: 'Pay attention to correctly fill all the fields. TOKENS_AMOUNT should be provided in atomic value.',
+    terminalApp: 'If you are not familiar with how to use the Terminal app, contact your technical teammates for help',
+    run: 'Run:',
+    yarnGenerate: 'yarn generate',
+    generateLinks: 'to generate links with the specified config params. The generated <span>CSV file</span> will be located in <span>output/linkdrop.csv</span> file',
+    haveAQuestion: 'Have a question — send us a message via Intercom',
+    scriptInstruction: 'To generate more than {{linksLimit}} links at a time',
+    scriptDescription: 'This script will deploy the linkdrop proxy contract for your campaign and top it up with the required ETH amount for covering fee costs as well as approve your ERC20 tokens.',
+    sendViaIntercom: 'Have a question — send us a message via <span>Intercom</span>',
+    codeBlockScript: `{
+  "LINKDROP_MASTER_ADDRESS": "{{masterAddress}}",
+  "SIGNING_KEY": "{{signingKey}}",
+  "WEI_AMOUNT": "{{weiAmount}}",
+  "CHAIN": "{{chain}}",
+  "TOKEN_ADDRESS": "{{tokenAddress}}",
+  "TOKENS_AMOUNT": "{{tokenAmount}}", // $ TOKENS AMOUNT PER LINK IN ATOMIC VALUE
+  "LINKS_NUMBER": "{{linksAmount}}",
+  "EXPIRATION_TIME": "10000000000",
+  "CAMPAIGN_ID": "{{campaignId}}",
+  "FACTORY_ADDRESS": "{{factory}}"
+}
+`,
     codeBlockErc20: `// installation: yarn add @linkdrop/sdk
 // import library
 const LinkdropSDK = require('@linkdrop/sdk')

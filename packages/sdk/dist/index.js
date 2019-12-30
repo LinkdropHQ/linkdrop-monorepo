@@ -33,7 +33,6 @@ var _LinkdropFactory = _interopRequireDefault(require("@linkdrop/contracts/build
 
 var _ethers = require("ethers");
 
-// Turn off annoying warnings
 _ethers.ethers.errors.setLogLevel('error');
 
 var LinkdropSDK =
@@ -120,13 +119,13 @@ function () {
       var _generateLink = (0, _asyncToGenerator2["default"])(
       /*#__PURE__*/
       _regenerator["default"].mark(function _callee2(_ref2) {
-        var signingKeyOrWallet, weiAmount, tokenAddress, tokenAmount, _ref2$expirationTime, expirationTime, campaignId;
+        var signingKeyOrWallet, weiAmount, tokenAddress, tokenAmount, _ref2$expirationTime, expirationTime, campaignId, wallet;
 
         return _regenerator["default"].wrap(function _callee2$(_context2) {
           while (1) {
             switch (_context2.prev = _context2.next) {
               case 0:
-                signingKeyOrWallet = _ref2.signingKeyOrWallet, weiAmount = _ref2.weiAmount, tokenAddress = _ref2.tokenAddress, tokenAmount = _ref2.tokenAmount, _ref2$expirationTime = _ref2.expirationTime, expirationTime = _ref2$expirationTime === void 0 ? 12345678910 : _ref2$expirationTime, campaignId = _ref2.campaignId;
+                signingKeyOrWallet = _ref2.signingKeyOrWallet, weiAmount = _ref2.weiAmount, tokenAddress = _ref2.tokenAddress, tokenAmount = _ref2.tokenAmount, _ref2$expirationTime = _ref2.expirationTime, expirationTime = _ref2$expirationTime === void 0 ? 12345678910 : _ref2$expirationTime, campaignId = _ref2.campaignId, wallet = _ref2.wallet;
                 _context2.t0 = generateLinkUtils;
                 _context2.t1 = this.factoryAddress;
                 _context2.t2 = this.chainId;
@@ -153,7 +152,8 @@ function () {
               case 16:
                 _context2.t11 = _context2.t10;
                 _context2.t12 = campaignId;
-                _context2.t13 = {
+                _context2.t13 = wallet;
+                _context2.t14 = {
                   factoryAddress: _context2.t1,
                   chainId: _context2.t2,
                   claimHost: _context2.t3,
@@ -164,11 +164,12 @@ function () {
                   tokenAmount: _context2.t8,
                   expirationTime: _context2.t9,
                   version: _context2.t11,
-                  campaignId: _context2.t12
+                  campaignId: _context2.t12,
+                  wallet: _context2.t13
                 };
-                return _context2.abrupt("return", _context2.t0.generateLink.call(_context2.t0, _context2.t13));
+                return _context2.abrupt("return", _context2.t0.generateLink.call(_context2.t0, _context2.t14));
 
-              case 20:
+              case 21:
               case "end":
                 return _context2.stop();
             }
@@ -188,13 +189,13 @@ function () {
       var _generateLinkERC = (0, _asyncToGenerator2["default"])(
       /*#__PURE__*/
       _regenerator["default"].mark(function _callee3(_ref3) {
-        var signingKeyOrWallet, weiAmount, nftAddress, tokenId, _ref3$expirationTime, expirationTime, campaignId;
+        var signingKeyOrWallet, weiAmount, nftAddress, tokenId, _ref3$expirationTime, expirationTime, campaignId, wallet;
 
         return _regenerator["default"].wrap(function _callee3$(_context3) {
           while (1) {
             switch (_context3.prev = _context3.next) {
               case 0:
-                signingKeyOrWallet = _ref3.signingKeyOrWallet, weiAmount = _ref3.weiAmount, nftAddress = _ref3.nftAddress, tokenId = _ref3.tokenId, _ref3$expirationTime = _ref3.expirationTime, expirationTime = _ref3$expirationTime === void 0 ? 12345678910 : _ref3$expirationTime, campaignId = _ref3.campaignId;
+                signingKeyOrWallet = _ref3.signingKeyOrWallet, weiAmount = _ref3.weiAmount, nftAddress = _ref3.nftAddress, tokenId = _ref3.tokenId, _ref3$expirationTime = _ref3.expirationTime, expirationTime = _ref3$expirationTime === void 0 ? 12345678910 : _ref3$expirationTime, campaignId = _ref3.campaignId, wallet = _ref3.wallet;
                 _context3.t0 = generateLinkUtils;
                 _context3.t1 = this.factoryAddress;
                 _context3.t2 = this.chainId;
@@ -221,7 +222,8 @@ function () {
               case 16:
                 _context3.t11 = _context3.t10;
                 _context3.t12 = campaignId;
-                _context3.t13 = {
+                _context3.t13 = wallet;
+                _context3.t14 = {
                   factoryAddress: _context3.t1,
                   chainId: _context3.t2,
                   claimHost: _context3.t3,
@@ -232,11 +234,12 @@ function () {
                   tokenId: _context3.t8,
                   expirationTime: _context3.t9,
                   version: _context3.t11,
-                  campaignId: _context3.t12
+                  campaignId: _context3.t12,
+                  wallet: _context3.t13
                 };
-                return _context3.abrupt("return", _context3.t0.generateLinkERC721.call(_context3.t0, _context3.t13));
+                return _context3.abrupt("return", _context3.t0.generateLinkERC721.call(_context3.t0, _context3.t14));
 
-              case 20:
+              case 21:
               case "end":
                 return _context3.stop();
             }

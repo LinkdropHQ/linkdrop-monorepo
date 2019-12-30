@@ -1,0 +1,59 @@
+{
+  "config": {
+    "target": "https://rinkeby.linkdrop.io",
+    "phases": [
+      {
+        "name": "Active claim phase",
+        "duration": 120,
+        "arrivalRate": 10
+      }
+    ],
+    "payload": {
+      "path": "./claim-params.csv",
+      "fields": [
+        "weiAmount",
+        "tokenAddress",
+        "tokenAmount",
+        "expirationTime",
+        "version",
+        "chainId",
+        "linkId",
+        "linkdropMasterAddress",
+        "linkdropSignerSignature",
+        "receiverAddress",
+        "receiverSignature",
+        "factoryAddress",
+        "campaignId"
+      ],
+      "order": "sequence",
+      "skipHeader": true,
+      "cast": false
+    }
+  },
+  "scenarios": [
+    {
+      "flow": [
+        {
+          "post": {
+            "url": "/api/v1/linkdrops/claim",
+            "json": {
+              "weiAmount": "{{weiAmount}}",
+              "tokenAddress": "{{tokenAddress}}",
+              "tokenAmount": "{{tokenAmount}}",
+              "expirationTime": "{{expirationTime}}",
+              "version": "{{version}}",
+              "chainId": "{{chainId}}",
+              "linkId": "{{linkId}}",
+              "linkdropMasterAddress": "{{linkdropMasterAddress}}",
+              "linkdropSignerSignature": "{{linkdropSignerSignature}}",
+              "receiverAddress": "{{receiverAddress}}",
+              "receiverSignature": "{{receiverSignature}}",
+              "factoryAddress": "{{factoryAddress}}",
+              "campaignId": "{{campaignId}}"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

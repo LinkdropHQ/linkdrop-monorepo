@@ -20,6 +20,8 @@ import Cursor from './cursor'
 import Ethereum from './ethereum'
 import Done from './done'
 import CheckboxCheck from './checkbox-check'
+import ContinueArrow from './continue-arrow'
+import ExpandArrowIcon from './expand-arrow'
 
 export default {
   LinkdropLogo,
@@ -43,5 +45,7 @@ export default {
   Cursor,
   Ethereum,
   Done,
-  CheckboxCheck
+  CheckboxCheck,
+  ContinueArrow,
+  ExpandArrowIcon
 }

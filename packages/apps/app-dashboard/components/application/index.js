@@ -4,6 +4,7 @@ import RouterProvider from './router-provider'
 import { platform } from 'decorators'
 import store from 'data/store'
 import MobileDisabled from './mobile-disabled'
+import { linksLimit } from 'app.config.js'
 
 @platform()
 class Application extends React.Component {

@@ -76,7 +76,8 @@ class LinkdropSDK {
     tokenAddress,
     tokenAmount,
     expirationTime = 12345678910,
-    campaignId
+    campaignId,
+    wallet
   }) {
     return generateLinkUtils.generateLink({
       factoryAddress: this.factoryAddress,
@@ -89,7 +90,8 @@ class LinkdropSDK {
       tokenAmount,
       expirationTime,
       version: this.version[campaignId] || (await this.getVersion(campaignId)),
-      campaignId
+      campaignId,
+      wallet
     })
   }
 
@@ -99,7 +101,8 @@ class LinkdropSDK {
     nftAddress,
     tokenId,
     expirationTime = 12345678910,
-    campaignId
+    campaignId,
+    wallet
   }) {
     return generateLinkUtils.generateLinkERC721({
       factoryAddress: this.factoryAddress,
@@ -112,7 +115,8 @@ class LinkdropSDK {
       tokenId,
       expirationTime,
       version: this.version[campaignId] || (await this.getVersion(campaignId)),
-      campaignId
+      campaignId,
+      wallet
     })
   }
 

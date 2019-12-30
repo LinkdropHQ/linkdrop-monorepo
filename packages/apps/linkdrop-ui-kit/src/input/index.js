@@ -25,7 +25,7 @@ class Input extends React.Component {
   }
 
   render () {
-    const { mask, className, disabled, placeholder, centered, numberInput, extraInfo } = this.props
+    const { mask, className, disabled, type = 'text', placeholder, centered, numberInput, extraInfo } = this.props
     const { value } = this.state
     if (numberInput) return this.renderNumberInput()
     if (mask) return this.renderMaskInput()
@@ -33,7 +33,7 @@ class Input extends React.Component {
       {extraInfo && <div className={styles.extraInfo}>
         <Icons.InformationIcon />
       </div>}
-      <input placeholder={placeholder} disabled={disabled} value={value} className={this.defineClassNames({ className, disabled, centered })} onChange={e => this.changeValue(e)} />
+      <input type={type} placeholder={placeholder} disabled={disabled} value={value} className={this.defineClassNames({ className, disabled, centered })} onChange={e => this.changeValue(e)} />
     </div>
   }
 
