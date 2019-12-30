@@ -8,7 +8,9 @@ const generator = function * ({ payload }) {
     const networkName = defineNetworkName({ chainId })
     const currentUrl = window.location.href
     const { success, link: coinbaseDeepLink } = yield call(getCoinbaseLinks, { networkName, url: currentUrl })
-    if (success) { return coinbaseDeepLink }
+    if (success) {
+    	return window.location = coinbaseDeepLink
+    }
   } catch (e) {
     console.error(e)
   }
