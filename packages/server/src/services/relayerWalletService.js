@@ -1,11 +1,16 @@
 import configs from '../../../../configs'
+import { BigNumber } from 'bignumber.js'
+
 const config = configs.get('server')
 const {
   jsonRpcUrl,
   relayerPrivateKey,
   DEFAULT_GAS_PRICE,
-  MAX_GAS_PRICE
+  MAX_GAS_PRICE,
+  K,
+  C
 } = config
+
 const ethers = require('ethers')
 ethers.errors.setLogLevel('error')
 
@@ -40,8 +45,19 @@ class RelayerWalletService {
     let gasPrice
 
     if (!DEFAULT_GAS_PRICE || DEFAULT_GAS_PRICE === 'auto') {
+      let currentGasPrice = await this.provider.getGasPrice()
+
+      if (K != null && K !== '' && C != null && C !== '') {
+        currentGasPrice = BigNumber(currentGasPrice)
+        currentGasPrice = currentGasPrice.multipliedBy(BigNumber(K))
+        currentGasPrice = currentGasPrice.plus(
+          BigNumber(ethers.utils.parseUnits(C, 'gwei'))
+        )
+        currentGasPrice = ethers.utils.bigNumberify(currentGasPrice.toString())
+      }
+
       gasPrice = Math.min(
-        await this.provider.getGasPrice(),
+        currentGasPrice,
         ethers.utils.parseUnits(MAX_GAS_PRICE, 'gwei')
       )
     } else {
