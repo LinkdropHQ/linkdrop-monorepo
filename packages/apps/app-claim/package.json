@@ -1,6 +1,6 @@
 {
   "name": "@linkdrop/app-claim",
-  "version": "2.0.18-alpha.0",
+  "version": "2.1.1-alpha.0",
   "description": "Front end part for linkdrop app to claim tokens",
   "main": "index.js",
   "author": "",
