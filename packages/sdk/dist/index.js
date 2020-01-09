@@ -209,13 +209,13 @@ function () {
       var _claim = (0, _asyncToGenerator2["default"])(
       /*#__PURE__*/
       _regenerator["default"].mark(function _callee3(_ref3) {
-        var token, nft, feeToken, feeReceiver, linkKey, nativeTokensAmount, tokensAmount, tokenId, feeAmount, expiration, _ref3$data, data, signerSignature, receiverAddress, linkdropContract, sender;
+        var _ref3$token, token, _ref3$nft, nft, _ref3$feeToken, feeToken, _ref3$feeReceiver, feeReceiver, _ref3$nativeTokensAmo, nativeTokensAmount, _ref3$tokensAmount, tokensAmount, _ref3$tokenId, tokenId, _ref3$feeAmount, feeAmount, _ref3$expiration, expiration, _ref3$data, data, linkKey, signerSignature, receiverAddress, linkdropContract, sender;
 
         return _regenerator["default"].wrap(function _callee3$(_context3) {
           while (1) {
             switch (_context3.prev = _context3.next) {
               case 0:
-                token = _ref3.token, nft = _ref3.nft, feeToken = _ref3.feeToken, feeReceiver = _ref3.feeReceiver, linkKey = _ref3.linkKey, nativeTokensAmount = _ref3.nativeTokensAmount, tokensAmount = _ref3.tokensAmount, tokenId = _ref3.tokenId, feeAmount = _ref3.feeAmount, expiration = _ref3.expiration, _ref3$data = _ref3.data, data = _ref3$data === void 0 ? '0x' : _ref3$data, signerSignature = _ref3.signerSignature, receiverAddress = _ref3.receiverAddress, linkdropContract = _ref3.linkdropContract, sender = _ref3.sender;
+                _ref3$token = _ref3.token, token = _ref3$token === void 0 ? _constants.AddressZero : _ref3$token, _ref3$nft = _ref3.nft, nft = _ref3$nft === void 0 ? _constants.AddressZero : _ref3$nft, _ref3$feeToken = _ref3.feeToken, feeToken = _ref3$feeToken === void 0 ? _constants.AddressZero : _ref3$feeToken, _ref3$feeReceiver = _ref3.feeReceiver, feeReceiver = _ref3$feeReceiver === void 0 ? _constants.AddressZero : _ref3$feeReceiver, _ref3$nativeTokensAmo = _ref3.nativeTokensAmount, nativeTokensAmount = _ref3$nativeTokensAmo === void 0 ? 0 : _ref3$nativeTokensAmo, _ref3$tokensAmount = _ref3.tokensAmount, tokensAmount = _ref3$tokensAmount === void 0 ? 0 : _ref3$tokensAmount, _ref3$tokenId = _ref3.tokenId, tokenId = _ref3$tokenId === void 0 ? 0 : _ref3$tokenId, _ref3$feeAmount = _ref3.feeAmount, feeAmount = _ref3$feeAmount === void 0 ? 0 : _ref3$feeAmount, _ref3$expiration = _ref3.expiration, expiration = _ref3$expiration === void 0 ? 11111111111 : _ref3$expiration, _ref3$data = _ref3.data, data = _ref3$data === void 0 ? '0x' : _ref3$data, linkKey = _ref3.linkKey, signerSignature = _ref3.signerSignature, receiverAddress = _ref3.receiverAddress, linkdropContract = _ref3.linkdropContract, sender = _ref3.sender;
                 return _context3.abrupt("return", claimUtils.claim({
                   jsonRpcUrl: this.jsonRpcUrl,
                   apiHost: this.apiHost,
@@ -491,17 +491,20 @@ function () {
       var _getLinkStatus = (0, _asyncToGenerator2["default"])(
       /*#__PURE__*/
       _regenerator["default"].mark(function _callee10(linkId) {
+        var campaignId,
+            _args10 = arguments;
         return _regenerator["default"].wrap(function _callee10$(_context10) {
           while (1) {
             switch (_context10.prev = _context10.next) {
               case 0:
+                campaignId = _args10.length > 1 && _args10[1] !== undefined ? _args10[1] : 0;
                 return _context10.abrupt("return", claimUtils.getLinkStatus({
                   apiHost: this.apiHost,
-                  senderAddress: this.senderAddress,
+                  linkdropContractAddress: this.getProxyAddress(campaignId),
                   linkId: linkId
                 }));
 
-              case 1:
+              case 2:
               case "end":
                 return _context10.stop();
             }

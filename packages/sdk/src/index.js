@@ -113,17 +113,17 @@ class LinkdropSDK {
   }
 
   async claim ({
-    token,
-    nft,
-    feeToken,
-    feeReceiver,
-    linkKey,
-    nativeTokensAmount,
-    tokensAmount,
-    tokenId,
-    feeAmount,
-    expiration,
+    token = AddressZero,
+    nft = AddressZero,
+    feeToken = AddressZero,
+    feeReceiver = AddressZero,
+    nativeTokensAmount = 0,
+    tokensAmount = 0,
+    tokenId = 0,
+    feeAmount = 0,
+    expiration = 11111111111,
     data = '0x',
+    linkKey,
     signerSignature,
     receiverAddress,
     linkdropContract,
@@ -257,10 +257,10 @@ class LinkdropSDK {
     )
   }
 
-  async getLinkStatus (linkId) {
+  async getLinkStatus (linkId, campaignId = 0) {
     return claimUtils.getLinkStatus({
       apiHost: this.apiHost,
-      senderAddress: this.senderAddress,
+      linkdropContractAddress: this.getProxyAddress(campaignId),
       linkId
     })
   }
