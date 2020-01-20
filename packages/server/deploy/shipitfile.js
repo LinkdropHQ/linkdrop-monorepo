@@ -22,9 +22,7 @@ module.exports = shipit => {
     },
     rinkeby: {},
     ropsten: {},
-    mainnet: {
-      branch: 'dev-v2'
-    },
+    mainnet: {},
     xdai: {}
   })
 
@@ -49,9 +47,7 @@ module.exports = shipit => {
   shipit.blTask('stopApp', async () => {
     try {
       await shipit.remote(
-        `cd ${
-          shipit.releasePath
-        } && pm2 stop ${PM2_APP_NAME} && pm2 delete ${PM2_APP_NAME}`
+        `cd ${shipit.releasePath} && pm2 stop ${PM2_APP_NAME} && pm2 delete ${PM2_APP_NAME}`
       )
       shipit.log('Stopped app process')
     } catch (err) {
@@ -61,9 +57,7 @@ module.exports = shipit => {
 
   shipit.blTask('startApp', async () => {
     await shipit.remote(
-      `cd ${
-        shipit.releasePath
-      } && CUSTOM_PORT=${CUSTOM_PORT} pm2 start --name ${PM2_APP_NAME} npm -- run server`
+      `cd ${shipit.releasePath} && CUSTOM_PORT=${CUSTOM_PORT} pm2 start --name ${PM2_APP_NAME} npm -- run server`
     )
     shipit.log('Started app process')
   })
