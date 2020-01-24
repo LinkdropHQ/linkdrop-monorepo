@@ -1,4 +1,4 @@
-import { computeProxyAddress } from './utils'
+import { computeProxyAddress, encodeTransaction, encodeParams } from './utils'
 import * as generateLinkUtils from './generateLink'
 import * as claimUtils from './claim'
 import * as deployUtils from './deployProxy'
@@ -17,7 +17,7 @@ class LinkdropSDK {
     factoryAddress,
     chain = 'mainnet', // rinkeby
     jsonRpcUrl = getJsonRpcUrl(chain),
-    apiHost = `https://${chain}.linkdrop.io`, // http://localhost:5000
+    apiHost = `https://${chain}.linkdrop.io`,
     claimHost = 'https://claim.linkdrop.io'
   }) {
     if (senderAddress == null || senderAddress === '') {
@@ -80,6 +80,7 @@ class LinkdropSDK {
     tokenId = 0,
     feeAmount = 0,
     expiration = 11111111111,
+    data = '0x',
     signingKeyOrWallet // private key of wallet
   }) {
     return generateLinkUtils.generateLink({
@@ -96,6 +97,7 @@ class LinkdropSDK {
       tokenId,
       feeAmount,
       expiration,
+      data,
       version: this.version[campaignId] || (await this.getVersion(campaignId)),
       chainId: this.chainId,
       signingKeyOrWallet
@@ -111,16 +113,17 @@ class LinkdropSDK {
   }
 
   async claim ({
-    token,
-    nft,
-    feeToken,
-    feeReceiver,
+    token = AddressZero,
+    nft = AddressZero,
+    feeToken = AddressZero,
+    feeReceiver = AddressZero,
+    nativeTokensAmount = 0,
+    tokensAmount = 0,
+    tokenId = 0,
+    feeAmount = 0,
+    expiration = 11111111111,
+    data = '0x',
     linkKey,
-    nativeTokensAmount,
-    tokensAmount,
-    tokenId,
-    feeAmount,
-    expiration,
     signerSignature,
     receiverAddress,
     linkdropContract,
@@ -139,6 +142,7 @@ class LinkdropSDK {
       tokenId,
       feeAmount,
       expiration,
+      data,
       signerSignature,
       receiverAddress,
       linkdropContract,
@@ -157,6 +161,7 @@ class LinkdropSDK {
     tokenId,
     feeAmount,
     expiration,
+    data = '0x',
     signerSignature,
     receiverAddress,
     linkdropContract,
@@ -187,6 +192,7 @@ class LinkdropSDK {
       tokenId,
       feeAmount,
       expiration,
+      data,
       signerSignature,
       receiverAddress,
       linkdropContract,
@@ -251,10 +257,10 @@ class LinkdropSDK {
     )
   }
 
-  async getLinkStatus (linkId) {
+  async getLinkStatus (linkId, campaignId = 0) {
     return claimUtils.getLinkStatus({
       apiHost: this.apiHost,
-      senderAddress: this.senderAddress,
+      linkdropContractAddress: this.getProxyAddress(campaignId),
       linkId
     })
   }
@@ -274,6 +280,14 @@ class LinkdropSDK {
       senderAddress: this.senderAddress,
       campaignId
     })
+  }
+
+  encodeParams (abi, method, params = []) {
+    return encodeParams(abi, method, params)
+  }
+
+  encodeTransaction (to, value = 0, data = '0x') {
+    return encodeTransaction(to, value, data)
   }
 }
 

@@ -4,12 +4,15 @@ class Contract {
   }
 
   getTokenERC20Data ({ token, nativeTokensAmount, tokensAmount, chainId }) {
-    console.log('here')
     this.actions.dispatch({ type: '*CONTRACT.GET_TOKEN_ERC20_DATA', payload: { token, nativeTokensAmount, tokensAmount, chainId } })
   }
 
   getTokenERC721Data ({ nft, tokenId, chainId }) {
     this.actions.dispatch({ type: '*CONTRACT.GET_TOKEN_ERC721_DATA', payload: { nft, tokenId, chainId } })
+  }
+
+  getTokenData ({ nft, tokenId, chainId, token, nativeTokensAmount, tokensAmount }) {
+    this.actions.dispatch({ type: '*CONTRACT.GET_TOKEN_DATA', payload: { nft, tokenId, chainId, token, nativeTokensAmount, tokensAmount } })
   }
 
   getPastEvents ({ linkKey, chainId, campaignId }) {

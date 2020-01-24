@@ -52,7 +52,14 @@ contract LinkdropFactory is Ownable, ReentrancyGuard {
     * @param _masterCopy One-to-many linkdrop contract mastercopy address
     * @param _chainId Chain id
     */
-    constructor(address payable _masterCopyTransfer, address payable _masterCopy, uint _chainId) public {
+    constructor
+    (
+        address payable _masterCopyTransfer,
+        address payable _masterCopy,
+        uint _chainId
+    )
+    public
+    {
         _initcodeTransfer = (hex"6319ed26266000526103ff60206004601c335afa6040516060f3");
         _initcode = (hex"6352c7420d6000526103ff60206004601c335afa6040516060f3");
         chainId = _chainId;
@@ -63,6 +70,7 @@ contract LinkdropFactory is Ownable, ReentrancyGuard {
      /**
     * @dev Function to verify claim params
     * @param _linkParams Link params struct
+    * @param _signerSignature ECDSA signature of linkdrop signer
     * @param _receiver Address of linkdrop receiver
     * @param _receiverSignature ECDSA signature of linkdrop receiver
     * @param _sender Linkdrop sender address
@@ -72,6 +80,7 @@ contract LinkdropFactory is Ownable, ReentrancyGuard {
     function checkClaimParams
     (
         ILinkdrop.LinkParams memory _linkParams,
+        bytes memory _signerSignature,
         address payable _receiver,
         bytes memory _receiverSignature,
         address _sender,
@@ -87,6 +96,7 @@ contract LinkdropFactory is Ownable, ReentrancyGuard {
         return ILinkdrop(getProxyAddress(_sender, _campaignId)).checkClaimParams
         (
             _linkParams,
+            _signerSignature,
             _receiver,
             _receiverSignature
         );
@@ -95,6 +105,7 @@ contract LinkdropFactory is Ownable, ReentrancyGuard {
     /**
     * @dev Function to claim linkdrop
     * @param _linkParams Link params struct
+    * @param _signerSignature ECDSA signature of linkdrop signer
     * @param _receiver Address of linkdrop receiver
     * @param _receiverSignature ECDSA signature of linkdrop receiver
     * @param _sender Linkdrop sender address
@@ -102,13 +113,13 @@ contract LinkdropFactory is Ownable, ReentrancyGuard {
     * @return True if success
     */
     function claim
-       (
+    (
         ILinkdrop.LinkParams memory _linkParams,
+        bytes memory _signerSignature,
         address payable _receiver,
         bytes memory _receiverSignature,
         address _sender,
         uint _campaignId
-
     )
     public
     returns (bool)
@@ -120,6 +131,7 @@ contract LinkdropFactory is Ownable, ReentrancyGuard {
         ILinkdrop(getProxyAddress(_sender, _campaignId)).claim
         (
             _linkParams,
+            _signerSignature,
             _receiver,
             _receiverSignature
         );

@@ -5,6 +5,7 @@ class Tokens {
 
   claim ({
     token,
+    campaignId,
     feeToken,
     feeReceiver,
     linkKey,
@@ -30,6 +31,7 @@ class Tokens {
         tokensAmount,
         feeAmount,
         expiration,
+        campaignId,
         signerSignature,
         receiverAddress,
         linkdropContract,

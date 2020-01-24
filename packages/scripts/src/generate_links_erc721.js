@@ -20,7 +20,8 @@ const {
   FACTORY_ADDRESS,
   TOKEN_IDS,
   CAMPAIGN_ID,
-  FEE_AMOUNT
+  FEE_AMOUNT,
+  CALLBACK_DATA
 } = config
 
 ethers.errors.setLogLevel('error')
@@ -136,7 +137,8 @@ export const generate = async () => {
         nft: NFT_ADDRESS,
         tokenId: tokenIds[i],
         campaignId: CAMPAIGN_ID,
-        feeAmount: FEE_AMOUNT
+        feeAmount: FEE_AMOUNT,
+        data: CALLBACK_DATA
       })
 
       const link = { i, linkId, linkKey, signerSignature, url }

@@ -15,7 +15,6 @@ const generator = function * ({ payload }) {
     let decimals
     let symbol
     let icon
-    console.log({ token, nativeTokensAmount, tokensAmount, chainId })
     if (ethWalletContract === token) {
       decimals = 18
       symbol = Number(chainId) === 100 ? 'xDAI' : 'ETH'

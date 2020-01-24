@@ -16,14 +16,11 @@ try {
   console.error(err)
 }
 
-@actions(({ user: { errors, step, loading: userLoading, readyToClaim, alreadyClaimed }, tokens: { transactionId }, contract: { loading, decimals, amount, symbol, icon } }) => ({
+@actions(({ user: { errors, step, loading: userLoading, readyToClaim, alreadyClaimed }, tokens: { transactionId, assets }, contract: { loading } }) => ({
   userLoading,
   loading,
-  decimals,
-  symbol,
-  amount,
-  icon,
   step,
+  assets,
   transactionId,
   errors,
   alreadyClaimed,
@@ -102,6 +99,15 @@ class Claim extends React.Component {
       return this.actions().user.setErrors({ errors: ['LINK_EXPIRED'] })
     }
 
+    return this.actions().contract.getTokenData({
+      nft,
+      tokenId,
+      chainId,
+      token,
+      nativeTokensAmount,
+      tokensAmount
+    })
+
     if (nft && Number(tokenId) !== 0) {
       // jsonRpcUrl,
       // apiHost,
@@ -147,7 +153,7 @@ class Claim extends React.Component {
   }
 
   renderCurrentPage ({ context }) {
-    const { decimals, amount, symbol, icon, step, userLoading, errors, alreadyClaimed } = this.props
+    const { assets, step, userLoading, errors, alreadyClaimed } = this.props
     // in context we can find:
     // active,
     // connectorName,
@@ -173,7 +179,7 @@ class Claim extends React.Component {
       chainId,
       linkdropMasterAddress
     } = getHashVariables()
-    const commonData = { linkdropMasterAddress, chainId, decimals, amount, symbol, icon, wallet: account, loading: userLoading }
+    const commonData = { linkdropMasterAddress, chainId, assets, wallet: account, loading: userLoading }
     if (this.platform === 'desktop' && chainId && !account) {
       return <ErrorPage error='NETWORK_NOT_SUPPORTED' network={capitalize({ string: defineNetworkName({ chainId }) })} />
     }

@@ -24,8 +24,8 @@
     "@babel/preset-react": "^7.0.0",
     "@babel/register": "^7.4.4",
     "@linkdrop/commons": "^2.0.12-alpha.0",
-    "@linkdrop/contracts": "^2.0.12-alpha.0",
-    "@linkdrop/sdk": "^2.0.12-alpha.0",
+    "@linkdrop/contracts": "^2.1.1-alpha.00",
+    "@linkdrop/sdk": "^2.1.1-alpha.0",
     "@linkdrop/ui-kit": "^2.0.12-alpha.0",
     "babel-loader": "^8.0.5",
     "babel-plugin-react-css-modules": "^5.2.4",
@@ -87,7 +87,6 @@
     "postcss-loader": "^3.0.0",
     "react-test-renderer": "^16.8.6",
     "sinon": "^7.3.1",
-    "standard-loader": "^6.0.1",
     "supertest": "^2.0.1",
     "supertest-as-promised": "^4.0.1",
     "webpack-dev-server": "^3.3.1"

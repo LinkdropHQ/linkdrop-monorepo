@@ -4,9 +4,10 @@ import { translate } from 'decorators'
 import { shortenString, getHashVariables } from '@linkdrop/commons'
 import text from 'texts'
 import classNames from 'classnames'
-
+import { defineMainAsset } from 'helpers'
 import styles from './styles.module'
 import commonStyles from '../styles.module'
+
 @translate('pages.main')
 class InitialPage extends React.Component {
   constructor (props) {
@@ -27,9 +28,10 @@ class InitialPage extends React.Component {
   }
 
   render () {
-    const { onClick, amount, symbol, loading, icon, wallet } = this.props
+    const { onClick, assets, wallet, loading } = this.props
     const { iconType } = this.state
     const { nftAddress } = getHashVariables()
+    const { symbol, amount, icon } = defineMainAsset({ assets })
     const finalIcon = iconType === 'default' ? <img onError={_ => this.setState({ iconType: 'blank' })} className={styles.icon} src={icon} /> : <Icons.Star />
     return <div className={commonStyles.container}>
       <Alert

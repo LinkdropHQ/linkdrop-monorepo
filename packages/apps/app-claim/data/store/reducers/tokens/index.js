@@ -4,7 +4,8 @@ const initialState = {
   loading: false,
   link: '',
   transactionStatus: null,
-  transactionId: null
+  transactionId: null,
+  assets: []
 }
 
 export default (state = initialState, action = {}) => {
@@ -20,5 +21,6 @@ const ACTIONS = {
   'TOKENS.SET_LINK': reducers.setLink,
   'TOKENS.SET_LOADING': reducers.setLoading,
   'TOKENS.SET_TRANSACTION_STATUS': reducers.setTransactionStatus,
-  'TOKENS.SET_TRANSACTION_ID': reducers.setTransactionId
+  'TOKENS.SET_TRANSACTION_ID': reducers.setTransactionId,
+  'TOKENS.SET_ASSETS': reducers.setAssets
 }

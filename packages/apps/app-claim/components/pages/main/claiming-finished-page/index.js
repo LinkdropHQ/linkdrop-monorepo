@@ -6,13 +6,15 @@ import commonStyles from '../styles.module'
 import { getDappData } from 'helpers'
 import { getHashVariables, defineEtherscanUrl } from '@linkdrop/commons'
 import classNames from 'classnames'
+import { defineMainAsset } from 'helpers'
 
 @actions(({ tokens: { transactionId } }) => ({ transactionId }))
 @translate('pages.main')
 class ClaimingFinishedPage extends React.Component {
   render () {
     const { chainId, dappId } = getHashVariables()
-    const { transactionId, amount, symbol } = this.props
+    const { transactionId, assets } = this.props
+    const { symbol, amount, icon } = defineMainAsset({ assets })
     return <div className={commonStyles.container}>
       <Alert icon={<Icons.Check />} className={styles.alert} />
       <div className={styles.title} dangerouslySetInnerHTML={{ __html: this.t('titles.tokensClaimed', { tokens: `${amount || ''} ${symbol || ''}` }) }} />

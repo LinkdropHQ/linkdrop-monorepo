@@ -20,6 +20,13 @@ const generator = function * ({ payload }) {
     const networkName = defineNetworkName({ chainId })
     const actualJsonRpcUrl = defineJsonRpcUrl({ chainId, infuraPk, jsonRpcUrlXdai })
     const provider = yield new ethers.providers.JsonRpcProvider(actualJsonRpcUrl)
+    console.log({
+      factoryAddress: factory,
+      chain: networkName,
+      senderAddress,
+      jsonRpcUrl: actualJsonRpcUrl,
+      apiHost: `https://${networkName}-v2.linkdrop.io`
+    })
     const sdk = initializeSdk({
       factoryAddress: factory,
       chain: networkName,
