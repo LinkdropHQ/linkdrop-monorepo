@@ -46,6 +46,8 @@ const generator = function * ({ payload }) {
       assets.push({ decimals, symbol, icon, amount, type: 'erc20' })
     }
 
+    console.log({ assets })
+
     yield put({ type: 'TOKENS.SET_ASSETS', payload: { assets } })
     yield put({ type: 'CONTRACT.SET_LOADING', payload: { loading: false } })
     yield put({ type: 'USER.SET_STEP', payload: { step: 1 } })

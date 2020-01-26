@@ -13,13 +13,10 @@ import Web3 from 'web3'
 import { TerminalHttpProvider, SourceType } from '@terminal-packages/sdk'
 import { Web3Consumer } from 'web3-react'
 
-@actions(({ user: { errors, step, loading: userLoading, readyToClaim, alreadyClaimed }, tokens: { transactionId }, contract: { loading, decimals, amount, symbol, icon } }) => ({
+@actions(({ user: { errors, step, loading: userLoading, readyToClaim, alreadyClaimed }, tokens: { transactionId, assets }, contract: { loading } }) => ({
   userLoading,
   loading,
-  decimals,
-  symbol,
-  amount,
-  icon,
+  assets,
   step,
   transactionId,
   errors,
@@ -142,7 +139,6 @@ class Claim extends React.Component {
 
   render () {
     const { context } = this.props
-    console.log({ context })
     return this.renderCurrentPage({ context })
   }
 
