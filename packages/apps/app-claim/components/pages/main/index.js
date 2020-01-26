@@ -143,7 +143,7 @@ class Claim extends React.Component {
   }
 
   renderCurrentPage ({ context }) {
-    const { assets, step, userLoading, errors, alreadyClaimed } = this.props
+    const { assets, step, userLoading, errors, alreadyClaimed, readyToClaim } = this.props
     // in context we can find:
     // active,
     // connectorName,
@@ -157,13 +157,25 @@ class Claim extends React.Component {
       account
     } = context
 
-    console.log({ account, connectorChainId })
 
     const {
       chainId
     } = getHashVariables()
 
+
+    if (!readyToClaim) { return <Loading /> }
+
     const commonData = { chainId, assets, wallet: account, loading: userLoading }
+    // if (this.platform === 'desktop' && chainId && !account) {
+    //   return <ErrorPage error='NETWORK_NOT_SUPPORTED' network={capitalize({ string: defineNetworkName({ chainId }) })} />
+    // }
+
+    if (alreadyClaimed) {
+      // if tokens we already claimed (if wallet is totally empty).
+      return <ClaimingFinishedPage
+        {...commonData}
+      />
+    }
 
     if (this.platform === 'desktop' && chainId && !account) {
       return <ErrorPage error='NETWORK_NOT_SUPPORTED' network={capitalize({ string: defineNetworkName({ chainId }) })} />
