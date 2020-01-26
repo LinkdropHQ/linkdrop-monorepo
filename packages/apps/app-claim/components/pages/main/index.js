@@ -55,15 +55,25 @@ class Claim extends React.Component {
   }
 
   async componentDidMount () {
+    const { currentProvider } = this.state
     const {
       linkKey,
       chainId,
-      linkdropMasterAddress,
-      campaignId
+      campaignId = 0,
+      linkdropContract,
+      sender: senderAddress
     } = getHashVariables()
-    const { currentProvider } = this.state
-    this.actions().tokens.checkIfClaimed({ linkKey, chainId, linkdropMasterAddress, campaignId })
-    this.actions().user.createSdk({ linkdropMasterAddress, chainId, linkKey, campaignId })
+    this.actions().tokens.checkIfClaimed({
+      linkKey,
+      chainId,
+      linkdropContract
+    })
+    this.actions().user.createSdk({
+      senderAddress,
+      chainId,
+      linkKey,
+      campaignId
+    })
     if (currentProvider) {
       const { accounts, connectorChainId } = await this.getProviderData({ currentProvider })
       this.setState({
@@ -146,19 +156,13 @@ class Claim extends React.Component {
     // networkId,
     // account,
     // error
-    const { connectorChainId } = this.state
+    const { connectorChainId, accounts } = this.state
 
     const {
-      account
-    } = context
-
-
-    const {
-      chainId,
-      linkdropMasterAddress
+      chainId
     } = getHashVariables()
 
-    const commonData = { linkdropMasterAddress, chainId, assets, wallet: account, loading: userLoading }
+    const commonData = { chainId, assets, wallet: account, loading: userLoading }
 
     if (this.platform === 'desktop' && chainId && !account) {
       return <ErrorPage error='NETWORK_NOT_SUPPORTED' network={capitalize({ string: defineNetworkName({ chainId }) })} />
