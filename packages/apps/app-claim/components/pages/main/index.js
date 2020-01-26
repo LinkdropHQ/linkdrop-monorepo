@@ -11,6 +11,7 @@ import { terminalApiKey, terminalProjectId } from 'app.config.js'
 import { getHashVariables, defineNetworkName, capitalize } from '@linkdrop/commons'
 import Web3 from 'web3'
 import { TerminalHttpProvider, SourceType } from '@terminal-packages/sdk'
+import { Web3Consumer } from 'web3-react'
 
 @actions(({ user: { errors, step, loading: userLoading, readyToClaim, alreadyClaimed }, tokens: { transactionId }, contract: { loading, decimals, amount, symbol, icon } }) => ({
   userLoading,
