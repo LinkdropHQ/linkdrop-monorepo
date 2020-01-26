@@ -157,6 +157,11 @@ class Claim extends React.Component {
     // account,
     // error
     const { connectorChainId, accounts } = this.state
+    const {
+      account
+    } = context
+
+    console.log({ account, connectorChainId })
 
     const {
       chainId
