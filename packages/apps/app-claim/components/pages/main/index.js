@@ -1,4 +1,3 @@
-/* global web3 */
 import React from 'react'
 import { Loading } from '@linkdrop/ui-kit'
 import { actions, translate, platform, detectBrowser } from 'decorators'
@@ -7,20 +6,20 @@ import WalletChoosePage from './wallet-choose-page'
 import ClaimingProcessPage from './claiming-process-page'
 import ErrorPage from './error-page'
 import ClaimingFinishedPage from './claiming-finished-page'
+import NeedWallet from './need-wallet'
+import { terminalApiKey, terminalProjectId } from 'app.config.js'
 import { getHashVariables, defineNetworkName, capitalize } from '@linkdrop/commons'
-import { Web3Consumer } from 'web3-react'
-let web3Obj
-try {
-  web3Obj = web3
-} catch (err) {
-  console.error(err)
-}
+import Web3 from 'web3'
+import { TerminalHttpProvider, SourceType } from '@terminal-packages/sdk'
 
-@actions(({ user: { errors, step, loading: userLoading, readyToClaim, alreadyClaimed }, tokens: { transactionId, assets }, contract: { loading } }) => ({
+@actions(({ user: { errors, step, loading: userLoading, readyToClaim, alreadyClaimed }, tokens: { transactionId }, contract: { loading, decimals, amount, symbol, icon } }) => ({
   userLoading,
   loading,
+  decimals,
+  symbol,
+  amount,
+  icon,
   step,
-  assets,
   transactionId,
   errors,
   alreadyClaimed,
@@ -30,25 +29,46 @@ try {
 @detectBrowser()
 @translate('pages.claim')
 class Claim extends React.Component {
-  componentDidMount () {
+  constructor (props) {
+    super(props)
+    const { web3Provider } = props
+    const currentProvider = web3Provider && createTerminalProvider({ web3Provider })
+    this.state = {
+      accounts: null,
+      connectorChainId: null,
+      currentProvider
+    }
+  }
+
+  createTerminalProvider ({ web3Provider }) {
+    return web3Provider
+    // return new Web3(web3Provider)
+    // const web3 = new Web3(
+    //   new TerminalHttpProvider({
+    //     apiKey: terminalApiKey,
+    //     projectId: terminalProjectId,
+    //     source: SourceType.Terminal,
+    //     customHttpProvider: web3Provider
+    //   })
+    // );
+  }
+
+  async componentDidMount () {
     const {
       linkKey,
       chainId,
-      campaignId = 0,
-      linkdropContract,
-      sender: senderAddress
-    } = getHashVariables()
-    this.actions().tokens.checkIfClaimed({
-      linkKey,
-      chainId,
-      linkdropContract
-    })
-    this.actions().user.createSdk({
-      senderAddress,
-      chainId,
-      linkKey,
+      linkdropMasterAddress,
       campaignId
-    })
+    } = getHashVariables()
+    const { currentProvider } = this.state
+    this.actions().tokens.checkIfClaimed({ linkKey, chainId, linkdropMasterAddress, campaignId })
+    this.actions().user.createSdk({ linkdropMasterAddress, chainId, linkKey, campaignId })
+    if (currentProvider) {
+      const { accounts, connectorChainId } = await this.getProviderData({ currentProvider })
+      this.setState({
+        accounts, connectorChainId
+      })
+    }
   }
 
   componentWillReceiveProps ({ readyToClaim, alreadyClaimed }) {
@@ -107,43 +127,6 @@ class Claim extends React.Component {
       nativeTokensAmount,
       tokensAmount
     })
-
-    if (nft && Number(tokenId) !== 0) {
-      // jsonRpcUrl,
-      // apiHost,
-      // token,
-      // nft,
-      // feeToken,
-      // feeReceiver,
-      // linkKey,
-      // nativeTokensAmount,
-      // tokensAmount,
-      // tokenId,
-      // feeAmount,
-      // expiration,
-      // signerSignature,
-      // receiverAddress,
-      // linkdropContract
-      return this.actions().contract.getTokenERC721Data({
-        nft,
-        tokenId,
-        chainId
-        // feeToken,
-        // feeReceiver,
-        // feeAmount,
-        // linkKey,
-        // expiration,
-        // nativeTokensAmount,
-        // signerSignature,
-        // linkdropContract
-      })
-    }
-    this.actions().contract.getTokenERC20Data({
-      token,
-      nativeTokensAmount,
-      tokensAmount,
-      chainId
-    })
   }
 
   render () {
@@ -162,52 +145,40 @@ class Claim extends React.Component {
     // networkId,
     // account,
     // error
-    let {
-      account,
-      networkId
+    const { connectorChainId } = this.state
+
+    const {
+      account
     } = context
-    if (this.isOpera) {
-      if (!account || !networkId) {
-        if (web3Obj && web3Obj.currentProvider && web3Obj.currentProvider.publicConfigStore && web3Obj.currentProvider.publicConfigStore.getState) {
-          const data = web3Obj.currentProvider.publicConfigStore.getState()
-          account = data.selectedAddress
-          networkId = data.networkVersion
-        }
-      }
-    }
+
+
     const {
       chainId,
       linkdropMasterAddress
     } = getHashVariables()
+
     const commonData = { linkdropMasterAddress, chainId, assets, wallet: account, loading: userLoading }
+
     if (this.platform === 'desktop' && chainId && !account) {
       return <ErrorPage error='NETWORK_NOT_SUPPORTED' network={capitalize({ string: defineNetworkName({ chainId }) })} />
     }
 
     if (this.platform === 'desktop' && !account) {
-      return <div>
-        <ErrorPage
-          error='NEED_METAMASK'
-        />
-      </div>
+      return <NeedWallet context={context} />
     }
+
     if (errors && errors.length > 0) {
       // if some errors occured and can be found in redux store, then show error page
       return <ErrorPage error={errors[0]} />
     }
+
     if (
-      (this.platform === 'desktop' && networkId && Number(chainId) !== Number(networkId)) ||
-      (this.platform !== 'desktop' && account && networkId && Number(chainId) !== Number(networkId))) {
+      (this.platform === 'desktop' && connectorChainId && Number(chainId) !== Number(connectorChainId)) ||
+      (this.platform !== 'desktop' && account && connectorChainId && Number(chainId) !== Number(connectorChainId))) {
       // if network id in the link and in the web3 are different
       return <ErrorPage error='NETWORK_NOT_SUPPORTED' network={capitalize({ string: defineNetworkName({ chainId }) })} />
     }
 
-    if (alreadyClaimed) {
-      // if tokens we already claimed (if wallet is totally empty).
-      return <ClaimingFinishedPage
-        {...commonData}
-      />
-    }
     switch (step) {
       case 1:
         return <InitialPage
