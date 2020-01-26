@@ -141,9 +141,9 @@ class Claim extends React.Component {
   }
 
   render () {
-    return <Web3Consumer>
-      {context => this.renderCurrentPage({ context })}
-    </Web3Consumer>
+    const { context } = this.props
+    console.log({ context })
+    return this.renderCurrentPage({ context })
   }
 
   renderCurrentPage ({ context }) {
