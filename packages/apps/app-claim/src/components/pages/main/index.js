@@ -184,10 +184,6 @@ class Claim extends React.Component {
       />
     }
 
-    if (this.platform === 'desktop' && chainId && !account) {
-      return <ErrorPage error='NETWORK_NOT_SUPPORTED' network={capitalize({ string: defineNetworkName({ chainId }) })} />
-    }
-
     if (this.platform === 'desktop' && !account) {
       return <NeedWallet context={context} />
     }
