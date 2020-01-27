@@ -165,7 +165,7 @@ class Claim extends React.Component {
 
     if (!readyToClaim) { return <Loading /> }
 
-    const commonData = { chainId, assets, wallet: account, loading: userLoading }
+    const commonData = { chainId, assets, wallet: account, loading: userLoading, context }
     // if (this.platform === 'desktop' && chainId && !account) {
     //   return <ErrorPage error='NETWORK_NOT_SUPPORTED' network={capitalize({ string: defineNetworkName({ chainId }) })} />
     // }
@@ -212,7 +212,9 @@ class Claim extends React.Component {
         />
       case 2:
         // page with wallet select component
-        return <WalletChoosePage onClick={_ => {
+        return <WalletChoosePage
+        {...commonData}
+        onClick={_ => {
           this.actions().user.setStep({ step: 3 })
         }}
         />
