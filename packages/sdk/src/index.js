@@ -167,16 +167,21 @@ class LinkdropSDK {
     linkdropContract,
     sender
   }) {
+    console.log('here')
     if (linkdropContract !== this.getProxyAddress()) {
+      console.log('here11')
       throw new Error(
         'Linkdrop contract cannot be deployed by relayer. Invalid campaign id.'
       )
     }
     const isDeployed = await this.isDeployed()
+    console.log('here1')
 
     if (isDeployed === true) {
       throw new Error('Linkdrop contract is already deployed')
     }
+
+    console.log('here2')
 
     return claimUtils.claimAndDeploy({
       jsonRpcUrl: this.jsonRpcUrl,
@@ -274,6 +279,7 @@ class LinkdropSDK {
   }
 
   async isDeployed (campaignId = 0) {
+    console.log({ campaignId, jsonRpcUrl: this.jsonRpcUrl, factoryAddress: this.factoryAddress, senderAddress: this.senderAddress })
     return deployUtils.isDeployed({
       jsonRpcUrl: this.jsonRpcUrl,
       factoryAddress: this.factoryAddress,
