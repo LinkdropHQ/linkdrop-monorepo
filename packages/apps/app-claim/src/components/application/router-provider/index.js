@@ -41,5 +41,5 @@ const defineConnectors = ({ connector }) => {
   if (connector) {
     return connectors[connector]
   }
-  return connectors['Portis']
+  return connectors['Metamask']
 }
