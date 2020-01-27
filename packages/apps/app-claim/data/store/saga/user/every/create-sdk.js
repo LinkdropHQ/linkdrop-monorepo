@@ -10,7 +10,6 @@ import Web3 from 'web3'
 import { getInitialBlock } from 'helpers'
 import Linkdrop from '@linkdrop/contracts/build/Linkdrop.json'
 import { defineNetworkName, defineJsonRpcUrl } from '@linkdrop/commons'
-import getCoinbaseLink from 'data/store/saga/deeplinks/every/get-coinbase-link'
 
 const web3 = new Web3(Web3.givenProvider)
 
@@ -34,7 +33,6 @@ const generator = function * ({ payload }) {
       jsonRpcUrl: actualJsonRpcUrl,
       apiHost: `https://${networkName}-v2.linkdrop.io`
     })
-    const coinbaseLink = yield getCoinbaseLink({ payload: { chainId } })
     yield put({ type: 'USER.SET_SDK', payload: { sdk } })
     const address = sdk.getProxyAddress(campaignId)
     const linkWallet = yield new ethers.Wallet(linkKey, provider)
@@ -44,9 +42,6 @@ const generator = function * ({ payload }) {
     const initialBlock = getInitialBlock({ chainId })
     yield put({ type: '*CONTRACT.GET_PAST_EVENTS', payload: { networkName, linkId, contract: contractWeb3, initialBlock } })
     yield put({ type: '*CONTRACT.SUBSCRIBE_TO_CLAIM_EVENT', payload: { networkName, linkId, contract: contractEthers, initialBlock } })
-    if (coinbaseLink) {
-      yield put({ type: 'DEEPLINKS.SET_COINBASE_LINK', payload: { coinbaseLink } })
-    }
   } catch (e) {
     console.error(e)
     yield put({ type: 'USER.SET_ERRORS', payload: { errors: ['LINK_INVALID'] } })
