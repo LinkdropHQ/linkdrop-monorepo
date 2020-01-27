@@ -89,7 +89,6 @@ function () {
             linkId = _ref3.linkId;
             linkParams = _ref3.linkParams;
             signerSignature = _ref3.signerSignature;
-            // Construct url
             url = "".concat(claimHost, "/#/receive?token=").concat(token, "&nft=").concat(nft, "&feeToken=").concat(feeToken, "&feeReceiver=").concat(feeReceiver, "&linkKey=").concat(linkKey, "&nativeTokensAmount=").concat(nativeTokensAmount, "&tokensAmount=").concat(tokensAmount, "&tokenId=").concat(tokenId, "&feeAmount=").concat(feeAmount, "&expiration=").concat(expiration, "&data=").concat(data, "&signerSignature=").concat(signerSignature, "&linkdropContract=").concat(linkdropContract, "&sender=").concat(sender, "&chainId=").concat(chainId);
             return _context.abrupt("return", {
               url: url,

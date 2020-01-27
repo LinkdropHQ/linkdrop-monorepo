@@ -54,7 +54,6 @@ export const generateLink = async ({
     signingKeyOrWallet
   })
 
-  // Construct url
   const url = `${claimHost}/#/receive?token=${token}&nft=${nft}&feeToken=${feeToken}&feeReceiver=${feeReceiver}&linkKey=${linkKey}&nativeTokensAmount=${nativeTokensAmount}&tokensAmount=${tokensAmount}&tokenId=${tokenId}&feeAmount=${feeAmount}&expiration=${expiration}&data=${data}&signerSignature=${signerSignature}&linkdropContract=${linkdropContract}&sender=${sender}&chainId=${chainId}`
 
   return { url, linkId, linkKey, linkParams, signerSignature }
