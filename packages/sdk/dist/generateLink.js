@@ -15,6 +15,7 @@ var _utils = require("./utils");
 
 var _ethers = require("ethers");
 
+// Turn off annoying warnings
 _ethers.ethers.errors.setLogLevel('error');
 
 var generateLink =
@@ -89,12 +90,7 @@ function () {
             linkParams = _ref3.linkParams;
             signerSignature = _ref3.signerSignature;
             // Construct url
-            url = "".concat(claimHost, "/#/receive?token=").concat(token, "&nft=").concat(nft, "&feeToken=").concat(feeToken, "&feeReceiver=").concat(feeReceiver, "&linkKey=").concat(linkKey, "&nativeTokensAmount=").concat(nativeTokensAmount, "&tokensAmount=").concat(tokensAmount, "&tokenId=").concat(tokenId, "&feeAmount=").concat(feeAmount, "&expiration=").concat(expiration, "&data=").concat(data, "&signerSignature=").concat(signerSignature, "&linkdropContract=").concat(linkdropContract, "&sender=").concat(sender);
-
-            if (String(chainId) !== '1') {
-              url = "".concat(url, "&chainId=").concat(chainId);
-            }
-
+            url = "".concat(claimHost, "/#/receive?token=").concat(token, "&nft=").concat(nft, "&feeToken=").concat(feeToken, "&feeReceiver=").concat(feeReceiver, "&linkKey=").concat(linkKey, "&nativeTokensAmount=").concat(nativeTokensAmount, "&tokensAmount=").concat(tokensAmount, "&tokenId=").concat(tokenId, "&feeAmount=").concat(feeAmount, "&expiration=").concat(expiration, "&data=").concat(data, "&signerSignature=").concat(signerSignature, "&linkdropContract=").concat(linkdropContract, "&sender=").concat(sender, "&chainId=").concat(chainId);
             return _context.abrupt("return", {
               url: url,
               linkId: linkId,
@@ -103,7 +99,7 @@ function () {
               signerSignature: signerSignature
             });
 
-          case 20:
+          case 19:
           case "end":
             return _context.stop();
         }

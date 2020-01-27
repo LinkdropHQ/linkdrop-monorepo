@@ -35,6 +35,7 @@ var _ethers = require("ethers");
 
 var _constants = require("ethers/constants");
 
+// Turn off annoying warnings
 _ethers.ethers.errors.setLogLevel('error');
 
 var LinkdropSDK =
@@ -50,7 +51,7 @@ function () {
         _ref$apiHost = _ref.apiHost,
         apiHost = _ref$apiHost === void 0 ? "https://".concat(chain, ".linkdrop.io") : _ref$apiHost,
         _ref$claimHost = _ref.claimHost,
-        claimHost = _ref$claimHost === void 0 ? 'https://claim.linkdrop.io' : _ref$claimHost;
+        claimHost = _ref$claimHost === void 0 ? 'https://claim-v2.linkdrop.io' : _ref$claimHost;
     (0, _classCallCheck2["default"])(this, LinkdropSDK);
 
     if (senderAddress == null || senderAddress === '') {
@@ -263,29 +264,33 @@ function () {
             switch (_context4.prev = _context4.next) {
               case 0:
                 token = _ref4.token, nft = _ref4.nft, feeToken = _ref4.feeToken, feeReceiver = _ref4.feeReceiver, linkKey = _ref4.linkKey, nativeTokensAmount = _ref4.nativeTokensAmount, tokensAmount = _ref4.tokensAmount, tokenId = _ref4.tokenId, feeAmount = _ref4.feeAmount, expiration = _ref4.expiration, _ref4$data = _ref4.data, data = _ref4$data === void 0 ? '0x' : _ref4$data, signerSignature = _ref4.signerSignature, receiverAddress = _ref4.receiverAddress, linkdropContract = _ref4.linkdropContract, sender = _ref4.sender;
+                console.log('here');
 
                 if (!(linkdropContract !== this.getProxyAddress())) {
-                  _context4.next = 3;
+                  _context4.next = 5;
                   break;
                 }
 
+                console.log('here11');
                 throw new Error('Linkdrop contract cannot be deployed by relayer. Invalid campaign id.');
 
-              case 3:
-                _context4.next = 5;
+              case 5:
+                _context4.next = 7;
                 return this.isDeployed();
 
-              case 5:
+              case 7:
                 isDeployed = _context4.sent;
+                console.log('here1');
 
                 if (!(isDeployed === true)) {
-                  _context4.next = 8;
+                  _context4.next = 11;
                   break;
                 }
 
                 throw new Error('Linkdrop contract is already deployed');
 
-              case 8:
+              case 11:
+                console.log('here2');
                 return _context4.abrupt("return", claimUtils.claimAndDeploy({
                   jsonRpcUrl: this.jsonRpcUrl,
                   apiHost: this.apiHost,
@@ -307,7 +312,7 @@ function () {
                   sender: sender
                 }));
 
-              case 9:
+              case 13:
               case "end":
                 return _context4.stop();
             }
@@ -561,6 +566,12 @@ function () {
             switch (_context12.prev = _context12.next) {
               case 0:
                 campaignId = _args12.length > 0 && _args12[0] !== undefined ? _args12[0] : 0;
+                console.log({
+                  campaignId: campaignId,
+                  jsonRpcUrl: this.jsonRpcUrl,
+                  factoryAddress: this.factoryAddress,
+                  senderAddress: this.senderAddress
+                });
                 return _context12.abrupt("return", deployUtils.isDeployed({
                   jsonRpcUrl: this.jsonRpcUrl,
                   factoryAddress: this.factoryAddress,
@@ -568,7 +579,7 @@ function () {
                   campaignId: campaignId
                 }));
 
-              case 2:
+              case 3:
               case "end":
                 return _context12.stop();
             }

@@ -18,7 +18,7 @@ class LinkdropSDK {
     chain = 'mainnet', // rinkeby
     jsonRpcUrl = getJsonRpcUrl(chain),
     apiHost = `https://${chain}.linkdrop.io`,
-    claimHost = 'https://claim.linkdrop.io'
+    claimHost = 'https://claim-v2.linkdrop.io'
   }) {
     if (senderAddress == null || senderAddress === '') {
       throw new Error('Please provide sender address')
@@ -279,7 +279,12 @@ class LinkdropSDK {
   }
 
   async isDeployed (campaignId = 0) {
-    console.log({ campaignId, jsonRpcUrl: this.jsonRpcUrl, factoryAddress: this.factoryAddress, senderAddress: this.senderAddress })
+    console.log({
+      campaignId,
+      jsonRpcUrl: this.jsonRpcUrl,
+      factoryAddress: this.factoryAddress,
+      senderAddress: this.senderAddress
+    })
     return deployUtils.isDeployed({
       jsonRpcUrl: this.jsonRpcUrl,
       factoryAddress: this.factoryAddress,
