@@ -104,6 +104,9 @@ module.exports = {
       INITIAL_BLOCK_GOERLI: JSON.stringify(process.env.INITIAL_BLOCK_GOERLI),
       INITIAL_BLOCK_ROPSTEN: JSON.stringify(process.env.INITIAL_BLOCK_ROPSTEN),
       INITIAL_BLOCK_KOVAN: JSON.stringify(process.env.INITIAL_BLOCK_KOVAN),
+      FORMATIC_API_KEY_TESTNET: JSON.stringify(process.env.FORMATIC_API_KEY_TESTNET),
+      FORMATIC_API_KEY_MAINNET: JSON.stringify(process.env.FORMATIC_API_KEY_MAINNET),
+      PORTIS_DAPP_ID: JSON.stringify(process.env.PORTIS_DAPP_ID),
       'process.env': {
         NODE_ENV: JSON.stringify(process.env.NODE_ENV || 'development')
       }

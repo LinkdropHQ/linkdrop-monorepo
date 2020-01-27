@@ -16,6 +16,9 @@ const initialBlockGoerli = INITIAL_BLOCK_GOERLI || config.initialBlockGoerli || 
 const initialBlockRopsten = INITIAL_BLOCK_ROPSTEN || config.initialBlockRopsten || 0
 const initialBlockKovan = INITIAL_BLOCK_KOVAN || config.initialBlockKovan || 0
 const infuraPk = INFURA_PK || String(config.infuraPk)
+const portisDappId = PORTIS_DAPP_ID || String(config.portisDappId)
+const formaticApiKeyTestnet = FORMATIC_API_KEY_TESTNET || String(config.formaticApiKeyTestnetClaim)
+const formaticApiKeyMainnet = FORMATIC_API_KEY_MAINNET || String(config.formaticApiKeyMainnetClaim)
 const jsonRpcUrlXdai = JSON_RPC_URL_XDAI || String(config.jsonRpcUrlXdai)
 
 module.exports = {
@@ -27,5 +30,8 @@ module.exports = {
   infuraPk,
   initialBlockGoerli,
   initialBlockRopsten,
-  initialBlockKovan
+  initialBlockKovan,
+  portisDappId,
+  formaticApiKeyTestnet,
+  formaticApiKeyMainnet
 }
