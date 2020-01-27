@@ -1,6 +1,16 @@
 const webpack = require('webpack')
 const path = require('path')
 const autoprefixer = require('autoprefixer')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+
+let config = {}
+try {
+  config = require('../../../configs/app.config.json')
+} catch (err) {
+  console.log(err)
+}
+
 
 const CSSModuleLoader = {
   loader: 'css-loader',
@@ -35,13 +45,12 @@ const postCSSLoader = {
 }
 
 module.exports = {
-  entry: [
-    'webpack/hot/dev-server',
-    '@babel/polyfill',
-    './src/index.js'
-  ],
+  entry: {
+    vendor: ['webpack/hot/dev-server', '@babel/polyfill', 'react', 'react-dom', 'redux'],
+    main: './src/index.js'
+  },
   output: {
-    filename: 'bundle.js',
+    filename: '[name].js',
     path: path.resolve(__dirname, 'dist')
   },
   context: __dirname,
@@ -49,6 +58,7 @@ module.exports = {
     extensions: ['.js', '.jsx', '.json', '.scss', '.css', '*'],
     modules: [
       path.resolve('./'),
+      path.resolve('./src'),
       path.resolve('./node_modules'),
       path.resolve('../../../node_modules')
     ],
@@ -62,6 +72,14 @@ module.exports = {
   },
   module: {
     rules: [{
+      enforce: 'pre',
+      test: /\.(js|jsx)$/,
+      loader: 'standard-loader',
+      exclude: /(node_modules|bower_components|linkdrop-ui-kit)/,
+      options: {
+        parser: 'babel-eslint'
+      }
+    }, {
       test: /\.(js|jsx)$/,
       exclude: /node_modules/,
       use: {
@@ -71,7 +89,7 @@ module.exports = {
       test: /\.(scss|css)$/,
       exclude: /\.module\.scss$/,
       use: [
-        'style-loader',
+        process.env.NODE_ENV === 'production' ? MiniCssExtractPlugin.loader : 'style-loader',
         CSSLoader,
         'sass-loader',
         postCSSLoader
@@ -79,7 +97,7 @@ module.exports = {
     }, {
       test: /\.module\.scss$/,
       use: [
-        'style-loader',
+        process.env.NODE_ENV === 'production' ? MiniCssExtractPlugin.loader : 'style-loader',
         CSSModuleLoader,
         'sass-loader',
         postCSSLoader
@@ -94,6 +112,17 @@ module.exports = {
   },
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
+    new MiniCssExtractPlugin({
+      filename: 'style.[hash].css'
+    }),
+    new HtmlWebpackPlugin({
+      inject: false,
+      hash: true,
+      template: './src/index.html',
+      filename: 'index.html',
+      terminalProjectId: process.env.TERMINAL_PROJECT_ID || config.terminalProjectId,
+      terminalApiKey: process.env.TERMINAL_API_KEY || config.terminalApiKey
+    }),
     new webpack.DefinePlugin({
       MASTER_COPY: JSON.stringify(process.env.MASTER_COPY),
       FACTORY: JSON.stringify(process.env.FACTORY),
