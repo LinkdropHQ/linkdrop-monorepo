@@ -79,14 +79,21 @@ class Claim extends React.Component {
     }
   }
 
-  componentWillReceiveProps ({ readyToClaim, alreadyClaimed }) {
-    const { readyToClaim: prevReadyToClaim } = this.props
+  componentWillReceiveProps ({ readyToClaim, alreadyClaimed, context, step }) {
+    const { readyToClaim: prevReadyToClaim, context: prevContext } = this.props
     if (
       (readyToClaim === true && prevReadyToClaim === true) ||
       readyToClaim == null ||
       readyToClaim === false ||
       alreadyClaimed == null
-    ) { return }
+    ) {
+      if (step === 2) {
+        if (context.active && context.account && !prevContext.account && !prevContext.active) {
+          this.actions().user.setStep({ step: 1 })
+        }
+      }
+      return
+    }
     const {
       token,
       tokensAmount,
