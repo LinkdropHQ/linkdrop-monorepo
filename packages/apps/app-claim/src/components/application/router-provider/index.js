@@ -18,6 +18,7 @@ export default function RouterProvider () {
   if (!context.active && !context.error) {
     return <Loading />
   } else if (context.error) {
+    console.log({ error: context.error })
     return <ConnectedRouter history={history}>
       <Router history={history}>
         <AppRouter web3Provider={null} context={context} />
@@ -40,5 +41,5 @@ const defineConnectors = ({ connector }) => {
   if (connector) {
     return connectors[connector]
   }
-  return connectors['Metamask']
+  return connectors['Portis']
 }
