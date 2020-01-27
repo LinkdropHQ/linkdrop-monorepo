@@ -29,7 +29,8 @@ const {
   TOKEN_ADDRESS,
   LINKS_NUMBER,
   BITLY_TOKEN,
-  CLAIM_HOST
+  CLAIM_HOST,
+  DEFAULT_WALLET
 } = config
 
 ethers.errors.setLogLevel('error')
@@ -194,6 +195,9 @@ export const generate = async () => {
         feeAmount: FEE_AMOUNT,
         data: CALLBACK_DATA
       })
+      if (DEFAULT_WALLET && DEFAULT_WALLET !== '') {
+        url = `${url}&w=${DEFAULT_WALLET}`
+      }
       url = await shortenUrl(url)
       links.push({ url })
     }
