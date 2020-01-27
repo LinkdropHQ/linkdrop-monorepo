@@ -17,6 +17,7 @@ var _axios = _interopRequireDefault(require("axios"));
 
 var _ethers = require("ethers");
 
+// Turn off annoying warnings
 _ethers.ethers.errors.setLogLevel('error');
 
 var claim =

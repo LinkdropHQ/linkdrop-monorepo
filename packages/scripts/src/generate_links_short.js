@@ -12,6 +12,7 @@ import fs from 'fs'
 import { newError } from './utils'
 import deployProxyIfNeeded from './deploy_proxy'
 import config from '../config'
+import fetch from 'node-fetch'
 
 const {
   JSON_RPC_URL,
@@ -26,7 +27,9 @@ const {
   CALLBACK_DATA,
   TOKENS_AMOUNT,
   TOKEN_ADDRESS,
-  LINKS_NUMBER
+  LINKS_NUMBER,
+  BITLY_TOKEN,
+  CLAIM_HOST
 } = config
 
 ethers.errors.setLogLevel('error')
@@ -41,6 +44,7 @@ const provider = new ethers.providers.JsonRpcProvider(JSON_RPC_URL)
 const sender = new ethers.Wallet(SENDER_PRIVATE_KEY, provider)
 
 const linkdropSDK = new LinkdropSDK({
+  claimHost: CLAIM_HOST,
   senderAddress: sender.address,
   chain: CHAIN,
   jsonRpcUrl: JSON_RPC_URL,
@@ -179,12 +183,7 @@ export const generate = async () => {
     const links = []
 
     for (let i = 0; i < linksNumber; i++) {
-      const {
-        url,
-        linkId,
-        linkKey,
-        signerSignature
-      } = await linkdropSDK.generateLink({
+      let { url } = await linkdropSDK.generateLink({
         signingKeyOrWallet: sender.privateKey,
         nativeTokensAmount: NATIVE_TOKENS_AMOUNT || 0,
         nft: NFT_ADDRESS || AddressZero,
@@ -195,9 +194,8 @@ export const generate = async () => {
         feeAmount: FEE_AMOUNT,
         data: CALLBACK_DATA
       })
-
-      const link = { i, linkId, linkKey, signerSignature, url }
-      links.push(link)
+      url = await shortenUrl(url)
+      links.push({ url })
     }
 
     // Save links
@@ -224,3 +222,28 @@ export const generate = async () => {
 }
 
 generate()
+
+const shortenUrl = async longUrl => {
+  try {
+    const params = {
+      long_url: longUrl,
+      title: 'Linkdrop'
+    }
+    const bitlyApiUrl = 'https://api-ssl.bitly.com/v4/bitlinks'
+
+    const result = await fetch(bitlyApiUrl, {
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${BITLY_TOKEN}`
+      },
+      method: 'POST',
+      body: JSON.stringify(params)
+    }).then(res => res.json())
+
+    return result.link
+  } catch (err) {
+    console.error('Error while creating bitly link: ', err)
+    return longUrl
+  }
+}

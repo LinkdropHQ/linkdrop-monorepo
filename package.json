@@ -22,6 +22,7 @@
     "generate-links-erc20": "npx babel-node packages/scripts/src/generate_links_erc20.js",
     "generate-links-erc721": "npx babel-node packages/scripts/src/generate_links_erc721.js",
     "generate-links": "npx babel-node packages/scripts/src/generate_links.js",
+    "generate-links-short": "npx babel-node packages/scripts/src/generate_links_short.js",
     "claim-eth": "npx babel-node packages/scripts/src/claim_eth.js",
     "claim-erc20": "npx babel-node packages/scripts/src/claim_erc20.js",
     "claim-erc721": "npx babel-node packages/scripts/src/claim_erc721.js",
