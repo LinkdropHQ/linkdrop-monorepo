@@ -1,14 +1,11 @@
 @import "variables";
 
 .title {
-  font-size: 24px;
+  font-size: 22px;
   margin-bottom: 30px;
-  font-family: 'Formular-Bold';
-}
-
-.subtitle {
-  font-size: 18px;
-  margin-bottom: 30px;
+  span {
+    font-family: 'Formular-Bold';
+  }
 }
 
 .description {
@@ -20,8 +17,8 @@
   }
 }
 
-.loading {
-  margin-bottom: 50px;
+.alert {
+  margin-bottom: 40px;
 }
 
 .descriptionHidden {

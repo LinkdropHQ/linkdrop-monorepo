@@ -7,6 +7,7 @@ import ClaimingProcessPage from './claiming-process-page'
 import ErrorPage from './error-page'
 import ClaimingFinishedPage from './claiming-finished-page'
 import NeedWallet from './need-wallet'
+import AlreadyClaimedPage from './already-claimed-page'
 import { terminalApiKey, terminalProjectId } from 'app.config.js'
 import { getHashVariables, defineNetworkName, capitalize } from '@linkdrop/commons'
 import Web3 from 'web3'
@@ -179,7 +180,7 @@ class Claim extends React.Component {
 
     if (alreadyClaimed) {
       // if tokens we already claimed (if wallet is totally empty).
-      return <ClaimingFinishedPage
+      return <AlreadyClaimedPage
         {...commonData}
       />
     }

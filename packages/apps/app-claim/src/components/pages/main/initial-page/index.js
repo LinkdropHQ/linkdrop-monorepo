@@ -1,58 +1,43 @@
 import React from 'react'
-import { Alert, Icons, Button } from '@linkdrop/ui-kit'
+import { RetinaImage } from '@linkdrop/ui-kit'
 import { translate } from 'decorators'
-import { shortenString, getHashVariables } from '@linkdrop/commons'
+import { shortenString } from '@linkdrop/commons'
 import text from 'texts'
 import classNames from 'classnames'
-import { defineMainAsset } from 'helpers'
+import { get0xAssets, getImages } from 'helpers'
 import styles from './styles.module'
 import commonStyles from '../styles.module'
+import { Button } from 'components/common'
 
 @translate('pages.main')
 class InitialPage extends React.Component {
-  constructor (props) {
-    super(props)
-    this.state = {
-      iconType: 'default'
-    }
-  }
-
-  componentWillReceiveProps ({ icon }) {
-    const { icon: prevIcon } = this.props
-    const { iconType } = this.state
-    if (prevIcon !== icon && icon != null && iconType !== 'default') {
-      this.setState({
-        iconType: 'default'
-      })
-    }
-  }
-
   render () {
     const { onClick, assets, wallet, loading } = this.props
-    const { iconType } = this.state
-    const { nftAddress } = getHashVariables()
-    const { symbol, amount, icon } = defineMainAsset({ assets })
-    const finalIcon = iconType === 'default' ? <img onError={_ => this.setState({ iconType: 'blank' })} className={styles.icon} src={icon} /> : <Icons.Star />
+    const assetsTitle = get0xAssets({ assets })
     return <div className={commonStyles.container}>
-      <Alert
-        noBorder={iconType === 'default' && symbol !== 'ETH' && symbol !== 'xDAI'} className={classNames(styles.tokenIcon, {
-          [styles.tokenIconNft]: nftAddress && iconType === 'default'
-        })} icon={finalIcon}
-      />
-      <div className={styles.title}>
-        <span>{amount && parseFloat(amount)}</span> {symbol}
+      <div className={styles.icon}>
+        <RetinaImage width={147} {...getImages({ src: '0x' })} />
       </div>
+      <div
+        className={styles.title}
+        dangerouslySetInnerHTML={{
+          __html: this.t(`titles.${wallet ? 'linkContentsReady' : 'linkContents'}`, {
+            contents: assetsTitle
+          })
+        }}
+      />
       <Button loading={loading} className={styles.button} onClick={_ => onClick && onClick()}>
         {text('common.buttons.claim')}
       </Button>
+      {wallet && <div className={styles.wallet} dangerouslySetInnerHTML={{ __html: this.t('titles.claimTo', { wallet: shortenString({ wallet }) }) }} />}
       <div
-        className={styles.terms} dangerouslySetInnerHTML={{
+        className={styles.terms}
+        dangerouslySetInnerHTML={{
           __html: this.t('titles.agreeWithTerms', {
             href: 'https://www.notion.so/Terms-and-Privacy-dfa7d9b85698491d9926cbfe3c9a0a58'
           })
         }}
       />
-      {wallet && <div className={styles.wallet} dangerouslySetInnerHTML={{ __html: this.t('titles.claimTo', { wallet: shortenString({ wallet }) }) }} />}
     </div>
   }
 }

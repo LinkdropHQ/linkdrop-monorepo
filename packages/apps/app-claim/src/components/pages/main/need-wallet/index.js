@@ -29,12 +29,6 @@ class NeewWallet extends React.Component {
         {w !== 'portis' && this.renderButton({ connector: 'fortmatic', context })}
         {w !== 'fortmatic' && this.renderButton({ connector: 'portis', context })}
         <div className={styles.divider}>{this.t('titles.divider')}</div>
-        {false && <Button
-          inverted className={styles.button}
-          onClick={_ => context.activate('Metamask')}
-        >
-          {this.t('buttons.metamask')}
-        </Button>}
         <div className={styles.instructions}>
           <div dangerouslySetInnerHTML={{ __html: this.t('texts._1') }} />
           <div dangerouslySetInnerHTML={{ __html: this.t('texts._2') }} />

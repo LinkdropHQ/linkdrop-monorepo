@@ -59,14 +59,6 @@ module.exports = {
   },
   module: {
     rules: [{
-      enforce: 'pre',
-      test: /\.(js|jsx)$/,
-      loader: 'standard-loader',
-      exclude: /(node_modules|bower_components)/,
-      options: {
-        parser: 'babel-eslint'
-      }
-    }, {
       test: /\.(js|jsx)$/,
       exclude: /node_modules/,
       use: {

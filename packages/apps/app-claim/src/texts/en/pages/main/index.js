@@ -1,21 +1,26 @@
 export default {
   titles: {
-    needWallet: 'You need a wallet to claim tokens',
+    needWallet: 'You need a wallet<br>to claim tokens',
     haveAnother: 'Have another wallet?',
     claimTo: 'Claim to: <span>{{wallet}}</span>',
     transactionInProcess: 'Transaction is processing',
-    claiming: 'Claiming...',
+    claiming: 'Claiming Tokens',
     instructions: 'It may take a few minutes. You can come back later.',
     seeDetails: 'See details on <a target="_blank" href={{transactionLink}}>Etherscan</a>',
     seeDetailsBlockscout: 'See details on <a target="_blank" href={{transactionLink}}>Blockscout</a>',
-    tokensClaimed: '<span>{{tokens}}</span> claimed',
+    tokensClaimed: 'Tokens Claimed!',
     howToClaim: 'How to claim tokens to {{wallet}}',
-    agreeWithTerms: 'By claiming you agree to the <a target="_blank" href={{href}}>Terms & Privacy</a>'
+    linkContents: 'Congrats! This coin contains<br><span>{{contents}}</span>',
+    linkContentsReady: 'Your wallet will receive<br><span>{{contents}}</span>',
+    agreeWithTerms: 'By claiming you agree to the <a target="_blank" href={{href}}>Terms & Privacy</a>',
+    tokensAlreadyClaimed: 'Tokens already claimed',
+    putTokensToWork: 'Put your ZRX to work and earn rewards by staking 0x market makers'
   },
   buttons: {
     useWallet: 'Use {{wallet}}',
     copyLink: 'Copy link',
-    goTo: 'Go to {{dapp}}'
+    goTo: 'Go to {{dapp}}',
+    stakeOn0x: 'Stake on 0x.org'
   },
   errors: {
     LINKDROP_PROXY_CONTRACT_PAUSED: {

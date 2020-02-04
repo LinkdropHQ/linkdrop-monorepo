@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, RetinaImage } from '@linkdrop/ui-kit'
+import { RetinaImage } from '@linkdrop/ui-kit'
 import { translate, actions, platform } from 'decorators'
 import { getImages, getWalletLink, getWalletData, capitalize } from 'helpers'
 import { copyToClipboard, getHashVariables } from '@linkdrop/commons'
@@ -7,6 +7,7 @@ import classNames from 'classnames'
 import styles from './styles.module'
 import commonStyles from '../styles.module'
 import Slider from './slider'
+import { Button } from 'components/common'
 import CommonInstruction from './common-instruction'
 import DeepLinkInstruction from './deep-link-instruction'
 import connectors from 'components/application/connectors'
@@ -40,7 +41,12 @@ class WalletChoosePage extends React.Component {
         <div className={classNames(styles.wallet, styles.withBorder, styles.walletPreview)}>
           {this.renderIcon({ id: w })}
         </div>
-        <div className={styles.title}>{this.t('titles.needWallet')}</div>
+        <div
+          className={styles.title}
+          dangerouslySetInnerHTML={{
+            __html: this.t('titles.needWallet')
+          }}
+        />
         {button}
         {this.renderSlider({ walletType })}
       </div>
@@ -72,7 +78,7 @@ class WalletChoosePage extends React.Component {
         imageId = 'opera-touch'
       }
     }
-    return <RetinaImage width={60} {...getImages({ src: imageId })} />
+    return <RetinaImage width={81} {...getImages({ src: imageId })} />
   }
 
   defineWalletHref ({ walletURL, walletURLIos, walletType }) {
@@ -96,7 +102,12 @@ class WalletChoosePage extends React.Component {
         break
       case 'fortmatic':
       case 'portis':
-        title = <div className={styles.title}>{this.t('titles.needWallet')}</div>
+        title = <div
+          className={styles.title}
+          dangerouslySetInnerHTML={{
+            __html: this.t('titles.needWallet')
+          }}
+        />
         break
       case 'status':
       case 'imtoken':

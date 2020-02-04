@@ -1,37 +1,23 @@
 @import "variables";
 
 .title {
-  font-size: 24px;
-  margin-bottom: 30px;
+  font-size: 22px;
+  margin-bottom: 38px;
   span {
-    font-family: 'Inter-Medium';
+    font-family: 'Formular-Bold';
   }
 }
 
 .description {
-  font-size: 14px;
-  margin-bottom: 8px;
-
-  a {
-    color: $blackColor;
-  }
+  font-size: 20px;
+  margin-bottom: 50px;
 }
 
 .alert {
   margin-bottom: 40px;
 }
 
-.descriptionHidden {
-  visibility: hidden;
-  opacity: 0;
-}
-
 .button {
   max-width: 300px;
   min-width: 300px;
-  transform: translateY(32px);
-
-  &.disableTranslateX {
-    transform: translateY(0px)
-  }
 }

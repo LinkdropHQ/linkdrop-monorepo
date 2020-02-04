@@ -20,7 +20,7 @@ const renderImage = ({ id, walletType, selectWallet, platform }) => {
   if (walletType == null && id === w) { return null }
   const icon = renderIcon({ id, platform })
   return <div
-    className={classNames(styles.wallet, styles.withBorder)}
+    className={classNames(styles.wallet, styles.sliderWallet, styles.withBorder)}
     onClick={_ => selectWallet && selectWallet({ id })}
   >
     {icon}

@@ -1,9 +1,9 @@
 @import "variables";
 
 .title {
-  font-size: 24px;
-  margin-bottom: 50px;
-  font-family: 'Inter-Medium';
+  font-size: 22px;
+  margin-bottom: 40px;
+  font-family: 'Formular-Bold';
   max-width: 300px;
 }
 
@@ -38,6 +38,7 @@
 .button {
   margin-bottom: 50px;
   max-width: 100%;
+  background: #0789BB;
 }
 
 .instructions {
@@ -73,29 +74,36 @@
 
 .wallet {
   border-radius: 14px;
-  width: 60px!important;
-  height: 60px!important;
+  width: 81px!important;
+  height: 81px!important;
   display: flex!important;
   align-items: center;
   justify-content: center;
   outline: none!important;
   background: $whiteColor;
 
+  &.sliderWallet {
+    width: 60px!important;
+    height: 60px!important;
+  }
+
   img {
     max-width: 100%;
   }
-}
 
-.wallet.withBorder {
-  border: 1px solid black;
-  transition: all .3s;
-  overflow: hidden;
-
-  &:hover {
-    background: $bgHoverGreyColor;
-    border-color: $borderHoverGreyColor;
+  &.withBorder {
+    transition: all .3s;
+    overflow: hidden;
+    border: 1px solid $blackColor;
+    &:hover {
+      background: $bgHoverGreyColor;
+      border-color: $borderHoverGreyColor;
+    }
   }
 }
+
+
+
 
 .sliderShow .subtitle {
   animation: titleOut .5s forwards;

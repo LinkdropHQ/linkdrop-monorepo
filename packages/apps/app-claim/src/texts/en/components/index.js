@@ -1,7 +1,7 @@
-import footer from './footer'
 import header from './header'
+import common from './common'
 
 export default {
-  footer,
-  header
+  header,
+  common
 }

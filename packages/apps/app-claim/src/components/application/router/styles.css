@@ -16,8 +16,24 @@
        url('~assets/fonts/Inter-Medium.woff') format('woff')
 }
 
+@font-face {
+  font-family: 'Formular-Regular';
+  src: url('~assets/fonts/Formular.ttf') format('truetype')
+}
+
+@font-face {
+  font-family: 'Formular-Bold';
+  src: url('~assets/fonts/Formular-Bold.ttf') format('truetype')
+}
+
+@font-face {
+  font-family: 'Formular-Medium';
+  src: url('~assets/fonts/Formular-Light.ttf') format('truetype')
+}
+
+
 html, body {
-  font-family: 'Inter-Regular', Helvetica, Arial, sans-serif;
+  font-family: 'Formular-Regular', Helvetica, Arial, sans-serif;
   margin: 0px;
   padding: 0px;
   min-height: 100vh;

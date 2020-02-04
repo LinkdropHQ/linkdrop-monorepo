@@ -1,0 +1,44 @@
+@import "variables";
+
+.container {
+  display: flex;
+  align-items: center;
+  padding-top: 0px;
+  padding-bottom: 0px;
+  width: 100%;
+  justify-content: center;
+  text-align: center;
+  height: 115px;
+  font-size: 18px;
+  font-family: 'Inter-Medium';
+  color: $greyColor;
+  transition: all .3s;
+  flex-direction: column;
+
+  span {
+    color: $blackColor;
+    transition: all .3s;
+  }
+
+  .title0x {
+    margin-bottom: 20px;
+    font-size: 28px;
+    color: #898890;
+  }
+
+  a {
+    text-decoration: none;
+    color: $greyColor;
+    display: block;
+  }
+
+  &:hover {
+    a {
+      text-decoration: none;
+      color: $textGreyColor;
+    }
+    span {
+      color: $textGreyColor;
+    }
+  }
+}

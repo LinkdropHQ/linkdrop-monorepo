@@ -5,6 +5,7 @@ import getWalletData from './get-wallet-data'
 import getInitialBlock from './get-initial-block'
 import getDappData from './get-dapp-data'
 import defineMainAsset from './define-main-asset'
+import get0xAssets from './get-0x-assets'
 
 export {
   getImages,
@@ -13,5 +14,6 @@ export {
   getWalletData,
   getInitialBlock,
   getDappData,
-  defineMainAsset
+  defineMainAsset,
+  get0xAssets
 }
