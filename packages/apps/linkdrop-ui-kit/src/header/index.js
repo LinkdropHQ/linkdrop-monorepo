@@ -1,10 +1,11 @@
 import React from 'react'
 import styles from './styles.module'
+import classNames from 'classnames'
 
 class Header extends React.Component {
   render () {
-    const { title } = this.props
-    return <header className={styles.container}>
+    const { title, className } = this.props
+    return <header className={classNames(styles.container, className)}>
       {title}
     </header>
   }

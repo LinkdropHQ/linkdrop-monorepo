@@ -9,11 +9,10 @@ import text from 'texts'
 class Page extends React.Component {
   render () {
     return <div className={styles.container}>
-      <Header title={this.t('titles.getTokens')} />
       <div className={styles.main}>
         {this.props.children}
       </div>
-      <Footer />
+      <Footer className={styles.footer} />
     </div>
   }
 }

@@ -4,8 +4,8 @@ import classNames from 'classnames'
 
 class Footer extends React.Component {
   render () {
-    const { content, href } = this.props
-    return <footer className={classNames(styles.container, {
+    const { content, href, className } = this.props
+    return <footer className={classNames(styles.container, className, {
       [styles.withLink]: href
     })}>
       {this.renderContent({ content, href })}

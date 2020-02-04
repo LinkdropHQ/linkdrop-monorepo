@@ -1,7 +1,11 @@
 .main {
-  min-height: calc(100vh - 175px);
+  min-height: calc(100vh - 115px);
   display: flex;
   align-items: center;
   justify-content: center;
   overflow-x: hidden; 
+}
+
+.header, .footer {
+	font-family: 'Inter-Regular'
 }
