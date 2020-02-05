@@ -1,3 +1,5 @@
+import { bignumber } from 'mathjs'
+
 export default ({ assets = [] }) => {
 	const erc721 = assets.find(asset => asset.type === 'erc721')
   const erc20 = assets.find(asset => asset.type === 'erc20')
@@ -6,7 +8,7 @@ export default ({ assets = [] }) => {
   	return `${erc721.symbol} NFT`
   }
   if (!erc721 && erc20) {
-  	return `${erc20.amount} ${erc20.symbol}`
+  	return `${String(bignumber(erc20.amount))} ${erc20.symbol}`
   }
-  return `${erc20.amount} ${erc20.symbol} + ${erc721.symbol} NFT`
+  return `${String(bignumber(erc20.amount))} ${erc20.symbol} + ${erc721.symbol} NFT`
 }
