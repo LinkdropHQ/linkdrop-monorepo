@@ -28,7 +28,7 @@ class ClaimingFinishedPage extends React.Component {
     return <Button
       className={styles.button}
       target='_blank'
-      href='https://0x.org/'
+      href='https://0x.org/zrx/staking'
     >
       {this.t('buttons.stakeOn0x')}
     </Button>

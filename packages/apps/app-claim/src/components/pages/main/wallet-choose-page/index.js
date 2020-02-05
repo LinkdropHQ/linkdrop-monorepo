@@ -32,6 +32,7 @@ class WalletChoosePage extends React.Component {
     if (walletType && walletType != null) {
       return this.renderWalletInstruction({ walletType })
     } else {
+      const { instruction } = this.defineWalletTexts({ walletType: w })
       const button = this.defineButton({ chainId, platform, w, context, loading })
       return <div className={classNames(commonStyles.container, styles.container, {
         [styles.sliderShow]: showSlider,
@@ -47,6 +48,7 @@ class WalletChoosePage extends React.Component {
             __html: this.t('titles.needWallet')
           }}
         />
+        {instruction}
         {button}
         {this.renderSlider({ walletType })}
       </div>
@@ -90,12 +92,10 @@ class WalletChoosePage extends React.Component {
     return walletURL
   }
 
-  renderWalletInstruction ({ walletType }) {
-    const { showSlider } = this.state
+  defineWalletTexts ({ walletType }) {
     const { name: walletTitle, walletURL, walletURLIos } = getWalletData({ wallet: walletType })
     let instruction = ''
     let title = <div className={classNames(styles.title, styles.instructionTitle)}>{this.t('titles.howToClaim', { wallet: walletTitle })}</div>
-
     switch (walletType) {
       case 'trust':
       case 'coinbase':
@@ -117,6 +117,15 @@ class WalletChoosePage extends React.Component {
       default:
         instruction = this.renderCommonInstruction({ walletType, title: walletTitle, href: walletURL })
     }
+    return {
+      instruction,
+      title
+    }
+  }
+
+  renderWalletInstruction ({ walletType }) {
+    const { showSlider } = this.state
+    const { title, instruction } = this.defineWalletTexts({ walletType })
     return <div className={classNames(commonStyles.container, styles.container, {
       [styles.sliderShow]: showSlider,
       [styles.sliderHide]: showSlider === false

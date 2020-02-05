@@ -41,6 +41,10 @@ html, body {
   width: 100vw;
 }
 
+.slick-list {
+  height: 70px!important;
+}
+
 * {
   box-sizing: border-box;
 }

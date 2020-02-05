@@ -38,7 +38,7 @@
 .button {
   margin-bottom: 50px;
   max-width: 100%;
-  background: #0789BB;
+  background: #0789BB!important;
 }
 
 .instructions {
@@ -73,7 +73,7 @@
 }
 
 .wallet {
-  border-radius: 14px;
+  border-radius: 24px;
   width: 81px!important;
   height: 81px!important;
   display: flex!important;
@@ -85,6 +85,9 @@
   &.sliderWallet {
     width: 60px!important;
     height: 60px!important;
+    border-radius: 14px!important;
+    box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.15)!important;
+
   }
 
   img {
@@ -94,7 +97,6 @@
   &.withBorder {
     transition: all .3s;
     overflow: hidden;
-    border: 1px solid $blackColor;
     &:hover {
       background: $bgHoverGreyColor;
       border-color: $borderHoverGreyColor;
