@@ -47,6 +47,10 @@
   font-size: 14px;
   margin-bottom: 30px;
 
+  a {
+    color: $blackColor;
+  }
+
   div {
     margin-bottom: 12px;
     &:last-child {
