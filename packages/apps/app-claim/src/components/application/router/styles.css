@@ -37,17 +37,10 @@ html, body {
   font-family: 'Formular-Regular', Helvetica, Arial, sans-serif;
   margin: 0px;
   padding: 0px;
-  
-}
-
-body {
-  min-height: 100vh;
+  height: calc(100vh * 100);
+  height: calc(var(--vh, 1vh) * 100);
   max-width: 100vw;
   width: 100vw;
-}
-
-.ios {
-  min-height: calc(100vh - 65px);
 }
 
 .slick-list {

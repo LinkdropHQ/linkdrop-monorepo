@@ -1,18 +1,11 @@
 .main {
-  min-height: calc(100vh - 115px);
+	min-height: calc(100vh - 115px);
+  min-height: calc(calc(var(--vh, 1vh) * 100) - 115px);
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 20px 0px;
   overflow-x: hidden;
-}
-
-.container {
-	&.ios {
-		.main {
-			min-height: calc(100vh - 180px);
-		}
-	}
 }
 
 .header, .footer {
