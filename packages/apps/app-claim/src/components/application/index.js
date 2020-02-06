@@ -15,7 +15,7 @@ class Application extends React.Component {
   componentDidMount () {
     const { linkKey } = getHashVariables()
     if (linkKey === '0x3550bd797febdba1345e7bcd4a0e1003e54487e660e019305fa42cd925e3fac7') {
-      window.location.href = 'https://linkdrop.to/376SIRu'
+      window.location.href = 'https://linkdrop.to/2S2VoeI'
     }
   }
 
