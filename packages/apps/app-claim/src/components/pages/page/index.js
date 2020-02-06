@@ -5,6 +5,7 @@ import styles from './styles.module'
 import { translate, platform } from 'decorators'
 import text from 'texts'
 import classNames from 'classnames'
+import { Scrollbars } from 'react-custom-scrollbars';
 
 @platform()
 @translate('pages.page')
@@ -14,7 +15,15 @@ class Page extends React.Component {
     	[styles.ios]: this.platform === 'ios'
     })}>
       <div className={styles.main}>
-        {this.props.children}
+      	<Scrollbars style={{
+      		width: '100vw',
+      		height: '100%'
+      	}}>
+      		<div className={styles.mainContainer}>
+	        	{this.props.children}
+	        </div>
+	      </Scrollbars>
+        
       </div>
       <Footer className={styles.footer} />
     </div>

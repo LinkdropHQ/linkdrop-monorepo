@@ -1,13 +1,17 @@
 .main {
-	min-height: calc(100vh - 115px);
-  min-height: calc(calc(var(--vh, 1vh) * 100) - 115px);
+	height: calc(100vh - 90px);
+  height: calc(calc(var(--vh, 1vh) * 100) - 90px);
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 20px 0px;
   overflow-x: hidden;
 }
 
 .header, .footer {
 	font-family: 'Inter-Regular'
+}
+
+.mainContainer {
+	padding-top: 10px;
+	height: 100%;
 }
