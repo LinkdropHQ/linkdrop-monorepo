@@ -3,7 +3,16 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  overflow-x: hidden; 
+  padding: 20px 0px;
+  overflow-x: hidden;
+}
+
+.container {
+	&.ios {
+		.main {
+			min-height: calc(100vh - 180px);
+		}
+	}
 }
 
 .header, .footer {

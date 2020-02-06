@@ -4,15 +4,23 @@ import { Switch, Route } from 'react-router'
 import { Main, Page, NotFound } from 'components/pages'
 import './styles'
 
-import { actions } from 'decorators'
+import { actions, platform } from 'decorators'
+
 @actions(({ user }) => ({
   locale: (user || {}).locale
 }))
+@platform()
 class AppRouter extends React.Component {
   componentWillReceiveProps ({ locale }) {
     const { locale: prevLocale } = this.props
     if (locale === prevLocale) { return }
     i18next.changeLanguage(locale)
+  }
+
+  componentDidMount () {
+    if (this.platform === 'ios') {
+      document.querySelector('body').classList.add('ios')
+    }
   }
 
   render () {
