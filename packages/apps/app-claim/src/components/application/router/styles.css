@@ -32,6 +32,7 @@
 }
 
 
+
 html, body {
   font-family: 'Formular-Regular', Helvetica, Arial, sans-serif;
   margin: 0px;
@@ -47,6 +48,7 @@ html, body {
 
 * {
   box-sizing: border-box;
+  font-variant-numeric: slashed-zero;
 }
 
 .application {
