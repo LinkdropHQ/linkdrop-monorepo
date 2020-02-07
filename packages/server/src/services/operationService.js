@@ -16,6 +16,7 @@ const GWEI_TO_ADD = ethers.utils.parseUnits(GWEI_ADDED_ON_RETRY || '1', 'gwei')
 class OperationService {
   async findById (id) {
     const operation = await Operation.findOne({ id })
+    console.log('operationService: ', operation)
     return operation
   }
 
@@ -39,9 +40,7 @@ class OperationService {
     await operation.save()
 
     logger.info(
-      `Operation ${operation.type} was successfully saved to database: ${
-        operation.id
-      }`
+      `Operation ${operation.type} was successfully saved to database: ${operation.id}`
     )
     return operation
   }
@@ -63,9 +62,7 @@ class OperationService {
     await operation.save()
 
     logger.info(
-      `Operation ${operation.type} was successfully updated in database: ${
-        operation.id
-      }`
+      `Operation ${operation.type} was successfully updated in database: ${operation.id}`
     )
     return operation
   }
@@ -208,9 +205,7 @@ class OperationService {
     this.trackTransaction(id, tx.hash)
 
     logger.info(
-      `Tx ${transaction.hash} was successfully saved to operation ${
-        operation.id
-      }`
+      `Tx ${transaction.hash} was successfully saved to operation ${operation.id}`
     )
     return operation
   }

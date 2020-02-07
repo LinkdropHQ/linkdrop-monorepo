@@ -1,6 +1,6 @@
 import operationService from '../src/services/operationService'
 import lastTxHashService from '../src/services/lastTxHashService'
-import connectDB from '../src/models/connectDB'
+import connectDB from '../config/db'
 import logger from '../src/utils/logger'
 import { ethers } from 'ethers'
 
