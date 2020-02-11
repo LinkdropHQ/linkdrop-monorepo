@@ -156,8 +156,7 @@ class OperationService {
           .filter(tx => tx.hash === txHash)[0]
           .toObject()
 
-        let { gasPrice, gasLimit } = transaction.params
-        logger.error(gasLimit)
+        let { gasPrice } = transaction.params
 
         // require gasPrice sent is less than max gas price
         if (

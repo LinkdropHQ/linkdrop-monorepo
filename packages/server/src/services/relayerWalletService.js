@@ -1,31 +1,26 @@
-/* eslint-disable no-undef */
-import config from '../../config/config.json'
+import configs from '../../../../configs'
 import { BigNumber } from 'bignumber.js'
+const BN = require('bn.js')
 
-const terminalSDK = require('@terminal-packages/sdk')
-
+const config = configs.get('server')
 const {
-  JSON_RPC_URL,
-  RELAYER_PRIVATE_KEY,
+  jsonRpcUrl,
+  relayerPrivateKey,
   DEFAULT_GAS_PRICE,
   MAX_GAS_PRICE,
-  CHAIN,
   K,
   C
 } = config
+
 const ethers = require('ethers')
 ethers.errors.setLogLevel('error')
 
-if (JSON_RPC_URL == null || JSON_RPC_URL === '') {
+if (jsonRpcUrl == null || jsonRpcUrl === '') {
   throw new Error('Please provide json rpc url')
 }
 
-if (RELAYER_PRIVATE_KEY == null || RELAYER_PRIVATE_KEY === '') {
+if (relayerPrivateKey == null || relayerPrivateKey === '') {
   throw new Error('Please provide relayer private key')
-}
-
-if (CHAIN == null || CHAIN === '') {
-  throw new Error('Please provide chain')
 }
 
 class AutoNonceWallet extends ethers.Wallet {
@@ -43,16 +38,9 @@ class AutoNonceWallet extends ethers.Wallet {
 
 class RelayerWalletService {
   constructor () {
-    this.provider = new ethers.providers.Web3Provider(
-      new terminalSDK.TerminalHttpProvider({
-        host: JSON_RPC_URL,
-        apiKey: config.TERMINAL_API_KEY,
-        projectId: config.TERMINAL_PROJECT_ID,
-        source: terminalSDK.SourceType.Infura
-      })
-    )
-    this.relayerWallet = new AutoNonceWallet(RELAYER_PRIVATE_KEY, this.provider)
-    this.chain = CHAIN
+    this.provider = new ethers.providers.JsonRpcProvider(jsonRpcUrl)
+    // this.relayerWallet = new AutoNonceWallet(relayerPrivateKey, this.provider)
+    this.relayerWallet = new ethers.Wallet(relayerPrivateKey, this.provider)
   }
 
   async getGasPrice () {
@@ -67,20 +55,22 @@ class RelayerWalletService {
         currentGasPrice = currentGasPrice.plus(
           BigNumber(ethers.utils.parseUnits(C, 'gwei'))
         )
-        currentGasPrice = ethers.utils.bigNumberify(currentGasPrice.toString())
+        currentGasPrice = ethers.utils.bigNumberify(
+          currentGasPrice.toFixed(0).toString()
+        )
       }
 
-      gasPrice = Math.min(
-        currentGasPrice,
-        ethers.utils.parseUnits(MAX_GAS_PRICE, 'gwei')
+      gasPrice = BN.min(
+        new BN(currentGasPrice.toString()),
+        new BN(ethers.utils.parseUnits(MAX_GAS_PRICE, 'gwei').toString())
       )
     } else {
-      gasPrice = Math.min(
-        ethers.utils.parseUnits(DEFAULT_GAS_PRICE, 'gwei'),
-        ethers.utils.parseUnits(MAX_GAS_PRICE, 'gwei')
+      gasPrice = BN.min(
+        new BN(ethers.utils.parseUnits(DEFAULT_GAS_PRICE, 'gwei').toString()),
+        new BN(ethers.utils.parseUnits(MAX_GAS_PRICE, 'gwei').toString())
       )
     }
-    return gasPrice
+    return ethers.utils.bigNumberify(gasPrice.toString())
   }
 }
 
