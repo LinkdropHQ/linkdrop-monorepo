@@ -14,6 +14,12 @@
     "query-string": "^6.4.2",
     "terminal-kit": "^1.28.0"
   },
+  "scripts": {
+    "load-test": "npx artillery run src/load-test/load-test.json -o src/load-test/load-test-res.json"
+  },
+  "devDependencies": {
+    "artillery": "^1.6.0-29"
+  },
   "babel": {
     "extends": "../babel.config.js"
   },

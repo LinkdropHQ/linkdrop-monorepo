@@ -1,0 +1,43 @@
+{
+  "config": {
+    "target": "http://localhost:5000",
+    "phases": [
+      {
+        "name": "Active claim phase",
+        "duration": 120,
+        "arrivalRate": 10
+      }
+    ],
+    "payload": {
+      "path": "./claim-params.csv",
+      "fields": [
+        "linkParams",
+        "signerSignature",
+        "receiverAddress",
+        "receiverSignature",
+        "linkdropContractAddress"
+      ],
+      "order": "sequence",
+      "skipHeader": true,
+      "cast": false
+    }
+  },
+  "scenarios": [
+    {
+      "flow": [
+        {
+          "post": {
+            "url": "/api/v1/linkdrops/claim",
+            "json": {
+              "linkParams": "{{linkParams}}",
+              "signerSignature": "{{signerSignature}}",
+              "receiverAddress": "{{receiverAddress}}",
+              "receiverSignature": "{{receiverSignature}}",
+              "linkdropContractAddress": "{{linkdropContractAddress}}"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

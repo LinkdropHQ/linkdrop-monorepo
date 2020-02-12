@@ -2,6 +2,14 @@ import claimService from '../services/claimService'
 
 // POST
 export const claim = async (req, res) => {
+  if (
+    req.body.linkParams &&
+    typeof req.body.linkParams !== 'object' &&
+    typeof req.body.linkParams === 'string'
+  ) {
+    req.body.linkParams = JSON.parse(req.body.linkParams)
+  }
+
   // claim transaction
   const txHash = await claimService.claim(req.body)
 

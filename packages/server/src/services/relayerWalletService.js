@@ -39,8 +39,8 @@ class AutoNonceWallet extends ethers.Wallet {
 class RelayerWalletService {
   constructor () {
     this.provider = new ethers.providers.JsonRpcProvider(jsonRpcUrl)
-    // this.relayerWallet = new AutoNonceWallet(relayerPrivateKey, this.provider)
-    this.relayerWallet = new ethers.Wallet(relayerPrivateKey, this.provider)
+    this.relayerWallet = new AutoNonceWallet(relayerPrivateKey, this.provider)
+    // this.relayerWallet = new ethers.Wallet(relayerPrivateKey, this.provider)
   }
 
   async getGasPrice () {

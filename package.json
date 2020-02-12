@@ -37,7 +37,8 @@
     "build:sdk": "babel packages/sdk/src -d packages/sdk/dist",
     "retry-transaction": "npx babel-node packages/server/tasks/retry_transaction.js",
     "retry-operation": "npx babel-node packages/server/tasks/retry_operation.js",
-    "send-tx-for-operation": "npx babel-node packages/server/tasks/send-tx-for-operation.js"
+    "send-tx-for-operation": "npx babel-node packages/server/tasks/send-tx-for-operation.js",
+    "load-test": "cd packages/scripts && yarn load-test"
   },
   "standard": {
     "parser": "babel-eslint"

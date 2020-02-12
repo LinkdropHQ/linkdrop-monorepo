@@ -88,21 +88,30 @@ export const getLinkNumber = maxNumber => {
   return number
 }
 
-// const JSON_RPC_URL = getString('jsonRpcUrl')
-// const HOST = getString('host')
-// const LINKDROP_MASTER_PRIVATE_KEY = getString('linkdropMasterPrivateKey')
-// const LINKDROP_FACTORY_ADDRESS = getString('factory')
-// const WEI_AMOUNT = getInt('weiAmount')
-// const LINKS_NUMBER = getInt('linksNumber')
-// const LINKDROP_MASTER_COPY_VERSION = getInt('version')
-// const LINKDROP_MASTER_COPY_ADDRESS = getString('masterCopy')
-// const CHAIN_ID = getInt('chainId')
-// const EXPIRATION_TIME = getExpirationTime()
-// const IS_APPROVE = getBool('isApprove')
-// const TOKEN_ADDRESS = getString('tokenAddress')
-// const TOKEN_AMOUNT = getInt('tokenAmount')
-// const NFT_ADDRESS = getString('nftAddress')
-// const NFT_IDS = getString('nftIds')
-// const PROVIDER = getProvider()
-// const LINKDROP_MASTER_WALLET = getLinkdropMasterWallet()
-// const INIT_CODE = getInitCode()
+export class LinkParams {
+  constructor ({
+    token,
+    nft,
+    feeToken,
+    feeReceiver,
+    linkId,
+    nativeTokensAmount,
+    tokensAmount,
+    tokenId,
+    feeAmount,
+    expiration,
+    data
+  }) {
+    this.token = token
+    this.nft = nft
+    this.feeToken = feeToken
+    this.feeReceiver = feeReceiver
+    this.linkId = linkId
+    this.nativeTokensAmount = nativeTokensAmount
+    this.tokensAmount = tokensAmount
+    this.tokenId = tokenId
+    this.feeAmount = feeAmount
+    this.expiration = expiration
+    this.data = data
+  }
+}
