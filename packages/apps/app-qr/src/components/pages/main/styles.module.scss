@@ -1,0 +1,52 @@
+@import "variables";
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  text-align: center;
+  max-width: 360px;
+  width: 100%;
+  margin: 0 auto;
+  position: relative;
+}
+
+
+.title {
+	font-size: 30px;
+	font-family: 'Inter-Bold';
+	margin-bottom: 16px;
+	text-align: center;
+}
+
+.subtitle {
+	font-size: 30px;
+	text-align: center;
+	margin-bottom: 60px;
+}
+
+.qrCode {
+	width: 250px;
+	height: 250px;
+	margin-bottom: 20px;
+	border: 1px solid $dbBlue;
+	border-radius: 5px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.scan {
+	margin-bottom: 90px;
+	font-size: 20px;
+	text-align: center;
+	color: $dbBlue;
+}
+
+.startSurvey {
+	color: $textGreyColor;
+	font-size: 20px;
+	text-align: center;
+}
+
