@@ -39,9 +39,7 @@ class OperationService {
     await operation.save()
 
     logger.info(
-      `Operation ${operation.type} was successfully saved to database: ${
-        operation.id
-      }`
+      `Operation ${operation.type} was successfully saved to database: ${operation.id}`
     )
     return operation
   }
@@ -63,9 +61,7 @@ class OperationService {
     await operation.save()
 
     logger.info(
-      `Operation ${operation.type} was successfully updated in database: ${
-        operation.id
-      }`
+      `Operation ${operation.type} was successfully updated in database: ${operation.id}`
     )
     return operation
   }
@@ -160,8 +156,6 @@ class OperationService {
           .toObject()
 
         let { gasPrice, gasLimit } = transaction.params
-        console.log('!@#$@!#$@#!$!@#$@!#$!@#$!@#$@')
-        logger.error(gasLimit)
 
         // require gasPrice sent is less than max gas price
         if (
@@ -209,9 +203,7 @@ class OperationService {
     this.trackTransaction(id, tx.hash)
 
     logger.info(
-      `Tx ${transaction.hash} was successfully saved to operation ${
-        operation.id
-      }`
+      `Tx ${transaction.hash} was successfully saved to operation ${operation.id}`
     )
     return operation
   }

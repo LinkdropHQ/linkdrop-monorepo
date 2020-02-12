@@ -34,7 +34,7 @@ class ClaimingFinishedPage extends React.Component {
     }
   }
   render () {
-    const { chainId, dappId, hideSubscribe } = getHashVariables()
+    const { chainId, dappId, subscribe } = getHashVariables()
     const { formShow, email } = this.state
     const { transactionId, amount, wallet, symbol, transactionStatus, loading, sendDataStatus } = this.props
     return <div className={classNames(commonStyles.container, {
@@ -63,7 +63,7 @@ class ClaimingFinishedPage extends React.Component {
         }}
       />
       {this.renderDappButton({ dappId, transactionId, transactionStatus })}
-      {this.renderSubscribeForm({ hideSubscribe, wallet, email, loading, sendDataStatus, transactionId })}
+      {this.renderSubscribeForm({ subscribe, wallet, email, loading, sendDataStatus, transactionId })}
     </div>
   }
 
@@ -83,8 +83,8 @@ class ClaimingFinishedPage extends React.Component {
   }
 
 
-  renderSubscribeForm ({ hideSubscribe, email, loading, sendDataStatus, transactionId, wallet }) {
-    if (hideSubscribe) { return null }
+  renderSubscribeForm ({ subscribe, email, loading, sendDataStatus, transactionId, wallet }) {
+    if (subscribe && subscribe === 'false') { return null }
     return <div className={classNames(styles.form, {
       [styles.formLoading]: loading,
       [styles.formFinished]: sendDataStatus === 'success',
