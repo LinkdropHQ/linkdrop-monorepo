@@ -27,7 +27,7 @@ class WalletChoosePage extends React.Component {
     const { showSlider, loading } = this.state
     const { walletType, context } = this.props
     const { platform } = this
-    const { w = 'trust', chainId } = getHashVariables()
+    const { w = 'trust', chainId, mw } = getHashVariables()
     if (walletType && walletType != null) {
       return this.renderWalletInstruction({ walletType })
     } else {
@@ -42,7 +42,7 @@ class WalletChoosePage extends React.Component {
         </div>
         <div className={styles.title}>{this.t('titles.needWallet')}</div>
         {button}
-        {this.renderSlider({ walletType })}
+        {this.renderSlider({ walletType, mw })}
       </div>
     }
   }
@@ -170,7 +170,8 @@ class WalletChoosePage extends React.Component {
     </Button>
   }
 
-  renderSlider ({ walletType }) {
+  renderSlider ({ walletType, mw }) {
+    if (mw && mw === 'false') { return null }
     const { platform } = this
     return <Slider
       t={this.t}
