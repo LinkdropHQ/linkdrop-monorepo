@@ -14,5 +14,9 @@
   "portis": {
     "name": "Portis",
     "link": "https://wallet.portis.io/login"
+  },
+  "pooltogether-fortmatic": {
+    "name": "PoolTogether",
+    "link": "https://app.pooltogether.com/en/deposit/Dai?numTickets=1&fortmatic=1"
   }
 }
