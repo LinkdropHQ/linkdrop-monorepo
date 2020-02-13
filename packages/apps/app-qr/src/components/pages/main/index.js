@@ -41,6 +41,7 @@ class Main extends React.Component {
   componentDidMount () {
     const { email } = getHashVariables()
     if (!email) {
+      alert(this.t('errors.EMAIL_SHOULD_BE_PROVIDED'))
       return this.actions().user.setError({ error: 'EMAIL_SHOULD_BE_PROVIDED' })
     }
     this.actions().user.generateLink({ email })
