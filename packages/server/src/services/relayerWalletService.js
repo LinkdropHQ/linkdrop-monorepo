@@ -1,5 +1,6 @@
 import configs from '../../../../configs'
 import { BigNumber } from 'bignumber.js'
+const BN = require('bn.js')
 
 const config = configs.get('server')
 const {
@@ -53,20 +54,22 @@ class RelayerWalletService {
         currentGasPrice = currentGasPrice.plus(
           BigNumber(ethers.utils.parseUnits(C, 'gwei'))
         )
-        currentGasPrice = ethers.utils.bigNumberify(currentGasPrice.toString())
+        currentGasPrice = ethers.utils.bigNumberify(
+          currentGasPrice.toFixed(0).toString()
+        )
       }
 
-      gasPrice = Math.min(
-        currentGasPrice,
-        ethers.utils.parseUnits(MAX_GAS_PRICE, 'gwei')
+      gasPrice = BN.min(
+        new BN(currentGasPrice.toString()),
+        new BN(ethers.utils.parseUnits(MAX_GAS_PRICE, 'gwei').toString())
       )
     } else {
-      gasPrice = Math.min(
-        ethers.utils.parseUnits(DEFAULT_GAS_PRICE, 'gwei'),
-        ethers.utils.parseUnits(MAX_GAS_PRICE, 'gwei')
+      gasPrice = BN.min(
+        new BN(ethers.utils.parseUnits(DEFAULT_GAS_PRICE, 'gwei').toString()),
+        new BN(ethers.utils.parseUnits(MAX_GAS_PRICE, 'gwei').toString())
       )
     }
-    return gasPrice
+    return ethers.utils.bigNumberify(gasPrice.toString())
   }
 }
 
