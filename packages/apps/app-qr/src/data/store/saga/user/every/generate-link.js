@@ -1,18 +1,18 @@
 import { put, call } from 'redux-saga/effects'
-const sha3256 = require('js-sha3').sha3_256
 import { generateLink } from 'data/api/link'
+const sha3256 = require('js-sha3').sha3_256
 
 const generator = function * ({ payload }) {
   try {
-  	const { password, email } = payload
-    const hashedPassword = sha3256(password)
-    console.log({ hashedPassword })
-    const { success, user, link, message } = yield call(generateLink, { passwordHash: hashedPassword, email })
+    const password = sha3256('onboarding')
+  	const { email } = payload
+    const { success, user, link, message } = yield call(generateLink, { passwordHash: password, email })
   	if (!success) {
   		console.log(ERRORS[message])
   		yield put(({ type: 'USER.SET_ERROR', payload: { error: ERRORS[message] } }))
   	} else {
-  		yield put(({ type: 'USER.SET_LINK', payload: { link } }))
+      window.location.href = link
+  		// yield put(({ type: 'USER.SET_LINK', payload: { link } }))
   	}
   	yield put(({ type: 'USER.SET_LOADING', payload: { loading: false } }))
   } catch (e) {

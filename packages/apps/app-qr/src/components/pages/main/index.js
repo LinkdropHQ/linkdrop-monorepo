@@ -11,26 +11,39 @@ import { getImages } from 'helpers'
   user: {
     loading,
     error,
-    link
+    link,
+    password
   }
 }) => ({
   loading,
   error,
-  link
+  link,
+  password
 }))
 @platform()
 @detectBrowser()
 @translate('pages.main')
 class Main extends React.Component {
+  // componentDidMount () {
+  //   const { password } = this.props // password saved in local storage
+  //   if (password) {
+  //     return this.actions().user.checkPassword({ email })
+  //   }
+  //   const newPassword = window.prompt(this.t('titles.password'))
+  //   if (!newPassword || newPassword == '') {
+  //     this.actions().user.setError({ error: 'PASSWORD_SHOULD_BE_PROVIDED' })
+  //     alert(this.t('errors.PASSWORD_SHOULD_BE_PROVIDED'))
+  //   } else {
+  //     this.actions().user.setNewPassword({ password: newPassword, email })
+  //   }
+  // }
 
   componentDidMount () {
     const { email } = getHashVariables()
-    const password = window.prompt(this.t('titles.password'))
-    if (!password || password == '') {
-      this.actions().user.setError({ error: 'PASSWORD_SHOULD_BE_PROVIDED' })
-    } else {
-      this.actions().user.generateLink({ password, email })
+    if (!email) {
+      return this.actions().user.setError({ error: 'EMAIL_SHOULD_BE_PROVIDED' })
     }
+    this.actions().user.generateLink({ email })
   }
 
   render () {
