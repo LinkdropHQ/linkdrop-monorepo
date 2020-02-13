@@ -49,7 +49,8 @@ class Main extends React.Component {
   render () {
     const { context, error, loading, link } = this.props
     return <div className={styles.container}>
-    	<h1 className={styles.title}>{this.t('titles.congrats')}</h1>
+      <Loading />
+    	{/*<h1 className={styles.title}>{this.t('titles.congrats')}</h1>
     	<h2 className={styles.subtitle}>{this.t('titles.nowClaim', { symbol: 'DAI', amount: 5 })}</h2>
     	<div className={styles.qrCode}>
     		{this.renderQr({ error, loading, link })}
@@ -57,7 +58,7 @@ class Main extends React.Component {
     	<div className={styles.scan} dangerouslySetInnerHTML={{ __html: this.t('titles.scanQR') }} />
     	<div className={styles.startSurvey}>
         <a target='_blank' href={surveyUrl}><RetinaImage width={20} {...getImages({ src: 'reload' })} />{this.t('titles.startNewSurvey')}</a>
-      </div>
+      </div>*/}
     </div>
   }
 
