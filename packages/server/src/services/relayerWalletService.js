@@ -1,11 +1,17 @@
 import configs from '../../../../configs'
+import { BigNumber } from 'bignumber.js'
+const BN = require('bn.js')
+
 const config = configs.get('server')
 const {
   jsonRpcUrl,
   relayerPrivateKey,
   DEFAULT_GAS_PRICE,
-  MAX_GAS_PRICE
+  MAX_GAS_PRICE,
+  K,
+  C
 } = config
+
 const ethers = require('ethers')
 ethers.errors.setLogLevel('error')
 
@@ -40,17 +46,30 @@ class RelayerWalletService {
     let gasPrice
 
     if (!DEFAULT_GAS_PRICE || DEFAULT_GAS_PRICE === 'auto') {
-      gasPrice = Math.min(
-        await this.provider.getGasPrice(),
-        ethers.utils.parseUnits(MAX_GAS_PRICE, 'gwei')
+      let currentGasPrice = await this.provider.getGasPrice()
+
+      if (K != null && K !== '' && C != null && C !== '') {
+        currentGasPrice = BigNumber(currentGasPrice)
+        currentGasPrice = currentGasPrice.multipliedBy(BigNumber(K))
+        currentGasPrice = currentGasPrice.plus(
+          BigNumber(ethers.utils.parseUnits(C, 'gwei'))
+        )
+        currentGasPrice = ethers.utils.bigNumberify(
+          currentGasPrice.toFixed(0).toString()
+        )
+      }
+
+      gasPrice = BN.min(
+        new BN(currentGasPrice.toString()),
+        new BN(ethers.utils.parseUnits(MAX_GAS_PRICE, 'gwei').toString())
       )
     } else {
-      gasPrice = Math.min(
-        ethers.utils.parseUnits(DEFAULT_GAS_PRICE, 'gwei'),
-        ethers.utils.parseUnits(MAX_GAS_PRICE, 'gwei')
+      gasPrice = BN.min(
+        new BN(ethers.utils.parseUnits(DEFAULT_GAS_PRICE, 'gwei').toString()),
+        new BN(ethers.utils.parseUnits(MAX_GAS_PRICE, 'gwei').toString())
       )
     }
-    return gasPrice
+    return ethers.utils.bigNumberify(gasPrice.toString())
   }
 }
 

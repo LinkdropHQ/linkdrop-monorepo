@@ -11,7 +11,7 @@ import CommonInstruction from './common-instruction'
 import DeepLinkInstruction from './deep-link-instruction'
 import connectors from 'components/application/connectors'
 
-@actions(({ user: { walletType }, deeplinks: { coinbaseLink } }) => ({ walletType, coinbaseLink }))
+@actions(({ user: { walletType } }) => ({ walletType }))
 @translate('pages.main')
 @platform()
 class WalletChoosePage extends React.Component {
@@ -25,13 +25,13 @@ class WalletChoosePage extends React.Component {
 
   render () {
     const { showSlider, loading } = this.state
-    const { walletType, coinbaseLink, context } = this.props
+    const { walletType, context } = this.props
     const { platform } = this
-    const { w = 'trust' } = getHashVariables()
+    const { w = 'trust', chainId, mw } = getHashVariables()
     if (walletType && walletType != null) {
       return this.renderWalletInstruction({ walletType })
     } else {
-      const button = this.defineButton({ platform, coinbaseLink, w, context, loading })
+      const button = this.defineButton({ chainId, platform, w, context, loading })
       return <div className={classNames(commonStyles.container, styles.container, {
         [styles.sliderShow]: showSlider,
         [styles.sliderHide]: showSlider === false
@@ -42,17 +42,22 @@ class WalletChoosePage extends React.Component {
         </div>
         <div className={styles.title}>{this.t('titles.needWallet')}</div>
         {button}
-        {this.renderSlider({ walletType })}
+        {this.renderSlider({ walletType, mw })}
       </div>
     }
   }
 
-  defineButton ({ platform, coinbaseLink, w, context, loading }) {
+  defineButton ({ platform, w, context, loading, chainId }) {
     if (platform === 'desktop') { return null }
 
     if (w !== 'fortmatic' && w !== 'portis') {
       const buttonTitle = getWalletData({ wallet: w }).name
-      const buttonLink = getWalletLink({ coinbaseLink, platform, wallet: w, currentUrl: window.location.href })
+      if (w === 'coinbase') {
+        return <Button onClick={_ => this.actions().deeplinks.getCoinbaseLink({ chainId })} className={styles.button}>
+          {this.t('buttons.useWallet', { wallet: buttonTitle })}
+        </Button>
+      }
+      const buttonLink = getWalletLink({ platform, wallet: w, currentUrl: window.location.href })
       return <Button href={buttonLink} target='_blank' className={styles.button}>
         {this.t('buttons.useWallet', { wallet: buttonTitle })}
       </Button>
@@ -117,7 +122,8 @@ class WalletChoosePage extends React.Component {
   }
 
   renderInstructionButton ({ walletType }) {
-    const { coinbaseLink, context } = this.props
+    const { chainId } = getHashVariables()
+    const { context } = this.props
     const { loading } = this.state
     const { platform } = this
     switch (walletType) {
@@ -127,12 +133,17 @@ class WalletChoosePage extends React.Component {
         return this.renderConnectorButton({ context, loading, connector: 'Portis' })
       case 'trust':
       case 'imtoken':
-      case 'coinbase':
       case 'status':
       case 'opera': {
         const buttonTitle = getWalletData({ wallet: walletType }).name
-        const buttonLink = getWalletLink({ platform, wallet: walletType, currentUrl: window.location.href, coinbaseLink })
+        const buttonLink = getWalletLink({ platform, wallet: walletType, currentUrl: window.location.href })
         return <Button href={platform !== 'desktop' && buttonLink} className={styles.button}>
+          {buttonTitle}
+        </Button>
+      }
+      case 'coinbase': {
+        const buttonTitle = getWalletData({ wallet: walletType }).name
+        return <Button onClick={_ => this.actions().deeplinks.getCoinbaseLink({ chainId })} className={styles.button}>
           {buttonTitle}
         </Button>
       }
@@ -159,7 +170,8 @@ class WalletChoosePage extends React.Component {
     </Button>
   }
 
-  renderSlider ({ walletType }) {
+  renderSlider ({ walletType, mw }) {
+    if (mw && mw === 'false') { return null }
     const { platform } = this
     return <Slider
       t={this.t}
