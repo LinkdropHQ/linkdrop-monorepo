@@ -18,5 +18,9 @@
   "pooltogether-fortmatic": {
     "name": "PoolTogether",
     "link": "https://app.pooltogether.com/en/deposit/Dai?numTickets=1&fortmatic=1"
+  }, 
+  "staked": {
+    "name": "Staked RAY",
+    "link": "https://staked.us/v/robo-advisor-yield"
   }
 }
