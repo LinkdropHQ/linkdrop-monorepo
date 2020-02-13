@@ -1,4 +1,4 @@
-/* global API_HOST */
+/* global API_HOST, SURVEY_URL */
 
 let config
 try {
@@ -7,8 +7,10 @@ try {
   config = {}
 }
 
-const apiHost = API_HOST || String(config.apiHost)
+const apiHost = API_HOST || String(config.qrApiHost)
+const surveyUrl = SURVEY_URL || String(config.surveyUrl)
 
 module.exports = {
-  apiHost
+  apiHost,
+  surveyUrl
 }

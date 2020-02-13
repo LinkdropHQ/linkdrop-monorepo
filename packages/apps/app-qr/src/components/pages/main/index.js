@@ -1,25 +1,61 @@
 import React from 'react'
-import { Loading } from '@linkdrop/ui-kit'
+import { Loading, RetinaImage } from '@linkdrop/ui-kit'
 import { actions, translate, platform, detectBrowser } from 'decorators'
 import styles from './styles.module'
 import QRCode from 'qrcode.react'
+import { surveyUrl } from 'app.config.js'
+import { getHashVariables } from '@linkdrop/commons'
+import { getImages } from 'helpers'
 
-@actions(({}) => ({}))
+@actions(({
+  user: {
+    loading,
+    error,
+    link
+  }
+}) => ({
+  loading,
+  error,
+  link
+}))
 @platform()
 @detectBrowser()
 @translate('pages.main')
 class Main extends React.Component {
+
+  componentDidMount () {
+    const { email } = getHashVariables()
+    const password = window.prompt(this.t('titles.password'))
+    if (!password || password == '') {
+      this.actions().user.setError({ error: 'PASSWORD_SHOULD_BE_PROVIDED' })
+    } else {
+      this.actions().user.generateLink({ password, email })
+    }
+  }
+
   render () {
-    const { context } = this.props
-    return <div>
+    const { context, error, loading, link } = this.props
+    return <div className={styles.container}>
     	<h1 className={styles.title}>{this.t('titles.congrats')}</h1>
     	<h2 className={styles.subtitle}>{this.t('titles.nowClaim', { symbol: 'DAI', amount: 5 })}</h2>
     	<div className={styles.qrCode}>
-    		<QRCode value='http://google.com' size={220} />
+    		{this.renderQr({ error, loading, link })}
     	</div>
     	<div className={styles.scan} dangerouslySetInnerHTML={{ __html: this.t('titles.scanQR') }} />
-    	<div className={styles.startSurvey}>{this.t('titles.startNewSurvey')}</div>
+    	<div className={styles.startSurvey}>
+        <a target='_blank' href={surveyUrl}><RetinaImage width={20} {...getImages({ src: 'reload' })} />{this.t('titles.startNewSurvey')}</a>
+      </div>
     </div>
+  }
+
+  renderQr ({ error, loading, link }) {
+    if (error) {
+      return this.t(`errors.${error}`)
+    }
+    if (loading) {
+      return <Loading />
+    }
+    return <QRCode value={link} size={220} />
   }
 }
 

@@ -24,6 +24,7 @@
 	font-size: 30px;
 	text-align: center;
 	margin-bottom: 60px;
+	margin-top: 0px;
 }
 
 .qrCode {
@@ -35,6 +36,7 @@
 	display: flex;
 	align-items: center;
 	justify-content: center;
+	padding: 15px;
 }
 
 .scan {
@@ -45,8 +47,19 @@
 }
 
 .startSurvey {
-	color: $textGreyColor;
 	font-size: 20px;
 	text-align: center;
+
+	img {
+		margin-right: 6px;
+	}
+
+	a {
+		color: $textGreyColor;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		text-decoration: none;
+	}
 }
 

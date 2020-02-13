@@ -3,12 +3,12 @@ class User {
     this.actions = actions
   }
 
-  checkPassword ({ password }) {
-    this.actions.dispatch({ type: '*USER.CHECK_PASSWORD', payload: { password } })
+  generateLink ({ password, email }) {
+    this.actions.dispatch({ type: '*USER.GENERATE_LINK', payload: { password, email } })
   }
 
-  generateLink () {
-    this.actions.dispatch({ type: '*USER.GENERATE_LINK' })
+  setError ({ error }) {
+  	this.actions.dispatch({ type: 'USER.SET_ERROR', payload: { error } })
   }
 }
 

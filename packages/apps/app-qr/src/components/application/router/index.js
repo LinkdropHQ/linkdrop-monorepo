@@ -4,6 +4,7 @@ import { Route, Switch } from 'react-router-dom'
 import { Main, Page, NotFound } from 'components/pages'
 import './styles'
 
+
 import { history } from 'data/store'
 import { HashRouter } from 'react-router-dom'
 import { ConnectedRouter } from 'connected-react-router'

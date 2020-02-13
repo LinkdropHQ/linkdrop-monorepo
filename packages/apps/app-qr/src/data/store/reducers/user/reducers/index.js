@@ -1,7 +1,11 @@
 import changeLocale from './change-locale'
-import setErrors from './set-errors'
+import setError from './set-error'
+import setLoading from './set-loading'
+import setLink from './set-link'
 
 export default {
   changeLocale,
-  setErrors
+  setError,
+  setLoading,
+  setLink
 }

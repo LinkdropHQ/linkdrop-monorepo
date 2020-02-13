@@ -117,6 +117,7 @@ module.exports = {
     }),
     new webpack.DefinePlugin({
       API_HOST: JSON.stringify(process.env.API_HOST),
+      SURVEY_URL: JSON.stringify(process.env.SURVEY_URL),
       'process.env': {
         NODE_ENV: JSON.stringify(process.env.NODE_ENV || 'development')
       }
