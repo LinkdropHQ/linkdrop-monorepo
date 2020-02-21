@@ -3,13 +3,13 @@
     "name": "PoolTogether", 
     "link": "https://app.pooltogether.com/en/account"
   },
-  "superrare": {
-    "name": "SuperRare",
-    "link": "https://superrare.co"
-  },
   "gfs": {
   	"name": "GXF",
   	"link": "https://www.giselflorez.com/p/gxf-art-coin-set"
+  },
+  "superrare": {
+    "name": "SuperRare",
+    "link": "https://superrare.co"
   },
   "portis": {
     "name": "Portis",
