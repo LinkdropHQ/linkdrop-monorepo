@@ -1,8 +1,9 @@
 import operationService from '../src/services/operationService'
 import logger from '../src/utils/logger'
 import { ethers } from 'ethers'
-import claimService from '../src/services/claimService'
-import connectDB from '../config/db'
+import claimService from '../src/services/claimServices/claimServiceERC20'
+import connectDB from '../src/models/connectDB'
+
 
 const getOperationId = () => {
   const args = process.argv.slice(2)
