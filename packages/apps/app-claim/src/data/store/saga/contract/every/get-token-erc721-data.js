@@ -4,6 +4,7 @@ import { ethers } from 'ethers'
 import NFTMock from '@linkdrop/contracts/build/NFTMock.json'
 import { defineJsonRpcUrl } from '@linkdrop/commons'
 import { infuraPk, jsonRpcUrlXdai } from 'app.config.js'
+import { removeNonAscii } from './helpers'
 
 const getImage = function * ({ metadataURL, nftAddress, tokenId, chainId }) {
   try {
@@ -61,7 +62,7 @@ const generator = function * ({ payload }) {
     const metadataURL = yield getContractData({ tokenId, nftContract })
     const name = yield getSymbol({ nftContract, nftAddress, tokenId, chainId })
     if (metadataURL !== '') {
-      image = yield getImage({ metadataURL, nftAddress, tokenId, chainId })
+      image = yield getImage({ metadataURL: removeNonAscii({ url: metadataURL }), nftAddress, tokenId, chainId })
     }
     yield put({ type: 'CONTRACT.SET_SYMBOL', payload: { symbol: linkFromName || name } })
 
