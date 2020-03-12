@@ -1,0 +1,23 @@
+{
+  "language": "Solidity",
+  "sources": {
+    "Linkdrop.sol": {
+      "urls": ["./contracts/Linkdrop.sol"]
+    }
+  },
+  "settings": {
+    "optimizer": {
+      "enabled": true,
+      "runs": 200,
+      "details": {
+        "yul": true
+      },
+      "evmVersion": "istanbul",
+      "outputSelection": {
+        "*": {
+          "*": ["metadata", "evm.bytecode"]
+        }
+      }
+    }
+  }
+}
