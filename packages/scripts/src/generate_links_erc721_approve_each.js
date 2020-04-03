@@ -1,6 +1,5 @@
 import NFTMock from '../../contracts/build/NFTMock'
 import LinkdropSDK from '@linkdrop/sdk'
-
 import ora from 'ora'
 import { terminal as term } from 'terminal-kit'
 import { ethers } from 'ethers'
@@ -31,6 +30,7 @@ const LINKDROP_MASTER_WALLET = getLinkdropMasterWallet()
 const CAMPAIGN_ID = getInt('CAMPAIGN_ID')
 const FACTORY_ADDRESS = getString('FACTORY_ADDRESS')
 const DEFAULT_WALLET = getString('DEFAULT_WALLET')
+const GAS_PRICE = getString('GAS_PRICE', false)
 
 const GAS_FEE = ethers.utils.parseUnits('0.002')
 
@@ -55,8 +55,8 @@ export const generate = async () => {
 
     const proxyAddress = linkdropSDK.getProxyAddress(CAMPAIGN_ID)
 
-    console.log({ proxyAddress })
-    
+    const gasPrice = GAS_PRICE ? ethers.utils.parseUnits(String(GAS_PRICE), 'gwei') : null
+        
     // check that proxy address is deployed
     await deployProxyIfNeeded(spinner)
 
@@ -82,11 +82,20 @@ export const generate = async () => {
           term.bold.str(`Approving tokenId ${tokenId} to ^g${proxyAddress}`)
         )
 
-        tx = await nftContract.approve(proxyAddress, tokenId, {
-          gasLimit: 400000
-        })
+        const txOpts = {
+          gasLimit: 400000,
+          gasPrice
+        }
+
+        tx = await nftContract.approve(proxyAddress, tokenId, txOpts)
+
         
-        term.bold(`Tx Hash: ^g${tx.hash}\n`)
+        term.bold(`Pending Tx Hash: ^g${tx.hash}\n`)
+        
+        // wait for transaction to be mined
+        await tx.wait()
+        term.bold(`Tx mined!\n`)
+
       } else {
         console.log(`TokenId ${tokenId} is not owned by ${LINKDROP_MASTER_WALLET.address}`)
       }
@@ -114,10 +123,15 @@ export const generate = async () => {
         tx = await LINKDROP_MASTER_WALLET.sendTransaction({
           to: proxyAddress,
           value: amountToSend,
-          gasLimit: 23000
+          gasLimit: 23000,
+          gasPrice
         })
+        
+        term.bold(`Pending Tx Hash: ^g${tx.hash}\n`)
 
-        term.bold(`Tx Hash: ^g${tx.hash}\n`)
+        // wait for transaction to be mined
+        await tx.wait()
+        term.bold(`Tx mined!\n`)        
       }
     }
 
@@ -128,11 +142,16 @@ export const generate = async () => {
     tx = await LINKDROP_MASTER_WALLET.sendTransaction({
       to: proxyAddress,
       value: FEE_COSTS,
-      gasLimit: 23000
+      gasLimit: 23000,
+      gasPrice
     })
 
-    term.bold(`Tx Hash: ^g${tx.hash}\n`)
-
+    term.bold(`Pending Tx Hash: ^g${tx.hash}\n`)
+    
+    // wait for transaction to be mined
+    await tx.wait()
+    term.bold(`Tx mined!\n`)
+    
     // Generate links
     const links = []
 
