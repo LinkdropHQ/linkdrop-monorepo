@@ -11,8 +11,8 @@ export const newError = message => {
   return error
 }
 
-export const getString = key => {
-  if (config[key] == null || config[key] === '') {
+export const getString = (key, required = true)  => {
+  if (required && (config[key] == null || config[key] === '')) {
     throw newError(`Please provide ${key}`)
   }
 
