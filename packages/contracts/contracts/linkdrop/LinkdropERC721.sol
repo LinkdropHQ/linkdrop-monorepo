@@ -117,9 +117,6 @@ contract LinkdropERC721 is ILinkdropERC721, LinkdropCommon {
         // Make sure linkdrop master is owner of token
         require(IERC721(_nftAddress).ownerOf(_tokenId) == linkdropMaster, "LINKDROP_MASTER_DOES_NOT_OWN_TOKEN_ID");
 
-        // Make sure nft is available for this contract
-        require(IERC721(_nftAddress).isApprovedForAll(linkdropMaster, address(this)), "INSUFFICIENT_ALLOWANCE");
-
         // Verify that link key is legit and signed by linkdrop signer's private key
         require
         (
@@ -238,7 +235,7 @@ contract LinkdropERC721 is ILinkdropERC721, LinkdropCommon {
         }
 
         // Transfer NFT
-        IERC721(_nftAddress).safeTransferFrom(linkdropMaster, _receiver, _tokenId);
+        IERC721(_nftAddress).transferFrom(linkdropMaster, _receiver, _tokenId);
 
         return true;
     }
