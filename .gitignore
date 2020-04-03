@@ -10,7 +10,6 @@ newrelic_agent.log
 node_modules/
 .DS_Store
 other/
-build/
 packages/scripts/output
 
 # Configs
