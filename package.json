@@ -17,6 +17,8 @@
     "generate-links-eth": "npx babel-node packages/scripts/src/generate_links_eth.js",
     "generate-links-erc20": "npx babel-node packages/scripts/src/generate_links_erc20.js",
     "generate-links-erc721": "npx babel-node packages/scripts/src/generate_links_erc721.js",
+    "generate-links-erc721-approve-each": "npx babel-node packages/scripts/src/generate_links_erc721_approve_each.js",    
+    "get-report": "npx babel-node packages/scripts/src/generate_campaign_report.js",
     "claim-eth": "npx babel-node packages/scripts/src/claim_eth.js",
     "claim-erc20": "npx babel-node packages/scripts/src/claim_erc20.js",
     "claim-erc721": "npx babel-node packages/scripts/src/claim_erc721.js",
