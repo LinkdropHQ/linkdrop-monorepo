@@ -70,20 +70,26 @@ export const generate = async () => {
     // If owner of tokenId is not proxy contract -> send it to proxy
     const tokenIds = JSON.parse(NFT_IDS)
 
-    // Approve tokens
-    const isApprovedForAll = await nftContract.isApprovedForAll(
-      LINKDROP_MASTER_WALLET.address,
-      proxyAddress
-    )
-    if (!isApprovedForAll) {
-      spinner.info(
-        term.bold.str(`Approving all ${nftSymbol} to ^g${proxyAddress}`)
-      )
+    for (let i = 0; i < tokenIds.length; i++) {
+      let tokenId = tokenIds[i]
+      // Approve tokens
+      let ownerAddress = await nftContract.ownerOf(tokenId)      
+      let isOwner = ownerAddress === LINKDROP_MASTER_WALLET.address
+      
+      if (isOwner) {
+        
+        spinner.info(
+          term.bold.str(`Approving tokenId ${tokenId} to ^g${proxyAddress}`)
+        )
 
-      tx = await nftContract.setApprovalForAll(proxyAddress, true, {
-        gasLimit: 500000
-      })
-      term.bold(`Tx Hash: ^g${tx.hash}\n`)
+        tx = await nftContract.approve(proxyAddress, tokenId, {
+          gasLimit: 400000
+        })
+        
+        term.bold(`Tx Hash: ^g${tx.hash}\n`)
+      } else {
+        console.log(`TokenId ${tokenId} is not owned by ${LINKDROP_MASTER_WALLET.address}`)
+      }
     }
 
     if (WEI_AMOUNT.gt(0)) {
@@ -146,7 +152,7 @@ export const generate = async () => {
         wallet: DEFAULT_WALLET
       })
 
-      const link = { i, linkId, linkKey, linkdropSignerSignature, url }
+      const link = { url }
       links.push(link)
     }
 
