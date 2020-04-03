@@ -1,4 +1,4 @@
-import NFTMock from '../../contracts/build/NFTMock'
+import NFTMock from '../../contracts/build/ERC721'
 import LinkdropSDK from '@linkdrop/sdk'
 import ora from 'ora'
 import { terminal as term } from 'terminal-kit'
@@ -65,7 +65,6 @@ export const generate = async () => {
       NFTMock.abi,
       LINKDROP_MASTER_WALLET
     )
-    const nftSymbol = await nftContract.symbol()
 
     // If owner of tokenId is not proxy contract -> send it to proxy
     const tokenIds = JSON.parse(NFT_IDS)
