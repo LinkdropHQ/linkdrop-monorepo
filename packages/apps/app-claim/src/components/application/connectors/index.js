@@ -27,12 +27,6 @@ const Network = new NetworkConnector({
   defaultChainId: Number(chainId)
 })
 
-const Fortmatic = new FortmaticConnector({
-  apiKey: Number(chainId) === 1 ? formaticApiKeyMainnet : formaticApiKeyTestnet,
-  logoutOnDeactivation: true,
-  chainId: Number(chainId)
-})
-
 const Portis = new PortisConnector({
   dAppId: portisDappId,
   networks: [Number(chainId)]
@@ -41,9 +35,16 @@ const Portis = new PortisConnector({
 const connectors = {
   Metamask,
   Network,
-  Fortmatic,
   Portis
 }
 
-export default connectors
+if (supportedNetworkURLs[Number(chainId)]) {
+  const Fortmatic = new FortmaticConnector({
+    apiKey: Number(chainId) === 1 ? formaticApiKeyMainnet : formaticApiKeyTestnet,
+    logoutOnDeactivation: true,
+    chainId: Number(chainId)
+  })  
+  connectors.Fortmatic = Fortmatic
+}
 
+export default connectors
