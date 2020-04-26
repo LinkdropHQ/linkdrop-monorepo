@@ -2,6 +2,7 @@ import { put, select } from 'redux-saga/effects'
 import { delay } from 'redux-saga'
 import { utils } from 'ethers'
 import configs from 'config-dashboard'
+import wallets from 'wallets'
 import { convertFromExponents } from '@linkdrop/commons'
 
 const generator = function * ({ payload }) {
@@ -20,6 +21,11 @@ const generator = function * ({ payload }) {
     )
     const privateKey = yield select(generator.selectors.privateKey)
     const tokenAddress = yield select(generator.selectors.tokenAddress)
+
+    if (defaultWallet === 'burner2') {
+      sdk.claimHost = wallets[defaultWallet].walletURL
+    }
+    
     const link = yield sdk.generateLink({
       signingKeyOrWallet: privateKey,
       weiAmount: weiAmount || 0,

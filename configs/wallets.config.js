@@ -3,11 +3,18 @@ const _withoutProtocol = (url) => url.replace(/(^\w+:|^)\/\//, '')
 export default {
   fortmatic: {
     id: 'fortmatic',
-    name: 'Fortmatic'
+    name: 'Fortmatic',
+    chains: ['1']
   },
+  metamask: {
+    id: 'metamask',
+    name: 'Metamask',
+    chains: ['100']
+  },  
   portis: {
     id: 'portis',
-    name: 'Portis'
+    name: 'Portis',
+    chains: ['1', '2']
   },
   trust: {
     id: 'trust',
@@ -23,7 +30,8 @@ export default {
         support: true,
         deepLink: (url) => `https://link.trustwallet.com/open_url?coin_id=60&url=${encodeURIComponent(url)}`
       }
-    }
+    },
+    chains: ['1']
   },
   opera: {
     id: 'opera',
@@ -40,7 +48,8 @@ export default {
         support: true,
         deepLink: (url) => `https://operacrypto.page.link/?link=${encodeURIComponent(url)}&efr=1&ibi=com.opera.OperaTouch&isi=1411869974`
       }
-    }
+    },
+    chains: ['1', '3', '4']
   },
   status: {
     id: 'status',
@@ -56,7 +65,8 @@ export default {
         support: true,
         deepLink: url => `https://get.status.im/browse/${_withoutProtocol(url)}`
       }
-    }
+    },
+    chains: ['1', '3', '4']
   },
   tokenpocket: {
     id: 'token_pocket',
@@ -72,7 +82,8 @@ export default {
         support: true,
         deepLink: url => `https://tokenpocket.github.io/applink?dappUrl=${encodeURIComponent(url)}`
       }
-    }
+    },
+    chains: ['1', '3', '4']
   },
   coinbase: {
     id: 'coinbase_wallet',
@@ -88,7 +99,8 @@ export default {
         support: false,
         deepLink: (url) => null
       }
-    }
+    },
+    chains: ['1', '3', '4']
   },
   imtoken: {
     id: 'imtoken',
@@ -106,7 +118,8 @@ export default {
         deepLink: url =>
           `imtokenv2://navigate/DappView?url=${encodeURIComponent(url)}`
       }
-    }
+    },
+    chains: ['1', '3', '4']
   },
   gowallet: {
     id: 'gowallet',
@@ -122,7 +135,8 @@ export default {
         support: false,
         deepLink: (url) => null
       }
-    }
+    },
+    chains: ['1', '3', '4']
   },
   buntoy: {
     id: 'buntoy',
@@ -138,6 +152,24 @@ export default {
         support: false,
         deepLink: (url) => null
       }
-    }
+    },
+    chains: ['1', '3', '4']
+  },
+  burner2: {
+    id: 'burner2',
+    name: 'Burner Wallet 2',
+    walletURL: 'https://linkdrop-test.burnerfactory.com/linkdrop',
+    dappStoreUrl: null,
+    mobile: {
+      android: {
+        support: false,
+        deepLink: (url) => null
+      },
+      ios: {
+        support: false,
+        deepLink: (url) => null
+      }
+    },
+    chains: ['100']
   }
 }

@@ -2,6 +2,7 @@ import { put, select } from 'redux-saga/effects'
 import { delay } from 'redux-saga'
 import { ethers, utils } from 'ethers'
 import configs from 'config-dashboard'
+import wallets from 'wallets'
 import { convertFromExponents } from '@linkdrop/commons'
 
 const generator = function * ({ payload }) {
@@ -14,6 +15,11 @@ const generator = function * ({ payload }) {
     const defaultWallet = yield select(generator.selectors.defaultWallet)
     const ethersContractZeroAddress = ethers.constants.AddressZero
     const campaignId = yield select(generator.selectors.campaignId)
+
+    if (defaultWallet === 'burner2') {
+      sdk.claimHost = wallets[defaultWallet].walletURL
+    }
+    
     const link = yield sdk.generateLink({
       signingKeyOrWallet: privateKey,
       weiAmount,
