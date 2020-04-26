@@ -2,6 +2,7 @@ import React from 'react'
 import { actions, translate } from 'decorators'
 import styles from './styles.module'
 import classNames from 'classnames'
+import { getHashVariables } from '@linkdrop/commons'
 import { Select, PageHeader, PageLoader, NFTToken } from 'components/common'
 import { TokenAddressInput, LinksContent, NextButton, AddEthField, EthTexts } from 'components/pages/common'
 import config from 'config-dashboard'
@@ -9,6 +10,8 @@ import AllTokensControl from './all-tokens-control'
 import Immutable from 'immutable'
 import { defineDefaultSymbol } from 'helpers'
 import wallets from 'wallets'
+
+const WALLET_IDS = ['trust', 'coinbase', 'opera', 'status', 'imtoken', 'gowallet', 'buntoy', 'tokenpocket', 'fortmatic', 'portis']
 
 @actions(({
   user: {
@@ -45,32 +48,35 @@ class Step1 extends React.Component {
     super(props)
     const { chainId } = this.props
     const assetsPrepared = this.prepareAssets({ assets: props.assetsERC721 })
-    const currentAsset = props.assetsERC721.find(asset => asset.address === assetsPrepared[0].value)
     this.defaultSymbol = defineDefaultSymbol({ chainId })
-    this.WALLETS = this.createWalletOptions()
+    this.WALLETS = this.createWalletOptions()    
+    let { wallet = WALLET_IDS[0] } = getHashVariables()
+
+    wallet = WALLET_IDS.find(w => w === wallet) || WALLET_IDS[0]
+    
     this.state = {
       options: assetsPrepared,
       ethAmount: 0,
-      tokenAddress: currentAsset && currentAsset.address,
-      currentIds: currentAsset ? currentAsset.ids : [],
+      tokenAddress: null, // currentAsset && currentAsset.address,
+      currentIds: [], // currentAsset ? currentAsset.ids : [],
       customTokenAddress: '',
       addEth: false,
-      wallet: this.WALLETS[0].value
+      wallet
     }
   }
 
   createWalletOptions () {
-    return (['trust', 'coinbase', 'opera', 'status', 'imtoken', 'gowallet', 'buntoy', 'tokenpocket', 'fortmatic', 'portis']).map(wallet => {
+    return WALLET_IDS.map(wallet => {
       const label = wallets[wallet].name
       return {
-        label: wallet === 'trust' ? `Default: ${label}` : label,
+        label: wallet === WALLET_IDS[0] ? `Default: ${label}` : label,
         value: wallet
       }
     })
   }
 
   componentDidMount () {
-    const { currentAddress, chainId, proxyAddress, items } = this.props
+    const { currentAddress, proxyAddress, items } = this.props
     if (!proxyAddress) {
       this.actions().campaigns.createProxyAddress({ campaignId: items.length })
     }
@@ -81,7 +87,15 @@ class Step1 extends React.Component {
     const { assetsERC721: prevAssets } = this.props
     if (assets != null && assets.length > 0 && !Immutable.fromJS(assets).equals(Immutable.fromJS(prevAssets))) {
       const assetsPrepared = this.prepareAssets({ assets })
-      const currentAsset = assets.find(asset => asset.address === assetsPrepared[0].value)
+      // get current asset from url
+      const { nftAddress = '0x0' } = getHashVariables()
+      let currentAsset = assets.find(asset => asset.address.toLowerCase() === nftAddress.toLowerCase())
+      console.log({ currentAsset })
+      
+      // if not present use the furst one
+      currentAsset = currentAsset || assets.find(asset => asset.address === assetsPrepared[0].value)
+      console.log({ currentAsset })
+
       this.setState({
         options: assetsPrepared,
         tokenAddress: currentAsset.address,
