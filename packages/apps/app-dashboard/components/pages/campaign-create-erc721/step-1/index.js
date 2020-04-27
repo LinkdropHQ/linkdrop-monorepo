@@ -88,18 +88,21 @@ class Step1 extends React.Component {
     if (assets != null && assets.length > 0 && !Immutable.fromJS(assets).equals(Immutable.fromJS(prevAssets))) {
       const assetsPrepared = this.prepareAssets({ assets })
       // get current asset from url
-      const { nftAddress = '0x0' } = getHashVariables()
+      let { nftAddress = '0x0', tokenIds } = getHashVariables()
       let currentAsset = assets.find(asset => asset.address.toLowerCase() === nftAddress.toLowerCase())
       console.log({ currentAsset })
       
       // if not present use the furst one
       currentAsset = currentAsset || assets.find(asset => asset.address === assetsPrepared[0].value)
-      console.log({ currentAsset })
 
+      // get tokenids from params if present
+      // if not set all ids owned by user
+      tokenIds = tokenIds ? tokenIds.split(',').filter(id => currentAsset.ids.find(id_ => id === id_)) : currentAsset.ids
+      
       this.setState({
         options: assetsPrepared,
         tokenAddress: currentAsset.address,
-        currentIds: currentAsset.ids
+        currentIds: tokenIds
       }, _ => {
         this.actions().tokens.setTokenERC721Data({ address: currentAsset.address })
       })
