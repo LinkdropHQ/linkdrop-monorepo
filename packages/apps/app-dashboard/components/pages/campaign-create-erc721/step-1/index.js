@@ -94,13 +94,10 @@ class Step1 extends React.Component {
       
       // if not present use the furst one
       currentAsset = currentAsset || assets.find(asset => asset.address === assetsPrepared[0].value)
-      console.log({ currentAsset })     
 
-      console.log({ ids: currentAsset.ids })
-
+      // get tokenids from params if present
+      // if not set all ids owned by user
       tokenIds = tokenIds ? tokenIds.split(',').filter(id => currentAsset.ids.find(id_ => id === id_)) : currentAsset.ids
-
-      console.log({ tokenIds })
       
       this.setState({
         options: assetsPrepared,
