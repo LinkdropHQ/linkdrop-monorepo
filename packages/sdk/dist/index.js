@@ -46,6 +46,8 @@ function () {
         factoryAddress = _ref.factoryAddress,
         _ref$chain = _ref.chain,
         chain = _ref$chain === void 0 ? 'mainnet' : _ref$chain,
+        _ref$chainId = _ref.chainId,
+        chainId = _ref$chainId === void 0 ? getChainId(chain) : _ref$chainId,
         _ref$jsonRpcUrl = _ref.jsonRpcUrl,
         jsonRpcUrl = _ref$jsonRpcUrl === void 0 ? getJsonRpcUrl(chain) : _ref$jsonRpcUrl,
         _ref$apiHost = _ref.apiHost,
@@ -62,14 +64,10 @@ function () {
       throw new Error('Please provide factory address');
     }
 
-    if (chain !== 'mainnet' && chain !== 'ropsten' && chain !== 'rinkeby' && chain !== 'goerli' && chain !== 'kovan' && chain !== 'xdai') {
-      throw new Error('Unsupported chain');
-    }
-
     this.senderAddress = senderAddress;
     this.factoryAddress = factoryAddress;
     this.chain = chain;
-    this.chainId = getChainId(chain);
+    this.chainId = chainId;
     this.jsonRpcUrl = jsonRpcUrl;
     this.apiHost = apiHost;
     this.claimHost = claimHost;
@@ -641,7 +639,7 @@ function getChainId(chain) {
       return 100;
 
     default:
-      return null;
+      throw new Error('Unsupported chain, please specify chainId explicitly');
   }
 }
 

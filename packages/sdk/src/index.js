@@ -15,7 +15,8 @@ class LinkdropSDK {
   constructor ({
     senderAddress,
     factoryAddress,
-    chain = 'mainnet', // rinkeby
+    chain = 'mainnet',
+    chainId = getChainId(chain),
     jsonRpcUrl = getJsonRpcUrl(chain),
     apiHost = `https://${chain}.linkdrop.io`,
     claimHost = 'https://claim-v2.linkdrop.io'
@@ -28,21 +29,10 @@ class LinkdropSDK {
       throw new Error('Please provide factory address')
     }
 
-    if (
-      chain !== 'mainnet' &&
-      chain !== 'ropsten' &&
-      chain !== 'rinkeby' &&
-      chain !== 'goerli' &&
-      chain !== 'kovan' &&
-      chain !== 'xdai'
-    ) {
-      throw new Error('Unsupported chain')
-    }
-
     this.senderAddress = senderAddress
     this.factoryAddress = factoryAddress
     this.chain = chain
-    this.chainId = getChainId(chain)
+    this.chainId = chainId
     this.jsonRpcUrl = jsonRpcUrl
     this.apiHost = apiHost
     this.claimHost = claimHost
@@ -326,7 +316,7 @@ function getChainId (chain) {
     case 'xdai':
       return 100
     default:
-      return null
+      throw new Error('Unsupported chain, please specify chainId explicitly')
   }
 }
 
