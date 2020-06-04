@@ -1,11 +1,11 @@
 {
   "name": "@linkdrop/scripts",
-  "version": "2.1.5-alpha.0",
+  "version": "2.1.6-alpha.0",
   "main": "index.js",
   "license": "MIT",
   "private": true,
   "dependencies": {
-    "@linkdrop/sdk": "^2.1.5-alpha.0",
+    "@linkdrop/sdk": "^2.1.6-alpha.0",
     "axios": "^0.18.0",
     "csvtojson": "^2.0.8",
     "fast-csv": "^2.4.1",
