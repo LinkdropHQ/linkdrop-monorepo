@@ -639,7 +639,8 @@ function getChainId(chain) {
       return 100;
 
     default:
-      throw new Error('Unsupported chain, please specify chainId explicitly');
+      console.warn('Unsupported chain, you should explicitly specify chain id');
+      return undefined;
   }
 }
 
