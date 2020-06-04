@@ -1,8 +1,6 @@
 import { ethers } from 'ethers'
 import { AddressZero } from 'ethers/constants'
 
-import Wallet from 'ethereumjs-wallet'
-
 // Turn off annoying warnings
 ethers.errors.setLogLevel('error')
 
@@ -261,12 +259,17 @@ export const signReceiverAddress = async (linkKey, receiverAddress) => {
  * Function to generate new account
  * @return {Object} `{address, privateKey}`
  */
+
 export const generateAccount = () => {
-  const wallet = Wallet.generate()
-  const address = wallet.getChecksumAddressString()
-  const privateKey = wallet.getPrivateKeyString()
-  return { address, privateKey }
+  const wallet = ethers.Wallet.createRandom()
+  return { address: wallet.address, privateKey: wallet.privateKey }
 }
+// export const generateAccount = () => {
+//   const wallet = Wallet.generate()
+//   const address = wallet.getChecksumAddressString()
+//   const privateKey = wallet.getPrivateKeyString()
+//   return { address, privateKey }
+// }
 
 export const encodeParams = (abi, method, params) => {
   return new ethers.utils.Interface(abi).functions[method].encode([...params])

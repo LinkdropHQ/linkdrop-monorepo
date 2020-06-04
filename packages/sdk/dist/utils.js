@@ -332,15 +332,19 @@ function () {
 exports.signReceiverAddress = signReceiverAddress;
 
 var generateAccount = function generateAccount() {
-  var wallet = _ethereumjsWallet["default"].generate();
+  var wallet = _ethers.ethers.Wallet.createRandom();
 
-  var address = wallet.getChecksumAddressString();
-  var privateKey = wallet.getPrivateKeyString();
   return {
-    address: address,
-    privateKey: privateKey
+    address: wallet.address,
+    privateKey: wallet.privateKey
   };
-};
+}; // export const generateAccount = () => {
+//   const wallet = Wallet.generate()
+//   const address = wallet.getChecksumAddressString()
+//   const privateKey = wallet.getPrivateKeyString()
+//   return { address, privateKey }
+// }
+
 
 exports.generateAccount = generateAccount;
 
