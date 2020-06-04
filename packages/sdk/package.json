@@ -12,6 +12,7 @@
   "dependencies": {
     "@linkdrop/contracts": "^2.1.6-alpha.0",
     "axios": "^0.18.1",
+    "ethereumjs-wallet": "^0.6.3",
     "ethers": "^4.0.27"
   },
   "gitHead": "b5ffc97bd0389a1303b908dc510fe45aa84375da"
