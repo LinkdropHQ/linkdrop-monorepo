@@ -316,7 +316,7 @@ function getChainId (chain) {
     case 'xdai':
       return 100
     default:
-      throw new Error('Unsupported chain, please specify chainId explicitly')
+      return undefined
   }
 }
 

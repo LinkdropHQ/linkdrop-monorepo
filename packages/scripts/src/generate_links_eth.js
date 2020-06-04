@@ -15,6 +15,7 @@ const {
   NATIVE_TOKENS_AMOUNT,
   SENDER_PRIVATE_KEY,
   CHAIN,
+  CHAIN_ID,
   FACTORY_ADDRESS,
   LINKS_NUMBER,
   CAMPAIGN_ID,
@@ -32,7 +33,7 @@ const sender = new ethers.Wallet(SENDER_PRIVATE_KEY, provider)
 
 const linkdropSDK = new LinkdropSDK({
   senderAddress: sender.address,
-  chain: CHAIN,
+  chainId: CHAIN_ID,
   jsonRpcUrl: JSON_RPC_URL,
   factoryAddress: FACTORY_ADDRESS
 })

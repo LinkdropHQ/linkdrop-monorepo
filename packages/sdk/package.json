@@ -1,6 +1,6 @@
 {
   "name": "@linkdrop/sdk",
-  "version": "2.1.3-alpha.0",
+  "version": "2.1.4-alpha.0",
   "main": "dist/index.js",
   "license": "MIT",
   "publishConfig": {
@@ -10,9 +10,9 @@
     "extends": "../babel.config.js"
   },
   "dependencies": {
-    "@linkdrop/contracts": "^2.1.3-alpha.0",
+    "@linkdrop/contracts": "^2.1.4-alpha.0",
     "axios": "^0.18.1",
     "ethers": "^4.0.27"
   },
-  "gitHead": "414d0e9ecca3fab72be5820c3046207b0b5415b2"
+  "gitHead": "b5ffc97bd0389a1303b908dc510fe45aa84375da"
 }
