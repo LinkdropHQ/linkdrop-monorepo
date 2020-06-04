@@ -2,11 +2,12 @@ import configs from '../../../../configs'
 import { BigNumber } from 'bignumber.js'
 const BN = require('bn.js')
 
-const config = configs.get('server')
+import config from '../../config/config.json'
+
 const {
-  jsonRpcUrl,
-  relayerPrivateKey,
+  JSON_RPC_URL,
   DEFAULT_GAS_PRICE,
+  RELAYER_PRIVATE_KEY,
   MAX_GAS_PRICE,
   K,
   C
@@ -15,11 +16,11 @@ const {
 const ethers = require('ethers')
 ethers.errors.setLogLevel('error')
 
-if (jsonRpcUrl == null || jsonRpcUrl === '') {
+if (JSON_RPC_URL == null || JSON_RPC_URL === '') {
   throw new Error('Please provide json rpc url')
 }
 
-if (relayerPrivateKey == null || relayerPrivateKey === '') {
+if (RELAYER_PRIVATE_KEY == null || RELAYER_PRIVATE_KEY === '') {
   throw new Error('Please provide relayer private key')
 }
 
@@ -38,8 +39,8 @@ class AutoNonceWallet extends ethers.Wallet {
 
 class RelayerWalletService {
   constructor () {
-    this.provider = new ethers.providers.JsonRpcProvider(jsonRpcUrl)
-    this.relayerWallet = new AutoNonceWallet(relayerPrivateKey, this.provider)
+    this.provider = new ethers.providers.JsonRpcProvider(JSON_RPC_URL)
+    this.relayerWallet = new AutoNonceWallet(RELAYER_PRIVATE_KEY, this.provider)
     // this.relayerWallet = new ethers.Wallet(relayerPrivateKey, this.provider)
   }
 

@@ -20,6 +20,7 @@ class LinkdropService {
       Linkdrop.abi,
       relayerWalletService.relayerWallet
     )
+
     return linkdropContract.checkClaimParams(
       linkParams,
       signerSignature,

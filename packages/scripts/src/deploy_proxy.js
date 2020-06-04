@@ -39,6 +39,7 @@ const deployProxyIfNeeded = async spinner => {
       sender
     )
     const tx = await factoryContract.deployProxy(CAMPAIGN_ID)
+
     if (spinner) {
       spinner.info(term.bold.str(`Tx hash: ^g${tx.hash}`))
     }
