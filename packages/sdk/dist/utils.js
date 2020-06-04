@@ -19,8 +19,6 @@ var _ethers = require("ethers");
 
 var _constants = require("ethers/constants");
 
-var _ethereumjsWallet = _interopRequireDefault(require("ethereumjs-wallet"));
-
 // Turn off annoying warnings
 _ethers.ethers.errors.setLogLevel('error');
 
