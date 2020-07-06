@@ -3,8 +3,6 @@ import { prepareGetParams } from 'data/api/helpers'
 import { openSeaApiKey } from 'app.config.js'
 
 export default ({ address, networkName, orderBy = 'current_price', direction = 'asc', page = 0 }) => {
-  // hardcode
-  address = '0xCa00141010B1E63b7a2374C7dF17c81253282C5E'
   const getParams = prepareGetParams({
     owner: address,
     order_by: orderBy,
