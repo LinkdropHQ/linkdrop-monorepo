@@ -80,7 +80,11 @@ class Step1 extends React.Component {
     if (!proxyAddress) {
       this.actions().campaigns.createProxyAddress({ campaignId: items.length })
     }
-    this.actions().tokens.getERC721Assets({ currentAddress })
+
+    let { page = 0 } = getHashVariables()
+    page = Number(page)
+    if (!page) page = 0
+    this.actions().tokens.getERC721Assets({ currentAddress, page })
   }
 
   componentWillReceiveProps ({ assetsERC721: assets }) {
