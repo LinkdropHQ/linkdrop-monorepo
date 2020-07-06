@@ -105,6 +105,7 @@ module.exports = {
       JSON_RPC_URL_XDAI: JSON.stringify(process.env.JSON_RPC_URL_XDAI),
       INFURA_PK: JSON.stringify(process.env.INFURA_PK),
       CLAIM_HOST: JSON.stringify(process.env.CLAIM_HOST),
+      OPENSEA_API_KEY: JSON.stringify(process.env.OPENSEA_API_KEY),
       PORTIS_DAPP_ID: JSON.stringify(process.env.PORTIS_DAPP_ID),
       FORMATIC_API_KEY_TESTNET: JSON.stringify(process.env.FORMATIC_API_KEY_TESTNET),
       FORMATIC_API_KEY_MAINNET: JSON.stringify(process.env.FORMATIC_API_KEY_MAINNET),
