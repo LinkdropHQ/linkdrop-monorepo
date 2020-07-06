@@ -53,10 +53,10 @@ const getTokenData = function * ({ tokenId, address, name, provider, imagePrevie
 const generator = function * ({ payload }) {
   try {
     yield put({ type: 'TOKENS.SET_LOADING', payload: { loading: true } })
-    const { currentAddress } = payload
+    const { currentAddress, page } = payload
     const chainId = yield select(generator.selectors.chainId)
     const networkName = defineNetworkName({ chainId })
-    const { assets } = yield call(getERC721Items, { address: currentAddress, networkName })
+    const { assets } = yield call(getERC721Items, { address: currentAddress, networkName, page })
     if (assets) {
       const actualJsonRpcUrl = defineJsonRpcUrl({ chainId, infuraPk, jsonRpcUrlXdai })
       const provider = yield new ethers.providers.JsonRpcProvider(actualJsonRpcUrl)

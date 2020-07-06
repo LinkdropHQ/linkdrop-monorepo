@@ -7,8 +7,8 @@ class Tokens {
     this.actions.dispatch({ type: '*TOKENS.GET_ASSETS', payload: { currentAddress } })
   }
 
-  getERC721Assets ({ currentAddress }) {
-    this.actions.dispatch({ type: '*TOKENS.GET_ERC721_ASSETS', payload: { currentAddress } })
+  getERC721Assets ({ currentAddress, page }) {
+    this.actions.dispatch({ type: '*TOKENS.GET_ERC721_ASSETS', payload: { currentAddress, page } })
   }
 
   getTokenERC20Data ({ tokenAddress, chainId }) {
