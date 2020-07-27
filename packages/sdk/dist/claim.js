@@ -20,12 +20,8 @@ var axios = require('axios'); // Turn off annoying warnings
 
 ethers.errors.setLogLevel('error');
 
-var claim =
-/*#__PURE__*/
-function () {
-  var _ref2 = (0, _asyncToGenerator2["default"])(
-  /*#__PURE__*/
-  _regenerator["default"].mark(function _callee(_ref) {
+var claim = /*#__PURE__*/function () {
+  var _ref2 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee(_ref) {
     var jsonRpcUrl, apiHost, weiAmount, tokenAddress, tokenAmount, expirationTime, version, chainId, linkKey, linkdropMasterAddress, linkdropSignerSignature, receiverAddress, factoryAddress, campaignId, provider, receiverSignature, linkId, claimParams, response, _response$data, error, errors, success, txHash;
 
     return _regenerator["default"].wrap(function _callee$(_context) {
@@ -199,12 +195,8 @@ function () {
 
 exports.claim = claim;
 
-var claimERC721 =
-/*#__PURE__*/
-function () {
-  var _ref4 = (0, _asyncToGenerator2["default"])(
-  /*#__PURE__*/
-  _regenerator["default"].mark(function _callee2(_ref3) {
+var claimERC721 = /*#__PURE__*/function () {
+  var _ref4 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee2(_ref3) {
     var jsonRpcUrl, apiHost, weiAmount, nftAddress, tokenId, expirationTime, version, chainId, linkKey, linkdropMasterAddress, linkdropSignerSignature, receiverAddress, factoryAddress, campaignId, provider, receiverSignature, linkId, claimParams, response, _response$data2, error, errors, success, txHash;
 
     return _regenerator["default"].wrap(function _callee2$(_context2) {
@@ -378,12 +370,8 @@ function () {
 
 exports.claimERC721 = claimERC721;
 
-var getLinkStatus =
-/*#__PURE__*/
-function () {
-  var _ref6 = (0, _asyncToGenerator2["default"])(
-  /*#__PURE__*/
-  _regenerator["default"].mark(function _callee3(_ref5) {
+var getLinkStatus = /*#__PURE__*/function () {
+  var _ref6 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee3(_ref5) {
     var apiHost, linkdropMasterAddress, linkId, response;
     return _regenerator["default"].wrap(function _callee3$(_context3) {
       while (1) {
@@ -412,12 +400,8 @@ function () {
 
 exports.getLinkStatus = getLinkStatus;
 
-var cancelLink =
-/*#__PURE__*/
-function () {
-  var _ref8 = (0, _asyncToGenerator2["default"])(
-  /*#__PURE__*/
-  _regenerator["default"].mark(function _callee4(_ref7) {
+var cancelLink = /*#__PURE__*/function () {
+  var _ref8 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee4(_ref7) {
     var apiHost, linkdropMasterAddress, linkId, response, _response$data3, error, errors, success, claimOperation;
 
     return _regenerator["default"].wrap(function _callee4$(_context4) {

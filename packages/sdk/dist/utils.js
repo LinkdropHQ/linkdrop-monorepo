@@ -56,12 +56,8 @@ var computeProxyAddress = function computeProxyAddress(factoryAddress, linkdropM
 
 exports.computeProxyAddress = computeProxyAddress;
 
-var createLink =
-/*#__PURE__*/
-function () {
-  var _ref2 = (0, _asyncToGenerator2["default"])(
-  /*#__PURE__*/
-  _regenerator["default"].mark(function _callee(_ref) {
+var createLink = /*#__PURE__*/function () {
+  var _ref2 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee(_ref) {
     var linkdropSigner, weiAmount, tokenAddress, tokenAmount, expirationTime, version, chainId, proxyAddress, _generateAccount, linkId, linkKey, linkdropSignerSignature;
 
     return _regenerator["default"].wrap(function _callee$(_context) {
@@ -110,12 +106,8 @@ function () {
 
 exports.createLink = createLink;
 
-var signLink =
-/*#__PURE__*/
-function () {
-  var _ref4 = (0, _asyncToGenerator2["default"])(
-  /*#__PURE__*/
-  _regenerator["default"].mark(function _callee2(_ref3) {
+var signLink = /*#__PURE__*/function () {
+  var _ref4 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee2(_ref3) {
     var linkdropSigner, weiAmount, tokenAddress, tokenAmount, expirationTime, version, chainId, linkId, proxyAddress, messageHash, messageHashToSign, signature;
     return _regenerator["default"].wrap(function _callee2$(_context2) {
       while (1) {
@@ -147,12 +139,8 @@ function () {
 
 exports.signLink = signLink;
 
-var createLinkERC721 =
-/*#__PURE__*/
-function () {
-  var _ref6 = (0, _asyncToGenerator2["default"])(
-  /*#__PURE__*/
-  _regenerator["default"].mark(function _callee3(_ref5) {
+var createLinkERC721 = /*#__PURE__*/function () {
+  var _ref6 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee3(_ref5) {
     var linkdropSigner, weiAmount, nftAddress, tokenId, expirationTime, version, chainId, proxyAddress, _generateAccount2, linkId, linkKey, linkdropSignerSignature;
 
     return _regenerator["default"].wrap(function _callee3$(_context3) {
@@ -201,12 +189,8 @@ function () {
 
 exports.createLinkERC721 = createLinkERC721;
 
-var signLinkERC721 =
-/*#__PURE__*/
-function () {
-  var _ref8 = (0, _asyncToGenerator2["default"])(
-  /*#__PURE__*/
-  _regenerator["default"].mark(function _callee4(_ref7) {
+var signLinkERC721 = /*#__PURE__*/function () {
+  var _ref8 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee4(_ref7) {
     var linkdropSigner, weiAmount, nftAddress, tokenId, expirationTime, version, chainId, linkId, proxyAddress, messageHash, messageHashToSign, signature;
     return _regenerator["default"].wrap(function _callee4$(_context4) {
       while (1) {
@@ -237,12 +221,8 @@ function () {
 
 exports.signLinkERC721 = signLinkERC721;
 
-var signReceiverAddress =
-/*#__PURE__*/
-function () {
-  var _ref9 = (0, _asyncToGenerator2["default"])(
-  /*#__PURE__*/
-  _regenerator["default"].mark(function _callee5(linkKey, receiverAddress) {
+var signReceiverAddress = /*#__PURE__*/function () {
+  var _ref9 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee5(linkKey, receiverAddress) {
     var wallet, messageHash, messageHashToSign, signature;
     return _regenerator["default"].wrap(function _callee5$(_context5) {
       while (1) {
