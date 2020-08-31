@@ -11,6 +11,7 @@ import MetamaskPopup from './metamask-popup'
 import PageLoader from './page-loader'
 import Instruction from './instruction'
 import NFTToken from './nft-token'
+import Note from './note'
 
 export {
   Aside,
@@ -25,5 +26,6 @@ export {
   MetamaskPopup,
   PageLoader,
   Instruction,
-  NFTToken
+  NFTToken,
+  Note
 }

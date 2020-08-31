@@ -4,7 +4,7 @@ import styles from './styles.module'
 import { defineDefaultSymbol } from 'helpers'
 import { ethers } from 'ethers'
 import classNames from 'classnames'
-import { Select, Input, PageHeader, PageLoader } from 'components/common'
+import { Select, Input, PageHeader, PageLoader, Note } from 'components/common'
 import config from 'config-dashboard'
 import Immutable from 'immutable'
 import wallets from 'wallets'
@@ -66,12 +66,11 @@ class Step1 extends React.Component {
       linksAmount: '0',
       addEth: false,
       tokenAddress: null,
-      wallet: this.WALLETS[0].value
+      wallet: (this.WALLETS[0] || {}).value
     }
   }
 
   createWalletOptions (chainId) {
-    console.log({ wallets })
     return (['trust', 'coinbase', 'opera', 'status', 'imtoken', 'gowallet', 'buntoy', 'tokenpocket', 'fortmatic', 'portis', 'burner2', 'metamask'])
       .filter(wallet => (wallets[wallet].chains || []).find(v => v === String(chainId)))
       .map(wallet => {
@@ -168,6 +167,7 @@ class Step1 extends React.Component {
             tokenSymbol: symbol || tokenSymbol,
             addEth
           })}
+          <Note aside text={this.t('texts.gasPriceAttention')} />
         </div>
       </div>
       <NextButton
@@ -238,17 +238,17 @@ class Step1 extends React.Component {
     if (tokenType === 'erc20') {
       if (tokenSymbol === 'ERC20') {
         if (!linksAmount || !value || !tokenAddress) {
-          return <p className={classNames(styles.text, styles.textGrey)}>{this.t('titles.fillTheField')}</p>
+          return <p className={classNames(styles.text, styles.textGrey, styles.textMargin30)}>{this.t('titles.fillTheField')}</p>
         }
       } else {
         if (!linksAmount || !value) {
-          return <p className={classNames(styles.text, styles.textGrey)}>{this.t('titles.fillTheField')}</p>
+          return <p className={classNames(styles.text, styles.textGrey, styles.textMargin30)}>{this.t('titles.fillTheField')}</p>
         }
       }
     }
     if (tokenType === 'eth') {
       if (!linksAmount || Number(linksAmount) === 0 || !value || Number(value) === 0) {
-        return <p className={classNames(styles.text, styles.textGrey)}>{this.t('titles.fillTheField')}</p>
+        return <p className={classNames(styles.text, styles.textGrey, styles.textMargin30)}>{this.t('titles.fillTheField')}</p>
       }
     }
     return <div>
@@ -256,7 +256,7 @@ class Step1 extends React.Component {
       <EthTexts ethAmount={ethAmount} linksAmount={linksAmount} />
       <LinksContent tokenAmount={tokenAmount} tokenSymbol={tokenSymbol} ethAmount={ethAmount} tokenType={tokenType} />
       <p className={styles.text} dangerouslySetInnerHTML={{ __html: this.t('titles.serviceFee', { symbol: this.defaultSymbol, price: config.linkPrice * linksAmount }) }} />
-      <p className={classNames(styles.text, styles.textGrey)} dangerouslySetInnerHTML={{ __html: this.t('titles.serviceFeePerLink', { symbol: this.defaultSymbol, price: config.linkPrice }) }} />
+      <p className={classNames(styles.text, styles.textGrey, styles.textMargin30)} dangerouslySetInnerHTML={{ __html: this.t('titles.serviceFeePerLink', { symbol: this.defaultSymbol, price: config.linkPrice }) }} />
     </div>
   }
 
