@@ -62,14 +62,6 @@ module.exports = {
   },
   module: {
     rules: [{
-      enforce: 'pre',
-      test: /\.(js|jsx)$/,
-      loader: 'standard-loader',
-      exclude: /(node_modules|bower_components|linkdrop-ui-kit)/,
-      options: {
-        parser: 'babel-eslint'
-      }
-    }, {
       test: /\.(js|jsx)$/,
       exclude: /node_modules/,
       use: {
@@ -96,6 +88,11 @@ module.exports = {
       test: /\.(png|woff|woff2|eot|ttf|svg|otf|gif)$/,
       loader: 'url-loader?limit=100000'
     }]
+  },
+  node: {
+    fs: 'empty',
+    net: 'empty',
+    tls: 'empty'
   },
   plugins: [
     new webpack.HotModuleReplacementPlugin(),

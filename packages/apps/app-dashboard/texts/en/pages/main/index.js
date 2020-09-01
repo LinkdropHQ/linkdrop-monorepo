@@ -14,8 +14,8 @@ export default {
   texts: {
     networkNotSupported: '<div>Simply open MetaMask and switch over to:</div><div><span>Main Ethereum Network</span> or <span>Test Networks:</span></div><div><span>Ropsten, Rinkeby, Kovan, Görli</span></div>',
     listOfLinks: 'List of links with encoded tokens prepared to distribute',
-    incentivizeCustomer: 'Reach out and let us know what other features you are interested in'
-
+    incentivizeCustomer: 'Reach out and let us know what other features you are interested in',
+    gasPriceAttention: '⚠️ Due to high gas prices, we can\'t guarantee that links will be claimed by receivers in time. We recommend <a target="_blank" href="mailto:hi@linkdrop.io">contacting us</a> before you setting up a new campaign so we can help with gas.'
   },
   buttons: {
     signIn: 'Sign In',

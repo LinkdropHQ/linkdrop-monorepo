@@ -9,6 +9,11 @@
   margin-right: 50px;
   max-width: 400px;
   width: 100%;
+
+
+  &:nth-child(2n) {
+    margin-right: 0px;
+  }
 }
 
 .transparent {

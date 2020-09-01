@@ -1,0 +1,23 @@
+@import "variables";
+
+.container {
+  background: rgba(0, 37, 255, .2);
+  border: 1px solid $dbBlue;
+  padding: 18px 40px;
+  color: $dbBlue;
+  position: relative;
+  border-radius: 5px;
+  margin-bottom: 30px;
+
+  &.containerAside {
+    padding: 18px 20px;
+  }
+}
+
+.close {
+  position: absolute;
+  right: 15px;
+  cursor: pointer;
+  top: 15px;
+}
+

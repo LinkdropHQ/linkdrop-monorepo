@@ -20,13 +20,9 @@ var ethers = require('ethers'); // Turn off annoying warnings
 
 ethers.errors.setLogLevel('error');
 
-var generateLink =
-/*#__PURE__*/
-function () {
-  var _ref2 = (0, _asyncToGenerator2["default"])(
-  /*#__PURE__*/
-  _regenerator["default"].mark(function _callee(_ref) {
-    var factoryAddress, chainId, claimHost, linkdropMasterAddress, signingKeyOrWallet, weiAmount, tokenAddress, tokenAmount, expirationTime, version, campaignId, wallet, linkdropSigner, proxyAddress, _ref3, linkKey, linkId, linkdropSignerSignature, url;
+var generateLink = /*#__PURE__*/function () {
+  var _ref2 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee(_ref) {
+    var factoryAddress, chainId, claimHost, linkdropMasterAddress, signingKeyOrWallet, weiAmount, tokenAddress, tokenAmount, expirationTime, version, campaignId, wallet, linkdropSigner, proxyAddress, _yield$createLink, linkKey, linkId, linkdropSignerSignature, url;
 
     return _regenerator["default"].wrap(function _callee$(_context) {
       while (1) {
@@ -142,10 +138,10 @@ function () {
             });
 
           case 27:
-            _ref3 = _context.sent;
-            linkKey = _ref3.linkKey;
-            linkId = _ref3.linkId;
-            linkdropSignerSignature = _ref3.linkdropSignerSignature;
+            _yield$createLink = _context.sent;
+            linkKey = _yield$createLink.linkKey;
+            linkId = _yield$createLink.linkId;
+            linkdropSignerSignature = _yield$createLink.linkdropSignerSignature;
             // Construct link
             url = "".concat(claimHost, "/#/receive?weiAmount=").concat(weiAmount, "&tokenAddress=").concat(tokenAddress, "&tokenAmount=").concat(tokenAmount, "&expirationTime=").concat(expirationTime, "&version=").concat(version, "&chainId=").concat(chainId, "&linkKey=").concat(linkKey, "&linkdropMasterAddress=").concat(linkdropMasterAddress, "&linkdropSignerSignature=").concat(linkdropSignerSignature, "&campaignId=").concat(campaignId);
 
@@ -175,19 +171,15 @@ function () {
 
 exports.generateLink = generateLink;
 
-var generateLinkERC721 =
-/*#__PURE__*/
-function () {
-  var _ref5 = (0, _asyncToGenerator2["default"])(
-  /*#__PURE__*/
-  _regenerator["default"].mark(function _callee2(_ref4) {
-    var factoryAddress, chainId, claimHost, linkdropMasterAddress, signingKeyOrWallet, weiAmount, nftAddress, tokenId, expirationTime, version, campaignId, wallet, linkdropSigner, proxyAddress, _ref6, linkKey, linkId, linkdropSignerSignature, url;
+var generateLinkERC721 = /*#__PURE__*/function () {
+  var _ref4 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee2(_ref3) {
+    var factoryAddress, chainId, claimHost, linkdropMasterAddress, signingKeyOrWallet, weiAmount, nftAddress, tokenId, expirationTime, version, campaignId, wallet, linkdropSigner, proxyAddress, _yield$createLinkERC, linkKey, linkId, linkdropSignerSignature, url;
 
     return _regenerator["default"].wrap(function _callee2$(_context2) {
       while (1) {
         switch (_context2.prev = _context2.next) {
           case 0:
-            factoryAddress = _ref4.factoryAddress, chainId = _ref4.chainId, claimHost = _ref4.claimHost, linkdropMasterAddress = _ref4.linkdropMasterAddress, signingKeyOrWallet = _ref4.signingKeyOrWallet, weiAmount = _ref4.weiAmount, nftAddress = _ref4.nftAddress, tokenId = _ref4.tokenId, expirationTime = _ref4.expirationTime, version = _ref4.version, campaignId = _ref4.campaignId, wallet = _ref4.wallet;
+            factoryAddress = _ref3.factoryAddress, chainId = _ref3.chainId, claimHost = _ref3.claimHost, linkdropMasterAddress = _ref3.linkdropMasterAddress, signingKeyOrWallet = _ref3.signingKeyOrWallet, weiAmount = _ref3.weiAmount, nftAddress = _ref3.nftAddress, tokenId = _ref3.tokenId, expirationTime = _ref3.expirationTime, version = _ref3.version, campaignId = _ref3.campaignId, wallet = _ref3.wallet;
 
             if (!(factoryAddress === null || factoryAddress === '')) {
               _context2.next = 3;
@@ -297,10 +289,10 @@ function () {
             });
 
           case 27:
-            _ref6 = _context2.sent;
-            linkKey = _ref6.linkKey;
-            linkId = _ref6.linkId;
-            linkdropSignerSignature = _ref6.linkdropSignerSignature;
+            _yield$createLinkERC = _context2.sent;
+            linkKey = _yield$createLinkERC.linkKey;
+            linkId = _yield$createLinkERC.linkId;
+            linkdropSignerSignature = _yield$createLinkERC.linkdropSignerSignature;
             // Construct link
             url = "".concat(claimHost, "/#/receive?weiAmount=").concat(weiAmount, "&nftAddress=").concat(nftAddress, "&tokenId=").concat(tokenId, "&expirationTime=").concat(expirationTime, "&version=").concat(version, "&chainId=").concat(chainId, "&linkKey=").concat(linkKey, "&linkdropMasterAddress=").concat(linkdropMasterAddress, "&linkdropSignerSignature=").concat(linkdropSignerSignature, "&campaignId=").concat(campaignId);
 
@@ -324,7 +316,7 @@ function () {
   }));
 
   return function generateLinkERC721(_x2) {
-    return _ref5.apply(this, arguments);
+    return _ref4.apply(this, arguments);
   };
 }();
 

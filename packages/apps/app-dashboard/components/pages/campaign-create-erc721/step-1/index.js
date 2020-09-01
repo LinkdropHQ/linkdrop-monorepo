@@ -3,7 +3,7 @@ import { actions, translate } from 'decorators'
 import styles from './styles.module'
 import classNames from 'classnames'
 import { getHashVariables } from '@linkdrop/commons'
-import { Select, PageHeader, PageLoader, NFTToken } from 'components/common'
+import { Select, PageHeader, PageLoader, NFTToken, Note } from 'components/common'
 import { TokenAddressInput, LinksContent, NextButton, AddEthField, EthTexts } from 'components/pages/common'
 import config from 'config-dashboard'
 import AllTokensControl from './all-tokens-control'
@@ -93,9 +93,7 @@ class Step1 extends React.Component {
       const assetsPrepared = this.prepareAssets({ assets })
       // get current asset from url
       let { nftAddress = '0x0', tokenIds } = getHashVariables()
-      let currentAsset = assets.find(asset => asset.address.toLowerCase() === nftAddress.toLowerCase())
-      console.log({ currentAsset })
-      
+      let currentAsset = assets.find(asset => asset.address.toLowerCase() === nftAddress.toLowerCase())      
       // if not present use the furst one
       currentAsset = currentAsset || assets.find(asset => asset.address === assetsPrepared[0].value)
 
@@ -161,6 +159,7 @@ class Step1 extends React.Component {
             tokenSymbol: symbol || tokenSymbol,
             addEth
           })}
+          <Note aside text={this.t('texts.gasPriceAttention')} />
         </div>
       </div>
       <div>
@@ -253,14 +252,14 @@ class Step1 extends React.Component {
 
   renderTexts ({ ethAmount, linksAmount, tokenAddress, tokenAmount, tokenSymbol }) {
     if (!linksAmount || !tokenAddress) {
-      return <p className={classNames(styles.text, styles.textGrey)}>{this.t('titles.fillTheField')}</p>
+      return <p className={classNames(styles.text, styles.textGrey, styles.textMargin30)}>{this.t('titles.fillTheField')}</p>
     }
     return <div>
       <p className={classNames(styles.text, styles.textMargin15)}>{linksAmount} {tokenSymbol}</p>
       <EthTexts ethAmount={ethAmount} linksAmount={linksAmount} />
       <LinksContent tokenAmount={tokenAmount} tokenSymbol={tokenSymbol} ethAmount={ethAmount} tokenType='erc721' />
       <p className={styles.text} dangerouslySetInnerHTML={{ __html: this.t('titles.serviceFee', { symbol: this.defaultSymbol, price: config.linkPrice * linksAmount }) }} />
-      <p className={classNames(styles.text, styles.textGrey)} dangerouslySetInnerHTML={{ __html: this.t('titles.serviceFeePerLink', { symbol: this.defaultSymbol, price: config.linkPrice }) }} />
+      <p className={classNames(styles.text, styles.textGrey, styles.textMargin30)} dangerouslySetInnerHTML={{ __html: this.t('titles.serviceFeePerLink', { symbol: this.defaultSymbol, price: config.linkPrice }) }} />
     </div>
   }
 
