@@ -17,12 +17,8 @@ var _LinkdropFactory = _interopRequireDefault(require("@linkdrop/contracts/build
 
 var ethers = require('ethers');
 
-var connectToFactoryContract =
-/*#__PURE__*/
-function () {
-  var _ref2 = (0, _asyncToGenerator2["default"])(
-  /*#__PURE__*/
-  _regenerator["default"].mark(function _callee(_ref) {
+var connectToFactoryContract = /*#__PURE__*/function () {
+  var _ref2 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee(_ref) {
     var jsonRpcUrl, factoryAddress, signingKeyOrWallet, provider, wallet;
     return _regenerator["default"].wrap(function _callee$(_context) {
       while (1) {
@@ -79,12 +75,8 @@ function () {
 
 exports.connectToFactoryContract = connectToFactoryContract;
 
-var deployProxy =
-/*#__PURE__*/
-function () {
-  var _ref4 = (0, _asyncToGenerator2["default"])(
-  /*#__PURE__*/
-  _regenerator["default"].mark(function _callee2(_ref3) {
+var deployProxy = /*#__PURE__*/function () {
+  var _ref4 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee2(_ref3) {
     var jsonRpcUrl, factoryAddress, signingKeyOrWallet, campaignId, weiAmount, provider, wallet, factoryContract, data;
     return _regenerator["default"].wrap(function _callee2$(_context2) {
       while (1) {

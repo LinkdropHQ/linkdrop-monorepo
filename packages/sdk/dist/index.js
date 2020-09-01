@@ -33,11 +33,10 @@ var _LinkdropFactory = _interopRequireDefault(require("@linkdrop/contracts/build
 
 var _ethers = require("ethers");
 
+// Turn off annoying warnings
 _ethers.ethers.errors.setLogLevel('error');
 
-var LinkdropSDK =
-/*#__PURE__*/
-function () {
+var LinkdropSDK = /*#__PURE__*/function () {
   function LinkdropSDK(_ref) {
     var linkdropMasterAddress = _ref.linkdropMasterAddress,
         factoryAddress = _ref.factoryAddress,
@@ -78,9 +77,7 @@ function () {
   (0, _createClass2["default"])(LinkdropSDK, [{
     key: "getVersion",
     value: function () {
-      var _getVersion = (0, _asyncToGenerator2["default"])(
-      /*#__PURE__*/
-      _regenerator["default"].mark(function _callee(campaignId) {
+      var _getVersion = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee(campaignId) {
         return _regenerator["default"].wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
@@ -116,9 +113,7 @@ function () {
   }, {
     key: "generateLink",
     value: function () {
-      var _generateLink = (0, _asyncToGenerator2["default"])(
-      /*#__PURE__*/
-      _regenerator["default"].mark(function _callee2(_ref2) {
+      var _generateLink = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee2(_ref2) {
         var signingKeyOrWallet, weiAmount, tokenAddress, tokenAmount, _ref2$expirationTime, expirationTime, campaignId, wallet;
 
         return _regenerator["default"].wrap(function _callee2$(_context2) {
@@ -186,9 +181,7 @@ function () {
   }, {
     key: "generateLinkERC721",
     value: function () {
-      var _generateLinkERC = (0, _asyncToGenerator2["default"])(
-      /*#__PURE__*/
-      _regenerator["default"].mark(function _callee3(_ref3) {
+      var _generateLinkERC = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee3(_ref3) {
         var signingKeyOrWallet, weiAmount, nftAddress, tokenId, _ref3$expirationTime, expirationTime, campaignId, wallet;
 
         return _regenerator["default"].wrap(function _callee3$(_context3) {
@@ -261,9 +254,7 @@ function () {
   }, {
     key: "claim",
     value: function () {
-      var _claim = (0, _asyncToGenerator2["default"])(
-      /*#__PURE__*/
-      _regenerator["default"].mark(function _callee4(_ref4) {
+      var _claim = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee4(_ref4) {
         var weiAmount, tokenAddress, tokenAmount, _ref4$expirationTime, expirationTime, linkKey, linkdropSignerSignature, receiverAddress, campaignId;
 
         return _regenerator["default"].wrap(function _callee4$(_context4) {
@@ -335,9 +326,7 @@ function () {
   }, {
     key: "claimERC721",
     value: function () {
-      var _claimERC = (0, _asyncToGenerator2["default"])(
-      /*#__PURE__*/
-      _regenerator["default"].mark(function _callee5(_ref5) {
+      var _claimERC = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee5(_ref5) {
         var weiAmount, nftAddress, tokenId, _ref5$expirationTime, expirationTime, linkKey, linkdropSignerSignature, receiverAddress, campaignId;
 
         return _regenerator["default"].wrap(function _callee5$(_context5) {
@@ -409,9 +398,7 @@ function () {
   }, {
     key: "topup",
     value: function () {
-      var _topup = (0, _asyncToGenerator2["default"])(
-      /*#__PURE__*/
-      _regenerator["default"].mark(function _callee6(_ref6) {
+      var _topup = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee6(_ref6) {
         var signingKeyOrWallet, proxyAddress, weiAmount;
         return _regenerator["default"].wrap(function _callee6$(_context6) {
           while (1) {
@@ -442,9 +429,7 @@ function () {
   }, {
     key: "approve",
     value: function () {
-      var _approve = (0, _asyncToGenerator2["default"])(
-      /*#__PURE__*/
-      _regenerator["default"].mark(function _callee7(_ref7) {
+      var _approve = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee7(_ref7) {
         var signingKeyOrWallet, proxyAddress, tokenAddress, tokenAmount;
         return _regenerator["default"].wrap(function _callee7$(_context7) {
           while (1) {
@@ -476,9 +461,7 @@ function () {
   }, {
     key: "approveERC721",
     value: function () {
-      var _approveERC = (0, _asyncToGenerator2["default"])(
-      /*#__PURE__*/
-      _regenerator["default"].mark(function _callee8(_ref8) {
+      var _approveERC = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee8(_ref8) {
         var signingKeyOrWallet, proxyAddress, nftAddress;
         return _regenerator["default"].wrap(function _callee8$(_context8) {
           while (1) {
@@ -509,9 +492,7 @@ function () {
   }, {
     key: "deployProxy",
     value: function () {
-      var _deployProxy = (0, _asyncToGenerator2["default"])(
-      /*#__PURE__*/
-      _regenerator["default"].mark(function _callee9(_ref9) {
+      var _deployProxy = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee9(_ref9) {
         var signingKeyOrWallet, _ref9$campaignId, campaignId, weiAmount;
 
         return _regenerator["default"].wrap(function _callee9$(_context9) {
@@ -544,9 +525,7 @@ function () {
   }, {
     key: "subscribeForClaimedEvents",
     value: function () {
-      var _subscribeForClaimedEvents2 = (0, _asyncToGenerator2["default"])(
-      /*#__PURE__*/
-      _regenerator["default"].mark(function _callee10(proxyAddress, callback) {
+      var _subscribeForClaimedEvents2 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee10(proxyAddress, callback) {
         return _regenerator["default"].wrap(function _callee10$(_context10) {
           while (1) {
             switch (_context10.prev = _context10.next) {
@@ -573,9 +552,7 @@ function () {
   }, {
     key: "subscribeForClaimedERC721Events",
     value: function () {
-      var _subscribeForClaimedERC721Events2 = (0, _asyncToGenerator2["default"])(
-      /*#__PURE__*/
-      _regenerator["default"].mark(function _callee11(proxyAddress, callback) {
+      var _subscribeForClaimedERC721Events2 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee11(proxyAddress, callback) {
         return _regenerator["default"].wrap(function _callee11$(_context11) {
           while (1) {
             switch (_context11.prev = _context11.next) {
@@ -602,9 +579,7 @@ function () {
   }, {
     key: "getLinkStatus",
     value: function () {
-      var _getLinkStatus = (0, _asyncToGenerator2["default"])(
-      /*#__PURE__*/
-      _regenerator["default"].mark(function _callee12(linkId) {
+      var _getLinkStatus = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee12(linkId) {
         return _regenerator["default"].wrap(function _callee12$(_context12) {
           while (1) {
             switch (_context12.prev = _context12.next) {
@@ -632,9 +607,7 @@ function () {
   }, {
     key: "cancelLink",
     value: function () {
-      var _cancelLink = (0, _asyncToGenerator2["default"])(
-      /*#__PURE__*/
-      _regenerator["default"].mark(function _callee13(linkId) {
+      var _cancelLink = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee13(linkId) {
         return _regenerator["default"].wrap(function _callee13$(_context13) {
           while (1) {
             switch (_context13.prev = _context13.next) {

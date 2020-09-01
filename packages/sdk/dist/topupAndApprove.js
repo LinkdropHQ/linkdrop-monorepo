@@ -19,12 +19,8 @@ var _TokenMock = _interopRequireDefault(require("../../contracts/build/TokenMock
 
 var _NFTMock = _interopRequireDefault(require("../../contracts/build/NFTMock.json"));
 
-var topup =
-/*#__PURE__*/
-function () {
-  var _ref2 = (0, _asyncToGenerator2["default"])(
-  /*#__PURE__*/
-  _regenerator["default"].mark(function _callee(_ref) {
+var topup = /*#__PURE__*/function () {
+  var _ref2 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee(_ref) {
     var jsonRpcUrl, signingKeyOrWallet, proxyAddress, weiAmount, provider, wallet, tx;
     return _regenerator["default"].wrap(function _callee$(_context) {
       while (1) {
@@ -97,12 +93,8 @@ function () {
 
 exports.topup = topup;
 
-var approve =
-/*#__PURE__*/
-function () {
-  var _ref4 = (0, _asyncToGenerator2["default"])(
-  /*#__PURE__*/
-  _regenerator["default"].mark(function _callee2(_ref3) {
+var approve = /*#__PURE__*/function () {
+  var _ref4 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee2(_ref3) {
     var jsonRpcUrl, signingKeyOrWallet, proxyAddress, tokenAddress, tokenAmount, provider, wallet, tokenContract, tx;
     return _regenerator["default"].wrap(function _callee2$(_context2) {
       while (1) {
@@ -181,12 +173,8 @@ function () {
 
 exports.approve = approve;
 
-var approveERC721 =
-/*#__PURE__*/
-function () {
-  var _ref6 = (0, _asyncToGenerator2["default"])(
-  /*#__PURE__*/
-  _regenerator["default"].mark(function _callee3(_ref5) {
+var approveERC721 = /*#__PURE__*/function () {
+  var _ref6 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee3(_ref5) {
     var jsonRpcUrl, signingKeyOrWallet, proxyAddress, nftAddress, provider, wallet, nftContract, tx;
     return _regenerator["default"].wrap(function _callee3$(_context3) {
       while (1) {

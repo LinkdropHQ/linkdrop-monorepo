@@ -1,11 +1,15 @@
-.container {
+.blocksContainer {
   display: flex;
   flex-wrap: wrap;
   align-items: flex-start;
   padding-bottom: 20px;
 }
 
+.container {
+  max-width: 850px;
+}
 
-.container > div {
+
+.blocksContainer > div {
   margin-bottom: 50px;
 }
