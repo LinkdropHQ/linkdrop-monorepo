@@ -188,8 +188,5 @@ export const signReceiverAddress = async (linkKey, receiverAddress) => {
  * @return {Object} `{address, privateKey}`
  */
 export const generateAccount = () => {
-  const wallet = Wallet.generate()
-  const address = wallet.getChecksumAddressString()
-  const privateKey = wallet.getPrivateKeyString()
-  return { address, privateKey }
+  return ethers.Wallet.createRandom()
 }
