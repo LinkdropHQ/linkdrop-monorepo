@@ -42,7 +42,7 @@ class ClaimingProcessPage extends React.Component {
     }
     if (status != null && prevStatus === null) {
       this.statusCheck && window.clearInterval(this.statusCheck)
-      this.actions().user.setStep({ step: 5 })
+      this.actions().user.setStep({ step: 7 })
     }
   }
 

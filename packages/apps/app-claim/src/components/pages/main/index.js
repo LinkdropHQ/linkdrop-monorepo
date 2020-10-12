@@ -2,10 +2,12 @@ import React from 'react'
 import { Loading } from '@linkdrop/ui-kit'
 import { actions, translate, platform, detectBrowser } from 'decorators'
 import InitialPage from './initial-page'
+import StartClaimPage from './start-claim-page'
 import WalletChoosePage from './wallet-choose-page'
 import ClaimingProcessPage from './claiming-process-page'
 import ErrorPage from './error-page'
 import ClaimingFinishedPage from './claiming-finished-page'
+import SaveAsWalletItemPage from './save-as-wallet-item-page'
 import NeedWallet from './need-wallet'
 import { terminalApiKey, terminalProjectId } from 'app.config.js'
 import { getHashVariables, defineNetworkName, capitalize } from '@linkdrop/commons'
@@ -79,9 +81,9 @@ class Claim extends React.Component {
       readyToClaim === false ||
       alreadyClaimed == null
     ) {
-      if (step === 2) {
+      if (step === 4) {
         if (context.active && context.account && !prevContext.account && !prevContext.active) {
-          this.actions().user.setStep({ step: 1 })
+          this.actions().user.setStep({ step: 3 })
         }
       }
       return
@@ -108,8 +110,11 @@ class Claim extends React.Component {
   }
 
   render () {
-    const { context } = this.props
-    return this.renderCurrentPage({ context })
+    const { context, step } = this.props
+    return <>
+      {step}
+      {this.renderCurrentPage({ context })}
+    </>
   }
 
   async getProviderData ({ currentProvider }) {
@@ -162,36 +167,48 @@ class Claim extends React.Component {
         return <InitialPage
           {...commonData}
           onClick={_ => {
-            if (account) {
-              // if wallet account was found in web3 context, then go to step 4 and claim data
-              return this.actions().user.setStep({ step: 4 })
-            }
-            // if wallet was not found in web3 context, then go to step 2 with wallet select page and instructions
-            this.actions().user.setStep({ step: 2 })
+            
           }}
         />
+
       case 2:
-        // page with wallet select component
-        return <WalletChoosePage
-          context={context}
-          onClick={_ => {
-            this.actions().user.setStep({ step: 3 })
-          }}
+        return <SaveAsWalletItemPage
+          {...commonData}
         />
       case 3:
-        // page with info about current wallet and button to claim tokens
-        return <InitialPage
+        return <StartClaimPage
           {...commonData}
           onClick={_ => {
+            if (account) {
+              // if wallet account was found in web3 context, then go to step 4 and claim data
+              return this.actions().user.setStep({ step: 6 })
+            }
+            // if wallet was not found in web3 context, then go to step 2 with wallet select page and instructions
             this.actions().user.setStep({ step: 4 })
           }}
         />
       case 4:
+        // page with wallet select component
+        return <WalletChoosePage
+          context={context}
+          onClick={_ => {
+            this.actions().user.setStep({ step: 5 })
+          }}
+        />
+      case 5:
+        // page with info about current wallet and button to claim tokens
+        return <StartClaimPage
+          {...commonData}
+          onClick={_ => {
+            this.actions().user.setStep({ step: 6 })
+          }}
+        />
+      case 6:
         // claiming is in process
         return <ClaimingProcessPage
           {...commonData}
         />
-      case 5:
+      case 7:
         // claiming finished successfully
         return <ClaimingFinishedPage
           {...commonData}

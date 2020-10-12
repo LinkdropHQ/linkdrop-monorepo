@@ -50,7 +50,7 @@ const generator = function * ({ payload }) {
     yield put({ type: 'CONTRACT.SET_ICON', payload: { icon } })
     yield put({ type: 'CONTRACT.SET_AMOUNT', payload: { amount: amountBigNumber } })
     yield put({ type: 'CONTRACT.SET_LOADING', payload: { loading: false } })
-    yield put({ type: 'USER.SET_STEP', payload: { step: 1 } })
+    yield put({ type: 'USER.SET_STEP', payload: { step: 3 } })
   } catch (e) {
     yield put({ type: 'USER.SET_ERRORS', payload: { errors: ['LINK_INVALID'] } })
     console.error(e)
