@@ -10,22 +10,18 @@
   text-align: center;
   height: 60px;
   font-size: 18px;
-  font-family: 'Inter-Medium';
-  color: $greyColor;
+  font-family: 'Inter-Regular';
+  color: $textGreyColor;
   transition: all .3s;
 
   span {
-    color: $blackColor;
     transition: all .3s;
   }
 
   &.withLink {
     a {
       text-decoration: none;
-      color: $greyColor;
-    }
-    span {
-      color: $blackColor;
+      color: $textGreyColor;
     }
     &:hover {
       a {

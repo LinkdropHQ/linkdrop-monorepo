@@ -16,10 +16,11 @@ export default {
     yourEmail: 'Your Email',
     subscribed: 'Subscribed!',
     failed: 'Failed!',
-    fakeCheckbox: 'Let me know about new giveaways'
+    fakeCheckbox: 'Let me know about new giveaways',
+    connectWallet: 'Connect your wallet<br>via {{connector}}'
   },
   buttons: {
-    useWallet: 'Use {{wallet}}',
+    useWallet: '{{wallet}}',
     copyLink: 'Copy link',
     goTo: 'Go to {{dapp}}',
     connect: 'Connect'

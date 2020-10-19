@@ -2,7 +2,7 @@ import React from 'react'
 import styles from '../styles.module'
 import classNames from 'classnames'
 import { Slider, RetinaImage, Button } from '@linkdrop/ui-kit'
-import { getImages } from 'helpers'
+import { getImages, getWalletData } from 'helpers'
 import { getHashVariables } from '@linkdrop/commons'
 
 const SliderComponent = ({ t, walletType, selectWallet, showSlider, platform }) => {
@@ -24,11 +24,15 @@ const renderImage = ({ id, walletType, selectWallet, platform }) => {
   if (walletType === id) { return null }
   if (walletType == null && id === w) { return null }
   const icon = renderIcon({ id, platform })
-  return <div
-    className={classNames(styles.wallet, styles.withBorder)}
-    onClick={_ => selectWallet && selectWallet({ id })}
-  >
-    {icon}
+  const title = getWalletData({ wallet: id }).name
+  return <div className={styles.walletContainer}>
+    <div
+      className={classNames(styles.wallet, styles.withBorder)}
+      onClick={_ => selectWallet && selectWallet({ id })}
+    >
+      {icon}
+    </div>
+    <div className={styles.walletTitle}>{title}</div>
   </div>
 }
 
@@ -44,5 +48,5 @@ const renderIcon = ({ id, platform }) => {
 
 export default SliderComponent
 
-const ANDROID_WALLETS = ['trust', 'coinbase', 'opera', 'imtoken', 'status', 'gowallet', 'buntoy', 'fortmatic', 'portis']
-const IOS_WALLETS = ['trust', 'coinbase', 'imtoken', 'status', 'tokenpocket', 'opera', 'fortmatic', 'portis']
+const ANDROID_WALLETS = ['coinbase', 'walletconnect', 'metamask', 'fortmatic', 'status', 'imtoken', 'portis', 'opera', 'trust', 'gowallet', 'buntoy']
+const IOS_WALLETS = ['coinbase', 'walletconnect', 'metamask', 'fortmatic', 'status', 'imtoken', 'portis', 'opera', 'trust', 'tokenpocket']
