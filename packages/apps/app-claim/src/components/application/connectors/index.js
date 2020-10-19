@@ -5,11 +5,12 @@ import { NetworkConnector } from "@web3-react/network-connector";
 import { FortmaticConnector } from "@web3-react/fortmatic-connector";
 import { PortisConnector } from "@web3-react/portis-connector";
 import { InjectedConnector } from "@web3-react/injected-connector";
+import { WalletConnectConnector } from '@web3-react/walletconnect-connector'
 
 
 const { chainId } = getHashVariables()
 const networkName = defineNetworkName({ chainId })
-
+const POLLING_INTERVAL = 12000
 const Metamask = new InjectedConnector({
   supportedChainIds: [1, 3, 4, 5, 42, 100]
 })
@@ -27,6 +28,15 @@ const Network = new NetworkConnector({
   defaultChainId: Number(chainId)
 })
 
+const Walletconnect = new WalletConnectConnector({
+  rpc: {
+    4: supportedNetworkURLs[4]
+  },
+  bridge: 'https://bridge.walletconnect.org',
+  qrcode: true,
+  pollingInterval: POLLING_INTERVAL
+})
+
 const Portis = new PortisConnector({
   dAppId: portisDappId,
   networks: [Number(chainId)]
@@ -35,7 +45,8 @@ const Portis = new PortisConnector({
 const connectors = {
   Metamask,
   Network,
-  Portis
+  Portis,
+  Walletconnect
 }
 
 if (supportedNetworkURLs[Number(chainId)]) {
