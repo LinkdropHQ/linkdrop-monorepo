@@ -10,7 +10,7 @@ import { WalletConnectConnector } from '@web3-react/walletconnect-connector'
 
 const { chainId } = getHashVariables()
 const networkName = defineNetworkName({ chainId })
-const POLLING_INTERVAL = 12000
+const POLLING_INTERVAL = 1000
 const Metamask = new InjectedConnector({
   supportedChainIds: [1, 3, 4, 5, 42, 100]
 })
@@ -28,10 +28,13 @@ const Network = new NetworkConnector({
   defaultChainId: Number(chainId)
 })
 
+const walletConnectRpc = {
+  [Number(chainId)]: supportedNetworkURLs[Number(chainId)]
+}
+console.log({ walletConnectRpc })
+
 const Walletconnect = new WalletConnectConnector({
-  rpc: {
-    4: supportedNetworkURLs[4]
-  },
+  rpc: walletConnectRpc,
   bridge: 'https://bridge.walletconnect.org',
   qrcode: true,
   pollingInterval: POLLING_INTERVAL

@@ -11,7 +11,6 @@ class PageHeader extends React.Component {
       <div className={styles.title}>
         {title}
       </div>
-      {Number(chainId) === 4 && <div className={styles.chain}>{this.t('titles.rinkeby')}</div>}
     </div>
   }
 }

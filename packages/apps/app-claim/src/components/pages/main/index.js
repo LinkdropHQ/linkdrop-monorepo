@@ -73,6 +73,15 @@ class Claim extends React.Component {
 
   componentWillReceiveProps ({ readyToClaim, alreadyClaimed, context, step }) {
     const { readyToClaim: prevReadyToClaim, context: prevContext } = this.props
+    
+    if (context &&
+      context.error &&
+      context.error.name &&
+      context.error.name === 'UnsupportedChainIdError' &&
+      prevContext.error.name !== 'UnsupportedChainIdError'
+    ) {
+      return this.actions().user.setErrors({ errors: ['CONNECTOR_NETWORK_NOT_SUPPORTED'] })
+    }
     if (
       (readyToClaim === true && prevReadyToClaim === true) ||
       readyToClaim == null ||
@@ -126,7 +135,7 @@ class Claim extends React.Component {
     } = context
 
     if (!readyToClaim) { return <Loading /> }
-
+    {/*return <ErrorPage error='NETWORK_NOT_SUPPORTED' />*/}
     const {
       chainId,
       linkdropMasterAddress
@@ -143,13 +152,18 @@ class Claim extends React.Component {
       />
     }
 
+    if (errors && errors.length > 0) {
+      // if some errors occured and can be found in redux store, then show error page
+      return <ErrorPage
+        error={errors[0]}
+        network={capitalize({ string: defineNetworkName({ chainId }) })}
+      />
+    }
+
     if (this.platform === 'desktop' && !account) {
       return <NeedWallet context={context} />
     }
-    if (errors && errors.length > 0) {
-      // if some errors occured and can be found in redux store, then show error page
-      return <ErrorPage error={errors[0]} />
-    }
+    
     if (
       (this.platform === 'desktop' && connectorChainId && Number(chainId) !== Number(connectorChainId)) ||
       (this.platform !== 'desktop' && account && connectorChainId && Number(chainId) !== Number(connectorChainId))) {
