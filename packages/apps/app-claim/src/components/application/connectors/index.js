@@ -28,10 +28,12 @@ const Network = new NetworkConnector({
   defaultChainId: Number(chainId)
 })
 
+const walletConnectRpc = {
+  [Number(chainId)]: supportedNetworkURLs[Number(chainId)]
+}
+
 const Walletconnect = new WalletConnectConnector({
-  rpc: {
-    4: supportedNetworkURLs[4]
-  },
+  rpc: walletConnectRpc,
   bridge: 'https://bridge.walletconnect.org',
   qrcode: true,
   pollingInterval: POLLING_INTERVAL

@@ -6,6 +6,7 @@ import { RetinaImage } from '@linkdrop/ui-kit'
 import { getImages } from 'helpers'
 import classNames from 'classnames'
 import { withRouter } from 'react-router'
+import { defineNetworkName, capitalize } from '@linkdrop/commons'
 
 @actions(({
   user: {
@@ -33,11 +34,13 @@ class Aside extends React.Component {
             <RetinaImage alwaysHighRes width={115} {...getImages({ src: 'logo' })} />
           </a>
         </div>
+        {chainId && Number(chainId) !== 1 && <div className={styles.networkName}>
+          {capitalize({ string: defineNetworkName({ chainId }) })}
+        </div>}
         {this.renderDashboardButton()}
         {this.renderCampaignsButton({ currentAddress, items, chainId })}
         {this.renderAnalyticsButton()}
         {this.renderSettingsButton()}
-        {this.renderCreateButton({ currentAddress })}
       </div>
       <div className={styles.footer}>
         {this.renderConnectorData({ web3ProviderName, currentAddress })}
@@ -68,25 +71,8 @@ class Aside extends React.Component {
       <span>{web3ProviderName}</span> connected
       <div>{currentAddressFormatted}</div>
       <div className={styles.logout} onClick={_ => window.location.reload()}>
-        <span>
-          {this.t('logout')}
-        </span>
+        {this.t('logout')}
       </div>
-    </div>
-  }
-
-  renderCreateButton ({ currentAddress }) {
-    return <div className={styles.buttonContainer}>
-      <Button
-        className={classNames(styles.button, { [styles.buttonDisabled]: !currentAddress })}
-        onClick={_ => {
-          if (!currentAddress) { return }
-          window.location.href = '/#/'
-        }}
-        disabled={!currentAddress}
-      >
-        {this.t('create')}
-      </Button>
     </div>
   }
 
