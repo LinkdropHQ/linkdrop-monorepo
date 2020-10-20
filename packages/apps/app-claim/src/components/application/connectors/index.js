@@ -10,7 +10,7 @@ import { WalletConnectConnector } from '@web3-react/walletconnect-connector'
 
 const { chainId } = getHashVariables()
 const networkName = defineNetworkName({ chainId })
-const POLLING_INTERVAL = 1000
+const POLLING_INTERVAL = 12000
 const Metamask = new InjectedConnector({
   supportedChainIds: [1, 3, 4, 5, 42, 100]
 })
@@ -31,7 +31,6 @@ const Network = new NetworkConnector({
 const walletConnectRpc = {
   [Number(chainId)]: supportedNetworkURLs[Number(chainId)]
 }
-console.log({ walletConnectRpc })
 
 const Walletconnect = new WalletConnectConnector({
   rpc: walletConnectRpc,

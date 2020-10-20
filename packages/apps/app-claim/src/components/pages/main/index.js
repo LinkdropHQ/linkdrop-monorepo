@@ -135,7 +135,6 @@ class Claim extends React.Component {
     } = context
 
     if (!readyToClaim) { return <Loading /> }
-    {/*return <ErrorPage error='NETWORK_NOT_SUPPORTED' />*/}
     const {
       chainId,
       linkdropMasterAddress
