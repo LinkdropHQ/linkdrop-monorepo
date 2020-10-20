@@ -73,7 +73,7 @@ class Claim extends React.Component {
 
   componentWillReceiveProps ({ readyToClaim, alreadyClaimed, context, step }) {
     const { readyToClaim: prevReadyToClaim, context: prevContext } = this.props
-    
+    console.log({ context })
     if (context &&
       context.error &&
       context.error.name &&
