@@ -80,6 +80,7 @@
   justify-content: center;
   outline: none!important;
   background: $whiteColor;
+  margin-bottom: 5px;
 
   img {
     max-width: 100%;
@@ -87,7 +88,7 @@
 }
 
 .wallet.withBorder {
-  border: 1px solid black;
+  border: 1px solid $dbGrey;
   transition: all .3s;
   overflow: hidden;
 
@@ -96,6 +97,16 @@
     border-color: $borderHoverGreyColor;
   }
 }
+
+.walletTitle {
+  font-size: 12px;
+  width: 60px;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 
 .sliderShow .subtitle {
   animation: titleOut .5s forwards;

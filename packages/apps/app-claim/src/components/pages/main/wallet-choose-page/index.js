@@ -27,7 +27,7 @@ class WalletChoosePage extends React.Component {
     const { showSlider, loading } = this.state
     const { walletType, context } = this.props
     const { platform } = this
-    const { w = 'trust', chainId, mw } = getHashVariables()
+    const { w = (platform === 'ios' ? 'coinbase' : 'trust'), chainId, mw } = getHashVariables()
     if (walletType && walletType != null) {
       return this.renderWalletInstruction({ walletType })
     } else {
@@ -50,7 +50,7 @@ class WalletChoosePage extends React.Component {
   defineButton ({ platform, w, context, loading, chainId }) {
     if (platform === 'desktop') { return null }
 
-    if (w !== 'fortmatic' && w !== 'portis') {
+    if (w !== 'fortmatic' && w !== 'portis' && w !== 'walletconnect') {
       const buttonTitle = getWalletData({ wallet: w }).name
       if (w === 'coinbase') {
         return <Button onClick={_ => this.actions().deeplinks.getCoinbaseLink({ chainId })} className={styles.button}>
@@ -94,9 +94,11 @@ class WalletChoosePage extends React.Component {
       case 'trust':
       case 'coinbase':
         break
-      case 'fortmatic':
+      case 'walletconnect':
       case 'portis':
-        title = <div className={styles.title}>{this.t('titles.needWallet')}</div>
+      case 'metamask':
+      case 'fortmatic':
+        title = <div className={styles.title} dangerouslySetInnerHTML={{__html: this.t('titles.connectWallet', { connector: walletTitle })}}/>
         break
       case 'status':
       case 'imtoken':
@@ -127,10 +129,15 @@ class WalletChoosePage extends React.Component {
     const { loading } = this.state
     const { platform } = this
     switch (walletType) {
-      case 'fortmatic':
-        return this.renderConnectorButton({ context, loading, connector: 'Fortmatic' })
       case 'portis':
-        return this.renderConnectorButton({ context, loading, connector: 'Portis' })
+      case 'fortmatic':
+      case 'walletconnect':
+        return this.renderConnectorButton({ context, loading, connector: capitalize({ string: walletType }) })
+      case 'metamask':
+        const buttonLink = getWalletLink({ platform, wallet: walletType, currentUrl: window.location.href })
+        return <Button href={platform !== 'desktop' && buttonLink} className={styles.button}>
+          {this.t('buttons.connect')}
+        </Button>
       case 'trust':
       case 'imtoken':
       case 'status':
@@ -166,7 +173,7 @@ class WalletChoosePage extends React.Component {
         })
       }}
     >
-      {this.t('buttons.useWallet', { wallet: connector })}
+      {this.t('buttons.connect')}
     </Button>
   }
 

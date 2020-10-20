@@ -4,9 +4,10 @@ export default {
     divider: 'or'
   },
   buttons: {
-    fortmatic: 'Use Fortmatic',
-    portis: 'Use Portis',
-    metamask: 'Use Metamask'
+    fortmatic: 'Fortmatic',
+    portis: 'Portis',
+    metamask: 'MetaMask',
+    walletconnect: 'WalletConnect'
   },
   texts: {
     _1: '1. Download <a href="https://metamask.io/" target="_blank">Metamask</a>',

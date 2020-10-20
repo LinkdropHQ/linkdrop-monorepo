@@ -1,15 +1,47 @@
 const _withoutProtocol = (url) => url.replace(/(^\w+:|^)\/\//, '')
 
 export default {
+  walletconnect: {
+    id: 'walletconnect',
+    name: 'WalletConnect',
+    chains: ['1']
+  },
+  metamask: {
+    id: 'metamask',
+    name: 'MetaMask',
+    chains: ['100'],
+    mobile: {
+      android: {
+        support: true,
+        deepLink: url => `https://metamask.app.link/dapp/${_withoutProtocol(url)}`
+      },
+      ios: {
+        support: true,
+        deepLink: url => `https://metamask.app.link/dapp/${_withoutProtocol(url)}`
+      }
+    },
+  },
   fortmatic: {
     id: 'fortmatic',
     name: 'Fortmatic',
     chains: ['1']
   },
-  metamask: {
-    id: 'metamask',
-    name: 'Metamask',
-    chains: ['100']
+  status: {
+    id: 'status',
+    name: 'Status',
+    walletURL: 'https://status.im/',
+    dappStoreUrl: null,
+    mobile: {
+      android: {
+        support: true,
+        deepLink: url => `https://get.status.im/browse/${_withoutProtocol(url)}`
+      },
+      ios: {
+        support: true,
+        deepLink: url => `https://get.status.im/browse/${_withoutProtocol(url)}`
+      }
+    },
+    chains: ['1', '3', '4']
   },  
   portis: {
     id: 'portis',
@@ -47,23 +79,6 @@ export default {
       ios: {
         support: true,
         deepLink: (url) => `https://operacrypto.page.link/?link=${encodeURIComponent(url)}&efr=1&ibi=com.opera.OperaTouch&isi=1411869974`
-      }
-    },
-    chains: ['1', '3', '4']
-  },
-  status: {
-    id: 'status',
-    name: 'Status',
-    walletURL: 'https://status.im/',
-    dappStoreUrl: null,
-    mobile: {
-      android: {
-        support: true,
-        deepLink: url => `https://get.status.im/browse/${_withoutProtocol(url)}`
-      },
-      ios: {
-        support: true,
-        deepLink: url => `https://get.status.im/browse/${_withoutProtocol(url)}`
       }
     },
     chains: ['1', '3', '4']
