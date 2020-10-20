@@ -73,12 +73,11 @@ class Claim extends React.Component {
 
   componentWillReceiveProps ({ readyToClaim, alreadyClaimed, context, step }) {
     const { readyToClaim: prevReadyToClaim, context: prevContext } = this.props
-    console.log({ context })
     if (context &&
       context.error &&
-      context.error.name &&
-      context.error.name === 'UnsupportedChainIdError' &&
-      prevContext.error.name !== 'UnsupportedChainIdError'
+      context.error.message &&
+      context.error.message.includes('Unsupported chain id')  &&
+      !prevContext.error.message.includes('Unsupported chain id')
     ) {
       return this.actions().user.setErrors({ errors: ['CONNECTOR_NETWORK_NOT_SUPPORTED'] })
     }
