@@ -155,7 +155,7 @@ describe('ETH/ERC721 linkdrop tests', () => {
     expect(isSigner).to.eq(false)
   })
 
-  it('should revert while checking claim params with insufficient allowance', async () => {
+  it('should not revert while checking claim params with insufficient allowance', async () => {
     await linkdropMaster.sendTransaction({
       to: proxy.address,
       value: ethers.utils.parseEther('2')
@@ -195,7 +195,7 @@ describe('ETH/ERC721 linkdrop tests', () => {
         receiverAddress,
         receiverSignature
       )
-    ).to.be.revertedWith('INSUFFICIENT_ALLOWANCE')
+    ).to.not.be.revertedWith('INSUFFICIENT_ALLOWANCE')
   })
 
   it('creates new link key and verifies its signature', async () => {
@@ -392,7 +392,7 @@ describe('ETH/ERC721 linkdrop tests', () => {
         receiverSignature,
         { gasLimit: 500000 }
       )
-    ).to.be.revertedWith('INSUFFICIENT_ALLOWANCE')
+    ).to.be.revertedWith('revert ERC721: transfer caller is not owner nor approved')
   })
 
   it('should fail to claim nft by expired link', async () => {
