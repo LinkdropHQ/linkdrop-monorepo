@@ -48,5 +48,5 @@ const renderIcon = ({ id, platform }) => {
 
 export default SliderComponent
 
-const ANDROID_WALLETS = ['coinbase', 'walletconnect', 'metamask', 'fortmatic', 'status', 'imtoken', 'portis', 'opera', 'trust', 'gowallet', 'buntoy']
-const IOS_WALLETS = ['coinbase', 'walletconnect', 'metamask', 'fortmatic', 'status', 'imtoken', 'portis', 'opera', 'trust', 'tokenpocket']
+const ANDROID_WALLETS = ['walletconnect', 'metamask', 'coinbase', 'imtoken', 'fortmatic', 'portis', 'opera', 'status', 'trust', 'gowallet', 'buntoy']
+const IOS_WALLETS = ['walletconnect', 'metamask', 'coinbase', 'imtoken', 'fortmatic', 'portis', 'opera', 'status']

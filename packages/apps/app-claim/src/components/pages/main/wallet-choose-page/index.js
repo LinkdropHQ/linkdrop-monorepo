@@ -87,27 +87,7 @@ class WalletChoosePage extends React.Component {
   renderWalletInstruction ({ walletType }) {
     const { showSlider } = this.state
     const { name: walletTitle, walletURL, walletURLIos } = getWalletData({ wallet: walletType })
-    let instruction = ''
-    let title = <div className={classNames(styles.title, styles.instructionTitle)}>{this.t('titles.howToClaim', { wallet: walletTitle })}</div>
-
-    switch (walletType) {
-      case 'trust':
-      case 'coinbase':
-        break
-      case 'walletconnect':
-      case 'portis':
-      case 'metamask':
-      case 'fortmatic':
-        title = <div className={styles.title} dangerouslySetInnerHTML={{__html: this.t('titles.connectWallet', { connector: walletTitle })}}/>
-        break
-      case 'status':
-      case 'imtoken':
-      case 'opera':
-        instruction = this.renderDeepLinkInstruction({ walletType, title: walletTitle, href: this.defineWalletHref({ walletURL, walletURLIos, walletType }) })
-        break
-      default:
-        instruction = this.renderCommonInstruction({ walletType, title: walletTitle, href: walletURL })
-    }
+    const title = <div className={styles.title} dangerouslySetInnerHTML={{__html: this.t('titles.connectWallet', { connector: walletTitle })}}/>
     return <div className={classNames(commonStyles.container, styles.container, {
       [styles.sliderShow]: showSlider,
       [styles.sliderHide]: showSlider === false
@@ -117,7 +97,6 @@ class WalletChoosePage extends React.Component {
         {this.renderIcon({ id: walletType })}
       </div>
       {title}
-      {instruction}
       {this.renderInstructionButton({ walletType })}
       {this.renderSlider({ walletType })}
     </div>
@@ -142,16 +121,14 @@ class WalletChoosePage extends React.Component {
       case 'imtoken':
       case 'status':
       case 'opera': {
-        const buttonTitle = getWalletData({ wallet: walletType }).name
         const buttonLink = getWalletLink({ platform, wallet: walletType, currentUrl: window.location.href })
         return <Button href={platform !== 'desktop' && buttonLink} className={styles.button}>
-          {buttonTitle}
+          {this.t('buttons.connect')}
         </Button>
       }
       case 'coinbase': {
-        const buttonTitle = getWalletData({ wallet: walletType }).name
         return <Button onClick={_ => this.actions().deeplinks.getCoinbaseLink({ chainId })} className={styles.button}>
-          {buttonTitle}
+          {this.t('buttons.connect')}
         </Button>
       }
       default:
@@ -196,14 +173,6 @@ class WalletChoosePage extends React.Component {
         })
       }}
     />
-  }
-
-  renderCommonInstruction ({ walletType, title, href }) {
-    return <CommonInstruction walletType={walletType} styles={styles} t={this.t} title={title} href={href} />
-  }
-
-  renderDeepLinkInstruction ({ walletType, title, href }) {
-    return <DeepLinkInstruction walletType={walletType} styles={styles} t={this.t} title={title} href={href} />
   }
 
   toggleSlider ({ showSlider = true, callback }) {

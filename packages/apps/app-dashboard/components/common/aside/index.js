@@ -27,6 +27,7 @@ import { defineNetworkName, capitalize } from '@linkdrop/commons'
 class Aside extends React.Component {
   render () {
     const { currentAddress, items, chainId, web3ProviderName } = this.props
+    const netWorkName = defineNetworkName({ chainId })
     return <aside className={styles.container}>
       <div className={styles.mainBlock}>
         <div className={styles.logo}>
@@ -34,8 +35,8 @@ class Aside extends React.Component {
             <RetinaImage alwaysHighRes width={115} {...getImages({ src: 'logo' })} />
           </a>
         </div>
-        {chainId && Number(chainId) !== 1 && <div className={styles.networkName}>
-          {capitalize({ string: defineNetworkName({ chainId }) })}
+        {chainId && Number(chainId) !== 1 && netWorkName && netWorkName !== '' && <div className={styles.networkName}>
+          {capitalize({ string: netWorkName })}
         </div>}
         {this.renderDashboardButton()}
         {this.renderCampaignsButton({ currentAddress, items, chainId })}
