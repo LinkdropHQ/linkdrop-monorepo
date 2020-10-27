@@ -27,7 +27,7 @@ import { defineNetworkName, capitalize } from '@linkdrop/commons'
 class Aside extends React.Component {
   render () {
     const { currentAddress, items, chainId, web3ProviderName } = this.props
-    const netWorkName = defineNetworkName({ chainId })
+    
     return <aside className={styles.container}>
       <div className={styles.mainBlock}>
         <div className={styles.logo}>
@@ -35,9 +35,7 @@ class Aside extends React.Component {
             <RetinaImage alwaysHighRes width={115} {...getImages({ src: 'logo' })} />
           </a>
         </div>
-        {chainId && Number(chainId) !== 1 && netWorkName && netWorkName !== '' && <div className={styles.networkName}>
-          {capitalize({ string: netWorkName })}
-        </div>}
+        {this.renderNetworkName({ chainId })}
         {this.renderDashboardButton()}
         {this.renderCampaignsButton({ currentAddress, items, chainId })}
         {this.renderAnalyticsButton()}
@@ -54,6 +52,19 @@ class Aside extends React.Component {
         </div>
       </div>
     </aside>
+  }
+
+  renderNetworkName ({ chainId }) {
+    const netWorkName = defineNetworkName({ chainId })
+    if (!chainId) { return null }
+    if (!netWorkName) { return null }
+    if (netWorkName === '') { return null }
+    const title = netWorkName === 'xdai' ? 'xDAI' : capitalize({ string: netWorkName })
+    return <div className={classNames(styles.networkName, {
+      [styles.networkNameMain]: netWorkName === 'xdai' || netWorkName === 'mainnet'
+    })}>
+      {title}
+    </div>
   }
 
   renderConnectorData ({ web3ProviderName, currentAddress }) {

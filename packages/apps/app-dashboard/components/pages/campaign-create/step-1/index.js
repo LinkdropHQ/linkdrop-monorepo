@@ -132,7 +132,7 @@ class Step1 extends React.Component {
             />
             <div className={styles.currentBalance}>
               {currentTokenBalance !== null && tokenType === 'erc20' && <div>{this.t('titles.balance')} {currentTokenBalance} {tokenType === 'erc20' ? symbol : tokenSymbol}</div>}
-              <div>{this.t('titles.etherBalance')} {currentEthBalance} {this.t('titles.eth')}</div>
+              <div>{this.t('titles.balance')} {currentEthBalance} {this.defaultSymbol}</div>
             </div>
           </div>
           {this.renderTokenInputs({ ethAmount, tokenType, tokenAddress, symbol, tokenSymbol, tokenAmount, addEth })}
@@ -142,7 +142,7 @@ class Step1 extends React.Component {
               <Input numberInput decimalSeparator={false} className={styles.input} value={linksAmount} onChange={({ value }) => this.setField({ field: 'linksAmount', value: parseFloat(value) })} />
             </div>
           </div>
-          <div className={styles.chooseWallet}>
+          {this.defaultSymbol !== 'xDAI' && <div className={styles.chooseWallet}>
             <h3 className={styles.subtitle}>{this.t('titles.receiverWallet')}</h3>
             <Select
               options={this.WALLETS}
@@ -153,7 +153,7 @@ class Step1 extends React.Component {
                 })
               }}
             />
-          </div>
+          </div>}
         </div>
 
         <div className={styles.summary}>
@@ -167,7 +167,7 @@ class Step1 extends React.Component {
             tokenSymbol: symbol || tokenSymbol,
             addEth
           })}
-          <Note aside text={this.t('texts.gasPriceAttention')} />
+          {this.defaultSymbol !== 'xDAI' && <Note aside text={this.t('texts.gasPriceAttention')} />}
         </div>
       </div>
       <NextButton

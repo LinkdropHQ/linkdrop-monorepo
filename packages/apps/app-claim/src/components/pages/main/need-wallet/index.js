@@ -20,14 +20,14 @@ class NeewWallet extends React.Component {
   render () {
     const { context } = this.props
     const { loading } = this.state
-    const { w = 'trust' } = getHashVariables()
+    const { w = 'trust', chainId } = getHashVariables()
     return <div className={commonStyles.container}>
       {loading && <Loading withOverlay />}
       <Alert className={styles.alert} icon={<Icons.Exclamation />} />
       <div className={styles.title} dangerouslySetInnerHTML={{ __html: this.t('titles.main') }} />
       <div className={styles.content}>
         {w !== 'portis' && this.renderButton({ connector: 'fortmatic', context })}
-        {w !== 'fortmatic' && this.renderButton({ connector: 'portis', context })}
+        {w !== 'fortmatic' && Number(chainId) !== 100 && this.renderButton({ connector: 'portis', context })}
         {w !== 'walletconnect' && this.renderButton({ connector: 'walletconnect', context })}
         {w !== 'metamask' && this.renderButton({ connector: 'metamask', context })}
         <div className={styles.instructions}>

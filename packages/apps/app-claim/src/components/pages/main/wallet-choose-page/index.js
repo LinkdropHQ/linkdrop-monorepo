@@ -28,6 +28,7 @@ class WalletChoosePage extends React.Component {
     const { walletType, context } = this.props
     const { platform } = this
     const { w = (platform === 'ios' ? 'coinbase' : 'trust'), chainId, mw } = getHashVariables()
+    const addSlider = Number(chainId) !== 100
     if (walletType && walletType != null) {
       return this.renderWalletInstruction({ walletType })
     } else {
@@ -41,8 +42,8 @@ class WalletChoosePage extends React.Component {
           {this.renderIcon({ id: w })}
         </div>
         <div className={styles.title}>{this.t('titles.needWallet')}</div>
-        {button}
-        {this.renderSlider({ walletType, mw })}
+        {addSlider && button}
+        {addSlider && this.renderSlider({ walletType, mw })}
       </div>
     }
   }
