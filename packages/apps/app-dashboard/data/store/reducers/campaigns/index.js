@@ -1,7 +1,7 @@
 import reducers from './reducers'
 const ls = (typeof window === 'undefined' ? {} : window).localStorage
 const campaigns = ls && ls.getItem && ls.getItem('campaigns')
-const campaignsDecoded = campaigns ? JSON.parse(window.atob(campaigns)) : []
+const campaignsDecoded = campaigns ? JSON.parse(decodeURIComponent(escape(window.atob(campaigns)))) : []
 const initialState = {
   tokenAmount: null,
   tokenSymbol: null,

@@ -12,50 +12,49 @@ const getTokenIds = function * ({
   symbol,
   name
 }) {
-  console.log({
-    tokenAddress,
-    provider,
-    address,
-    symbol,
-    name
-  })
   const tokenContract = yield new ethers.Contract(tokenAddress, NFTMock.abi, provider)
   const numberOfTokens = yield tokenContract.balanceOf(address)
-  console.log({ tokenContract })
+  const tokens = []
   for (let i = 0; i < Number(numberOfTokens); i++) {
     const token = yield tokenContract.tokenOfOwnerByIndex(address, i)
-    console.log({
-      token
+    const tokenId = yield token.toString()
+    let image = ''
+    let metadataURL = ''
+    let tokenData = {
+      tokenId,
+      address: tokenAddress,
+      symbol,
+      name: `${name} - ${tokenId}`
+    }
+    try {
+      metadataURL = yield tokenContract.tokenURI(tokenId)
+      if (metadataURL !== '') {
+        const data = yield call(getERC721TokenData, { erc721URL: metadataURL })
+        if (data) {
+          image = data.image
+        }
+      }
+
+      tokenData = {
+        ...tokenData,
+        image
+      }
+    } catch (e) {
+      tokenData = {
+        ...tokenData,
+        image: ''
+      }
+    }
+    
+    tokens.push({
+      tokenId,
+      address: tokenAddress,
+      symbol,
+      name,
+      image: ''
     })
-    // sum.push(
-    //   this.tokenContract
-    //     .tokenOfOwnerByIndexPromise(owner, i)
-    //     .then(t => t.toString())
-    //     .then(async tokenId => {
-    //       const metadata = await this.getMetadata(tokenId);
-    //       return { tokenId, metadata };
-    //     })
-    // );
   }
-  return {
-    tokenId: '1',
-    address: tokenAddress,
-    symbol,
-    name,
-    image: ''
-  }
-  // const promises = [];
-  // for (let i = 0; i < numberOfTokens; i++) {
-  //   promises.push(
-  //     this.tokenContract
-  //       .tokenOfOwnerByIndexPromise(owner, i)
-  //       .then(t => t.toString())
-  //       .then(async tokenId => {
-  //         const metadata = await this.getMetadata(tokenId);
-  //         return { tokenId, metadata };
-  //       })
-  //   );
-  // }
+  return tokens
 }
 
 const getTokens = function * ({ actualJsonRpcUrl, provider, currentAddress, networkName, page }) {
@@ -82,7 +81,8 @@ const getTokensXdai = function * ({ currentAddress, provider }) {
   if (assets) {
     const assetsFiltered = assets.filter(({ type }) => type === 'ERC-721')
     const assetsFormatted = yield all(assetsFiltered.map(({ contractAddress, name, symbol }) => call(getTokenIds, { tokenAddress: contractAddress, provider, address: currentAddress, symbol, name })))
-    const assetsMerged = assetsFormatted.reduce((sum, { tokenId, address, symbol, name, image }) => {
+    const assetsFlat = [].concat.apply([], assetsFormatted)
+    const assetsMerged = assetsFlat.reduce((sum, { tokenId, address, symbol, name, image }) => {
       if (sum[address]) {
         sum[address] = { ...sum[address], names: { ...sum[address].names, [tokenId]: name }, ids: [...sum[address].ids, tokenId], images: { ...sum[address].images, [tokenId]: image } }
       } else {
@@ -145,15 +145,12 @@ const getTokenData = function * ({ tokenId, address, name, provider, imagePrevie
 const generator = function * ({ payload }) {
   try {
     yield put({ type: 'TOKENS.SET_LOADING', payload: { loading: true } })
-    const { page } = payload
-    const currentAddress = '0xA582360DA4ae1fBb912C975fcce1A0C0e2af91e8'
+    const { page, currentAddress } = payload
 
     const chainId = yield select(generator.selectors.chainId)
     const networkName = defineNetworkName({ chainId })
     const actualJsonRpcUrl = defineJsonRpcUrl({ chainId, infuraPk, jsonRpcUrlXdai })
-    console.log({ actualJsonRpcUrl })
     const provider = yield new ethers.providers.JsonRpcProvider(actualJsonRpcUrl)
-    console.log({ provider })
     if (networkName === 'xdai') {
       yield getTokensXdai({ currentAddress, provider })
     } else {

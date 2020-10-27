@@ -96,6 +96,7 @@ class Aside extends React.Component {
 
   renderCampaignsButton ({ currentAddress, items, chainId }) {
     const itemsForCurrentChainId = items.filter(item => item.chainId === chainId && item.currentAddress === currentAddress)
+    console.log(items, chainId, currentAddress)
     return <div className={classNames(styles.menuItem, {
       [styles.disabled]: !currentAddress || !itemsForCurrentChainId || itemsForCurrentChainId.length === 0,
       [styles.active]: this.defineCurrentPage() === 'campaigns'
