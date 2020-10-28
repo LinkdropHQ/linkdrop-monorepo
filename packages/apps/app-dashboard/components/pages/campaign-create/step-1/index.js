@@ -71,7 +71,7 @@ class Step1 extends React.Component {
   }
 
   createWalletOptions (chainId) {
-    return (['walletconnect', 'trust', 'coinbase', 'opera', 'imtoken', 'gowallet', 'buntoy', 'fortmatic', 'portis', 'burner2', 'metamask'])
+    return (['walletconnect', 'metamask', 'coinbase', 'imtoken', 'fortmatic', 'portis', 'opera'])
       .filter(wallet => (wallets[wallet].chains || []).find(v => v === String(chainId)))
       .map(wallet => {
       const label = wallets[wallet].name

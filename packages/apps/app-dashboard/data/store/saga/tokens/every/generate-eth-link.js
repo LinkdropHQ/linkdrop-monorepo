@@ -15,10 +15,6 @@ const generator = function * ({ payload }) {
     const defaultWallet = yield select(generator.selectors.defaultWallet)
     const ethersContractZeroAddress = ethers.constants.AddressZero
     const campaignId = yield select(generator.selectors.campaignId)
-
-    if (defaultWallet === 'burner2') {
-      sdk.claimHost = wallets[defaultWallet].walletURL
-    }
     
     const link = yield sdk.generateLink({
       signingKeyOrWallet: privateKey,

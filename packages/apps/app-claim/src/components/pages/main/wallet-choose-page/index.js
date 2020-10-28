@@ -33,6 +33,7 @@ class WalletChoosePage extends React.Component {
       return this.renderWalletInstruction({ walletType })
     } else {
       const button = this.defineButton({ chainId, platform, w, context, loading })
+      const { name: walletTitle } = getWalletData({ wallet: w })
       return <div className={classNames(commonStyles.container, styles.container, {
         [styles.sliderShow]: showSlider,
         [styles.sliderHide]: showSlider === false
@@ -41,8 +42,8 @@ class WalletChoosePage extends React.Component {
         <div className={classNames(styles.wallet, styles.withBorder, styles.walletPreview)}>
           {this.renderIcon({ id: w })}
         </div>
-        <div className={styles.title}>{this.t('titles.needWallet')}</div>
-        {addSlider && button}
+        <div className={styles.title} dangerouslySetInnerHTML={{__html: this.t('titles.connectWallet', { connector: walletTitle })}}/>
+        {button}
         {addSlider && this.renderSlider({ walletType, mw })}
       </div>
     }

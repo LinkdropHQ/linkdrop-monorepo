@@ -11,7 +11,7 @@ import Immutable from 'immutable'
 import { defineDefaultSymbol } from 'helpers'
 import wallets from 'wallets'
 
-const WALLET_IDS = ['walletconnect', 'trust', 'coinbase', 'opera', 'imtoken', 'gowallet', 'buntoy', 'fortmatic', 'portis']
+const WALLET_IDS = ['walletconnect', 'metamask', 'coinbase', 'imtoken', 'fortmatic', 'portis', 'opera']
 
 @actions(({
   user: {
