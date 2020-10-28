@@ -152,22 +152,5 @@ export default {
       }
     },
     chains: ['1', '3', '4']
-  },
-  burner2: {
-    id: 'burner2',
-    name: 'Burner Wallet 2',
-    walletURL: 'https://linkdrop-test.burnerfactory.com/linkdrop',
-    dappStoreUrl: null,
-    mobile: {
-      android: {
-        support: false,
-        deepLink: (url) => null
-      },
-      ios: {
-        support: false,
-        deepLink: (url) => null
-      }
-    },
-    chains: ['100']
   }
 }
