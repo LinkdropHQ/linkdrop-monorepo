@@ -27,6 +27,7 @@ import { defineNetworkName, capitalize } from '@linkdrop/commons'
 class Aside extends React.Component {
   render () {
     const { currentAddress, items, chainId, web3ProviderName } = this.props
+    
     return <aside className={styles.container}>
       <div className={styles.mainBlock}>
         <div className={styles.logo}>
@@ -34,9 +35,7 @@ class Aside extends React.Component {
             <RetinaImage alwaysHighRes width={115} {...getImages({ src: 'logo' })} />
           </a>
         </div>
-        {chainId && Number(chainId) !== 1 && <div className={styles.networkName}>
-          {capitalize({ string: defineNetworkName({ chainId }) })}
-        </div>}
+        {this.renderNetworkName({ chainId })}
         {this.renderDashboardButton()}
         {this.renderCampaignsButton({ currentAddress, items, chainId })}
         {this.renderAnalyticsButton()}
@@ -53,6 +52,19 @@ class Aside extends React.Component {
         </div>
       </div>
     </aside>
+  }
+
+  renderNetworkName ({ chainId }) {
+    const netWorkName = defineNetworkName({ chainId })
+    if (!chainId) { return null }
+    if (!netWorkName) { return null }
+    if (netWorkName === '') { return null }
+    const title = netWorkName === 'xdai' ? 'xDAI' : capitalize({ string: netWorkName })
+    return <div className={classNames(styles.networkName, {
+      [styles.networkNameMain]: netWorkName === 'xdai' || netWorkName === 'mainnet'
+    })}>
+      {title}
+    </div>
   }
 
   renderConnectorData ({ web3ProviderName, currentAddress }) {
@@ -77,7 +89,9 @@ class Aside extends React.Component {
   }
 
   renderDashboardButton () {
-    return <div className={classNames(styles.menuItem, { [styles.active]: this.defineCurrentPage() === 'dashboard' })}>
+    return <div className={classNames(styles.menuItem, {
+      [styles.active]: this.defineCurrentPage() === 'dashboard'
+    })}>
       <a href='/#/'>{this.t('dashboard')}</a>
     </div>
   }
@@ -112,8 +126,8 @@ class Aside extends React.Component {
 
   defineCurrentPage () {
     const { location: { pathname } } = this.props
-    if (pathname === '/campaigns') { return 'campaigns' }
-    if (pathname === '/') { return 'dashboard' }
+    if (pathname.includes('campaigns')) { return 'campaigns' }
+    if (pathname.includes('/')) { return 'dashboard' }
     return null
   }
 }

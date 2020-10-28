@@ -15,7 +15,7 @@ class Main extends React.Component {
 
   render () {
     return <div className={styles.container}>
-      <Note text={this.t('texts.gasPriceAttention')} />
+      {this.defaultSymbol !== 'xDAI' && <Note text={this.t('texts.gasPriceAttention')} />}
       <div className={styles.blocksContainer}>
         <ActionBlock
           title={this.t('titles.erc20Campaign')}

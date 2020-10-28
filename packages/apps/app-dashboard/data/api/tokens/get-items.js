@@ -7,5 +7,6 @@ export default ({ address, networkName }) => {
     action: 'tokenlist',
     module: 'account'
   })
-  return fetch(`https://blockscout.com/eth/${networkName}/api${getParams}`)
+  const apiPrefix = networkName === 'xdai' ? 'poa' : 'etc'
+  return fetch(`https://blockscout.com/${apiPrefix}/${networkName}/api${getParams}`)
 }

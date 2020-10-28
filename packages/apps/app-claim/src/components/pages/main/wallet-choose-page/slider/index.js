@@ -11,11 +11,6 @@ const SliderComponent = ({ t, walletType, selectWallet, showSlider, platform }) 
     <Slider visibleSlides={4} className={styles.slider} step={4}>
       {(platform === 'ios' ? IOS_WALLETS : ANDROID_WALLETS).map(wallet => renderImage({ id: wallet, platform, walletType, selectWallet }))}
     </Slider>
-    {/* <Button
-      onClick={() => context.setConnector('Fortmatic')}
-    >
-      fortmatic
-    </Button> */}
   </div>
 }
 
@@ -48,5 +43,5 @@ const renderIcon = ({ id, platform }) => {
 
 export default SliderComponent
 
-const ANDROID_WALLETS = ['coinbase', 'walletconnect', 'metamask', 'fortmatic', 'status', 'imtoken', 'portis', 'opera', 'trust', 'gowallet', 'buntoy']
-const IOS_WALLETS = ['coinbase', 'walletconnect', 'metamask', 'fortmatic', 'status', 'imtoken', 'portis', 'opera', 'trust', 'tokenpocket']
+const ANDROID_WALLETS = ['walletconnect', 'metamask', 'coinbase', 'imtoken', 'fortmatic', 'portis', 'opera', 'trust', 'gowallet', 'buntoy']
+const IOS_WALLETS = ['walletconnect', 'metamask', 'coinbase', 'imtoken', 'fortmatic', 'portis', 'opera']
