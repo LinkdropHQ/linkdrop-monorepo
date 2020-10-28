@@ -83,23 +83,6 @@ export default {
     },
     chains: ['1', '3', '4']
   },
-  tokenpocket: {
-    id: 'token_pocket',
-    name: 'Token Pocket',
-    walletURL: 'https://tokenpocket.jp/en/',
-    dappStoreUrl: null,
-    mobile: {
-      android: {
-        support: false,
-        deepLink: (url) => null
-      },
-      ios: {
-        support: true,
-        deepLink: url => `https://tokenpocket.github.io/applink?dappUrl=${encodeURIComponent(url)}`
-      }
-    },
-    chains: ['1', '3', '4']
-  },
   coinbase: {
     id: 'coinbase_wallet',
     name: 'Coinbase Wallet',

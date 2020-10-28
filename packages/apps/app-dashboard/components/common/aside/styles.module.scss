@@ -27,6 +27,11 @@
   display: inline-block;
 }
 
+.networkNameMain {
+  color: $greenColor;
+  border-color: $greenColor;
+}
+
 .logo {
   cursor: pointer;
   display: block;

@@ -11,7 +11,7 @@ import Immutable from 'immutable'
 import { defineDefaultSymbol } from 'helpers'
 import wallets from 'wallets'
 
-const WALLET_IDS = ['trust', 'coinbase', 'opera', 'status', 'imtoken', 'gowallet', 'buntoy', 'tokenpocket', 'fortmatic', 'portis']
+const WALLET_IDS = ['walletconnect', 'trust', 'coinbase', 'opera', 'imtoken', 'gowallet', 'buntoy', 'fortmatic', 'portis']
 
 @actions(({
   user: {
@@ -134,7 +134,7 @@ class Step1 extends React.Component {
             />
           </div>
           {this.renderTokenInputs({ addEth, ethAmount, tokenAddress, customTokenAddress })}
-          <div className={styles.chooseWallet}>
+          {this.defaultSymbol !== 'xDAI' && <div className={styles.chooseWallet}>
             <h3 className={styles.subtitle}>{this.t('titles.receiverWallet')}</h3>
             <Select
               options={this.WALLETS}
@@ -145,7 +145,7 @@ class Step1 extends React.Component {
                 })
               }}
             />
-          </div>
+          </div>}
         </div>
 
         <div className={styles.summary}>
@@ -159,7 +159,7 @@ class Step1 extends React.Component {
             tokenSymbol: symbol || tokenSymbol,
             addEth
           })}
-          <Note aside text={this.t('texts.gasPriceAttention')} />
+          {this.defaultSymbol !== 'xDAI' && <Note aside text={this.t('texts.gasPriceAttention')} />}
         </div>
       </div>
       <div>
