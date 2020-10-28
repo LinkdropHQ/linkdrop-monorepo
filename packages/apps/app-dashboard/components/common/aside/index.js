@@ -89,14 +89,15 @@ class Aside extends React.Component {
   }
 
   renderDashboardButton () {
-    return <div className={classNames(styles.menuItem, { [styles.active]: this.defineCurrentPage() === 'dashboard' })}>
+    return <div className={classNames(styles.menuItem, {
+      [styles.active]: this.defineCurrentPage() === 'dashboard'
+    })}>
       <a href='/#/'>{this.t('dashboard')}</a>
     </div>
   }
 
   renderCampaignsButton ({ currentAddress, items, chainId }) {
     const itemsForCurrentChainId = items.filter(item => item.chainId === chainId && item.currentAddress === currentAddress)
-    console.log(items, chainId, currentAddress)
     return <div className={classNames(styles.menuItem, {
       [styles.disabled]: !currentAddress || !itemsForCurrentChainId || itemsForCurrentChainId.length === 0,
       [styles.active]: this.defineCurrentPage() === 'campaigns'
@@ -125,8 +126,8 @@ class Aside extends React.Component {
 
   defineCurrentPage () {
     const { location: { pathname } } = this.props
-    if (pathname === '/campaigns') { return 'campaigns' }
-    if (pathname === '/') { return 'dashboard' }
+    if (pathname.includes('campaigns')) { return 'campaigns' }
+    if (pathname.includes('/')) { return 'dashboard' }
     return null
   }
 }
