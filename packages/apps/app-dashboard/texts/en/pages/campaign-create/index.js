@@ -76,7 +76,7 @@ export default {
     _2: 'The Link Key is a unique private key that allows us to sign every link for you so you no need to do it manually.',
 
     // step3
-    _10: 'Ether will be stored in Linkdrop Contract to distribute into links.<br>You can stop the campaign anytime and get back your Ether.',
+    _10: 'Ether will be stored in Linkdrop Contract to distribute into links.<br>You can stop the campaign anytime and get back your {{defaultSymbol}}.',
     _15: 'You wil send {{eth}} {{symbol}} to start generate links',
     _16: '<span>{{eth}} {{symbol}}</span> — to distribute',
     _17: '<span>{{eth}} {{symbol}}</span> — service fee',

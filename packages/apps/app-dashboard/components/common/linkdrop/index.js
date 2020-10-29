@@ -8,7 +8,7 @@ import { defineDefaultSymbol } from 'helpers'
 import { Icons, Loading } from '@linkdrop/ui-kit'
 import config from 'config-dashboard'
 import { multiply, bignumber } from 'mathjs'
-import { convertFromExponents } from '@linkdrop/commons'
+import { convertFromExponents, defineEtherscanUrl } from '@linkdrop/commons'
 import variables from 'variables'
 
 moment.locale('en-gb')
@@ -60,7 +60,9 @@ class Linkdrop extends React.Component {
       id
     } = this.props
 
-    const checkAddressUrl = `${Number(chainId) === 1 ? config.etherscanMainnet : config.etherscanRinkeby}/${id}`
+    const etherscanUrl = defineEtherscanUrl({ chainId })
+    const checkAddressUrl = `${etherscanUrl}address/${id}`
+
     return <div className={classNames(styles.container, { [styles.containerDisabled]: status === 'canceled' })}>
       {loading && <Loading withOverlay />}
       {this.renderTokenTypeLabel({ tokenType })}
