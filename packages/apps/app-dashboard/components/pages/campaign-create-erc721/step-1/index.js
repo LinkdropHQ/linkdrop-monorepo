@@ -113,7 +113,7 @@ class Step1 extends React.Component {
 
   render () {
     const { currentIds, ethAmount, addEth, tokenAddress, customTokenAddress, options, wallet } = this.state
-    const { privateKey, proxyAddress, symbol, assetsERC721, loading, tokensLoading } = this.props
+    const { privateKey, proxyAddress, symbol, assetsERC721, loading, tokensLoading, chainId } = this.props
     const tokenSymbol = (assetsERC721.find(item => item.address === tokenAddress) || {}).symbol
     return <div className={classNames(styles.container, { [styles.customTokenEnabled]: tokenSymbol === 'ERC20' })}>
       {(tokensLoading || loading) && <PageLoader />}
@@ -159,7 +159,7 @@ class Step1 extends React.Component {
             tokenSymbol: symbol || tokenSymbol,
             addEth
           })}
-          {this.defaultSymbol !== 'xDAI' && <Note aside text={this.t('texts.gasPriceAttention')} />}
+          {Number(chainId) === 1 && <Note aside text={this.t('texts.gasPriceAttention')} />}
         </div>
       </div>
       <div>

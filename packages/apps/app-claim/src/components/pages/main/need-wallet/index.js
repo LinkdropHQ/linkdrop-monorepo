@@ -26,8 +26,8 @@ class NeewWallet extends React.Component {
       <Alert className={styles.alert} icon={<Icons.Exclamation />} />
       <div className={styles.title} dangerouslySetInnerHTML={{ __html: this.t('titles.main') }} />
       <div className={styles.content}>
-        {w !== 'portis' && this.renderButton({ connector: 'fortmatic', context })}
-        {w !== 'fortmatic' && Number(chainId) !== 100 && this.renderButton({ connector: 'portis', context })}
+        {Number(chainId) !== 100 && this.renderButton({ connector: 'fortmatic', context })}
+        {this.renderButton({ connector: 'portis', context })}
         {this.renderButton({ connector: 'walletconnect', context })}
         {this.renderButton({ connector: 'metamask', context })}
         <div className={styles.instructions}>
