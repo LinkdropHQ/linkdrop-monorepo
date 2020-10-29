@@ -167,7 +167,7 @@ class Step1 extends React.Component {
             tokenSymbol: symbol || tokenSymbol,
             addEth
           })}
-          {this.defaultSymbol !== 'xDAI' && <Note aside text={this.t('texts.gasPriceAttention')} />}
+          {Number(chainId) === 1 && <Note aside text={this.t('texts.gasPriceAttention')} />}
         </div>
       </div>
       <NextButton

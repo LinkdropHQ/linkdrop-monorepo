@@ -14,8 +14,9 @@ class Main extends React.Component {
   }
 
   render () {
+    const { chainId } = this.props
     return <div className={styles.container}>
-      {this.defaultSymbol !== 'xDAI' && <Note text={this.t('texts.gasPriceAttention')} />}
+      {Number(chainId) === 1 && <Note text={this.t('texts.gasPriceAttention')} />}
       <div className={styles.blocksContainer}>
         <ActionBlock
           title={this.t('titles.erc20Campaign')}
