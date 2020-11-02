@@ -20,21 +20,16 @@ class NeewWallet extends React.Component {
   render () {
     const { context } = this.props
     const { loading } = this.state
-    const { w = 'trust' } = getHashVariables()
+    const { w = 'trust', chainId } = getHashVariables()
     return <div className={commonStyles.container}>
       {loading && <Loading withOverlay />}
       <Alert className={styles.alert} icon={<Icons.Exclamation />} />
       <div className={styles.title} dangerouslySetInnerHTML={{ __html: this.t('titles.main') }} />
       <div className={styles.content}>
-        {w !== 'portis' && this.renderButton({ connector: 'fortmatic', context })}
-        {w !== 'fortmatic' && this.renderButton({ connector: 'portis', context })}
-        <div className={styles.divider}>{this.t('titles.divider')}</div>
-        {false && <Button
-          inverted className={styles.button}
-          onClick={_ => context.activate('Metamask')}
-        >
-          {this.t('buttons.metamask')}
-        </Button>}
+        {Number(chainId) !== 100 && this.renderButton({ connector: 'fortmatic', context })}
+        {this.renderButton({ connector: 'portis', context })}
+        {this.renderButton({ connector: 'walletconnect', context })}
+        {this.renderButton({ connector: 'metamask', context })}
         <div className={styles.instructions}>
           <div dangerouslySetInnerHTML={{ __html: this.t('texts._1') }} />
           <div dangerouslySetInnerHTML={{ __html: this.t('texts._2') }} />

@@ -5,24 +5,41 @@
   height: 100vh;
   position: relative;
   padding: 35px 0px 40px;
-  background: $blackColor;
+  background: #FFF;
   display: flex;
   flex-direction: column;
 }
 
 .logout {
   cursor: pointer;
+  color: $dbBlue;
+  font-family: 'Inter-Medium';
+}
+
+.networkName {
+  padding: 10px 15px;
+  color: $darkOrangeColor;
+  font-size: 16px;
+  border-radius: 5px;
+  border: 1px solid $darkOrangeColor;
+  margin-left: 50px;
+  margin-bottom: 30px;
+  display: inline-block;
+}
+
+.networkNameMain {
+  color: $greenColor;
+  border-color: $greenColor;
 }
 
 .logo {
   cursor: pointer;
   display: block;
-  margin: 0 auto 50px 50px;
+  margin: 0 auto 25px 50px;
   width: 181px;
 }
 
 .connectorData {
-  
   font-size: 16px;
   max-width: 170px;
   margin: 0 auto 20px;
@@ -32,7 +49,7 @@
   color: $textGreyColor;
 
   span {
-    color: $whiteColor;
+    color: $blackColor;
     font-family: 'Inter-Medium';
   }
 
@@ -71,7 +88,7 @@
 }
 
 .menuItem {
-  color: $whiteColor;
+  color: $blackColor;
   font-size: 20px;
   margin-bottom: 26px;
   height: 40px;
@@ -99,7 +116,7 @@
 
   a {
     text-decoration: none;
-    color: $whiteColor;
+    color: $blackColor;
     padding-left: 40px;
     display: inline-block;
     width: 100%;

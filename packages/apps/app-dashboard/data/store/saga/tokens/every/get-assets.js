@@ -12,7 +12,7 @@ const generator = function * ({ payload }) {
     yield put({
       type: 'TOKENS.SET_CURRENT_ETH_BALANCE',
       payload: {
-        currentEthBalance: Math.round(ethBalanceFormatted * 100) / 100
+        currentEthBalance: Math.round(ethBalanceFormatted * 1000) / 1000
       }
     })
 

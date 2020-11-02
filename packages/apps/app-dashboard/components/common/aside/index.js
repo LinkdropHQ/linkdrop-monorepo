@@ -6,6 +6,7 @@ import { RetinaImage } from '@linkdrop/ui-kit'
 import { getImages } from 'helpers'
 import classNames from 'classnames'
 import { withRouter } from 'react-router'
+import { defineNetworkName, capitalize } from '@linkdrop/commons'
 
 @actions(({
   user: {
@@ -26,6 +27,7 @@ import { withRouter } from 'react-router'
 class Aside extends React.Component {
   render () {
     const { currentAddress, items, chainId, web3ProviderName } = this.props
+    
     return <aside className={styles.container}>
       <div className={styles.mainBlock}>
         <div className={styles.logo}>
@@ -33,11 +35,11 @@ class Aside extends React.Component {
             <RetinaImage alwaysHighRes width={115} {...getImages({ src: 'logo' })} />
           </a>
         </div>
+        {this.renderNetworkName({ chainId })}
         {this.renderDashboardButton()}
         {this.renderCampaignsButton({ currentAddress, items, chainId })}
         {this.renderAnalyticsButton()}
         {this.renderSettingsButton()}
-        {this.renderCreateButton({ currentAddress })}
       </div>
       <div className={styles.footer}>
         {this.renderConnectorData({ web3ProviderName, currentAddress })}
@@ -50,6 +52,19 @@ class Aside extends React.Component {
         </div>
       </div>
     </aside>
+  }
+
+  renderNetworkName ({ chainId }) {
+    const netWorkName = defineNetworkName({ chainId })
+    if (!chainId) { return null }
+    if (!netWorkName) { return null }
+    if (netWorkName === '') { return null }
+    const title = netWorkName === 'xdai' ? 'xDAI' : capitalize({ string: netWorkName })
+    return <div className={classNames(styles.networkName, {
+      [styles.networkNameMain]: netWorkName === 'xdai' || netWorkName === 'mainnet'
+    })}>
+      {title}
+    </div>
   }
 
   renderConnectorData ({ web3ProviderName, currentAddress }) {
@@ -68,30 +83,15 @@ class Aside extends React.Component {
       <span>{web3ProviderName}</span> connected
       <div>{currentAddressFormatted}</div>
       <div className={styles.logout} onClick={_ => window.location.reload()}>
-        <span>
-          {this.t('logout')}
-        </span>
+        {this.t('logout')}
       </div>
     </div>
   }
 
-  renderCreateButton ({ currentAddress }) {
-    return <div className={styles.buttonContainer}>
-      <Button
-        className={classNames(styles.button, { [styles.buttonDisabled]: !currentAddress })}
-        onClick={_ => {
-          if (!currentAddress) { return }
-          window.location.href = '/#/'
-        }}
-        disabled={!currentAddress}
-      >
-        {this.t('create')}
-      </Button>
-    </div>
-  }
-
   renderDashboardButton () {
-    return <div className={classNames(styles.menuItem, { [styles.active]: this.defineCurrentPage() === 'dashboard' })}>
+    return <div className={classNames(styles.menuItem, {
+      [styles.active]: this.defineCurrentPage() === 'dashboard'
+    })}>
       <a href='/#/'>{this.t('dashboard')}</a>
     </div>
   }
@@ -99,7 +99,7 @@ class Aside extends React.Component {
   renderCampaignsButton ({ currentAddress, items, chainId }) {
     const itemsForCurrentChainId = items.filter(item => item.chainId === chainId && item.currentAddress === currentAddress)
     return <div className={classNames(styles.menuItem, {
-      [styles.disabled]: !currentAddress || !itemsForCurrentChainId || itemsForCurrentChainId.length === 0,
+      [styles.disabled]: (!currentAddress || !itemsForCurrentChainId || itemsForCurrentChainId.length === 0) && this.defineCurrentPage() !== 'campaigns',
       [styles.active]: this.defineCurrentPage() === 'campaigns'
     })}
     >
@@ -126,8 +126,8 @@ class Aside extends React.Component {
 
   defineCurrentPage () {
     const { location: { pathname } } = this.props
-    if (pathname === '/campaigns') { return 'campaigns' }
-    if (pathname === '/') { return 'dashboard' }
+    if (pathname.includes('campaigns')) { return 'campaigns' }
+    if (pathname.includes('/')) { return 'dashboard' }
     return null
   }
 }

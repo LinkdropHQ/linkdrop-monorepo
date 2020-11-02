@@ -16,10 +16,11 @@ export default {
     yourEmail: 'Your Email',
     subscribed: 'Subscribed!',
     failed: 'Failed!',
-    fakeCheckbox: 'Let me know about new giveaways'
+    fakeCheckbox: 'Let me know about new giveaways',
+    connectWallet: 'Connect your wallet<br>via {{connector}}'
   },
   buttons: {
-    useWallet: 'Use {{wallet}}',
+    useWallet: '{{wallet}}',
     copyLink: 'Copy link',
     goTo: 'Go to {{dapp}}',
     connect: 'Connect'
@@ -82,8 +83,8 @@ export default {
       description: 'Switch to {{network}}',
       instructions: {
         _1: '1. Go to <span>Settings</span> in your Wallet',
-        _2: '2. Swich Network to <span>{{network}}</span>',
-        _3: '3. Back to wallet’s DApp browser then reload the claiming link and follow instructions'
+        _2: '2. Switch Network to <span>{{network}}</span>',
+        _3: '3. Back to wallet’s DApp browser then reload the claiming page and follow instructions'
       }
     },
     NEED_METAMASK: {
@@ -92,6 +93,15 @@ export default {
       instructions: {
         _1: '1. Download <a href="https://metamask.io/" target="_blank">Metamask</a>',
         _2: '2. Then just reload the claim page'
+      }
+    },
+    CONNECTOR_NETWORK_NOT_SUPPORTED: {
+      title: 'Switch to {{network}} Network',
+      description: '',
+      instructions: {
+        _1: '1. Go to <span>Settings</span> in your Wallet',
+        _2: '2. Switch Network to <span>{{network}}</span> (if supported)',
+        _3: '3. Back to your browser or wallet’s DApp browser then reload the claiming page and follow instructions'
       }
     }
   },

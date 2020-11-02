@@ -46,7 +46,7 @@ const generator = function * ({ payload }) {
     const campaigns = yield select(generator.selectors.campaigns)
     const campaignsUpdated = campaigns.concat(newCampaign)
     yield put({ type: 'CAMPAIGNS.SET_ITEMS', payload: { items: campaignsUpdated } })
-    const campaignsStringified = JSON.stringify(campaignsUpdated)
+    const campaignsStringified = unescape(encodeURIComponent(JSON.stringify(campaignsUpdated)))
     ls && ls.setItem && ls.setItem('campaigns', window.btoa(campaignsStringified))
     yield put({ type: '*CAMPAIGNS.RESET_DATA' })
     yield put({ type: 'CAMPAIGNS.SET_CURRENT', payload: { current: proxyAddress } })

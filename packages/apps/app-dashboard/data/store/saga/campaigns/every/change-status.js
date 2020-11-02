@@ -34,7 +34,7 @@ const generator = function * ({ payload }) {
         }
         return campaign
       })
-      const campaignsStringified = JSON.stringify(campaignsUpdated)
+      const campaignsStringified = unescape(encodeURIComponent(JSON.stringify(campaignsUpdated)))
       ls && ls.setItem && ls.setItem('campaigns', window.btoa(campaignsStringified))
       yield put({ type: 'CAMPAIGNS.SET_ITEMS', payload: { items: campaignsUpdated } })
       yield put({ type: 'METAMASK.SET_STATUS', payload: { status: 'finished' } })

@@ -2,7 +2,7 @@ import React from 'react'
 import styles from '../styles.module'
 import classNames from 'classnames'
 import { Slider, RetinaImage, Button } from '@linkdrop/ui-kit'
-import { getImages } from 'helpers'
+import { getImages, getWalletData } from 'helpers'
 import { getHashVariables } from '@linkdrop/commons'
 
 const SliderComponent = ({ t, walletType, selectWallet, showSlider, platform }) => {
@@ -11,11 +11,6 @@ const SliderComponent = ({ t, walletType, selectWallet, showSlider, platform }) 
     <Slider visibleSlides={4} className={styles.slider} step={4}>
       {(platform === 'ios' ? IOS_WALLETS : ANDROID_WALLETS).map(wallet => renderImage({ id: wallet, platform, walletType, selectWallet }))}
     </Slider>
-    {/* <Button
-      onClick={() => context.setConnector('Fortmatic')}
-    >
-      fortmatic
-    </Button> */}
   </div>
 }
 
@@ -24,11 +19,15 @@ const renderImage = ({ id, walletType, selectWallet, platform }) => {
   if (walletType === id) { return null }
   if (walletType == null && id === w) { return null }
   const icon = renderIcon({ id, platform })
-  return <div
-    className={classNames(styles.wallet, styles.withBorder)}
-    onClick={_ => selectWallet && selectWallet({ id })}
-  >
-    {icon}
+  const title = getWalletData({ wallet: id }).name
+  return <div className={styles.walletContainer}>
+    <div
+      className={classNames(styles.wallet, styles.withBorder)}
+      onClick={_ => selectWallet && selectWallet({ id })}
+    >
+      {icon}
+    </div>
+    <div className={styles.walletTitle}>{title}</div>
   </div>
 }
 
@@ -44,5 +43,5 @@ const renderIcon = ({ id, platform }) => {
 
 export default SliderComponent
 
-const ANDROID_WALLETS = ['trust', 'coinbase', 'opera', 'imtoken', 'status', 'gowallet', 'buntoy', 'fortmatic', 'portis']
-const IOS_WALLETS = ['trust', 'coinbase', 'imtoken', 'status', 'tokenpocket', 'opera', 'fortmatic', 'portis']
+const ANDROID_WALLETS = ['walletconnect', 'metamask', 'coinbase', 'imtoken', 'fortmatic', 'portis', 'opera']
+const IOS_WALLETS = ['walletconnect', 'metamask', 'coinbase', 'imtoken', 'fortmatic', 'portis', 'opera']

@@ -19,5 +19,6 @@ contract NFTMock is ERC721Metadata {
             super._setTokenURI(i, "https://api.myjson.com/bins/1dhwd6");
         }
     }
-
+    
+    function tokenOfOwnerByIndex(address _owner, uint256 _index) external view returns (uint256);
 }
