@@ -21,10 +21,6 @@ const generator = function * ({ payload }) {
     )
     const privateKey = yield select(generator.selectors.privateKey)
     const tokenAddress = yield select(generator.selectors.tokenAddress)
-
-    if (defaultWallet === 'burner2') {
-      sdk.claimHost = wallets[defaultWallet].walletURL
-    }
     
     const link = yield sdk.generateLink({
       signingKeyOrWallet: privateKey,

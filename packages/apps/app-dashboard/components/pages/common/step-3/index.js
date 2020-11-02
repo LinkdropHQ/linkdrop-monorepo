@@ -109,7 +109,7 @@ class Step3 extends React.Component {
       <PageHeader title={this.t('titles.sendEth', { symbol: this.defaultSymbol, ethAmount: ethAmountFinal })} />
       <div className={styles.main}>
         <div className={styles.description}>
-          <p className={styles.text} dangerouslySetInnerHTML={{ __html: this.t('texts._10') }} />
+          <p className={styles.text} dangerouslySetInnerHTML={{ __html: this.t('texts._10', { defaultSymbol: this.defaultSymbol }) }} />
         </div>
         <div className={styles.scheme}>
           <Instruction linksAmount={linksAmount} ethAmount={ethAmount} />
