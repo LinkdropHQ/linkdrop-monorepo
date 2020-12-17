@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, RetinaImage } from '@linkdrop/ui-kit'
+import { RetinaImage } from '@linkdrop/ui-kit'
 import { translate, actions, platform } from 'decorators'
 import { getImages, getWalletLink, getWalletData, capitalize } from 'helpers'
 import { copyToClipboard, getHashVariables } from '@linkdrop/commons'
@@ -10,6 +10,7 @@ import Slider from './slider'
 import CommonInstruction from './common-instruction'
 import DeepLinkInstruction from './deep-link-instruction'
 import connectors from 'components/application/connectors'
+import { RoundedButton } from 'components/common'
 
 @actions(({ user: { walletType } }) => ({ walletType }))
 @translate('pages.main')
@@ -27,10 +28,10 @@ class WalletChoosePage extends React.Component {
     const { showSlider, loading } = this.state
     const { walletType, context } = this.props
     const { platform } = this
-    const { w = (platform === 'ios' ? 'coinbase' : 'trust'), chainId, mw } = getHashVariables()
+    const { variant, w = (platform === 'ios' ? 'coinbase' : 'trust'), chainId, mw } = getHashVariables()
     const addSlider = Number(chainId) !== 100
     if (walletType && walletType != null) {
-      return this.renderWalletInstruction({ walletType })
+      return this.renderWalletInstruction({ walletType, variant })
     } else {
       const button = this.defineButton({ chainId, platform, w, context, loading })
       const { name: walletTitle } = getWalletData({ wallet: w })
@@ -42,7 +43,7 @@ class WalletChoosePage extends React.Component {
         <div className={classNames(styles.wallet, styles.withBorder, styles.walletPreview)}>
           {this.renderIcon({ id: w })}
         </div>
-        <div className={styles.title} dangerouslySetInnerHTML={{__html: this.t('titles.connectWallet', { connector: walletTitle })}}/>
+        <div className={styles.title} dangerouslySetInnerHTML={{__html: this.t(`titles.${variant ? 'youNeedEth' : 'connectWallet'}`, { connector: walletTitle })}}/>
         {button}
         {addSlider && this.renderSlider({ walletType, mw })}
       </div>
@@ -55,14 +56,14 @@ class WalletChoosePage extends React.Component {
     if (w !== 'fortmatic' && w !== 'portis' && w !== 'walletconnect') {
       const buttonTitle = getWalletData({ wallet: w }).name
       if (w === 'coinbase') {
-        return <Button onClick={_ => this.actions().deeplinks.getCoinbaseLink({ chainId })} className={styles.button}>
+        return <RoundedButton onClick={_ => this.actions().deeplinks.getCoinbaseLink({ chainId })} className={styles.button}>
           {this.t('buttons.useWallet', { wallet: buttonTitle })}
-        </Button>
+        </RoundedButton>
       }
       const buttonLink = getWalletLink({ platform, wallet: w, currentUrl: window.location.href })
-      return <Button href={buttonLink} target='_blank' className={styles.button}>
+      return <RoundedButton href={buttonLink} target='_blank' className={styles.button}>
         {this.t('buttons.useWallet', { wallet: buttonTitle })}
-      </Button>
+      </RoundedButton>
     }
     return this.renderConnectorButton({ context, loading, connector: capitalize({ string: w }) })
   }
@@ -86,10 +87,10 @@ class WalletChoosePage extends React.Component {
     return walletURL
   }
 
-  renderWalletInstruction ({ walletType }) {
+  renderWalletInstruction ({ walletType, variant }) {
     const { showSlider } = this.state
     const { name: walletTitle, walletURL, walletURLIos } = getWalletData({ wallet: walletType })
-    const title = <div className={styles.title} dangerouslySetInnerHTML={{__html: this.t('titles.connectWallet', { connector: walletTitle })}}/>
+    const title = <div className={styles.title} dangerouslySetInnerHTML={{__html: this.t(`titles.${variant ? 'youNeedEth' : 'connectWallet'}`, { connector: walletTitle })}}/>
     return <div className={classNames(commonStyles.container, styles.container, {
       [styles.sliderShow]: showSlider,
       [styles.sliderHide]: showSlider === false

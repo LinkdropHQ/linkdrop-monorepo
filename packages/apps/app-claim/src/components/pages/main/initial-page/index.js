@@ -1,9 +1,10 @@
 import React from 'react'
-import { Alert, Icons, Button } from '@linkdrop/ui-kit'
+import { Alert, Icons } from '@linkdrop/ui-kit'
 import { translate } from 'decorators'
 import { shortenString, getHashVariables } from '@linkdrop/commons'
 import text from 'texts'
 import classNames from 'classnames'
+import { RoundedButton } from 'components/common'
 
 import styles from './styles.module'
 import commonStyles from '../styles.module'
@@ -26,23 +27,40 @@ class InitialPage extends React.Component {
     }
   }
 
+  renderIcon ({ nftAddress, symbol, variant }) {
+    const icon = 'https://s3.amazonaws.com/neon-district-founders-sale/07_RiotShield/008_RiotShield_UnCommon.png'
+    const { iconType } = this.state
+    const finalIcon = iconType === 'default' ? <img onError={_ => this.setState({ iconType: 'blank' })} className={styles.icon} src={icon} /> : <Icons.Star />
+    return <Alert
+      noBorder={iconType === 'default' && symbol !== 'ETH' && symbol !== 'xDAI'} className={classNames(styles.tokenIcon, {
+        [styles.tokenIconNft]: nftAddress && iconType === 'default',
+        [styles.tokenIconNftLarge]: nftAddress && iconType === 'default' && variant
+      })} icon={finalIcon}
+    />
+  }
+
+  renderTitle ({ variant, amount, symbol }) {
+    const title = variant ? this.t('titles.claimInstruction'): <><span>{amount && parseFloat(amount)}</span> {symbol}</>
+    return <div className={classNames(styles.title, {
+      [styles.titleVariant]: variant
+    })}>
+      {title}
+    </div>
+  }
+
   render () {
     const { onClick, amount, symbol, loading, icon, wallet } = this.props
-    const { iconType } = this.state
-    const { nftAddress } = getHashVariables()
-    const finalIcon = iconType === 'default' ? <img onError={_ => this.setState({ iconType: 'blank' })} className={styles.icon} src={icon} /> : <Icons.Star />
+    const { nftAddress, variant } = getHashVariables()
     return <div className={commonStyles.container}>
-      <Alert
-        noBorder={iconType === 'default' && symbol !== 'ETH' && symbol !== 'xDAI'} className={classNames(styles.tokenIcon, {
-          [styles.tokenIconNft]: nftAddress && iconType === 'default'
-        })} icon={finalIcon}
-      />
-      <div className={styles.title}>
-        <span>{amount && parseFloat(amount)}</span> {symbol}
-      </div>
-      <Button loading={loading} className={styles.button} onClick={_ => onClick && onClick()}>
-        {text('common.buttons.claim')}
-      </Button>
+      {this.renderIcon({ nftAddress, symbol, variant, icon })}
+      {this.renderTitle({ variant, amount, symbol })}
+      <RoundedButton
+        loading={loading}
+        className={styles.button}
+        onClick={_ => onClick && onClick()}
+      >
+        {text('common.buttons.claim')} {variant && 'NFT'}
+      </RoundedButton>
       <div
         className={styles.terms} dangerouslySetInnerHTML={{
           __html: this.t('titles.agreeWithTerms', {
