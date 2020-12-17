@@ -117,32 +117,32 @@ class WalletChoosePage extends React.Component {
         return this.renderConnectorButton({ context, loading, connector: capitalize({ string: walletType }) })
       case 'metamask':
         const buttonLink = getWalletLink({ platform, wallet: walletType, currentUrl: window.location.href })
-        return <Button href={platform !== 'desktop' && buttonLink} className={styles.button}>
+        return <RoundedButton href={platform !== 'desktop' && buttonLink} className={styles.button}>
           {this.t('buttons.connect')}
-        </Button>
+        </RoundedButton>
       case 'trust':
       case 'imtoken':
       case 'status':
       case 'opera': {
         const buttonLink = getWalletLink({ platform, wallet: walletType, currentUrl: window.location.href })
-        return <Button href={platform !== 'desktop' && buttonLink} className={styles.button}>
+        return <RoundedButton href={platform !== 'desktop' && buttonLink} className={styles.button}>
           {this.t('buttons.connect')}
-        </Button>
+        </RoundedButton>
       }
       case 'coinbase': {
-        return <Button onClick={_ => this.actions().deeplinks.getCoinbaseLink({ chainId })} className={styles.button}>
+        return <RoundedButton onClick={_ => this.actions().deeplinks.getCoinbaseLink({ chainId })} className={styles.button}>
           {this.t('buttons.connect')}
-        </Button>
+        </RoundedButton>
       }
       default:
-        return <Button inverted onClick={_ => copyToClipboard({ value: window.location.href })} className={styles.button}>
+        return <RoundedButton inverted onClick={_ => copyToClipboard({ value: window.location.href })} className={styles.button}>
           {this.t('buttons.copyLink')}
-        </Button>
+        </RoundedButton>
     }
   }
 
   renderConnectorButton ({ context, connector, loading }) {
-    return <Button
+    return <RoundedButton
       className={styles.button}
       loading={loading}
       onClick={_ => {
@@ -154,7 +154,7 @@ class WalletChoosePage extends React.Component {
       }}
     >
       {this.t('buttons.connect')}
-    </Button>
+    </RoundedButton>
   }
 
   renderSlider ({ walletType, mw }) {
