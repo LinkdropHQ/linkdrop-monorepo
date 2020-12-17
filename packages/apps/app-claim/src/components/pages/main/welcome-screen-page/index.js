@@ -15,7 +15,7 @@ class WelcomeScreenPage extends React.Component {
       </h2>
       <img
         className={styles.image}
-        src='https://s3.amazonaws.com/neon-district-founders-sale/07_RiotShield/008_RiotShield_UnCommon.png'
+        src="https://i.ibb.co/sCX6Hn1/image-1.png"
       />
       <p
         className={styles.description}

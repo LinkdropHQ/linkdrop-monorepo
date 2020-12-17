@@ -28,7 +28,7 @@ class InitialPage extends React.Component {
   }
 
   renderIcon ({ nftAddress, symbol, variant }) {
-    const icon = 'https://s3.amazonaws.com/neon-district-founders-sale/07_RiotShield/008_RiotShield_UnCommon.png'
+    const icon = "https://i.ibb.co/sCX6Hn1/image-1.png"
     const { iconType } = this.state
     const finalIcon = iconType === 'default' ? <img onError={_ => this.setState({ iconType: 'blank' })} className={styles.icon} src={icon} /> : <Icons.Star />
     return <Alert

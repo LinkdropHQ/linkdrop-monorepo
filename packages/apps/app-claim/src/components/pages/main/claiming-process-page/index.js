@@ -10,7 +10,6 @@ import classNames from 'classnames'
 @translate('pages.main')
 class ClaimingProcessPage extends React.Component {
   componentDidMount () {
-    return
     const { wallet } = this.props
     const {
       tokenAddress,
