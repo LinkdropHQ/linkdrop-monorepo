@@ -20,7 +20,7 @@ export default {
     fakeCheckbox: 'Let me know about new giveaways',
     connectWallet: 'Connect your wallet<br>via {{connector}}',
     youNeedEth: 'You need an Ethereum wallet to claim your NFT',
-    claimInstruction: 'Your wallet will receive 1 NFT  and .005 ETH to play with it',
+    claimInstruction: 'Your wallet will receive 1 NFT and .005 ETH to play with it',
     howToSeeTokens: 'How to see your NFT in<br><a href={{metamaskHref}}>MetaMask</a> or <a href="href={{coinbaseHref}}">Coinbase Wallet</a>',
     congrats: 'Congrats!',
     nftClaimed: 'NFT Claimed'
