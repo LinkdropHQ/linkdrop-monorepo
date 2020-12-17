@@ -21,7 +21,7 @@ class WelcomeScreenPage extends React.Component {
         className={styles.description}
         dangerouslySetInnerHTML={{
           __html: this.t('texts.description', {
-            href: 'https://google.com'
+            href: 'https://artblocks.io/project/2'
           })
         }}
       />
