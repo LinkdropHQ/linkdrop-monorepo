@@ -10,6 +10,12 @@
   text-transform: uppercase;
 }
 
+.titleVariant {
+  font-size: 24px;
+  text-transform: none;
+}
+
+
 .button {
   margin-bottom: 15px;
   max-width: 300px;
@@ -32,6 +38,11 @@
 .tokenIconNft {
   width: 140px;
   height: 140px;
+}
+
+.tokenIconNftLarge {
+  width: 150px;
+  height: 150px;
 }
 
 .wallet {

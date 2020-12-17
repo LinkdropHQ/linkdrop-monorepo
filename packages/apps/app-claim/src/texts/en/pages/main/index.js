@@ -5,7 +5,7 @@ export default {
     claimTo: 'Claim to: <span>{{wallet}}</span>',
     transactionInProcess: 'Transaction is processing',
     claiming: 'Claiming...',
-    instructions: 'It may take a few minutes. You can come back later.',
+    instructions: 'It may take a few minutes.',
     seeDetails: 'See details on <a target="_blank" href={{transactionLink}}>Etherscan</a>',
     seeDetailsBlockscout: 'See details on <a target="_blank" href={{transactionLink}}>Blockscout</a>',
     tokensClaimed: '<span>{{tokens}}</span> claimed',
@@ -17,7 +17,12 @@ export default {
     subscribed: 'Subscribed!',
     failed: 'Failed!',
     fakeCheckbox: 'Let me know about new giveaways',
-    connectWallet: 'Connect your wallet<br>via {{connector}}'
+    connectWallet: 'Connect your wallet<br>via {{connector}}',
+    youNeedEth: 'You need an Ethereum wallet to claim your NFT',
+    claimInstruction: 'Your wallet will receive 1 NFT  and .005 ETH to play with it',
+    howToSeeTokens: 'How to see your NFT in<br><a href={{metamaskHref}}>MetaMask</a> or <a href="href={{coinbaseHref}}">Coinbase Wallet</a>',
+    congrats: 'Congrats!',
+    nftClaimed: 'NFT Claimed'
   },
   buttons: {
     useWallet: '{{wallet}}',

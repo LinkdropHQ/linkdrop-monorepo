@@ -7,6 +7,8 @@ import ClaimingProcessPage from './claiming-process-page'
 import ErrorPage from './error-page'
 import ClaimingFinishedPage from './claiming-finished-page'
 import NeedWallet from './need-wallet'
+import WelcomeScreenPage from './welcome-screen-page'
+
 import { terminalApiKey, terminalProjectId } from 'app.config.js'
 import { getHashVariables, defineNetworkName, capitalize } from '@linkdrop/commons'
 import Web3 from 'web3'
@@ -36,7 +38,8 @@ class Claim extends React.Component {
     this.state = {
       accounts: null,
       connectorChainId: null,
-      currentProvider
+      currentProvider,
+      welcomeScreen: true
     }
   }
 
@@ -127,8 +130,9 @@ class Claim extends React.Component {
   }
 
   renderCurrentPage ({ context }) {
+    const { variant } = getHashVariables()
     const { decimals, amount, symbol, icon, step, userLoading, errors, alreadyClaimed, web3Provider, readyToClaim } = this.props
-    const { connectorChainId } = this.state
+    const { connectorChainId, welcomeScreen } = this.state
     const {
       account
     } = context
@@ -168,6 +172,19 @@ class Claim extends React.Component {
       // if network id in the link and in the web3 are different
       return <ErrorPage error='NETWORK_NOT_SUPPORTED' network={capitalize({ string: defineNetworkName({ chainId }) })} />
     }
+
+    if (variant && welcomeScreen) {
+      return <WelcomeScreenPage
+        icon={icon}
+        onClick={_ => {
+          this.setState({
+            welcomeScreen: false
+          })
+        }}
+      />
+    }
+
+
 
     switch (step) {
       case 1:
