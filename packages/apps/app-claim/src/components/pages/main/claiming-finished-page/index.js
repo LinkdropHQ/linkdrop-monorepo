@@ -46,7 +46,7 @@ class ClaimingFinishedPage extends React.Component {
       />
       {this.renderTitles({ transactionStatus, amount, symbol, variant })}
       {this.renderEtherscanUrl({ transactionId, chainId })}
-      {this.renderTokenCheckInstruction({ variant })}
+      {this.renderTokenCheckInstruction({ variant, wallet })}
       {this.renderDappButton({ dappId, transactionId, transactionStatus })}
       {this.renderSubscribeForm({ variant, subscribe, wallet, email, loading, sendDataStatus, transactionId })}
     </div>
@@ -84,16 +84,28 @@ class ClaimingFinishedPage extends React.Component {
     />
   }
 
-  renderTokenCheckInstruction ({ variant }) {
-    return <div
-      className={styles.description}
-      dangerouslySetInnerHTML={{
-        __html: this.t('titles.howToSeeTokens', {
-          metamaskHref: 'https://google.com',
-          coinbaseHref: 'https://google.com',
-        })
-      }}
-    />
+  renderTokenCheckInstruction ({ variant, wallet }) {
+    if (!variant) { return null }
+    return <div>
+      <div
+        className={classNames(styles.description, styles.descriptionMarginBottom)}
+        dangerouslySetInnerHTML={{
+          __html: this.t('titles.howToSeeTokens', {
+            openseaHref: `https://opensea.io/${wallet ? `accounts/${wallet}` : ''}`,
+            raribleHref: `https://app.rarible.com/${wallet ? `user/${wallet}/collectibles` : ''}`
+          })
+        }}
+      />
+      <div className={classNames(styles.description, styles.descriptionMarginBottom)}>{this.t('titles.or')}</div>
+      <div
+        className={styles.description}
+        dangerouslySetInnerHTML={{
+          __html: this.t('titles.viewTheEntireSeries', {
+            href: 'https://artblocks.io/project/5'
+          })
+        }}
+      />
+    </div>
   }
 
   renderDappButton ({ dappId, transactionId, transactionStatus }) {
