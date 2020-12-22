@@ -21,7 +21,7 @@ export default {
     connectWallet: 'Connect your wallet<br>via {{connector}}',
     youNeedEth: 'You need an Ethereum wallet to claim your NFT',
     claimInstruction: 'Your wallet will receive 1 NFT and .005 ETH to play with it',
-    howToSeeTokens: 'How to see your NFT in<br><a target="_blank" href={{openseaHref}}>Opensea</a> or <a target="_blank" href="{{raribleHref}}">Rarible</a>',
+    howToSeeTokens: 'Now you can see your NFT in<br><a target="_blank" href={{openseaHref}}>Opensea</a> or <a target="_blank" href="{{raribleHref}}">Rarible</a>',
     or: 'or',
     viewTheEntireSeries: 'View the entire <a href={{href}}>series</a>',
     congrats: 'Congrats!',
