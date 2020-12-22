@@ -15,7 +15,7 @@ class WelcomeScreenPage extends React.Component {
       </h2>
       <img
         className={styles.image}
-        src="https://i.ibb.co/sCX6Hn1/image-1.png"
+        src={icon}
       />
       <p
         className={styles.description}
