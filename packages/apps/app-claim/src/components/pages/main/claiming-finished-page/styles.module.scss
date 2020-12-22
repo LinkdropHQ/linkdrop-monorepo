@@ -9,12 +9,16 @@
 }
 
 .description {
-  font-size: 14px;
+  font-size: 18px;
   margin-bottom: 8px;
 
   a {
     color: $blackColor;
   }
+}
+
+.descriptionMarginBottom {
+  margin-bottom: 16px;
 }
 
 .alert {

@@ -1,0 +1,29 @@
+@import "variables";
+
+.image {
+  max-width: 275px;
+  margin-bottom: 30px;
+}
+
+.description {
+  max-width: 348px;
+  font-size: 18px;
+  margin-top: 0px;
+  padding: 0px 10px;
+  margin-bottom: 30px;
+
+
+  a {
+    color: $blackColor;
+  }
+
+  span {
+    font-family: 'Inter-Medium';
+  }
+}
+
+.title {
+  margin-bottom: 40px;
+  font-family: 26px;
+}
+
