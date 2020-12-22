@@ -34,7 +34,7 @@ class ClaimingFinishedPage extends React.Component {
     }
   }
   render () {
-    const { chainId, dappId, subscribe } = getHashVariables()
+    const { chainId, dappId, subscribe, variant } = getHashVariables()
     const { formShow, email } = this.state
     const { transactionId, amount, wallet, symbol, transactionStatus, loading, sendDataStatus } = this.props
     return <div className={classNames(commonStyles.container, {
@@ -44,26 +44,67 @@ class ClaimingFinishedPage extends React.Component {
         icon={transactionStatus === 'failed' ? <Icons.Exclamation /> : <Icons.Check />}
         className={styles.alert}
       />
-      <div
-        className={styles.title}
-        dangerouslySetInnerHTML={{
-          __html: this.t(transactionStatus === 'failed' ? 'titles.claimFailed' : 'titles.tokensClaimed', {
-            tokens: `${amount || ''} ${symbol || ''}`
-          })
-        }}
-      />
-      <div
-        className={classNames(styles.description, {
-          [styles.descriptionHidden]: !transactionId
-        })}
-        dangerouslySetInnerHTML={{
-          __html: this.t(`titles.${Number(chainId) === 100 ? 'seeDetailsBlockscout' : 'seeDetails'}`, {
-            transactionLink: `${defineEtherscanUrl({ chainId })}tx/${transactionId}`
-          })
-        }}
-      />
+      {this.renderTitles({ transactionStatus, amount, symbol, variant })}
+      {this.renderEtherscanUrl({ transactionId, chainId })}
+      {this.renderTokenCheckInstruction({ variant, wallet })}
       {this.renderDappButton({ dappId, transactionId, transactionStatus })}
-      {this.renderSubscribeForm({ subscribe, wallet, email, loading, sendDataStatus, transactionId })}
+      {this.renderSubscribeForm({ variant, subscribe, wallet, email, loading, sendDataStatus, transactionId })}
+    </div>
+  }
+
+
+  renderTitles ({ transactionStatus, amount, symbol, variant }) {
+    if (variant) {
+      return <div
+      className={styles.title}>
+        <div dangerouslySetInnerHTML={{ __html: this.t('titles.congrats') }} />
+        <div dangerouslySetInnerHTML={{ __html: this.t('titles.nftClaimed') }} />
+      </div>
+    }
+    return <div
+      className={styles.title}
+      dangerouslySetInnerHTML={{
+        __html: this.t(transactionStatus === 'failed' ? 'titles.claimFailed' : 'titles.tokensClaimed', {
+          tokens: `${amount || ''} ${symbol || ''}`
+        })
+      }}
+    />
+  }
+
+  renderEtherscanUrl ({ transactionId, chainId }) {
+    return <div
+      className={classNames(styles.description, {
+        [styles.descriptionHidden]: !transactionId
+      })}
+      dangerouslySetInnerHTML={{
+        __html: this.t(`titles.${Number(chainId) === 100 ? 'seeDetailsBlockscout' : 'seeDetails'}`, {
+          transactionLink: `${defineEtherscanUrl({ chainId })}tx/${transactionId}`
+        })
+      }}
+    />
+  }
+
+  renderTokenCheckInstruction ({ variant, wallet }) {
+    if (!variant) { return null }
+    return <div>
+      <div
+        className={classNames(styles.description, styles.descriptionMarginBottom)}
+        dangerouslySetInnerHTML={{
+          __html: this.t('titles.howToSeeTokens', {
+            openseaHref: `https://opensea.io/${wallet ? `accounts/${wallet}` : ''}`,
+            raribleHref: `https://app.rarible.com/${wallet ? `user/${wallet}/collectibles` : ''}`
+          })
+        }}
+      />
+      <div className={classNames(styles.description, styles.descriptionMarginBottom)}>{this.t('titles.or')}</div>
+      <div
+        className={styles.description}
+        dangerouslySetInnerHTML={{
+          __html: this.t('titles.viewTheEntireSeries', {
+            href: 'https://artblocks.io/project/5'
+          })
+        }}
+      />
     </div>
   }
 
@@ -83,8 +124,9 @@ class ClaimingFinishedPage extends React.Component {
   }
 
 
-  renderSubscribeForm ({ subscribe, email, loading, sendDataStatus, transactionId, wallet }) {
+  renderSubscribeForm ({ variant, subscribe, email, loading, sendDataStatus, transactionId, wallet }) {
     if (subscribe && subscribe === 'false') { return null }
+    if (variant) { return null }
     return <div className={classNames(styles.form, {
       [styles.formLoading]: loading,
       [styles.formFinished]: sendDataStatus === 'success',

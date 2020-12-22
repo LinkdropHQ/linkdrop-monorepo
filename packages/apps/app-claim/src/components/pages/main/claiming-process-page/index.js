@@ -47,11 +47,11 @@ class ClaimingProcessPage extends React.Component {
   }
 
   render () {
-    const { chainId } = getHashVariables()
+    const { chainId, variant } = getHashVariables()
     const { transactionId } = this.props
     return <div className={commonStyles.container}>
       <Loading container size='small' className={styles.loading} />
-      <div className={styles.title}>{this.t('titles.claiming')}</div>
+      {this.renderTitle({ variant })}
       <div className={styles.subtitle}>{this.t('titles.transactionInProcess')}</div>
       <div className={styles.description}>{this.t('titles.instructions')}</div>
       <div
@@ -64,6 +64,12 @@ class ClaimingProcessPage extends React.Component {
           })
         }}
       />
+    </div>
+  }
+
+  renderTitle ({ variant }) {
+    return <div className={styles.title}>
+      {this.t(`titles.${variant ? 'claimingNFT' : 'claiming'}`)}
     </div>
   }
 }
