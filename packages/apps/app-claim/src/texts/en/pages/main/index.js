@@ -21,12 +21,18 @@ export default {
     connectWallet: 'Connect your wallet<br>via {{connector}}',
     youNeedEth: 'You need an Ethereum wallet to claim your NFT',
     claimInstruction: 'Your wallet will receive 1 NFT and .005 ETH to play with it',
-    howToSeeTokens: 'How to see your NFT in<br><a href={{metamaskHref}}>MetaMask</a> or <a href="href={{coinbaseHref}}">Coinbase Wallet</a>',
+    howToSeeTokens: 'How to see your NFT in<br><a target="_blank" href={{openseaHref}}>Opensea</a> or <a target="_blank" href="{{raribleHref}}">Rarible</a>',
+    or: 'or',
+    viewTheEntireSeries: 'View the entire <a href={{href}}>series</a>',
     congrats: 'Congrats!',
-    nftClaimed: 'NFT Claimed'
+    nftClaimed: 'NFT Claimed',
+    variantInstructions: {
+      _1: '1. Copy this page URL',
+      _2: '2. Paste it in the dApp browser after the wallet was installed'
+    }
   },
   buttons: {
-    useWallet: '{{wallet}}',
+    useWallet: 'Use {{wallet}}',
     copyLink: 'Copy link',
     goTo: 'Go to {{dapp}}',
     connect: 'Connect'

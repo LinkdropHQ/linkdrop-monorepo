@@ -43,11 +43,22 @@ class WalletChoosePage extends React.Component {
         <div className={classNames(styles.wallet, styles.withBorder, styles.walletPreview)}>
           {this.renderIcon({ id: w })}
         </div>
-        <div className={styles.title} dangerouslySetInnerHTML={{__html: this.t(`titles.${variant ? 'youNeedEth' : 'connectWallet'}`, { connector: walletTitle })}}/>
+        <div className={classNames(styles.title, {
+          [styles.titleVariant]: variant
+        })} dangerouslySetInnerHTML={{__html: this.t(`titles.${variant ? 'youNeedEth' : 'connectWallet'}`, { connector: walletTitle })}}/>
+        {this.renderVariantText({ variant })}
         {button}
         {addSlider && this.renderSlider({ walletType, mw })}
       </div>
     }
+  }
+
+  renderVariantText ({ variant }) {
+    if (!variant) return null
+    return <div className={styles.variantInstruction}>
+      <div className={styles.variantInstructionItem}>{this.t('titles.variantInstructions._1')}</div>
+      <div className={styles.variantInstructionItem}>{this.t('titles.variantInstructions._2')}</div>
+    </div>
   }
 
   defineButton ({ platform, w, context, loading, chainId }) {
@@ -90,7 +101,9 @@ class WalletChoosePage extends React.Component {
   renderWalletInstruction ({ walletType, variant }) {
     const { showSlider } = this.state
     const { name: walletTitle, walletURL, walletURLIos } = getWalletData({ wallet: walletType })
-    const title = <div className={styles.title} dangerouslySetInnerHTML={{__html: this.t(`titles.${variant ? 'youNeedEth' : 'connectWallet'}`, { connector: walletTitle })}}/>
+    const title = <div className={classNames(styles.title, {
+      [styles.titleVariant]: variant
+    })} dangerouslySetInnerHTML={{__html: this.t(`titles.${variant ? 'youNeedEth' : 'connectWallet'}`, { connector: walletTitle })}}/>
     return <div className={classNames(commonStyles.container, styles.container, {
       [styles.sliderShow]: showSlider,
       [styles.sliderHide]: showSlider === false
@@ -100,6 +113,7 @@ class WalletChoosePage extends React.Component {
         {this.renderIcon({ id: walletType })}
       </div>
       {title}
+      {this.renderVariantText({ variant })}
       {this.renderInstructionButton({ walletType })}
       {this.renderSlider({ walletType })}
     </div>
