@@ -28,7 +28,7 @@ export default {
     nftClaimed: 'NFT Claimed',
     variantInstructions: {
       _1: '1. Copy this page URL',
-      _2: '2. Paste it in the dApp browser after the wallet was installed'
+      _2: '2. Paste it in the dApp browser after the wallet is installed'
     }
   },
   buttons: {
