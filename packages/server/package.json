@@ -11,6 +11,7 @@
     "deploy-rinkeby": "cd deploy && npx shipit rinkeby deploy",
     "deploy-ropsten": "cd deploy && npx shipit ropsten deploy",
     "deploy-mainnet": "cd deploy && npx shipit mainnet deploy",
+    "deploy-kovan": "cd deploy && npx shipit kovan deploy",    
     "deploy-xdai": "cd deploy && npx shipit xdai deploy"
   },
   "devDependencies": {
