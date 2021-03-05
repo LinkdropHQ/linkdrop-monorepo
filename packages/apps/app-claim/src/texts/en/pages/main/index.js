@@ -5,7 +5,8 @@ export default {
     claimTo: 'Claim to: <span>{{wallet}}</span>',
     transactionInProcess: 'Transaction is processing',
     claiming: 'Claiming...',
-    instructions: 'It may take a few minutes. You can come back later.',
+    claimingNFT: 'Claiming NFT...',
+    instructions: 'It may take a few minutes.',
     seeDetails: 'See details on <a target="_blank" href={{transactionLink}}>Etherscan</a>',
     seeDetailsBlockscout: 'See details on <a target="_blank" href={{transactionLink}}>Blockscout</a>',
     tokensClaimed: '<span>{{tokens}}</span> claimed',
@@ -17,10 +18,21 @@ export default {
     subscribed: 'Subscribed!',
     failed: 'Failed!',
     fakeCheckbox: 'Let me know about new giveaways',
-    connectWallet: 'Connect your wallet<br>via {{connector}}'
+    connectWallet: 'Connect your wallet<br>via {{connector}}',
+    youNeedEth: 'You need an Ethereum wallet to claim your NFT',
+    claimInstruction: 'Your wallet will receive 1 NFT and .005 ETH to play with it',
+    howToSeeTokens: 'Now you can see your NFT in<br><a target="_blank" href={{openseaHref}}>Opensea</a> or <a target="_blank" href="{{raribleHref}}">Rarible</a>',
+    or: 'or',
+    viewTheEntireSeries: 'View the entire <a href={{href}}>series</a>',
+    congrats: 'Congrats!',
+    nftClaimed: 'NFT Claimed',
+    variantInstructions: {
+      _1: '1. Copy this page URL',
+      _2: '2. Paste it in the dApp browser after the wallet is installed'
+    }
   },
   buttons: {
-    useWallet: '{{wallet}}',
+    useWallet: 'Use {{wallet}}',
     copyLink: 'Copy link',
     goTo: 'Go to {{dapp}}',
     connect: 'Connect'

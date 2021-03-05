@@ -1,5 +1,5 @@
 import React from 'react'
-import { Alert, Icons, Button, RetinaImage, Loading } from '@linkdrop/ui-kit'
+import { Alert, Icons, RetinaImage, Loading } from '@linkdrop/ui-kit'
 import { translate } from 'decorators'
 import classNames from 'classnames'
 import { getImages, capitalize } from 'helpers'
@@ -7,6 +7,7 @@ import connectors from 'components/application/connectors'
 import styles from './styles.module'
 import commonStyles from '../styles.module'
 import { getHashVariables } from '@linkdrop/commons'
+import { RoundedButton } from 'components/common'
 
 @translate('pages.needWallet')
 class NeewWallet extends React.Component {
@@ -39,7 +40,7 @@ class NeewWallet extends React.Component {
   }
 
   renderButton ({ connector, context }) {
-    return <Button
+    return <RoundedButton
       inverted
       className={classNames(styles.button, styles.buttonIconed)}
       onClick={_ => {
@@ -52,7 +53,7 @@ class NeewWallet extends React.Component {
     >
       <RetinaImage width={20} {...getImages({ src: `${connector}-icon` })} />
       <div className={styles.buttonTitle}>{this.t(`buttons.${connector}`)}</div>
-    </Button>
+    </RoundedButton>
   }
 }
 
