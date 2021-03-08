@@ -6,5 +6,6 @@ const NETWORK_IDS = {
   _4: 'rinkeby',
   _5: 'goerli',
   _42: 'kovan',
-  _100: 'xdai'
+  _100: 'xdai',
+  _97: 'bsc-testnet'
 }

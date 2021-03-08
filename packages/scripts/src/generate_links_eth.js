@@ -88,7 +88,7 @@ export const generate = async () => {
       to: proxyAddress,
       value: FEE_COSTS,
       gasLimit: 23000,
-      gasPrice: ethers.utils.parseUnits('2', 'gwei')
+      gasPrice: ethers.utils.parseUnits('20', 'gwei')
     })
 
     term.bold(`Tx Hash: ^g${tx.hash}\n`)

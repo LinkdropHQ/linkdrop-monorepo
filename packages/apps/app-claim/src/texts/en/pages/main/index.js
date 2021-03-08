@@ -9,6 +9,7 @@ export default {
     instructions: 'It may take a few minutes.',
     seeDetails: 'See details on <a target="_blank" href={{transactionLink}}>Etherscan</a>',
     seeDetailsBlockscout: 'See details on <a target="_blank" href={{transactionLink}}>Blockscout</a>',
+    seeDetailsBscScan: 'See details on <a target="_blank" href={{transactionLink}}>BscScan</a>',    
     tokensClaimed: '<span>{{tokens}}</span> claimed',
     claimFailed: 'Claiming Failed',
     howToClaim: 'How to claim tokens to {{wallet}}',

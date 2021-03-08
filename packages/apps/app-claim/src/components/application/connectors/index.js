@@ -9,10 +9,10 @@ import { WalletConnectConnector } from '@web3-react/walletconnect-connector'
 
 
 const { chainId } = getHashVariables()
-const networkName = defineNetworkName({ chainId })
+// const networkName = defineNetworkName({ chainId })
 const POLLING_INTERVAL = 12000
 const Metamask = new InjectedConnector({
-  supportedChainIds: [1, 3, 4, 5, 42, 100]
+  supportedChainIds: [1, 3, 4, 5, 42, 100, 97]
 })
 
 const supportedNetworkURLs = {
@@ -20,7 +20,8 @@ const supportedNetworkURLs = {
   4: `https://rinkeby.infura.io/v3/${infuraPk}`,
   3: `https://ropsten.infura.io/v3/${infuraPk}`,
   5: `https://goerli.infura.io/v3/${infuraPk}`,
-  42: `https://kovan.infura.io/v3/${infuraPk}`
+  42: `https://kovan.infura.io/v3/${infuraPk}`,
+  // 97: 'https://data-seed-prebsc-1-s1.binance.org:8545/'
 }
 
 const Network = new NetworkConnector({
@@ -39,15 +40,9 @@ const Walletconnect = new WalletConnectConnector({
   pollingInterval: POLLING_INTERVAL
 })
 
-const Portis = new PortisConnector({
-  dAppId: portisDappId,
-  networks: [Number(chainId)]
-})
-
 const connectors = {
   Metamask,
   Network,
-  Portis,
   Walletconnect
 }
 
@@ -58,6 +53,13 @@ if (supportedNetworkURLs[Number(chainId)]) {
     chainId: Number(chainId)
   })  
   connectors.Fortmatic = Fortmatic
+
+   const Portis = new PortisConnector({
+    dAppId: portisDappId,
+    networks: [Number(chainId)]
+  })
+
+  connectors.Portis = Portis
 }
 
 export default connectors

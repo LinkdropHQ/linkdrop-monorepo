@@ -58,7 +58,7 @@ var LinkdropSDK = /*#__PURE__*/function () {
       throw new Error('Please provide factory address');
     }
 
-    if (chain !== 'mainnet' && chain !== 'ropsten' && chain !== 'rinkeby' && chain !== 'goerli' && chain !== 'kovan' && chain !== 'xdai') {
+    if (chain !== 'mainnet' && chain !== 'ropsten' && chain !== 'rinkeby' && chain !== 'goerli' && chain !== 'kovan' && chain !== 'xdai' && chain !== 'bsc-testnet') {
       throw new Error('Unsupported chain');
     }
 
@@ -641,6 +641,9 @@ function getJsonRpcUrl(chain) {
     case 'xdai':
       return 'https://dai.poa.network';
 
+    case 'bsc-testnet':
+      return 'https://data-seed-prebsc-1-s1.binance.org:8545';
+
     default:
       return "https://".concat(chain, ".infura.io");
   }
@@ -665,6 +668,9 @@ function getChainId(chain) {
 
     case 'xdai':
       return 100;
+
+    case 'bsc-testnet':
+      return 97;
 
     default:
       return null;

@@ -259,13 +259,7 @@ var signReceiverAddress = /*#__PURE__*/function () {
 exports.signReceiverAddress = signReceiverAddress;
 
 var generateAccount = function generateAccount() {
-  var wallet = Wallet.generate();
-  var address = wallet.getChecksumAddressString();
-  var privateKey = wallet.getPrivateKeyString();
-  return {
-    address: address,
-    privateKey: privateKey
-  };
+  return ethers.Wallet.createRandom();
 };
 
 exports.generateAccount = generateAccount;

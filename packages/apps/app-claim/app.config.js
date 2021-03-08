@@ -1,4 +1,4 @@
-/* global MASTER_COPY, PORTIS_DAPP_ID, FORMATIC_API_KEY_TESTNET, FORMATIC_API_KEY_MAINNET, JSON_RPC_URL_XDAI, INFURA_PK, FACTORY, INITIAL_BLOCK_GOERLI, INITIAL_BLOCK_KOVAN, INITIAL_BLOCK_ROPSTEN, INITIAL_BLOCK_MAINNET, INITIAL_BLOCK_RINKEBY */
+/* global MASTER_COPY, PORTIS_DAPP_ID, FORMATIC_API_KEY_TESTNET, FORMATIC_API_KEY_MAINNET, INFURA_PK, FACTORY, INITIAL_BLOCK_GOERLI, INITIAL_BLOCK_KOVAN, INITIAL_BLOCK_ROPSTEN, INITIAL_BLOCK_MAINNET, INITIAL_BLOCK_RINKEBY */
 
 let config
 
@@ -16,14 +16,12 @@ const initialBlockGoerli = INITIAL_BLOCK_GOERLI || config.initialBlockGoerli || 
 const initialBlockRopsten = INITIAL_BLOCK_ROPSTEN || config.initialBlockRopsten || 0
 const initialBlockKovan = INITIAL_BLOCK_KOVAN || config.initialBlockKovan || 0
 const infuraPk = INFURA_PK || String(config.infuraPk)
-const jsonRpcUrlXdai = JSON_RPC_URL_XDAI || String(config.jsonRpcUrlXdai)
 const portisDappId = PORTIS_DAPP_ID || String(config.portisDappId)
 const formaticApiKeyTestnet = FORMATIC_API_KEY_TESTNET || String(config.formaticApiKeyTestnetClaim)
 const formaticApiKeyMainnet = FORMATIC_API_KEY_MAINNET || String(config.formaticApiKeyMainnetClaim)
 
 module.exports = {
   masterCopy,
-  jsonRpcUrlXdai,
   factory,
   portisDappId,
   formaticApiKeyTestnet,
