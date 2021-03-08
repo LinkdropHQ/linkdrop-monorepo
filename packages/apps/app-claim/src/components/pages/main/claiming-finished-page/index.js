@@ -72,12 +72,18 @@ class ClaimingFinishedPage extends React.Component {
   }
 
   renderEtherscanUrl ({ transactionId, chainId }) {
+    const scannerDct = {
+      "100": 'seeDetailsBlockscout',
+      "97": 'seeDetailsBscScan'
+    }
+    const seeDetails = scannerDct[String(chainId)] || 'seeDetails'
+
     return <div
       className={classNames(styles.description, {
         [styles.descriptionHidden]: !transactionId
       })}
       dangerouslySetInnerHTML={{
-        __html: this.t(`titles.${Number(chainId) === 100 ? 'seeDetailsBlockscout' : 'seeDetails'}`, {
+        __html: this.t(`titles.${seeDetails}`, {
           transactionLink: `${defineEtherscanUrl({ chainId })}tx/${transactionId}`
         })
       }}
