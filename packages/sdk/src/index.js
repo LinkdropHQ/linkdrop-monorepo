@@ -37,7 +37,8 @@ class LinkdropSDK {
       chain !== 'rinkeby' &&
       chain !== 'goerli' &&
       chain !== 'kovan' &&
-      chain !== 'xdai'
+      chain !== 'xdai' &&
+      chain !== 'bsc-testnet'
     ) {
       throw new Error('Unsupported chain')
     }
@@ -268,6 +269,8 @@ function getJsonRpcUrl (chain) {
   switch (chain) {
     case 'xdai':
       return 'https://dai.poa.network'
+    case 'bsc-testnet':
+      return 'https://data-seed-prebsc-1-s1.binance.org:8545'
     default:
       return `https://${chain}.infura.io`
   }
@@ -287,6 +290,8 @@ function getChainId (chain) {
       return 42
     case 'xdai':
       return 100
+    case 'bsc-testnet':
+      return 97
     default:
       return null
   }

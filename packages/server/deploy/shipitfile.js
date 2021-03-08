@@ -16,7 +16,7 @@ module.exports = shipit => {
       repositoryUrl: 'git@github.com:LinkdropHQ/linkdrop-monorepo.git',
       keepReleases: 3,
       deployTo: `linkdrop/${network}`,
-      servers: 'root@rinkeby.linkdrop.io'
+      servers: 'root@mainnet.linkdrop.io'
     },
     rinkeby: { branch: 'dev' },
     ropsten: { branch: 'dev' },

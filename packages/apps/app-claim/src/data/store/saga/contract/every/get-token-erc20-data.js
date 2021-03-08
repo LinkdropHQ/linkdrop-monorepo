@@ -2,7 +2,7 @@ import { put } from 'redux-saga/effects'
 import { ethers, utils } from 'ethers'
 import { getImages } from 'helpers'
 import TokenMock from '@linkdrop/contracts/build/TokenMock.json'
-import { jsonRpcUrlXdai, infuraPk } from 'app.config.js'
+import { infuraPk } from 'app.config.js'
 import { defineJsonRpcUrl } from '@linkdrop/commons'
 
 const generator = function * ({ payload }) {
@@ -10,7 +10,7 @@ const generator = function * ({ payload }) {
     const ethWalletContract = ethers.constants.AddressZero
     yield put({ type: 'CONTRACT.SET_LOADING', payload: { loading: true } })
     const { tokenAmount, weiAmount, tokenAddress, chainId } = payload
-    const actualJsonRpcUrl = defineJsonRpcUrl({ chainId, infuraPk, jsonRpcUrlXdai })
+    const actualJsonRpcUrl = defineJsonRpcUrl({ chainId, infuraPk })
     const provider = yield new ethers.providers.JsonRpcProvider(actualJsonRpcUrl)
     let decimals
     let symbol
@@ -18,6 +18,7 @@ const generator = function * ({ payload }) {
     if (ethWalletContract === tokenAddress) {
       decimals = 18
       symbol = Number(chainId) === 100 ? 'xDAI' : 'ETH'
+      if (Number(chainId) === 97) symbol = 'BNB'
       icon = getImages({ src: 'ether' }).imageRetina
     } else if (tokenAddress.toLowerCase() === '0x89d24a6b4ccb1b6faa2625fe562bdd9a23260359') {
       // SAI token has problem with fetching decimals

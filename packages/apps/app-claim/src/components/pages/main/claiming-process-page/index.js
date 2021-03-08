@@ -49,6 +49,13 @@ class ClaimingProcessPage extends React.Component {
   render () {
     const { chainId, variant } = getHashVariables()
     const { transactionId } = this.props
+
+    const scannerDct = {
+      "100": 'seeDetailsBlockscout',
+      "97": 'seeDetailsBscScan'
+    }
+    const seeDetails = scannerDct[String(chainId)] || 'seeDetails'
+    
     return <div className={commonStyles.container}>
       <Loading container size='small' className={styles.loading} />
       {this.renderTitle({ variant })}
@@ -59,7 +66,7 @@ class ClaimingProcessPage extends React.Component {
           [styles.descriptionHidden]: !transactionId
         })}
         dangerouslySetInnerHTML={{
-          __html: this.t(`titles.${Number(chainId) === 100 ? 'seeDetailsBlockscout' : 'seeDetails'}`, {
+          __html: this.t(`titles.${seeDetails}`, {
             transactionLink: `${defineEtherscanUrl({ chainId })}tx/${transactionId}`
           })
         }}
