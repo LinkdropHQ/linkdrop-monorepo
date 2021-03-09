@@ -23,7 +23,7 @@ const generator = function * ({ payload }) {
       chain: networkName,
       linkdropMasterAddress,
       jsonRpcUrl: actualJsonRpcUrl,
-      apiHost: 'http://localhost:5000'// `https://${networkName}.linkdrop.io`
+      apiHost: `https://${networkName}.linkdrop.io`
     })
     yield put({ type: 'USER.SET_SDK', payload: { sdk } })
     const address = sdk.getProxyAddress(campaignId)
