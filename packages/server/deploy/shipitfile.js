@@ -10,6 +10,7 @@ module.exports = shipit => {
   else if (network === 'ropsten') CUSTOM_PORT = 10003
   else if (network === 'xdai') CUSTOM_PORT = 10100
   else if (network === 'kovan') CUSTOM_PORT = 10042
+  else if (network === 'bsc-testnet') CUSTOM_PORT = 10097
 
   shipit.initConfig({
     default: {
@@ -22,7 +23,8 @@ module.exports = shipit => {
     ropsten: { branch: 'dev' },
     mainnet: { branch: 'dev' },
     xdai: { branch: 'dev' },
-    kovan: { branch: 'dev' }    
+    kovan: { branch: 'dev' },
+    "bsc-testnet": { branch: 'dev' }
   })
 
   shipit.blTask('installDependencies', async () => {

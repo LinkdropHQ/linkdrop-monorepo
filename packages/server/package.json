@@ -12,7 +12,8 @@
     "deploy-ropsten": "cd deploy && npx shipit ropsten deploy",
     "deploy-mainnet": "cd deploy && npx shipit mainnet deploy",
     "deploy-kovan": "cd deploy && npx shipit kovan deploy",    
-    "deploy-xdai": "cd deploy && npx shipit xdai deploy"
+    "deploy-xdai": "cd deploy && npx shipit xdai deploy",
+    "deploy-bsc-testnet": "cd deploy && npx shipit bsc-testnet deploy"                     
   },
   "devDependencies": {
     "@babel/cli": "^7.4.3",
