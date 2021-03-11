@@ -12,7 +12,7 @@ const { chainId } = getHashVariables()
 // const networkName = defineNetworkName({ chainId })
 const POLLING_INTERVAL = 12000
 const Metamask = new InjectedConnector({
-  supportedChainIds: [1, 3, 4, 5, 42, 100, 97]
+  supportedChainIds: [1, 3, 4, 5, 42, 100, 97, 56]
 })
 
 const supportedNetworkURLs = {
