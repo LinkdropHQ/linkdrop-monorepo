@@ -7,5 +7,6 @@ const NETWORK_IDS = {
   _5: 'goerli',
   _42: 'kovan',
   _100: 'xdai',
-  _97: 'bsc-testnet'
+  _97: 'bsc-testnet',
+  _56: 'bsc'  
 }
