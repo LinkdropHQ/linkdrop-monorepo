@@ -73,8 +73,10 @@ class ClaimingFinishedPage extends React.Component {
 
   renderEtherscanUrl ({ transactionId, chainId }) {
     const scannerDct = {
-      "100": 'seeDetailsBlockscout',
-      "97": 'seeDetailsBscScan'
+      "100": 'seeDetailsBlockscout',      
+      "97": 'seeDetailsBscScan',
+      "56": 'seeDetailsBscScan',
+      "137": 'seeDetailsExplorer',
     }
     const seeDetails = scannerDct[String(chainId)] || 'seeDetails'
 

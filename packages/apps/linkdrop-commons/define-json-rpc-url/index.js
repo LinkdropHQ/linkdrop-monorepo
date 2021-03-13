@@ -10,6 +10,8 @@ export default ({ chainId, infuraPk }) => {
     return 'https://data-seed-prebsc-1-s1.binance.org:8545/'
   } else if (String(chainId) === '56') {
     return 'https://bsc-dataseed.binance.org'
+  } else if (String(chainId) === '137') {
+    return 'https://rpc-mainnet.maticvigil.com'
   }
   
   return `https://${networkName}.infura.io/v3/${infuraPk}`

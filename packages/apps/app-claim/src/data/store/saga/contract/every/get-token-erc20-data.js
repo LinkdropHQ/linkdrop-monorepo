@@ -17,8 +17,13 @@ const generator = function * ({ payload }) {
     let icon
     if (ethWalletContract === tokenAddress) {
       decimals = 18
-      symbol = Number(chainId) === 100 ? 'xDAI' : 'ETH'
+      
+      symbol = 'ETH'
+      if (Number(chainId) === 100) symbol = 'XDAI' 
       if (Number(chainId) === 97) symbol = 'BNB'
+      if (Number(chainId) === 56) symbol = 'BNB'
+      if (Number(chainId) === 137) symbol = 'MATIC'
+      
       icon = getImages({ src: 'ether' }).imageRetina
     } else if (tokenAddress.toLowerCase() === '0x89d24a6b4ccb1b6faa2625fe562bdd9a23260359') {
       // SAI token has problem with fetching decimals
