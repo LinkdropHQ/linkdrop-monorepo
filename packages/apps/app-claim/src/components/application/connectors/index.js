@@ -12,7 +12,7 @@ const { chainId } = getHashVariables()
 // const networkName = defineNetworkName({ chainId })
 const POLLING_INTERVAL = 12000
 const Metamask = new InjectedConnector({
-  supportedChainIds: [1, 3, 4, 5, 42, 100, 97]
+  supportedChainIds: [1, 3, 4, 5, 42, 100, 97, 56, 137]
 })
 
 const supportedNetworkURLs = {
@@ -21,6 +21,7 @@ const supportedNetworkURLs = {
   3: `https://ropsten.infura.io/v3/${infuraPk}`,
   5: `https://goerli.infura.io/v3/${infuraPk}`,
   42: `https://kovan.infura.io/v3/${infuraPk}`,
+  //  137: 'https://rpc-mainnet.maticvigil.com'  
   // 97: 'https://data-seed-prebsc-1-s1.binance.org:8545/'
 }
 

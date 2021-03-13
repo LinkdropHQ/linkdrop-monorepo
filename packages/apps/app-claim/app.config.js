@@ -9,7 +9,7 @@ try {
 }
 
 const masterCopy = MASTER_COPY || String(config.masterCopy)
-const factory = FACTORY || String(config.factory)
+const factory = FACTORY || String(config.FACTORY_ADDRESS)
 const initialBlockMainnet = INITIAL_BLOCK_MAINNET || config.initialBlockMainnet || 0
 const initialBlockRinkeby = INITIAL_BLOCK_RINKEBY || config.initialBlockRinkeby || 0
 const initialBlockGoerli = INITIAL_BLOCK_GOERLI || config.initialBlockGoerli || 0
