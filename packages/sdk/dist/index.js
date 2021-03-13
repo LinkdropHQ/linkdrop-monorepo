@@ -58,7 +58,7 @@ var LinkdropSDK = /*#__PURE__*/function () {
       throw new Error('Please provide factory address');
     }
 
-    if (chain !== 'mainnet' && chain !== 'ropsten' && chain !== 'rinkeby' && chain !== 'goerli' && chain !== 'kovan' && chain !== 'xdai' && chain !== 'bsc-testnet' && chain !== 'bsc') {
+    if (chain !== 'mainnet' && chain !== 'ropsten' && chain !== 'rinkeby' && chain !== 'goerli' && chain !== 'kovan' && chain !== 'xdai' && chain !== 'bsc-testnet' && chain !== 'bsc' && chain !== 'matic') {
       throw new Error('Unsupported chain');
     }
 
@@ -674,6 +674,9 @@ function getChainId(chain) {
 
     case 'bsc':
       return 56;
+
+    case 'matic':
+      return '137';
 
     default:
       return null;

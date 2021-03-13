@@ -39,7 +39,8 @@ class LinkdropSDK {
       chain !== 'kovan' &&
       chain !== 'xdai' &&
       chain !== 'bsc-testnet' &&
-      chain !== 'bsc'
+        chain !== 'bsc' &&
+        chain !== 'matic'
     ) {
       throw new Error('Unsupported chain')
     }
@@ -295,6 +296,8 @@ function getChainId (chain) {
       return 97
     case 'bsc':
       return 56
+    case 'matic':
+      return '137'    
   default:
       return null
   }
