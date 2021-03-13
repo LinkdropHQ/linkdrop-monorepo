@@ -8,5 +8,6 @@ const NETWORK_IDS = {
   _42: 'kovan',
   _100: 'xdai',
   _97: 'bsc-testnet',
-  _56: 'bsc'  
+  _56: 'bsc',
+  _137: 'matic'
 }
